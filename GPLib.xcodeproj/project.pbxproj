@@ -65,7 +65,6 @@
 		5C3D90F61577F3880052179A /* GPBackArrowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90F41577F3880052179A /* GPBackArrowButton.m */; };
 		5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */; };
 		5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */; };
-		5C5C0A9215B8DEAA005A2F2D /* libGPHTTPRequestLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */; };
 		5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */; };
 		5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */; };
 		5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */; };
@@ -232,6 +231,7 @@
 		5CE2616E1520C3E70022ACA2 /* magnifier-ranged-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261661520C3E70022ACA2 /* magnifier-ranged-mask@2x.png */; };
 		5CE2636F1522106B0022ACA2 /* GPDrawExtras.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2636D1522106B0022ACA2 /* GPDrawExtras.h */; };
 		5CE263701522106B0022ACA2 /* GPDrawExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2636E1522106B0022ACA2 /* GPDrawExtras.m */; };
+		5CFB9E8715B9D08400E837BE /* libGPHTTPRequestLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */; };
 		5CFFA15F14DC601900501A3E /* GPTableMoreItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CFFA15D14DC601900501A3E /* GPTableMoreItem.h */; };
 		5CFFA16014DC601900501A3E /* GPTableMoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFFA15E14DC601900501A3E /* GPTableMoreItem.m */; };
 		5CFFA16414DC615900501A3E /* GPTableMoreCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CFFA16214DC615900501A3E /* GPTableMoreCell.h */; };
@@ -552,7 +552,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C5C0A9215B8DEAA005A2F2D /* libGPHTTPRequestLibrary.a in Frameworks */,
+				5CFB9E8715B9D08400E837BE /* libGPHTTPRequestLibrary.a in Frameworks */,
 				5C884029152B6957007AEE7D /* libxml2.dylib in Frameworks */,
 				5C6907B914E18A5D00E44620 /* CoreText.framework in Frameworks */,
 				5CFFA1A114DC79BE00501A3E /* SystemConfiguration.framework in Frameworks */,
@@ -1640,10 +1640,7 @@
 		5CD4F8D914DC521A00F2CBB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_BIT)",
-					armv6,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/GPLib.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GPLib/GPLib-Prefix.pch";
@@ -1664,10 +1661,7 @@
 		5CD4F8DA14DC521A00F2CBB3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_BIT)",
-					armv6,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/GPLib.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GPLib/GPLib-Prefix.pch";

@@ -53,6 +53,7 @@ typedef enum {
 @property(nonatomic, readonly)UIViewController* visibleViewController;
 @property(nonatomic, readonly)NSMutableDictionary* URLs;
 @property(nonatomic, assign)BOOL useCustomBackButton;
+@property(nonatomic, assign)BOOL searchAppStore;
 
 @property(nonatomic, retain)UIPopoverController* popOver;
 +(GPNavigator*)navigator;

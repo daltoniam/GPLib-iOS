@@ -44,7 +44,7 @@
 
 @implementation GPNavigator
 
-@synthesize navigationController = Navigation,URLs = URLs,popOver,useCustomBackButton;
+@synthesize navigationController = Navigation,URLs = URLs,popOver,useCustomBackButton,searchAppStore;
 
 NSString* GPHTTPLINKSURL = @"http"; //use to map your http links to a view controller (probably with a webview)
 
@@ -187,6 +187,22 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     NSString* selURL = [self determineSelURL:URL query:query];
     if([selURL isEqualToString:GPHTTPLINKSURL])
         params = [NSArray arrayWithObjects:[NSURL URLWithString:URL],query,nil];
+    if([selURL isEqualToString:@""])
+    {
+        NSURL* interURL = [NSURL URLWithString:URL];
+        if([[UIApplication sharedApplication] canOpenURL:interURL])
+        {
+            [[UIApplication sharedApplication] openURL:interURL];
+            return nil;
+        }
+        interURL = [NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.com/apps/%@",interURL.scheme]];
+        if([[UIApplication sharedApplication] canOpenURL:interURL] && self.searchAppStore)
+        {
+            [[UIApplication sharedApplication] openURL:interURL];
+            return nil;
+        }
+            
+    }
     Class class = [URLs objectForKey:selURL];
     SEL sel = [self selectorFromURL:selURL];
     
@@ -364,7 +380,8 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
 -(NSString*)pathFromURL:(NSURL*)URL
 {
     NSString* path = URL.absoluteString; 
-    
+    if(!URL.host)
+        return path;
     NSRange range = [path rangeOfString:URL.host];
     if(range.location != NSNotFound)
         path = [path substringFromIndex:range.location+range.length]; //substringFromIndex

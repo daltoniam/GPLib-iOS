@@ -1,0 +1,1760 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5C0769981518E8BC0006F70B /* GPTransparentToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C0769961518E8BC0006F70B /* GPTransparentToolbar.h */; };
+		5C0769991518E8BC0006F70B /* GPTransparentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0769971518E8BC0006F70B /* GPTransparentToolbar.m */; };
+		5C0F35A0156D2CD40027A4BB /* GPGridMoreCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C0F3599156D2CD30027A4BB /* GPGridMoreCell.h */; };
+		5C0F35A1156D2CD40027A4BB /* GPGridMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F359A156D2CD30027A4BB /* GPGridMoreCell.m */; };
+		5C0F35A2156D2CD40027A4BB /* GPGridViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C0F359B156D2CD30027A4BB /* GPGridViewCell.h */; };
+		5C0F35A3156D2CD40027A4BB /* GPGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F359C156D2CD30027A4BB /* GPGridViewCell.m */; };
+		5C0F35A4156D2CD40027A4BB /* GPGridViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C0F359E156D2CD40027A4BB /* GPGridViewItem.h */; };
+		5C0F35A5156D2CD40027A4BB /* GPGridViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F359F156D2CD40027A4BB /* GPGridViewItem.m */; };
+		5C0F35A8156D2D250027A4BB /* GPGridMoreItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C0F35A6156D2D250027A4BB /* GPGridMoreItem.h */; };
+		5C0F35A9156D2D250027A4BB /* GPGridMoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F35A7156D2D250027A4BB /* GPGridMoreItem.m */; };
+		5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */; };
+		5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */; };
+		5C1431181547137200AEE1FA /* GPTableSearchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1431161547137200AEE1FA /* GPTableSearchController.h */; };
+		5C1431191547137200AEE1FA /* GPTableSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1431171547137200AEE1FA /* GPTableSearchController.m */; };
+		5C14312615483D6100AEE1FA /* GPLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14312415483D6100AEE1FA /* GPLabel.h */; };
+		5C14312715483D6100AEE1FA /* GPLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C14312515483D6100AEE1FA /* GPLabel.m */; };
+		5C14312A15485E8100AEE1FA /* GPView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14312815485E8100AEE1FA /* GPView.h */; };
+		5C14312B15485E8100AEE1FA /* GPView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C14312915485E8100AEE1FA /* GPView.m */; };
+		5C14314215488F3F00AEE1FA /* GPPillLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14314015488F3F00AEE1FA /* GPPillLabel.h */; };
+		5C14314315488F3F00AEE1FA /* GPPillLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C14314115488F3F00AEE1FA /* GPPillLabel.m */; };
+		5C14314A1549A6B900AEE1FA /* GPTableDeleteItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1431481549A6B800AEE1FA /* GPTableDeleteItem.h */; };
+		5C14314B1549A6B900AEE1FA /* GPTableDeleteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1431491549A6B900AEE1FA /* GPTableDeleteItem.m */; };
+		5C14314E1549A7A800AEE1FA /* GPTableDeleteCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14314C1549A7A700AEE1FA /* GPTableDeleteCell.h */; };
+		5C14314F1549A7A800AEE1FA /* GPTableDeleteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C14314D1549A7A700AEE1FA /* GPTableDeleteCell.m */; };
+		5C2E88AD151784BE0012CE45 /* HTMLLinkViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C2E88AB151784BE0012CE45 /* HTMLLinkViewController.h */; };
+		5C2E88AE151784BE0012CE45 /* HTMLLinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */; };
+		5C2FFA4C1561A7B100D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
+		5C2FFA561562C00800D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
+		5C3BD0C81565717200E615D6 /* GPTableFloatingItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3BD0C61565717200E615D6 /* GPTableFloatingItem.h */; };
+		5C3BD0C91565717200E615D6 /* GPTableFloatingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3BD0C71565717200E615D6 /* GPTableFloatingItem.m */; };
+		5C3BD0CD156572A000E615D6 /* GPTableFloatingCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3BD0CB156572A000E615D6 /* GPTableFloatingCell.h */; };
+		5C3BD0CE156572A000E615D6 /* GPTableFloatingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3BD0CC156572A000E615D6 /* GPTableFloatingCell.m */; };
+		5C3D8FE81573EAAC0052179A /* GPTimeScroller.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D8FE61573EAAC0052179A /* GPTimeScroller.h */; };
+		5C3D8FE91573EAAC0052179A /* GPTimeScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D8FE71573EAAC0052179A /* GPTimeScroller.m */; };
+		5C3D8FF11573F4100052179A /* timescroll_hourhand.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C3D8FEB1573F4100052179A /* timescroll_hourhand.png */; };
+		5C3D8FF21573F4100052179A /* timescroll_hourhand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C3D8FEC1573F4100052179A /* timescroll_hourhand@2x.png */; };
+		5C3D8FF31573F4100052179A /* timescroll_minutehand.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C3D8FED1573F4100052179A /* timescroll_minutehand.png */; };
+		5C3D8FF41573F4100052179A /* timescroll_minutehand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C3D8FEE1573F4100052179A /* timescroll_minutehand@2x.png */; };
+		5C3D8FF51573F4100052179A /* timescroll_pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C3D8FEF1573F4100052179A /* timescroll_pointer.png */; };
+		5C3D8FF61573F4100052179A /* timescroll_pointer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C3D8FF01573F4100052179A /* timescroll_pointer@2x.png */; };
+		5C3D9049157670590052179A /* GPAttachmentView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D9047157670590052179A /* GPAttachmentView.h */; };
+		5C3D904A157670590052179A /* GPAttachmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D9048157670590052179A /* GPAttachmentView.m */; };
+		5C3D90E31577CA4A0052179A /* GPUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90D71577CA4A0052179A /* GPUtils.h */; };
+		5C3D90E41577CA4A0052179A /* GPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90D81577CA4A0052179A /* GPUtils.m */; };
+		5C3D90E51577CA4A0052179A /* NSDate+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90D91577CA4A0052179A /* NSDate+Additions.h */; };
+		5C3D90E61577CA4A0052179A /* NSDate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90DA1577CA4A0052179A /* NSDate+Additions.m */; };
+		5C3D90E71577CA4A0052179A /* NSString+GPString.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90DB1577CA4A0052179A /* NSString+GPString.h */; };
+		5C3D90E81577CA4A0052179A /* NSString+GPString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90DC1577CA4A0052179A /* NSString+GPString.m */; };
+		5C3D90E91577CA4A0052179A /* UIBarButtonItem+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90DD1577CA4A0052179A /* UIBarButtonItem+Additions.h */; };
+		5C3D90EA1577CA4A0052179A /* UIBarButtonItem+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90DE1577CA4A0052179A /* UIBarButtonItem+Additions.m */; };
+		5C3D90EB1577CA4A0052179A /* UIImage+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90DF1577CA4A0052179A /* UIImage+Additions.h */; };
+		5C3D90EC1577CA4A0052179A /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90E01577CA4A0052179A /* UIImage+Additions.m */; };
+		5C3D90ED1577CA4A0052179A /* UIViewController+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90E11577CA4A0052179A /* UIViewController+Additions.h */; };
+		5C3D90EE1577CA4A0052179A /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90E21577CA4A0052179A /* UIViewController+Additions.m */; };
+		5C3D90F51577F3880052179A /* GPBackArrowButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90F31577F3870052179A /* GPBackArrowButton.h */; };
+		5C3D90F61577F3880052179A /* GPBackArrowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90F41577F3880052179A /* GPBackArrowButton.m */; };
+		5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */; };
+		5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */; };
+		5C5C0A9215B8DEAA005A2F2D /* libGPHTTPRequestLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */; };
+		5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */; };
+		5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */; };
+		5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */; };
+		5C5F7D23159CCB7100F42061 /* GPTableMailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */; };
+		5C63DECA156A8BDD00C3EEC0 /* GPTabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */; };
+		5C63DECB156A8BDD00C3EEC0 /* GPTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C63DEC9156A8BDD00C3EEC0 /* GPTabBarItem.m */; };
+		5C63DED0156AAB5100C3EEC0 /* GPTabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C63DECE156AAB5100C3EEC0 /* GPTabBarController.h */; };
+		5C63DED1156AAB5100C3EEC0 /* GPTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C63DECF156AAB5100C3EEC0 /* GPTabBarController.m */; };
+		5C63DEE0156AD1BA00C3EEC0 /* TabBarGlow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDA156AD1BA00C3EEC0 /* TabBarGlow.png */; };
+		5C63DEE1156AD1BA00C3EEC0 /* TabBarGlow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDB156AD1BA00C3EEC0 /* TabBarGlow@2x.png */; };
+		5C63DEE2156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDC156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png */; };
+		5C63DEE3156AD1BA00C3EEC0 /* TabBarItemSelectedBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDD156AD1BA00C3EEC0 /* TabBarItemSelectedBackground@2x.png */; };
+		5C63DEE4156AD1BA00C3EEC0 /* TabBarNipple.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDE156AD1BA00C3EEC0 /* TabBarNipple.png */; };
+		5C63DEE5156AD1BA00C3EEC0 /* TabBarNipple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDF156AD1BA00C3EEC0 /* TabBarNipple@2x.png */; };
+		5C63DF0E156AEB4000C3EEC0 /* GPTableAccessory.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C63DF0C156AEB4000C3EEC0 /* GPTableAccessory.h */; };
+		5C63DF0F156AEB4000C3EEC0 /* GPTableAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C63DF0D156AEB4000C3EEC0 /* GPTableAccessory.m */; };
+		5C69079A14E02FA200E44620 /* GPLauncherView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C69079814E02FA200E44620 /* GPLauncherView.h */; };
+		5C69079B14E02FA200E44620 /* GPLauncherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C69079914E02FA200E44620 /* GPLauncherView.m */; };
+		5C6907B114E04C8900E44620 /* GPLauncherButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C6907AF14E04C8900E44620 /* GPLauncherButton.h */; };
+		5C6907B214E04C8900E44620 /* GPLauncherButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C6907B014E04C8900E44620 /* GPLauncherButton.m */; };
+		5C6907B914E18A5D00E44620 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C6907B814E18A5D00E44620 /* CoreText.framework */; };
+		5C7D168915B45BA900D27B16 /* GPHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C7D168515B45BA900D27B16 /* GPHTTPRequest.h */; };
+		5C7D168B15B45BA900D27B16 /* GPReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C7D168715B45BA900D27B16 /* GPReachability.h */; };
+		5C88137B151A175A006BCDC9 /* HTMLSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */; };
+		5C88137C151A175A006BCDC9 /* HTMLSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */; };
+		5C881380151B6778006BCDC9 /* HTMLListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C88137E151B6778006BCDC9 /* HTMLListViewController.h */; };
+		5C881381151B6778006BCDC9 /* HTMLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88137F151B6778006BCDC9 /* HTMLListViewController.m */; };
+		5C8813A3151CE7AA006BCDC9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C8813A2151CE7AA006BCDC9 /* CoreFoundation.framework */; };
+		5C8813A9151CE7AA006BCDC9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813A7151CE7AA006BCDC9 /* InfoPlist.strings */; };
+		5C8813AF151CE7E7006BCDC9 /* center_justify.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C881383151CDE54006BCDC9 /* center_justify.png */; };
+		5C8813B0151CE7E7006BCDC9 /* justify_justify.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C881384151CDE54006BCDC9 /* justify_justify.png */; };
+		5C8813B1151CE7E7006BCDC9 /* left_justify.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C881385151CDE54006BCDC9 /* left_justify.png */; };
+		5C8813B2151CE7E7006BCDC9 /* right_justify.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C881386151CDE54006BCDC9 /* right_justify.png */; };
+		5C8813B3151CE7E7006BCDC9 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CD4F9BD14DC54E600F2CBB3 /* 37x-Checkmark.png */; };
+		5C8813B6151CE818006BCDC9 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813B4151CE818006BCDC9 /* blueArrow.png */; };
+		5C8813B7151CE818006BCDC9 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813B5151CE818006BCDC9 /* blueArrow@2x.png */; };
+		5C8813DE151CF3F1006BCDC9 /* bold.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D2151CF3DD006BCDC9 /* bold.png */; };
+		5C8813E0151CF3F1006BCDC9 /* orderlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D4151CF3DD006BCDC9 /* orderlist.png */; };
+		5C8813E1151CF3F1006BCDC9 /* strike.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D5151CF3DD006BCDC9 /* strike.png */; };
+		5C8813E2151CF3F1006BCDC9 /* underline.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D6151CF3DD006BCDC9 /* underline.png */; };
+		5C8813E3151CF3F1006BCDC9 /* unorderlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D7151CF3DD006BCDC9 /* unorderlist.png */; };
+		5C884029152B6957007AEE7D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C884028152B6957007AEE7D /* libxml2.dylib */; };
+		5C8840FC152E39FB007AEE7D /* GPGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8840FA152E39FB007AEE7D /* GPGridView.h */; };
+		5C8840FD152E39FB007AEE7D /* GPGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C8840FB152E39FB007AEE7D /* GPGridView.m */; };
+		5C89A1911551C5D800BF73CE /* GPEmptyTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C89A18F1551C5D800BF73CE /* GPEmptyTableView.h */; };
+		5C89A1921551C5D800BF73CE /* GPEmptyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C89A1901551C5D800BF73CE /* GPEmptyTableView.m */; };
+		5C9B7D5515408D9100856C8A /* GPTableTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C9B7D5315408D9000856C8A /* GPTableTextFieldCell.h */; };
+		5C9B7D5615408D9100856C8A /* GPTableTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C9B7D5415408D9100856C8A /* GPTableTextFieldCell.m */; };
+		5C9B7D5A15408E2100856C8A /* GPTableTextFieldItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C9B7D5815408E2100856C8A /* GPTableTextFieldItem.h */; };
+		5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */; };
+		5CA6800015361109001719DC /* GPGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA67FFE15361109001719DC /* GPGridViewController.h */; };
+		5CA6800115361109001719DC /* GPGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA67FFF15361109001719DC /* GPGridViewController.m */; };
+		5CD4F8B814DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
+		5CD4F8C614DC521A00F2CBB3 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8C514DC521A00F2CBB3 /* SenTestingKit.framework */; };
+		5CD4F8C914DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
+		5CD4F8CC14DC521A00F2CBB3 /* libGPLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */; };
+		5CD4F8D214DC521A00F2CBB3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5CD4F8D014DC521A00F2CBB3 /* InfoPlist.strings */; };
+		5CD4F8D514DC521A00F2CBB3 /* GPLibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8D414DC521A00F2CBB3 /* GPLibTests.m */; };
+		5CD4F8F614DC52A500F2CBB3 /* ASIAuthenticationDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8E014DC52A500F2CBB3 /* ASIAuthenticationDialog.h */; };
+		5CD4F8F714DC52A500F2CBB3 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8E114DC52A500F2CBB3 /* ASIAuthenticationDialog.m */; };
+		5CD4F8F814DC52A500F2CBB3 /* ASICacheDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8E214DC52A500F2CBB3 /* ASICacheDelegate.h */; };
+		5CD4F8F914DC52A500F2CBB3 /* ASIDataCompressor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8E314DC52A500F2CBB3 /* ASIDataCompressor.h */; };
+		5CD4F8FA14DC52A500F2CBB3 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8E414DC52A500F2CBB3 /* ASIDataCompressor.m */; };
+		5CD4F8FB14DC52A500F2CBB3 /* ASIDataDecompressor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8E514DC52A500F2CBB3 /* ASIDataDecompressor.h */; };
+		5CD4F8FC14DC52A500F2CBB3 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8E614DC52A500F2CBB3 /* ASIDataDecompressor.m */; };
+		5CD4F8FD14DC52A500F2CBB3 /* ASIDownloadCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8E714DC52A500F2CBB3 /* ASIDownloadCache.h */; };
+		5CD4F8FE14DC52A500F2CBB3 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8E814DC52A500F2CBB3 /* ASIDownloadCache.m */; };
+		5CD4F8FF14DC52A500F2CBB3 /* ASIFormDataRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8E914DC52A500F2CBB3 /* ASIFormDataRequest.h */; };
+		5CD4F90014DC52A500F2CBB3 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8EA14DC52A500F2CBB3 /* ASIFormDataRequest.m */; };
+		5CD4F90114DC52A500F2CBB3 /* ASIHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8EB14DC52A500F2CBB3 /* ASIHTTPRequest.h */; };
+		5CD4F90214DC52A500F2CBB3 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8EC14DC52A500F2CBB3 /* ASIHTTPRequest.m */; };
+		5CD4F90314DC52A500F2CBB3 /* ASIHTTPRequestConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8ED14DC52A500F2CBB3 /* ASIHTTPRequestConfig.h */; };
+		5CD4F90414DC52A500F2CBB3 /* ASIHTTPRequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8EE14DC52A500F2CBB3 /* ASIHTTPRequestDelegate.h */; };
+		5CD4F90514DC52A500F2CBB3 /* ASIInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8EF14DC52A500F2CBB3 /* ASIInputStream.h */; };
+		5CD4F90614DC52A500F2CBB3 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8F014DC52A500F2CBB3 /* ASIInputStream.m */; };
+		5CD4F90714DC52A500F2CBB3 /* ASINetworkQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8F114DC52A500F2CBB3 /* ASINetworkQueue.h */; };
+		5CD4F90814DC52A500F2CBB3 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F8F214DC52A500F2CBB3 /* ASINetworkQueue.m */; };
+		5CD4F90914DC52A500F2CBB3 /* ASIProgressDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8F314DC52A500F2CBB3 /* ASIProgressDelegate.h */; };
+		5CD4F90A14DC52A500F2CBB3 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F8F414DC52A500F2CBB3 /* Reachability.h */; };
+		5CD4F96B14DC54C900F2CBB3 /* GPMessagePostViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F92414DC54C900F2CBB3 /* GPMessagePostViewController.h */; };
+		5CD4F96C14DC54C900F2CBB3 /* GPMessagePostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F92514DC54C900F2CBB3 /* GPMessagePostViewController.m */; };
+		5CD4F96D14DC54C900F2CBB3 /* HTMLPostViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F92614DC54C900F2CBB3 /* HTMLPostViewController.h */; };
+		5CD4F96E14DC54C900F2CBB3 /* HTMLPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F92714DC54C900F2CBB3 /* HTMLPostViewController.m */; };
+		5CD4F96F14DC54C900F2CBB3 /* GPBubbleTableCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F92914DC54C900F2CBB3 /* GPBubbleTableCell.h */; };
+		5CD4F97014DC54C900F2CBB3 /* GPBubbleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F92A14DC54C900F2CBB3 /* GPBubbleTableCell.m */; };
+		5CD4F97114DC54C900F2CBB3 /* GPTableCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F92B14DC54C900F2CBB3 /* GPTableCell.h */; };
+		5CD4F97214DC54C900F2CBB3 /* GPTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F92C14DC54C900F2CBB3 /* GPTableCell.m */; };
+		5CD4F97314DC54C900F2CBB3 /* GPTableHtmlItemCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F92D14DC54C900F2CBB3 /* GPTableHtmlItemCell.h */; };
+		5CD4F97414DC54C900F2CBB3 /* GPTableHtmlItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F92E14DC54C900F2CBB3 /* GPTableHtmlItemCell.m */; };
+		5CD4F97514DC54C900F2CBB3 /* GPTableImageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F92F14DC54C900F2CBB3 /* GPTableImageCell.h */; };
+		5CD4F97614DC54C900F2CBB3 /* GPTableImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93014DC54C900F2CBB3 /* GPTableImageCell.m */; };
+		5CD4F97714DC54C900F2CBB3 /* GPTableMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F93114DC54C900F2CBB3 /* GPTableMessageCell.h */; };
+		5CD4F97814DC54C900F2CBB3 /* GPTableMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93214DC54C900F2CBB3 /* GPTableMessageCell.m */; };
+		5CD4F97B14DC54C900F2CBB3 /* GPTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F93514DC54C900F2CBB3 /* GPTableViewCell.h */; };
+		5CD4F97C14DC54C900F2CBB3 /* GPTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93614DC54C900F2CBB3 /* GPTableViewCell.m */; };
+		5CD4F97D14DC54C900F2CBB3 /* GPTableBubbleItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F93814DC54C900F2CBB3 /* GPTableBubbleItem.h */; };
+		5CD4F97E14DC54C900F2CBB3 /* GPTableBubbleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93914DC54C900F2CBB3 /* GPTableBubbleItem.m */; };
+		5CD4F97F14DC54C900F2CBB3 /* GPTableHTMLItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F93A14DC54C900F2CBB3 /* GPTableHTMLItem.h */; };
+		5CD4F98014DC54C900F2CBB3 /* GPTableHTMLItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93B14DC54C900F2CBB3 /* GPTableHTMLItem.m */; };
+		5CD4F98114DC54C900F2CBB3 /* GPTableImageItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F93C14DC54C900F2CBB3 /* GPTableImageItem.h */; };
+		5CD4F98214DC54C900F2CBB3 /* GPTableImageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93D14DC54C900F2CBB3 /* GPTableImageItem.m */; };
+		5CD4F98314DC54C900F2CBB3 /* GPTableMessageItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F93E14DC54C900F2CBB3 /* GPTableMessageItem.h */; };
+		5CD4F98414DC54C900F2CBB3 /* GPTableMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F93F14DC54C900F2CBB3 /* GPTableMessageItem.m */; };
+		5CD4F98514DC54C900F2CBB3 /* GPTableTextItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F94014DC54C900F2CBB3 /* GPTableTextItem.h */; };
+		5CD4F98614DC54C900F2CBB3 /* GPTableTextItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F94114DC54C900F2CBB3 /* GPTableTextItem.m */; };
+		5CD4F98914DC54C900F2CBB3 /* GPTableViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F94414DC54C900F2CBB3 /* GPTableViewItem.h */; };
+		5CD4F98A14DC54C900F2CBB3 /* GPTableViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F94514DC54C900F2CBB3 /* GPTableViewItem.m */; };
+		5CD4F98B14DC54C900F2CBB3 /* GPBubbleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F94714DC54C900F2CBB3 /* GPBubbleView.h */; };
+		5CD4F98C14DC54C900F2CBB3 /* GPBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F94814DC54C900F2CBB3 /* GPBubbleView.m */; };
+		5CD4F98D14DC54C900F2CBB3 /* GPButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F94914DC54C900F2CBB3 /* GPButton.h */; };
+		5CD4F98E14DC54C900F2CBB3 /* GPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F94A14DC54C900F2CBB3 /* GPButton.m */; };
+		5CD4F98F14DC54C900F2CBB3 /* GPCommentView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F94B14DC54C900F2CBB3 /* GPCommentView.h */; };
+		5CD4F99014DC54C900F2CBB3 /* GPCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F94C14DC54C900F2CBB3 /* GPCommentView.m */; };
+		5CD4F99114DC54C900F2CBB3 /* GPLoadingLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F94D14DC54C900F2CBB3 /* GPLoadingLabel.h */; };
+		5CD4F99214DC54C900F2CBB3 /* GPLoadingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F94E14DC54C900F2CBB3 /* GPLoadingLabel.m */; };
+		5CD4F99514DC54C900F2CBB3 /* GPReceiptField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F95114DC54C900F2CBB3 /* GPReceiptField.h */; };
+		5CD4F99614DC54C900F2CBB3 /* GPReceiptField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95214DC54C900F2CBB3 /* GPReceiptField.m */; };
+		5CD4F99714DC54C900F2CBB3 /* GPYouTubeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F95314DC54C900F2CBB3 /* GPYouTubeView.h */; };
+		5CD4F99814DC54C900F2CBB3 /* GPYouTubeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95414DC54C900F2CBB3 /* GPYouTubeView.m */; };
+		5CD4F99914DC54C900F2CBB3 /* GPImageScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F95614DC54C900F2CBB3 /* GPImageScrollView.h */; };
+		5CD4F99A14DC54C900F2CBB3 /* GPImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95714DC54C900F2CBB3 /* GPImageScrollView.m */; };
+		5CD4F99B14DC54C900F2CBB3 /* GPImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F95814DC54C900F2CBB3 /* GPImageView.h */; };
+		5CD4F99C14DC54C900F2CBB3 /* GPImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95914DC54C900F2CBB3 /* GPImageView.m */; };
+		5CD4F99D14DC54C900F2CBB3 /* GPImageViewer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F95A14DC54C900F2CBB3 /* GPImageViewer.h */; };
+		5CD4F99E14DC54C900F2CBB3 /* GPImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95B14DC54C900F2CBB3 /* GPImageViewer.m */; };
+		5CD4F9C014DC550200F2CBB3 /* GPNavigator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9BE14DC550200F2CBB3 /* GPNavigator.h */; };
+		5CD4F9C114DC550200F2CBB3 /* GPNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9BF14DC550200F2CBB3 /* GPNavigator.m */; };
+		5CD4F9CC14DC555100F2CBB3 /* GPCenterLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */; };
+		5CD4F9CD14DC555100F2CBB3 /* GPCenterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */; };
+		5CD4F9CE14DC555100F2CBB3 /* GPDragToRefreshView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */; };
+		5CD4F9CF14DC555100F2CBB3 /* GPDragToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C514DC555100F2CBB3 /* GPDragToRefreshView.m */; };
+		5CD4F9D014DC555100F2CBB3 /* GPModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C614DC555100F2CBB3 /* GPModel.h */; };
+		5CD4F9D114DC555100F2CBB3 /* GPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C714DC555100F2CBB3 /* GPModel.m */; };
+		5CD4F9D214DC555100F2CBB3 /* GPTableDragRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */; };
+		5CD4F9D314DC555100F2CBB3 /* GPTableDragRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */; };
+		5CD4F9D414DC555100F2CBB3 /* GPTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9CA14DC555100F2CBB3 /* GPTableViewController.h */; };
+		5CD4F9D514DC555100F2CBB3 /* GPTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9CB14DC555100F2CBB3 /* GPTableViewController.m */; };
+		5CD4F9EA14DC559A00F2CBB3 /* HTMLColors.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9DB14DC559A00F2CBB3 /* HTMLColors.h */; };
+		5CD4F9EB14DC559A00F2CBB3 /* HTMLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9DC14DC559A00F2CBB3 /* HTMLColors.m */; };
+		5CD4F9EC14DC559A00F2CBB3 /* HTMLElements.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9DD14DC559A00F2CBB3 /* HTMLElements.h */; };
+		5CD4F9ED14DC559A00F2CBB3 /* HTMLElements.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9DE14DC559A00F2CBB3 /* HTMLElements.m */; };
+		5CD4F9EE14DC559A00F2CBB3 /* HTMLKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9DF14DC559A00F2CBB3 /* HTMLKit.h */; };
+		5CD4F9EF14DC559A00F2CBB3 /* HTMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9E014DC559A00F2CBB3 /* HTMLParser.h */; };
+		5CD4F9F014DC559A00F2CBB3 /* HTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9E114DC559A00F2CBB3 /* HTMLParser.m */; };
+		5CD4F9F114DC559A00F2CBB3 /* HTMLText.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9E214DC559A00F2CBB3 /* HTMLText.h */; };
+		5CD4F9F214DC559A00F2CBB3 /* HTMLText.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9E314DC559A00F2CBB3 /* HTMLText.m */; };
+		5CD4F9F314DC559A00F2CBB3 /* HTMLTextLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9E414DC559A00F2CBB3 /* HTMLTextLabel.h */; };
+		5CD4F9F414DC559A00F2CBB3 /* HTMLTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9E514DC559A00F2CBB3 /* HTMLTextLabel.m */; };
+		5CD4F9F514DC559A00F2CBB3 /* HTMLTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9E614DC559A00F2CBB3 /* HTMLTextView.h */; };
+		5CD4F9F614DC559A00F2CBB3 /* HTMLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9E714DC559A00F2CBB3 /* HTMLTextView.m */; };
+		5CD4F9FA14DC566C00F2CBB3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9F914DC566C00F2CBB3 /* UIKit.framework */; };
+		5CD4F9FC14DC577600F2CBB3 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9FB14DC577600F2CBB3 /* CFNetwork.framework */; };
+		5CD4F9FE14DC577D00F2CBB3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9FD14DC577C00F2CBB3 /* MobileCoreServices.framework */; };
+		5CD4FA0014DC578500F2CBB3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9FF14DC578500F2CBB3 /* libz.dylib */; };
+		5CD4FA0214DC578D00F2CBB3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4FA0114DC578D00F2CBB3 /* CoreGraphics.framework */; };
+		5CD4FA0414DC579300F2CBB3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4FA0314DC579300F2CBB3 /* QuartzCore.framework */; };
+		5CE261671520C3E70022ACA2 /* drag-dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2615F1520C3E70022ACA2 /* drag-dot@2x.png */; };
+		5CE261681520C3E70022ACA2 /* loupe-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261601520C3E70022ACA2 /* loupe-hi@2x.png */; };
+		5CE261691520C3E70022ACA2 /* loupe-lo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261611520C3E70022ACA2 /* loupe-lo@2x.png */; };
+		5CE2616A1520C3E70022ACA2 /* loupe-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261621520C3E70022ACA2 /* loupe-mask@2x.png */; };
+		5CE2616B1520C3E70022ACA2 /* magnifier-ranged-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261631520C3E70022ACA2 /* magnifier-ranged-hi@2x.png */; };
+		5CE2616C1520C3E70022ACA2 /* magnifier-ranged-lo-stemless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261641520C3E70022ACA2 /* magnifier-ranged-lo-stemless@2x.png */; };
+		5CE2616D1520C3E70022ACA2 /* magnifier-ranged-lo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261651520C3E70022ACA2 /* magnifier-ranged-lo@2x.png */; };
+		5CE2616E1520C3E70022ACA2 /* magnifier-ranged-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261661520C3E70022ACA2 /* magnifier-ranged-mask@2x.png */; };
+		5CE2636F1522106B0022ACA2 /* GPDrawExtras.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2636D1522106B0022ACA2 /* GPDrawExtras.h */; };
+		5CE263701522106B0022ACA2 /* GPDrawExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2636E1522106B0022ACA2 /* GPDrawExtras.m */; };
+		5CFFA15F14DC601900501A3E /* GPTableMoreItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CFFA15D14DC601900501A3E /* GPTableMoreItem.h */; };
+		5CFFA16014DC601900501A3E /* GPTableMoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFFA15E14DC601900501A3E /* GPTableMoreItem.m */; };
+		5CFFA16414DC615900501A3E /* GPTableMoreCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CFFA16214DC615900501A3E /* GPTableMoreCell.h */; };
+		5CFFA16514DC615900501A3E /* GPTableMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFFA16314DC615900501A3E /* GPTableMoreCell.m */; };
+		5CFFA18F14DC739B00501A3E /* GPPostingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CFFA18D14DC739B00501A3E /* GPPostingViewController.h */; };
+		5CFFA19014DC739B00501A3E /* GPPostingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFFA18E14DC739B00501A3E /* GPPostingViewController.m */; };
+		5CFFA19514DC754A00501A3E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9F914DC566C00F2CBB3 /* UIKit.framework */; };
+		5CFFA1A114DC79BE00501A3E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CFFA1A014DC79BE00501A3E /* SystemConfiguration.framework */; };
+		D96B385E15740097004B9F69 /* GPTableSwitchItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D96B385C15740097004B9F69 /* GPTableSwitchItem.h */; };
+		D96B385F15740097004B9F69 /* GPTableSwitchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D96B385D15740097004B9F69 /* GPTableSwitchItem.m */; };
+		D96B38631574011C004B9F69 /* GPTableSwitchCell.h in Headers */ = {isa = PBXBuildFile; fileRef = D96B38611574011C004B9F69 /* GPTableSwitchCell.h */; };
+		D96B38641574011C004B9F69 /* GPTableSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D96B38621574011C004B9F69 /* GPTableSwitchCell.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5C5C0A8A15B8DE97005A2F2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CE2C0751583F95B00463E97;
+			remoteInfo = GPHTTPRequestFramework;
+		};
+		5C5C0A8C15B8DE97005A2F2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CE2C0861583F95B00463E97;
+			remoteInfo = GPHTTPRequestFrameworkTests;
+		};
+		5C5C0A8E15B8DE97005A2F2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CE2C0A01583FB0F00463E97;
+			remoteInfo = GPHTTPRequestLibrary;
+		};
+		5C5C0A9015B8DE97005A2F2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CE2C0AE1583FB0F00463E97;
+			remoteInfo = GPHTTPRequestLibraryTests;
+		};
+		5C5C0A9315B8DEB2005A2F2D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5CE2C09F1583FB0F00463E97;
+			remoteInfo = GPHTTPRequestLibrary;
+		};
+		5CD4F8CA14DC521A00F2CBB3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5CD4F8AB14DC521A00F2CBB3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5CD4F8B314DC521A00F2CBB3;
+			remoteInfo = GPLib;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5C0769961518E8BC0006F70B /* GPTransparentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTransparentToolbar.h; sourceTree = "<group>"; };
+		5C0769971518E8BC0006F70B /* GPTransparentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTransparentToolbar.m; sourceTree = "<group>"; };
+		5C0F3599156D2CD30027A4BB /* GPGridMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPGridMoreCell.h; sourceTree = "<group>"; };
+		5C0F359A156D2CD30027A4BB /* GPGridMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPGridMoreCell.m; sourceTree = "<group>"; };
+		5C0F359B156D2CD30027A4BB /* GPGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPGridViewCell.h; sourceTree = "<group>"; };
+		5C0F359C156D2CD30027A4BB /* GPGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPGridViewCell.m; sourceTree = "<group>"; };
+		5C0F359E156D2CD40027A4BB /* GPGridViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPGridViewItem.h; sourceTree = "<group>"; };
+		5C0F359F156D2CD40027A4BB /* GPGridViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPGridViewItem.m; sourceTree = "<group>"; };
+		5C0F35A6156D2D250027A4BB /* GPGridMoreItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPGridMoreItem.h; sourceTree = "<group>"; };
+		5C0F35A7156D2D250027A4BB /* GPGridMoreItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPGridMoreItem.m; sourceTree = "<group>"; };
+		5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPRevealViewController.h; path = GPReveal/GPRevealViewController.h; sourceTree = "<group>"; };
+		5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPRevealViewController.m; path = GPReveal/GPRevealViewController.m; sourceTree = "<group>"; };
+		5C1431161547137200AEE1FA /* GPTableSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPTableSearchController.h; path = GPTableSearchController/GPTableSearchController.h; sourceTree = "<group>"; };
+		5C1431171547137200AEE1FA /* GPTableSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPTableSearchController.m; path = GPTableSearchController/GPTableSearchController.m; sourceTree = "<group>"; };
+		5C14312415483D6100AEE1FA /* GPLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLabel.h; sourceTree = "<group>"; };
+		5C14312515483D6100AEE1FA /* GPLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPLabel.m; sourceTree = "<group>"; };
+		5C14312815485E8100AEE1FA /* GPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPView.h; sourceTree = "<group>"; };
+		5C14312915485E8100AEE1FA /* GPView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPView.m; sourceTree = "<group>"; };
+		5C14314015488F3F00AEE1FA /* GPPillLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPPillLabel.h; sourceTree = "<group>"; };
+		5C14314115488F3F00AEE1FA /* GPPillLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPPillLabel.m; sourceTree = "<group>"; };
+		5C1431481549A6B800AEE1FA /* GPTableDeleteItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableDeleteItem.h; sourceTree = "<group>"; };
+		5C1431491549A6B900AEE1FA /* GPTableDeleteItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableDeleteItem.m; sourceTree = "<group>"; };
+		5C14314C1549A7A700AEE1FA /* GPTableDeleteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableDeleteCell.h; sourceTree = "<group>"; };
+		5C14314D1549A7A700AEE1FA /* GPTableDeleteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableDeleteCell.m; sourceTree = "<group>"; };
+		5C2E88AB151784BE0012CE45 /* HTMLLinkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTMLLinkViewController.h; path = ../HTMLKit/HTMLLinkViewController.h; sourceTree = "<group>"; };
+		5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTMLLinkViewController.m; path = ../HTMLKit/HTMLLinkViewController.m; sourceTree = "<group>"; };
+		5C2FFA4B1561A7B100D87B52 /* italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = italic.png; sourceTree = "<group>"; };
+		5C3BD0C61565717200E615D6 /* GPTableFloatingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableFloatingItem.h; sourceTree = "<group>"; };
+		5C3BD0C71565717200E615D6 /* GPTableFloatingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableFloatingItem.m; sourceTree = "<group>"; };
+		5C3BD0CB156572A000E615D6 /* GPTableFloatingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableFloatingCell.h; sourceTree = "<group>"; };
+		5C3BD0CC156572A000E615D6 /* GPTableFloatingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableFloatingCell.m; sourceTree = "<group>"; };
+		5C3D8FE61573EAAC0052179A /* GPTimeScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTimeScroller.h; sourceTree = "<group>"; };
+		5C3D8FE71573EAAC0052179A /* GPTimeScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTimeScroller.m; sourceTree = "<group>"; };
+		5C3D8FEB1573F4100052179A /* timescroll_hourhand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timescroll_hourhand.png; sourceTree = "<group>"; };
+		5C3D8FEC1573F4100052179A /* timescroll_hourhand@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timescroll_hourhand@2x.png"; sourceTree = "<group>"; };
+		5C3D8FED1573F4100052179A /* timescroll_minutehand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timescroll_minutehand.png; sourceTree = "<group>"; };
+		5C3D8FEE1573F4100052179A /* timescroll_minutehand@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timescroll_minutehand@2x.png"; sourceTree = "<group>"; };
+		5C3D8FEF1573F4100052179A /* timescroll_pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timescroll_pointer.png; sourceTree = "<group>"; };
+		5C3D8FF01573F4100052179A /* timescroll_pointer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timescroll_pointer@2x.png"; sourceTree = "<group>"; };
+		5C3D9047157670590052179A /* GPAttachmentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPAttachmentView.h; sourceTree = "<group>"; };
+		5C3D9048157670590052179A /* GPAttachmentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPAttachmentView.m; sourceTree = "<group>"; };
+		5C3D90D71577CA4A0052179A /* GPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPUtils.h; path = Common/GPUtils.h; sourceTree = "<group>"; };
+		5C3D90D81577CA4A0052179A /* GPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPUtils.m; path = Common/GPUtils.m; sourceTree = "<group>"; };
+		5C3D90D91577CA4A0052179A /* NSDate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Additions.h"; path = "Common/NSDate+Additions.h"; sourceTree = "<group>"; };
+		5C3D90DA1577CA4A0052179A /* NSDate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Additions.m"; path = "Common/NSDate+Additions.m"; sourceTree = "<group>"; };
+		5C3D90DB1577CA4A0052179A /* NSString+GPString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+GPString.h"; path = "Common/NSString+GPString.h"; sourceTree = "<group>"; };
+		5C3D90DC1577CA4A0052179A /* NSString+GPString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+GPString.m"; path = "Common/NSString+GPString.m"; sourceTree = "<group>"; };
+		5C3D90DD1577CA4A0052179A /* UIBarButtonItem+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+Additions.h"; path = "Common/UIBarButtonItem+Additions.h"; sourceTree = "<group>"; };
+		5C3D90DE1577CA4A0052179A /* UIBarButtonItem+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBarButtonItem+Additions.m"; path = "Common/UIBarButtonItem+Additions.m"; sourceTree = "<group>"; };
+		5C3D90DF1577CA4A0052179A /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Additions.h"; path = "Common/UIImage+Additions.h"; sourceTree = "<group>"; };
+		5C3D90E01577CA4A0052179A /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Additions.m"; path = "Common/UIImage+Additions.m"; sourceTree = "<group>"; };
+		5C3D90E11577CA4A0052179A /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Additions.h"; path = "Common/UIViewController+Additions.h"; sourceTree = "<group>"; };
+		5C3D90E21577CA4A0052179A /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Additions.m"; path = "Common/UIViewController+Additions.m"; sourceTree = "<group>"; };
+		5C3D90F31577F3870052179A /* GPBackArrowButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPBackArrowButton.h; sourceTree = "<group>"; };
+		5C3D90F41577F3880052179A /* GPBackArrowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBackArrowButton.m; sourceTree = "<group>"; };
+		5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPBarButtonItem.h; path = Common/GPBarButtonItem.h; sourceTree = "<group>"; };
+		5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPBarButtonItem.m; path = Common/GPBarButtonItem.m; sourceTree = "<group>"; };
+		5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPHTTPRequest.xcodeproj; path = GPHTTPRequest/GPHTTPRequest.xcodeproj; sourceTree = "<group>"; };
+		5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMailItem.h; sourceTree = "<group>"; };
+		5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMailItem.m; sourceTree = "<group>"; };
+		5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMailCell.h; sourceTree = "<group>"; };
+		5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMailCell.m; sourceTree = "<group>"; };
+		5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTabBarItem.h; sourceTree = "<group>"; };
+		5C63DEC9156A8BDD00C3EEC0 /* GPTabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTabBarItem.m; sourceTree = "<group>"; };
+		5C63DECE156AAB5100C3EEC0 /* GPTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTabBarController.h; sourceTree = "<group>"; };
+		5C63DECF156AAB5100C3EEC0 /* GPTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTabBarController.m; sourceTree = "<group>"; };
+		5C63DEDA156AD1BA00C3EEC0 /* TabBarGlow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarGlow.png; sourceTree = "<group>"; };
+		5C63DEDB156AD1BA00C3EEC0 /* TabBarGlow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarGlow@2x.png"; sourceTree = "<group>"; };
+		5C63DEDC156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarItemSelectedBackground.png; sourceTree = "<group>"; };
+		5C63DEDD156AD1BA00C3EEC0 /* TabBarItemSelectedBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarItemSelectedBackground@2x.png"; sourceTree = "<group>"; };
+		5C63DEDE156AD1BA00C3EEC0 /* TabBarNipple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarNipple.png; sourceTree = "<group>"; };
+		5C63DEDF156AD1BA00C3EEC0 /* TabBarNipple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarNipple@2x.png"; sourceTree = "<group>"; };
+		5C63DF0C156AEB4000C3EEC0 /* GPTableAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableAccessory.h; sourceTree = "<group>"; };
+		5C63DF0D156AEB4000C3EEC0 /* GPTableAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableAccessory.m; sourceTree = "<group>"; };
+		5C69079814E02FA200E44620 /* GPLauncherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPLauncherView.h; path = Launcher/GPLauncherView.h; sourceTree = "<group>"; };
+		5C69079914E02FA200E44620 /* GPLauncherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPLauncherView.m; path = Launcher/GPLauncherView.m; sourceTree = "<group>"; };
+		5C6907AF14E04C8900E44620 /* GPLauncherButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPLauncherButton.h; path = Launcher/GPLauncherButton.h; sourceTree = "<group>"; };
+		5C6907B014E04C8900E44620 /* GPLauncherButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPLauncherButton.m; path = Launcher/GPLauncherButton.m; sourceTree = "<group>"; };
+		5C6907B814E18A5D00E44620 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		5C7D168515B45BA900D27B16 /* GPHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPHTTPRequest.h; sourceTree = "<group>"; };
+		5C7D168615B45BA900D27B16 /* GPHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPHTTPRequest.m; sourceTree = "<group>"; };
+		5C7D168715B45BA900D27B16 /* GPReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPReachability.h; sourceTree = "<group>"; };
+		5C7D168815B45BA900D27B16 /* GPReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPReachability.m; sourceTree = "<group>"; };
+		5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLSettingsViewController.h; sourceTree = "<group>"; };
+		5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLSettingsViewController.m; sourceTree = "<group>"; };
+		5C88137E151B6778006BCDC9 /* HTMLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLListViewController.h; sourceTree = "<group>"; };
+		5C88137F151B6778006BCDC9 /* HTMLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLListViewController.m; sourceTree = "<group>"; };
+		5C881383151CDE54006BCDC9 /* center_justify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = center_justify.png; sourceTree = "<group>"; };
+		5C881384151CDE54006BCDC9 /* justify_justify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = justify_justify.png; sourceTree = "<group>"; };
+		5C881385151CDE54006BCDC9 /* left_justify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left_justify.png; sourceTree = "<group>"; };
+		5C881386151CDE54006BCDC9 /* right_justify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right_justify.png; sourceTree = "<group>"; };
+		5C8813A1151CE7AA006BCDC9 /* GPLibBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPLibBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C8813A2151CE7AA006BCDC9 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		5C8813A6151CE7AA006BCDC9 /* GPLibBundle-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GPLibBundle-Info.plist"; sourceTree = "<group>"; };
+		5C8813A8151CE7AA006BCDC9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5C8813AA151CE7AA006BCDC9 /* GPLibBundle-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPLibBundle-Prefix.pch"; sourceTree = "<group>"; };
+		5C8813B4151CE818006BCDC9 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
+		5C8813B5151CE818006BCDC9 /* blueArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueArrow@2x.png"; sourceTree = "<group>"; };
+		5C8813D2151CF3DD006BCDC9 /* bold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bold.png; sourceTree = "<group>"; };
+		5C8813D4151CF3DD006BCDC9 /* orderlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orderlist.png; sourceTree = "<group>"; };
+		5C8813D5151CF3DD006BCDC9 /* strike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = strike.png; sourceTree = "<group>"; };
+		5C8813D6151CF3DD006BCDC9 /* underline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = underline.png; sourceTree = "<group>"; };
+		5C8813D7151CF3DD006BCDC9 /* unorderlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unorderlist.png; sourceTree = "<group>"; };
+		5C884028152B6957007AEE7D /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		5C8840FA152E39FB007AEE7D /* GPGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridView.h; path = GridView/GPGridView.h; sourceTree = "<group>"; };
+		5C8840FB152E39FB007AEE7D /* GPGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridView.m; path = GridView/GPGridView.m; sourceTree = "<group>"; };
+		5C89A18F1551C5D800BF73CE /* GPEmptyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPEmptyTableView.h; sourceTree = "<group>"; };
+		5C89A1901551C5D800BF73CE /* GPEmptyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPEmptyTableView.m; sourceTree = "<group>"; };
+		5C9B7D5315408D9000856C8A /* GPTableTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextFieldCell.h; sourceTree = "<group>"; };
+		5C9B7D5415408D9100856C8A /* GPTableTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextFieldCell.m; sourceTree = "<group>"; };
+		5C9B7D5815408E2100856C8A /* GPTableTextFieldItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextFieldItem.h; sourceTree = "<group>"; };
+		5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextFieldItem.m; sourceTree = "<group>"; };
+		5CA67FFE15361109001719DC /* GPGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridViewController.h; path = GridView/GPGridViewController.h; sourceTree = "<group>"; };
+		5CA67FFF15361109001719DC /* GPGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridViewController.m; path = GridView/GPGridViewController.m; sourceTree = "<group>"; };
+		5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGPLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5CD4F8BB14DC521A00F2CBB3 /* GPLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPLib-Prefix.pch"; sourceTree = "<group>"; };
+		5CD4F8BC14DC521A00F2CBB3 /* GPLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPLib.h; sourceTree = "<group>"; };
+		5CD4F8C414DC521A00F2CBB3 /* GPLibTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPLibTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CD4F8C514DC521A00F2CBB3 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		5CD4F8CF14DC521A00F2CBB3 /* GPLibTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GPLibTests-Info.plist"; sourceTree = "<group>"; };
+		5CD4F8D114DC521A00F2CBB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5CD4F8D314DC521A00F2CBB3 /* GPLibTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPLibTests.h; sourceTree = "<group>"; };
+		5CD4F8D414DC521A00F2CBB3 /* GPLibTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPLibTests.m; sourceTree = "<group>"; };
+		5CD4F8E014DC52A500F2CBB3 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
+		5CD4F8E114DC52A500F2CBB3 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
+		5CD4F8E214DC52A500F2CBB3 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
+		5CD4F8E314DC52A500F2CBB3 /* ASIDataCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDataCompressor.h; sourceTree = "<group>"; };
+		5CD4F8E414DC52A500F2CBB3 /* ASIDataCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDataCompressor.m; sourceTree = "<group>"; };
+		5CD4F8E514DC52A500F2CBB3 /* ASIDataDecompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDataDecompressor.h; sourceTree = "<group>"; };
+		5CD4F8E614DC52A500F2CBB3 /* ASIDataDecompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDataDecompressor.m; sourceTree = "<group>"; };
+		5CD4F8E714DC52A500F2CBB3 /* ASIDownloadCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDownloadCache.h; sourceTree = "<group>"; };
+		5CD4F8E814DC52A500F2CBB3 /* ASIDownloadCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDownloadCache.m; sourceTree = "<group>"; };
+		5CD4F8E914DC52A500F2CBB3 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
+		5CD4F8EA14DC52A500F2CBB3 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIFormDataRequest.m; sourceTree = "<group>"; };
+		5CD4F8EB14DC52A500F2CBB3 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
+		5CD4F8EC14DC52A500F2CBB3 /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIHTTPRequest.m; sourceTree = "<group>"; };
+		5CD4F8ED14DC52A500F2CBB3 /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
+		5CD4F8EE14DC52A500F2CBB3 /* ASIHTTPRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestDelegate.h; sourceTree = "<group>"; };
+		5CD4F8EF14DC52A500F2CBB3 /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIInputStream.h; sourceTree = "<group>"; };
+		5CD4F8F014DC52A500F2CBB3 /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIInputStream.m; sourceTree = "<group>"; };
+		5CD4F8F114DC52A500F2CBB3 /* ASINetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINetworkQueue.h; sourceTree = "<group>"; };
+		5CD4F8F214DC52A500F2CBB3 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
+		5CD4F8F314DC52A500F2CBB3 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
+		5CD4F8F414DC52A500F2CBB3 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		5CD4F8F514DC52A500F2CBB3 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		5CD4F92414DC54C900F2CBB3 /* GPMessagePostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPMessagePostViewController.h; sourceTree = "<group>"; };
+		5CD4F92514DC54C900F2CBB3 /* GPMessagePostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPMessagePostViewController.m; sourceTree = "<group>"; };
+		5CD4F92614DC54C900F2CBB3 /* HTMLPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLPostViewController.h; sourceTree = "<group>"; };
+		5CD4F92714DC54C900F2CBB3 /* HTMLPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLPostViewController.m; sourceTree = "<group>"; };
+		5CD4F92914DC54C900F2CBB3 /* GPBubbleTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPBubbleTableCell.h; sourceTree = "<group>"; };
+		5CD4F92A14DC54C900F2CBB3 /* GPBubbleTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBubbleTableCell.m; sourceTree = "<group>"; };
+		5CD4F92B14DC54C900F2CBB3 /* GPTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableCell.h; sourceTree = "<group>"; };
+		5CD4F92C14DC54C900F2CBB3 /* GPTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableCell.m; sourceTree = "<group>"; };
+		5CD4F92D14DC54C900F2CBB3 /* GPTableHtmlItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableHtmlItemCell.h; sourceTree = "<group>"; };
+		5CD4F92E14DC54C900F2CBB3 /* GPTableHtmlItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableHtmlItemCell.m; sourceTree = "<group>"; };
+		5CD4F92F14DC54C900F2CBB3 /* GPTableImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableImageCell.h; sourceTree = "<group>"; };
+		5CD4F93014DC54C900F2CBB3 /* GPTableImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableImageCell.m; sourceTree = "<group>"; };
+		5CD4F93114DC54C900F2CBB3 /* GPTableMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMessageCell.h; sourceTree = "<group>"; };
+		5CD4F93214DC54C900F2CBB3 /* GPTableMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMessageCell.m; sourceTree = "<group>"; };
+		5CD4F93514DC54C900F2CBB3 /* GPTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableViewCell.h; sourceTree = "<group>"; };
+		5CD4F93614DC54C900F2CBB3 /* GPTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableViewCell.m; sourceTree = "<group>"; };
+		5CD4F93814DC54C900F2CBB3 /* GPTableBubbleItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableBubbleItem.h; sourceTree = "<group>"; };
+		5CD4F93914DC54C900F2CBB3 /* GPTableBubbleItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableBubbleItem.m; sourceTree = "<group>"; };
+		5CD4F93A14DC54C900F2CBB3 /* GPTableHTMLItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableHTMLItem.h; sourceTree = "<group>"; };
+		5CD4F93B14DC54C900F2CBB3 /* GPTableHTMLItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableHTMLItem.m; sourceTree = "<group>"; };
+		5CD4F93C14DC54C900F2CBB3 /* GPTableImageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableImageItem.h; sourceTree = "<group>"; };
+		5CD4F93D14DC54C900F2CBB3 /* GPTableImageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableImageItem.m; sourceTree = "<group>"; };
+		5CD4F93E14DC54C900F2CBB3 /* GPTableMessageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMessageItem.h; sourceTree = "<group>"; };
+		5CD4F93F14DC54C900F2CBB3 /* GPTableMessageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMessageItem.m; sourceTree = "<group>"; };
+		5CD4F94014DC54C900F2CBB3 /* GPTableTextItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextItem.h; sourceTree = "<group>"; };
+		5CD4F94114DC54C900F2CBB3 /* GPTableTextItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextItem.m; sourceTree = "<group>"; };
+		5CD4F94414DC54C900F2CBB3 /* GPTableViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableViewItem.h; sourceTree = "<group>"; };
+		5CD4F94514DC54C900F2CBB3 /* GPTableViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableViewItem.m; sourceTree = "<group>"; };
+		5CD4F94714DC54C900F2CBB3 /* GPBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPBubbleView.h; sourceTree = "<group>"; };
+		5CD4F94814DC54C900F2CBB3 /* GPBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBubbleView.m; sourceTree = "<group>"; };
+		5CD4F94914DC54C900F2CBB3 /* GPButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPButton.h; sourceTree = "<group>"; };
+		5CD4F94A14DC54C900F2CBB3 /* GPButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPButton.m; sourceTree = "<group>"; };
+		5CD4F94B14DC54C900F2CBB3 /* GPCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPCommentView.h; sourceTree = "<group>"; };
+		5CD4F94C14DC54C900F2CBB3 /* GPCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPCommentView.m; sourceTree = "<group>"; };
+		5CD4F94D14DC54C900F2CBB3 /* GPLoadingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLoadingLabel.h; sourceTree = "<group>"; };
+		5CD4F94E14DC54C900F2CBB3 /* GPLoadingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPLoadingLabel.m; sourceTree = "<group>"; };
+		5CD4F95114DC54C900F2CBB3 /* GPReceiptField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPReceiptField.h; sourceTree = "<group>"; };
+		5CD4F95214DC54C900F2CBB3 /* GPReceiptField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPReceiptField.m; sourceTree = "<group>"; };
+		5CD4F95314DC54C900F2CBB3 /* GPYouTubeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPYouTubeView.h; sourceTree = "<group>"; };
+		5CD4F95414DC54C900F2CBB3 /* GPYouTubeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPYouTubeView.m; sourceTree = "<group>"; };
+		5CD4F95614DC54C900F2CBB3 /* GPImageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPImageScrollView.h; sourceTree = "<group>"; };
+		5CD4F95714DC54C900F2CBB3 /* GPImageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPImageScrollView.m; sourceTree = "<group>"; };
+		5CD4F95814DC54C900F2CBB3 /* GPImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPImageView.h; sourceTree = "<group>"; };
+		5CD4F95914DC54C900F2CBB3 /* GPImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPImageView.m; sourceTree = "<group>"; };
+		5CD4F95A14DC54C900F2CBB3 /* GPImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPImageViewer.h; sourceTree = "<group>"; };
+		5CD4F95B14DC54C900F2CBB3 /* GPImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPImageViewer.m; sourceTree = "<group>"; };
+		5CD4F9BD14DC54E600F2CBB3 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark.png"; sourceTree = "<group>"; };
+		5CD4F9BE14DC550200F2CBB3 /* GPNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPNavigator.h; sourceTree = "<group>"; };
+		5CD4F9BF14DC550200F2CBB3 /* GPNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPNavigator.m; sourceTree = "<group>"; };
+		5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPCenterLabel.h; sourceTree = "<group>"; };
+		5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPCenterLabel.m; sourceTree = "<group>"; };
+		5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPDragToRefreshView.h; sourceTree = "<group>"; };
+		5CD4F9C514DC555100F2CBB3 /* GPDragToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPDragToRefreshView.m; sourceTree = "<group>"; };
+		5CD4F9C614DC555100F2CBB3 /* GPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPModel.h; sourceTree = "<group>"; };
+		5CD4F9C714DC555100F2CBB3 /* GPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPModel.m; sourceTree = "<group>"; };
+		5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableDragRefresh.h; sourceTree = "<group>"; };
+		5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableDragRefresh.m; sourceTree = "<group>"; };
+		5CD4F9CA14DC555100F2CBB3 /* GPTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableViewController.h; sourceTree = "<group>"; };
+		5CD4F9CB14DC555100F2CBB3 /* GPTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableViewController.m; sourceTree = "<group>"; };
+		5CD4F9DB14DC559A00F2CBB3 /* HTMLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLColors.h; sourceTree = "<group>"; };
+		5CD4F9DC14DC559A00F2CBB3 /* HTMLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLColors.m; sourceTree = "<group>"; };
+		5CD4F9DD14DC559A00F2CBB3 /* HTMLElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLElements.h; sourceTree = "<group>"; };
+		5CD4F9DE14DC559A00F2CBB3 /* HTMLElements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLElements.m; sourceTree = "<group>"; };
+		5CD4F9DF14DC559A00F2CBB3 /* HTMLKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLKit.h; sourceTree = "<group>"; };
+		5CD4F9E014DC559A00F2CBB3 /* HTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLParser.h; sourceTree = "<group>"; };
+		5CD4F9E114DC559A00F2CBB3 /* HTMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLParser.m; sourceTree = "<group>"; };
+		5CD4F9E214DC559A00F2CBB3 /* HTMLText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLText.h; sourceTree = "<group>"; };
+		5CD4F9E314DC559A00F2CBB3 /* HTMLText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLText.m; sourceTree = "<group>"; };
+		5CD4F9E414DC559A00F2CBB3 /* HTMLTextLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLTextLabel.h; sourceTree = "<group>"; };
+		5CD4F9E514DC559A00F2CBB3 /* HTMLTextLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLTextLabel.m; sourceTree = "<group>"; };
+		5CD4F9E614DC559A00F2CBB3 /* HTMLTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLTextView.h; sourceTree = "<group>"; };
+		5CD4F9E714DC559A00F2CBB3 /* HTMLTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLTextView.m; sourceTree = "<group>"; };
+		5CD4F9F914DC566C00F2CBB3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5CD4F9FB14DC577600F2CBB3 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		5CD4F9FD14DC577C00F2CBB3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		5CD4F9FF14DC578500F2CBB3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		5CD4FA0114DC578D00F2CBB3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		5CD4FA0314DC579300F2CBB3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5CE2615F1520C3E70022ACA2 /* drag-dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drag-dot@2x.png"; sourceTree = "<group>"; };
+		5CE261601520C3E70022ACA2 /* loupe-hi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loupe-hi@2x.png"; sourceTree = "<group>"; };
+		5CE261611520C3E70022ACA2 /* loupe-lo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loupe-lo@2x.png"; sourceTree = "<group>"; };
+		5CE261621520C3E70022ACA2 /* loupe-mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loupe-mask@2x.png"; sourceTree = "<group>"; };
+		5CE261631520C3E70022ACA2 /* magnifier-ranged-hi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnifier-ranged-hi@2x.png"; sourceTree = "<group>"; };
+		5CE261641520C3E70022ACA2 /* magnifier-ranged-lo-stemless@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnifier-ranged-lo-stemless@2x.png"; sourceTree = "<group>"; };
+		5CE261651520C3E70022ACA2 /* magnifier-ranged-lo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnifier-ranged-lo@2x.png"; sourceTree = "<group>"; };
+		5CE261661520C3E70022ACA2 /* magnifier-ranged-mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "magnifier-ranged-mask@2x.png"; sourceTree = "<group>"; };
+		5CE2636D1522106B0022ACA2 /* GPDrawExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPDrawExtras.h; path = Common/GPDrawExtras.h; sourceTree = "<group>"; };
+		5CE2636E1522106B0022ACA2 /* GPDrawExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPDrawExtras.m; path = Common/GPDrawExtras.m; sourceTree = "<group>"; };
+		5CFFA15D14DC601900501A3E /* GPTableMoreItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPTableMoreItem.h; path = GPLib/TableItems/GPTableMoreItem.h; sourceTree = SOURCE_ROOT; };
+		5CFFA15E14DC601900501A3E /* GPTableMoreItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPTableMoreItem.m; path = GPLib/TableItems/GPTableMoreItem.m; sourceTree = SOURCE_ROOT; };
+		5CFFA16214DC615900501A3E /* GPTableMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMoreCell.h; sourceTree = "<group>"; };
+		5CFFA16314DC615900501A3E /* GPTableMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMoreCell.m; sourceTree = "<group>"; };
+		5CFFA18D14DC739B00501A3E /* GPPostingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPPostingViewController.h; sourceTree = "<group>"; };
+		5CFFA18E14DC739B00501A3E /* GPPostingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPPostingViewController.m; sourceTree = "<group>"; };
+		5CFFA1A014DC79BE00501A3E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		D96B385C15740097004B9F69 /* GPTableSwitchItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSwitchItem.h; sourceTree = "<group>"; };
+		D96B385D15740097004B9F69 /* GPTableSwitchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableSwitchItem.m; sourceTree = "<group>"; };
+		D96B38611574011C004B9F69 /* GPTableSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSwitchCell.h; sourceTree = "<group>"; };
+		D96B38621574011C004B9F69 /* GPTableSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableSwitchCell.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5C88139E151CE7AA006BCDC9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C8813A3151CE7AA006BCDC9 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD4F8B114DC521A00F2CBB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C5C0A9215B8DEAA005A2F2D /* libGPHTTPRequestLibrary.a in Frameworks */,
+				5C884029152B6957007AEE7D /* libxml2.dylib in Frameworks */,
+				5C6907B914E18A5D00E44620 /* CoreText.framework in Frameworks */,
+				5CFFA1A114DC79BE00501A3E /* SystemConfiguration.framework in Frameworks */,
+				5CD4FA0414DC579300F2CBB3 /* QuartzCore.framework in Frameworks */,
+				5CD4FA0214DC578D00F2CBB3 /* CoreGraphics.framework in Frameworks */,
+				5CD4FA0014DC578500F2CBB3 /* libz.dylib in Frameworks */,
+				5CD4F9FE14DC577D00F2CBB3 /* MobileCoreServices.framework in Frameworks */,
+				5CD4F9FC14DC577600F2CBB3 /* CFNetwork.framework in Frameworks */,
+				5CD4F9FA14DC566C00F2CBB3 /* UIKit.framework in Frameworks */,
+				5CD4F8B814DC521A00F2CBB3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD4F8C014DC521A00F2CBB3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CFFA19514DC754A00501A3E /* UIKit.framework in Frameworks */,
+				5CD4F8C614DC521A00F2CBB3 /* SenTestingKit.framework in Frameworks */,
+				5CD4F8C914DC521A00F2CBB3 /* Foundation.framework in Frameworks */,
+				5CD4F8CC14DC521A00F2CBB3 /* libGPLib.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5C0F3598156D2CD30027A4BB /* GridCells */ = {
+			isa = PBXGroup;
+			children = (
+				5C0F3599156D2CD30027A4BB /* GPGridMoreCell.h */,
+				5C0F359A156D2CD30027A4BB /* GPGridMoreCell.m */,
+				5C0F359B156D2CD30027A4BB /* GPGridViewCell.h */,
+				5C0F359C156D2CD30027A4BB /* GPGridViewCell.m */,
+			);
+			name = GridCells;
+			path = GridView/GridCells;
+			sourceTree = "<group>";
+		};
+		5C0F359D156D2CD30027A4BB /* GridItems */ = {
+			isa = PBXGroup;
+			children = (
+				5C0F359E156D2CD40027A4BB /* GPGridViewItem.h */,
+				5C0F359F156D2CD40027A4BB /* GPGridViewItem.m */,
+				5C0F35A6156D2D250027A4BB /* GPGridMoreItem.h */,
+				5C0F35A7156D2D250027A4BB /* GPGridMoreItem.m */,
+			);
+			name = GridItems;
+			path = GridView/GridItems;
+			sourceTree = "<group>";
+		};
+		5C1430B41545A5AC00AEE1FA /* GPReveal */ = {
+			isa = PBXGroup;
+			children = (
+				5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */,
+				5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */,
+			);
+			name = GPReveal;
+			sourceTree = "<group>";
+		};
+		5C1431141547132E00AEE1FA /* GPTableSearchController */ = {
+			isa = PBXGroup;
+			children = (
+				5C1431161547137200AEE1FA /* GPTableSearchController.h */,
+				5C1431171547137200AEE1FA /* GPTableSearchController.m */,
+			);
+			name = GPTableSearchController;
+			sourceTree = "<group>";
+		};
+		5C14313E15488E9100AEE1FA /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F94914DC54C900F2CBB3 /* GPButton.h */,
+				5CD4F94A14DC54C900F2CBB3 /* GPButton.m */,
+				5C14312415483D6100AEE1FA /* GPLabel.h */,
+				5C14312515483D6100AEE1FA /* GPLabel.m */,
+				5C14312815485E8100AEE1FA /* GPView.h */,
+				5C14312915485E8100AEE1FA /* GPView.m */,
+				5C14314015488F3F00AEE1FA /* GPPillLabel.h */,
+				5C14314115488F3F00AEE1FA /* GPPillLabel.m */,
+				5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */,
+				5C63DEC9156A8BDD00C3EEC0 /* GPTabBarItem.m */,
+				5C3D90F31577F3870052179A /* GPBackArrowButton.h */,
+				5C3D90F41577F3880052179A /* GPBackArrowButton.m */,
+			);
+			name = Controls;
+			sourceTree = "<group>";
+		};
+		5C14313F15488EE800AEE1FA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F94714DC54C900F2CBB3 /* GPBubbleView.h */,
+				5CD4F94814DC54C900F2CBB3 /* GPBubbleView.m */,
+				5CD4F94B14DC54C900F2CBB3 /* GPCommentView.h */,
+				5CD4F94C14DC54C900F2CBB3 /* GPCommentView.m */,
+				5CD4F94D14DC54C900F2CBB3 /* GPLoadingLabel.h */,
+				5CD4F94E14DC54C900F2CBB3 /* GPLoadingLabel.m */,
+				5CD4F95114DC54C900F2CBB3 /* GPReceiptField.h */,
+				5CD4F95214DC54C900F2CBB3 /* GPReceiptField.m */,
+				5CD4F95314DC54C900F2CBB3 /* GPYouTubeView.h */,
+				5CD4F95414DC54C900F2CBB3 /* GPYouTubeView.m */,
+				5C3D8FE61573EAAC0052179A /* GPTimeScroller.h */,
+				5C3D8FE71573EAAC0052179A /* GPTimeScroller.m */,
+				5C3D9047157670590052179A /* GPAttachmentView.h */,
+				5C3D9048157670590052179A /* GPAttachmentView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		5C2E88AF151787350012CE45 /* HTMLPosting */ = {
+			isa = PBXGroup;
+			children = (
+				5C2E88AB151784BE0012CE45 /* HTMLLinkViewController.h */,
+				5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */,
+				5CD4F92614DC54C900F2CBB3 /* HTMLPostViewController.h */,
+				5CD4F92714DC54C900F2CBB3 /* HTMLPostViewController.m */,
+				5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */,
+				5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */,
+				5C88137E151B6778006BCDC9 /* HTMLListViewController.h */,
+				5C88137F151B6778006BCDC9 /* HTMLListViewController.m */,
+			);
+			name = HTMLPosting;
+			sourceTree = "<group>";
+		};
+		5C5C0A8415B8DE97005A2F2D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5C5C0A8B15B8DE97005A2F2D /* GPHTTPRequestFramework.framework */,
+				5C5C0A8D15B8DE97005A2F2D /* GPHTTPRequestFrameworkTests.octest */,
+				5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */,
+				5C5C0A9115B8DE97005A2F2D /* GPHTTPRequestLibraryTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5C63DECD156AAB5100C3EEC0 /* GPTabBarViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5C63DECE156AAB5100C3EEC0 /* GPTabBarController.h */,
+				5C63DECF156AAB5100C3EEC0 /* GPTabBarController.m */,
+			);
+			path = GPTabBarViewController;
+			sourceTree = "<group>";
+		};
+		5C69073714E02BD900E44620 /* Launcher */ = {
+			isa = PBXGroup;
+			children = (
+				5C69079814E02FA200E44620 /* GPLauncherView.h */,
+				5C69079914E02FA200E44620 /* GPLauncherView.m */,
+				5C6907AF14E04C8900E44620 /* GPLauncherButton.h */,
+				5C6907B014E04C8900E44620 /* GPLauncherButton.m */,
+			);
+			name = Launcher;
+			sourceTree = "<group>";
+		};
+		5C7D168415B45BA900D27B16 /* GPHTTPRequest */ = {
+			isa = PBXGroup;
+			children = (
+				5C7D168515B45BA900D27B16 /* GPHTTPRequest.h */,
+				5C7D168615B45BA900D27B16 /* GPHTTPRequest.m */,
+				5C7D168715B45BA900D27B16 /* GPReachability.h */,
+				5C7D168815B45BA900D27B16 /* GPReachability.m */,
+			);
+			path = GPHTTPRequest;
+			sourceTree = SOURCE_ROOT;
+		};
+		5C881382151CDE54006BCDC9 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				5C2FFA4B1561A7B100D87B52 /* italic.png */,
+				5CE2615F1520C3E70022ACA2 /* drag-dot@2x.png */,
+				5CE261601520C3E70022ACA2 /* loupe-hi@2x.png */,
+				5CE261611520C3E70022ACA2 /* loupe-lo@2x.png */,
+				5CE261621520C3E70022ACA2 /* loupe-mask@2x.png */,
+				5CE261631520C3E70022ACA2 /* magnifier-ranged-hi@2x.png */,
+				5CE261641520C3E70022ACA2 /* magnifier-ranged-lo-stemless@2x.png */,
+				5CE261651520C3E70022ACA2 /* magnifier-ranged-lo@2x.png */,
+				5CE261661520C3E70022ACA2 /* magnifier-ranged-mask@2x.png */,
+				5C8813D2151CF3DD006BCDC9 /* bold.png */,
+				5C8813D4151CF3DD006BCDC9 /* orderlist.png */,
+				5C8813D5151CF3DD006BCDC9 /* strike.png */,
+				5C8813D6151CF3DD006BCDC9 /* underline.png */,
+				5C8813D7151CF3DD006BCDC9 /* unorderlist.png */,
+				5C881383151CDE54006BCDC9 /* center_justify.png */,
+				5C881384151CDE54006BCDC9 /* justify_justify.png */,
+				5C881385151CDE54006BCDC9 /* left_justify.png */,
+				5C881386151CDE54006BCDC9 /* right_justify.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		5C8813A4151CE7AA006BCDC9 /* GPLibBundle */ = {
+			isa = PBXGroup;
+			children = (
+				5C8813A5151CE7AA006BCDC9 /* Supporting Files */,
+			);
+			path = GPLibBundle;
+			sourceTree = "<group>";
+		};
+		5C8813A5151CE7AA006BCDC9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5C8813A6151CE7AA006BCDC9 /* GPLibBundle-Info.plist */,
+				5C8813A7151CE7AA006BCDC9 /* InfoPlist.strings */,
+				5C8813AA151CE7AA006BCDC9 /* GPLibBundle-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5C8840F8152E39CC007AEE7D /* gridView */ = {
+			isa = PBXGroup;
+			children = (
+				5C0F3598156D2CD30027A4BB /* GridCells */,
+				5C0F359D156D2CD30027A4BB /* GridItems */,
+				5CA67FFE15361109001719DC /* GPGridViewController.h */,
+				5CA67FFF15361109001719DC /* GPGridViewController.m */,
+				5C8840FA152E39FB007AEE7D /* GPGridView.h */,
+				5C8840FB152E39FB007AEE7D /* GPGridView.m */,
+			);
+			name = gridView;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5CD4F8A914DC521A00F2CBB3 = {
+			isa = PBXGroup;
+			children = (
+				5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */,
+				5CD4F8B914DC521A00F2CBB3 /* GPLib */,
+				5CD4F8CD14DC521A00F2CBB3 /* GPLibTests */,
+				5C8813A4151CE7AA006BCDC9 /* GPLibBundle */,
+				5CD4F8B614DC521A00F2CBB3 /* Frameworks */,
+				5CD4F8B514DC521A00F2CBB3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5CD4F8B514DC521A00F2CBB3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */,
+				5CD4F8C414DC521A00F2CBB3 /* GPLibTests.octest */,
+				5C8813A1151CE7AA006BCDC9 /* GPLibBundle.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5CD4F8B614DC521A00F2CBB3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5C884028152B6957007AEE7D /* libxml2.dylib */,
+				5C6907B814E18A5D00E44620 /* CoreText.framework */,
+				5CFFA1A014DC79BE00501A3E /* SystemConfiguration.framework */,
+				5CD4FA0314DC579300F2CBB3 /* QuartzCore.framework */,
+				5CD4FA0114DC578D00F2CBB3 /* CoreGraphics.framework */,
+				5CD4F9FF14DC578500F2CBB3 /* libz.dylib */,
+				5CD4F9FD14DC577C00F2CBB3 /* MobileCoreServices.framework */,
+				5CD4F9FB14DC577600F2CBB3 /* CFNetwork.framework */,
+				5CD4F9F914DC566C00F2CBB3 /* UIKit.framework */,
+				5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */,
+				5CD4F8C514DC521A00F2CBB3 /* SenTestingKit.framework */,
+				5C8813A2151CE7AA006BCDC9 /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5CD4F8B914DC521A00F2CBB3 /* GPLib */ = {
+			isa = PBXGroup;
+			children = (
+				5C1430B41545A5AC00AEE1FA /* GPReveal */,
+				5C8840F8152E39CC007AEE7D /* gridView */,
+				5C69073714E02BD900E44620 /* Launcher */,
+				5CD4F90F14DC54C900F2CBB3 /* HTMLKit */,
+				5CD4F91F14DC54C900F2CBB3 /* Images */,
+				5CD4F92114DC54C900F2CBB3 /* Navigator */,
+				5CD4F92214DC54C900F2CBB3 /* NetModel */,
+				5CD4F92314DC54C900F2CBB3 /* Posting Controllers */,
+				5CD4F92814DC54C900F2CBB3 /* TableCells */,
+				5CD4F93714DC54C900F2CBB3 /* TableItems */,
+				5CD4F94614DC54C900F2CBB3 /* Views */,
+				5CD4F90C14DC52AD00F2CBB3 /* Core */,
+				5CD4F8BC14DC521A00F2CBB3 /* GPLib.h */,
+				5CD4F8BA14DC521A00F2CBB3 /* Supporting Files */,
+			);
+			path = GPLib;
+			sourceTree = "<group>";
+		};
+		5CD4F8BA14DC521A00F2CBB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F8BB14DC521A00F2CBB3 /* GPLib-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5CD4F8CD14DC521A00F2CBB3 /* GPLibTests */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F8D314DC521A00F2CBB3 /* GPLibTests.h */,
+				5CD4F8D414DC521A00F2CBB3 /* GPLibTests.m */,
+				5CD4F8CE14DC521A00F2CBB3 /* Supporting Files */,
+			);
+			path = GPLibTests;
+			sourceTree = "<group>";
+		};
+		5CD4F8CE14DC521A00F2CBB3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F8CF14DC521A00F2CBB3 /* GPLibTests-Info.plist */,
+				5CD4F8D014DC521A00F2CBB3 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5CD4F8DF14DC52A500F2CBB3 /* ASIHTTP */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F8E014DC52A500F2CBB3 /* ASIAuthenticationDialog.h */,
+				5CD4F8E114DC52A500F2CBB3 /* ASIAuthenticationDialog.m */,
+				5CD4F8E214DC52A500F2CBB3 /* ASICacheDelegate.h */,
+				5CD4F8E314DC52A500F2CBB3 /* ASIDataCompressor.h */,
+				5CD4F8E414DC52A500F2CBB3 /* ASIDataCompressor.m */,
+				5CD4F8E514DC52A500F2CBB3 /* ASIDataDecompressor.h */,
+				5CD4F8E614DC52A500F2CBB3 /* ASIDataDecompressor.m */,
+				5CD4F8E714DC52A500F2CBB3 /* ASIDownloadCache.h */,
+				5CD4F8E814DC52A500F2CBB3 /* ASIDownloadCache.m */,
+				5CD4F8E914DC52A500F2CBB3 /* ASIFormDataRequest.h */,
+				5CD4F8EA14DC52A500F2CBB3 /* ASIFormDataRequest.m */,
+				5CD4F8EB14DC52A500F2CBB3 /* ASIHTTPRequest.h */,
+				5CD4F8EC14DC52A500F2CBB3 /* ASIHTTPRequest.m */,
+				5CD4F8ED14DC52A500F2CBB3 /* ASIHTTPRequestConfig.h */,
+				5CD4F8EE14DC52A500F2CBB3 /* ASIHTTPRequestDelegate.h */,
+				5CD4F8EF14DC52A500F2CBB3 /* ASIInputStream.h */,
+				5CD4F8F014DC52A500F2CBB3 /* ASIInputStream.m */,
+				5CD4F8F114DC52A500F2CBB3 /* ASINetworkQueue.h */,
+				5CD4F8F214DC52A500F2CBB3 /* ASINetworkQueue.m */,
+				5CD4F8F314DC52A500F2CBB3 /* ASIProgressDelegate.h */,
+				5CD4F8F414DC52A500F2CBB3 /* Reachability.h */,
+				5CD4F8F514DC52A500F2CBB3 /* Reachability.m */,
+			);
+			name = ASIHTTP;
+			path = ../ASIHTTP;
+			sourceTree = "<group>";
+		};
+		5CD4F90C14DC52AD00F2CBB3 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				5C7D168415B45BA900D27B16 /* GPHTTPRequest */,
+				5CE2636B1522103D0022ACA2 /* DrawExtras */,
+				5CD4FA0514DC5AC900F2CBB3 /* GPUtils */,
+				5CD4F8DF14DC52A500F2CBB3 /* ASIHTTP */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		5CD4F90F14DC54C900F2CBB3 /* HTMLKit */ = {
+			isa = PBXGroup;
+			children = (
+				5C881382151CDE54006BCDC9 /* images */,
+				5CD4F9DB14DC559A00F2CBB3 /* HTMLColors.h */,
+				5CD4F9DC14DC559A00F2CBB3 /* HTMLColors.m */,
+				5CD4F9DD14DC559A00F2CBB3 /* HTMLElements.h */,
+				5CD4F9DE14DC559A00F2CBB3 /* HTMLElements.m */,
+				5CD4F9DF14DC559A00F2CBB3 /* HTMLKit.h */,
+				5CD4F9E014DC559A00F2CBB3 /* HTMLParser.h */,
+				5CD4F9E114DC559A00F2CBB3 /* HTMLParser.m */,
+				5CD4F9E214DC559A00F2CBB3 /* HTMLText.h */,
+				5CD4F9E314DC559A00F2CBB3 /* HTMLText.m */,
+				5CD4F9E414DC559A00F2CBB3 /* HTMLTextLabel.h */,
+				5CD4F9E514DC559A00F2CBB3 /* HTMLTextLabel.m */,
+				5CD4F9E614DC559A00F2CBB3 /* HTMLTextView.h */,
+				5CD4F9E714DC559A00F2CBB3 /* HTMLTextView.m */,
+			);
+			path = HTMLKit;
+			sourceTree = "<group>";
+		};
+		5CD4F91F14DC54C900F2CBB3 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				5C3D8FEB1573F4100052179A /* timescroll_hourhand.png */,
+				5C3D8FEC1573F4100052179A /* timescroll_hourhand@2x.png */,
+				5C3D8FED1573F4100052179A /* timescroll_minutehand.png */,
+				5C3D8FEE1573F4100052179A /* timescroll_minutehand@2x.png */,
+				5C3D8FEF1573F4100052179A /* timescroll_pointer.png */,
+				5C3D8FF01573F4100052179A /* timescroll_pointer@2x.png */,
+				5C63DEDA156AD1BA00C3EEC0 /* TabBarGlow.png */,
+				5C63DEDB156AD1BA00C3EEC0 /* TabBarGlow@2x.png */,
+				5C63DEDC156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png */,
+				5C63DEDD156AD1BA00C3EEC0 /* TabBarItemSelectedBackground@2x.png */,
+				5C63DEDE156AD1BA00C3EEC0 /* TabBarNipple.png */,
+				5C63DEDF156AD1BA00C3EEC0 /* TabBarNipple@2x.png */,
+				5C8813B4151CE818006BCDC9 /* blueArrow.png */,
+				5C8813B5151CE818006BCDC9 /* blueArrow@2x.png */,
+				5CD4F9BD14DC54E600F2CBB3 /* 37x-Checkmark.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		5CD4F92114DC54C900F2CBB3 /* Navigator */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F9BE14DC550200F2CBB3 /* GPNavigator.h */,
+				5CD4F9BF14DC550200F2CBB3 /* GPNavigator.m */,
+			);
+			path = Navigator;
+			sourceTree = "<group>";
+		};
+		5CD4F92214DC54C900F2CBB3 /* NetModel */ = {
+			isa = PBXGroup;
+			children = (
+				5C63DECD156AAB5100C3EEC0 /* GPTabBarViewController */,
+				5C1431141547132E00AEE1FA /* GPTableSearchController */,
+				5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */,
+				5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */,
+				5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */,
+				5CD4F9C514DC555100F2CBB3 /* GPDragToRefreshView.m */,
+				5CD4F9C614DC555100F2CBB3 /* GPModel.h */,
+				5CD4F9C714DC555100F2CBB3 /* GPModel.m */,
+				5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */,
+				5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */,
+				5CD4F9CA14DC555100F2CBB3 /* GPTableViewController.h */,
+				5CD4F9CB14DC555100F2CBB3 /* GPTableViewController.m */,
+				5C89A18F1551C5D800BF73CE /* GPEmptyTableView.h */,
+				5C89A1901551C5D800BF73CE /* GPEmptyTableView.m */,
+				5C63DF0C156AEB4000C3EEC0 /* GPTableAccessory.h */,
+				5C63DF0D156AEB4000C3EEC0 /* GPTableAccessory.m */,
+			);
+			path = NetModel;
+			sourceTree = "<group>";
+		};
+		5CD4F92314DC54C900F2CBB3 /* Posting Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5C2E88AF151787350012CE45 /* HTMLPosting */,
+				5CFFA18D14DC739B00501A3E /* GPPostingViewController.h */,
+				5CFFA18E14DC739B00501A3E /* GPPostingViewController.m */,
+				5CD4F92414DC54C900F2CBB3 /* GPMessagePostViewController.h */,
+				5CD4F92514DC54C900F2CBB3 /* GPMessagePostViewController.m */,
+			);
+			path = "Posting Controllers";
+			sourceTree = "<group>";
+		};
+		5CD4F92814DC54C900F2CBB3 /* TableCells */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F92914DC54C900F2CBB3 /* GPBubbleTableCell.h */,
+				5CD4F92A14DC54C900F2CBB3 /* GPBubbleTableCell.m */,
+				5CD4F92B14DC54C900F2CBB3 /* GPTableCell.h */,
+				5CD4F92C14DC54C900F2CBB3 /* GPTableCell.m */,
+				5CD4F92D14DC54C900F2CBB3 /* GPTableHtmlItemCell.h */,
+				5CD4F92E14DC54C900F2CBB3 /* GPTableHtmlItemCell.m */,
+				5CD4F92F14DC54C900F2CBB3 /* GPTableImageCell.h */,
+				5CD4F93014DC54C900F2CBB3 /* GPTableImageCell.m */,
+				5CD4F93114DC54C900F2CBB3 /* GPTableMessageCell.h */,
+				5CD4F93214DC54C900F2CBB3 /* GPTableMessageCell.m */,
+				5CD4F93514DC54C900F2CBB3 /* GPTableViewCell.h */,
+				5CD4F93614DC54C900F2CBB3 /* GPTableViewCell.m */,
+				5CFFA16214DC615900501A3E /* GPTableMoreCell.h */,
+				5CFFA16314DC615900501A3E /* GPTableMoreCell.m */,
+				5C9B7D5315408D9000856C8A /* GPTableTextFieldCell.h */,
+				5C9B7D5415408D9100856C8A /* GPTableTextFieldCell.m */,
+				5C14314C1549A7A700AEE1FA /* GPTableDeleteCell.h */,
+				5C14314D1549A7A700AEE1FA /* GPTableDeleteCell.m */,
+				5C3BD0CB156572A000E615D6 /* GPTableFloatingCell.h */,
+				5C3BD0CC156572A000E615D6 /* GPTableFloatingCell.m */,
+				D96B38611574011C004B9F69 /* GPTableSwitchCell.h */,
+				D96B38621574011C004B9F69 /* GPTableSwitchCell.m */,
+				5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */,
+				5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */,
+			);
+			path = TableCells;
+			sourceTree = "<group>";
+		};
+		5CD4F93714DC54C900F2CBB3 /* TableItems */ = {
+			isa = PBXGroup;
+			children = (
+				5CFFA15D14DC601900501A3E /* GPTableMoreItem.h */,
+				5CFFA15E14DC601900501A3E /* GPTableMoreItem.m */,
+				5CD4F93814DC54C900F2CBB3 /* GPTableBubbleItem.h */,
+				5CD4F93914DC54C900F2CBB3 /* GPTableBubbleItem.m */,
+				5CD4F93A14DC54C900F2CBB3 /* GPTableHTMLItem.h */,
+				5CD4F93B14DC54C900F2CBB3 /* GPTableHTMLItem.m */,
+				5CD4F93C14DC54C900F2CBB3 /* GPTableImageItem.h */,
+				5CD4F93D14DC54C900F2CBB3 /* GPTableImageItem.m */,
+				5CD4F93E14DC54C900F2CBB3 /* GPTableMessageItem.h */,
+				5CD4F93F14DC54C900F2CBB3 /* GPTableMessageItem.m */,
+				5CD4F94014DC54C900F2CBB3 /* GPTableTextItem.h */,
+				5CD4F94114DC54C900F2CBB3 /* GPTableTextItem.m */,
+				5CD4F94414DC54C900F2CBB3 /* GPTableViewItem.h */,
+				5CD4F94514DC54C900F2CBB3 /* GPTableViewItem.m */,
+				5C9B7D5815408E2100856C8A /* GPTableTextFieldItem.h */,
+				5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */,
+				5C1431481549A6B800AEE1FA /* GPTableDeleteItem.h */,
+				5C1431491549A6B900AEE1FA /* GPTableDeleteItem.m */,
+				5C3BD0C61565717200E615D6 /* GPTableFloatingItem.h */,
+				5C3BD0C71565717200E615D6 /* GPTableFloatingItem.m */,
+				D96B385C15740097004B9F69 /* GPTableSwitchItem.h */,
+				D96B385D15740097004B9F69 /* GPTableSwitchItem.m */,
+				5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */,
+				5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */,
+			);
+			path = TableItems;
+			sourceTree = "<group>";
+		};
+		5CD4F94614DC54C900F2CBB3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5C14313F15488EE800AEE1FA /* Views */,
+				5C14313E15488E9100AEE1FA /* Controls */,
+				5C0769961518E8BC0006F70B /* GPTransparentToolbar.h */,
+				5C0769971518E8BC0006F70B /* GPTransparentToolbar.m */,
+				5CD4F95514DC54C900F2CBB3 /* ImageViews */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5CD4F95514DC54C900F2CBB3 /* ImageViews */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F95614DC54C900F2CBB3 /* GPImageScrollView.h */,
+				5CD4F95714DC54C900F2CBB3 /* GPImageScrollView.m */,
+				5CD4F95814DC54C900F2CBB3 /* GPImageView.h */,
+				5CD4F95914DC54C900F2CBB3 /* GPImageView.m */,
+				5CD4F95A14DC54C900F2CBB3 /* GPImageViewer.h */,
+				5CD4F95B14DC54C900F2CBB3 /* GPImageViewer.m */,
+			);
+			path = ImageViews;
+			sourceTree = "<group>";
+		};
+		5CD4FA0514DC5AC900F2CBB3 /* GPUtils */ = {
+			isa = PBXGroup;
+			children = (
+				5C3D90D71577CA4A0052179A /* GPUtils.h */,
+				5C3D90D81577CA4A0052179A /* GPUtils.m */,
+				5C3D90D91577CA4A0052179A /* NSDate+Additions.h */,
+				5C3D90DA1577CA4A0052179A /* NSDate+Additions.m */,
+				5C3D90DB1577CA4A0052179A /* NSString+GPString.h */,
+				5C3D90DC1577CA4A0052179A /* NSString+GPString.m */,
+				5C3D90DD1577CA4A0052179A /* UIBarButtonItem+Additions.h */,
+				5C3D90DE1577CA4A0052179A /* UIBarButtonItem+Additions.m */,
+				5C3D90DF1577CA4A0052179A /* UIImage+Additions.h */,
+				5C3D90E01577CA4A0052179A /* UIImage+Additions.m */,
+				5C3D90E11577CA4A0052179A /* UIViewController+Additions.h */,
+				5C3D90E21577CA4A0052179A /* UIViewController+Additions.m */,
+				5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */,
+				5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */,
+			);
+			name = GPUtils;
+			sourceTree = "<group>";
+		};
+		5CE2636B1522103D0022ACA2 /* DrawExtras */ = {
+			isa = PBXGroup;
+			children = (
+				5CE2636D1522106B0022ACA2 /* GPDrawExtras.h */,
+				5CE2636E1522106B0022ACA2 /* GPDrawExtras.m */,
+			);
+			name = DrawExtras;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5CD4F8B214DC521A00F2CBB3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CD4F8F614DC52A500F2CBB3 /* ASIAuthenticationDialog.h in Headers */,
+				5CD4F8F814DC52A500F2CBB3 /* ASICacheDelegate.h in Headers */,
+				5CD4F8F914DC52A500F2CBB3 /* ASIDataCompressor.h in Headers */,
+				5CD4F8FB14DC52A500F2CBB3 /* ASIDataDecompressor.h in Headers */,
+				5CD4F8FD14DC52A500F2CBB3 /* ASIDownloadCache.h in Headers */,
+				5CD4F8FF14DC52A500F2CBB3 /* ASIFormDataRequest.h in Headers */,
+				5CD4F90114DC52A500F2CBB3 /* ASIHTTPRequest.h in Headers */,
+				5CD4F90314DC52A500F2CBB3 /* ASIHTTPRequestConfig.h in Headers */,
+				5CD4F90414DC52A500F2CBB3 /* ASIHTTPRequestDelegate.h in Headers */,
+				5CD4F90514DC52A500F2CBB3 /* ASIInputStream.h in Headers */,
+				5CD4F90714DC52A500F2CBB3 /* ASINetworkQueue.h in Headers */,
+				5CD4F90914DC52A500F2CBB3 /* ASIProgressDelegate.h in Headers */,
+				5CD4F90A14DC52A500F2CBB3 /* Reachability.h in Headers */,
+				5CD4F96B14DC54C900F2CBB3 /* GPMessagePostViewController.h in Headers */,
+				5CD4F96D14DC54C900F2CBB3 /* HTMLPostViewController.h in Headers */,
+				5CD4F96F14DC54C900F2CBB3 /* GPBubbleTableCell.h in Headers */,
+				5CD4F97114DC54C900F2CBB3 /* GPTableCell.h in Headers */,
+				5CD4F97314DC54C900F2CBB3 /* GPTableHtmlItemCell.h in Headers */,
+				5CD4F97514DC54C900F2CBB3 /* GPTableImageCell.h in Headers */,
+				5CD4F97714DC54C900F2CBB3 /* GPTableMessageCell.h in Headers */,
+				5CD4F97B14DC54C900F2CBB3 /* GPTableViewCell.h in Headers */,
+				5CD4F97D14DC54C900F2CBB3 /* GPTableBubbleItem.h in Headers */,
+				5CD4F97F14DC54C900F2CBB3 /* GPTableHTMLItem.h in Headers */,
+				5CD4F98114DC54C900F2CBB3 /* GPTableImageItem.h in Headers */,
+				5CD4F98314DC54C900F2CBB3 /* GPTableMessageItem.h in Headers */,
+				5CD4F98514DC54C900F2CBB3 /* GPTableTextItem.h in Headers */,
+				5CD4F98914DC54C900F2CBB3 /* GPTableViewItem.h in Headers */,
+				5CD4F98B14DC54C900F2CBB3 /* GPBubbleView.h in Headers */,
+				5CD4F98D14DC54C900F2CBB3 /* GPButton.h in Headers */,
+				5CD4F98F14DC54C900F2CBB3 /* GPCommentView.h in Headers */,
+				5CD4F99114DC54C900F2CBB3 /* GPLoadingLabel.h in Headers */,
+				5CD4F99514DC54C900F2CBB3 /* GPReceiptField.h in Headers */,
+				5CD4F99714DC54C900F2CBB3 /* GPYouTubeView.h in Headers */,
+				5CD4F99914DC54C900F2CBB3 /* GPImageScrollView.h in Headers */,
+				5CD4F99B14DC54C900F2CBB3 /* GPImageView.h in Headers */,
+				5CD4F99D14DC54C900F2CBB3 /* GPImageViewer.h in Headers */,
+				5CD4F9C014DC550200F2CBB3 /* GPNavigator.h in Headers */,
+				5CD4F9CC14DC555100F2CBB3 /* GPCenterLabel.h in Headers */,
+				5CD4F9CE14DC555100F2CBB3 /* GPDragToRefreshView.h in Headers */,
+				5CD4F9D014DC555100F2CBB3 /* GPModel.h in Headers */,
+				5CD4F9D214DC555100F2CBB3 /* GPTableDragRefresh.h in Headers */,
+				5CD4F9D414DC555100F2CBB3 /* GPTableViewController.h in Headers */,
+				5CD4F9EA14DC559A00F2CBB3 /* HTMLColors.h in Headers */,
+				5CD4F9EC14DC559A00F2CBB3 /* HTMLElements.h in Headers */,
+				5CD4F9EE14DC559A00F2CBB3 /* HTMLKit.h in Headers */,
+				5CD4F9EF14DC559A00F2CBB3 /* HTMLParser.h in Headers */,
+				5CD4F9F114DC559A00F2CBB3 /* HTMLText.h in Headers */,
+				5CD4F9F314DC559A00F2CBB3 /* HTMLTextLabel.h in Headers */,
+				5CD4F9F514DC559A00F2CBB3 /* HTMLTextView.h in Headers */,
+				5CFFA15F14DC601900501A3E /* GPTableMoreItem.h in Headers */,
+				5CFFA16414DC615900501A3E /* GPTableMoreCell.h in Headers */,
+				5CFFA18F14DC739B00501A3E /* GPPostingViewController.h in Headers */,
+				5C69079A14E02FA200E44620 /* GPLauncherView.h in Headers */,
+				5C6907B114E04C8900E44620 /* GPLauncherButton.h in Headers */,
+				5C2E88AD151784BE0012CE45 /* HTMLLinkViewController.h in Headers */,
+				5C0769981518E8BC0006F70B /* GPTransparentToolbar.h in Headers */,
+				5C88137B151A175A006BCDC9 /* HTMLSettingsViewController.h in Headers */,
+				5C881380151B6778006BCDC9 /* HTMLListViewController.h in Headers */,
+				5CE2636F1522106B0022ACA2 /* GPDrawExtras.h in Headers */,
+				5C8840FC152E39FB007AEE7D /* GPGridView.h in Headers */,
+				5CA6800015361109001719DC /* GPGridViewController.h in Headers */,
+				5C9B7D5515408D9100856C8A /* GPTableTextFieldCell.h in Headers */,
+				5C9B7D5A15408E2100856C8A /* GPTableTextFieldItem.h in Headers */,
+				5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */,
+				5C1431181547137200AEE1FA /* GPTableSearchController.h in Headers */,
+				5C14312615483D6100AEE1FA /* GPLabel.h in Headers */,
+				5C14312A15485E8100AEE1FA /* GPView.h in Headers */,
+				5C14314215488F3F00AEE1FA /* GPPillLabel.h in Headers */,
+				5C14314A1549A6B900AEE1FA /* GPTableDeleteItem.h in Headers */,
+				5C14314E1549A7A800AEE1FA /* GPTableDeleteCell.h in Headers */,
+				5C89A1911551C5D800BF73CE /* GPEmptyTableView.h in Headers */,
+				5C3BD0C81565717200E615D6 /* GPTableFloatingItem.h in Headers */,
+				5C3BD0CD156572A000E615D6 /* GPTableFloatingCell.h in Headers */,
+				5C63DECA156A8BDD00C3EEC0 /* GPTabBarItem.h in Headers */,
+				5C63DED0156AAB5100C3EEC0 /* GPTabBarController.h in Headers */,
+				5C63DF0E156AEB4000C3EEC0 /* GPTableAccessory.h in Headers */,
+				5C0F35A0156D2CD40027A4BB /* GPGridMoreCell.h in Headers */,
+				5C0F35A2156D2CD40027A4BB /* GPGridViewCell.h in Headers */,
+				5C0F35A4156D2CD40027A4BB /* GPGridViewItem.h in Headers */,
+				5C0F35A8156D2D250027A4BB /* GPGridMoreItem.h in Headers */,
+				5C3D8FE81573EAAC0052179A /* GPTimeScroller.h in Headers */,
+				D96B385E15740097004B9F69 /* GPTableSwitchItem.h in Headers */,
+				D96B38631574011C004B9F69 /* GPTableSwitchCell.h in Headers */,
+				5C3D9049157670590052179A /* GPAttachmentView.h in Headers */,
+				5C3D90E31577CA4A0052179A /* GPUtils.h in Headers */,
+				5C3D90E51577CA4A0052179A /* NSDate+Additions.h in Headers */,
+				5C3D90E71577CA4A0052179A /* NSString+GPString.h in Headers */,
+				5C3D90E91577CA4A0052179A /* UIBarButtonItem+Additions.h in Headers */,
+				5C3D90EB1577CA4A0052179A /* UIImage+Additions.h in Headers */,
+				5C3D90ED1577CA4A0052179A /* UIViewController+Additions.h in Headers */,
+				5C3D90F51577F3880052179A /* GPBackArrowButton.h in Headers */,
+				5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */,
+				5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */,
+				5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */,
+				5C7D168915B45BA900D27B16 /* GPHTTPRequest.h in Headers */,
+				5C7D168B15B45BA900D27B16 /* GPReachability.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5C8813A0151CE7AA006BCDC9 /* GPLibBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C8813AD151CE7AA006BCDC9 /* Build configuration list for PBXNativeTarget "GPLibBundle" */;
+			buildPhases = (
+				5C88139D151CE7AA006BCDC9 /* Sources */,
+				5C88139E151CE7AA006BCDC9 /* Frameworks */,
+				5C88139F151CE7AA006BCDC9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GPLibBundle;
+			productName = GPLibBundle;
+			productReference = 5C8813A1151CE7AA006BCDC9 /* GPLibBundle.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+		5CD4F8B314DC521A00F2CBB3 /* GPLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CD4F8D814DC521A00F2CBB3 /* Build configuration list for PBXNativeTarget "GPLib" */;
+			buildPhases = (
+				5CD4F8B014DC521A00F2CBB3 /* Sources */,
+				5CD4F8B114DC521A00F2CBB3 /* Frameworks */,
+				5CD4F8B214DC521A00F2CBB3 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5C5C0A9415B8DEB2005A2F2D /* PBXTargetDependency */,
+			);
+			name = GPLib;
+			productName = GPLib;
+			productReference = 5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		5CD4F8C314DC521A00F2CBB3 /* GPLibTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CD4F8DB14DC521A00F2CBB3 /* Build configuration list for PBXNativeTarget "GPLibTests" */;
+			buildPhases = (
+				5CD4F8BF14DC521A00F2CBB3 /* Sources */,
+				5CD4F8C014DC521A00F2CBB3 /* Frameworks */,
+				5CD4F8C114DC521A00F2CBB3 /* Resources */,
+				5CD4F8C214DC521A00F2CBB3 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5CD4F8CB14DC521A00F2CBB3 /* PBXTargetDependency */,
+			);
+			name = GPLibTests;
+			productName = GPLibTests;
+			productReference = 5CD4F8C414DC521A00F2CBB3 /* GPLibTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5CD4F8AB14DC521A00F2CBB3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Lightspeed Systems";
+			};
+			buildConfigurationList = 5CD4F8AE14DC521A00F2CBB3 /* Build configuration list for PBXProject "GPLib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5CD4F8A914DC521A00F2CBB3;
+			productRefGroup = 5CD4F8B514DC521A00F2CBB3 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5C5C0A8415B8DE97005A2F2D /* Products */;
+					ProjectRef = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				5CD4F8B314DC521A00F2CBB3 /* GPLib */,
+				5CD4F8C314DC521A00F2CBB3 /* GPLibTests */,
+				5C8813A0151CE7AA006BCDC9 /* GPLibBundle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5C5C0A8B15B8DE97005A2F2D /* GPHTTPRequestFramework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GPHTTPRequestFramework.framework;
+			remoteRef = 5C5C0A8A15B8DE97005A2F2D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5C5C0A8D15B8DE97005A2F2D /* GPHTTPRequestFrameworkTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GPHTTPRequestFrameworkTests.octest;
+			remoteRef = 5C5C0A8C15B8DE97005A2F2D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGPHTTPRequestLibrary.a;
+			remoteRef = 5C5C0A8E15B8DE97005A2F2D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5C5C0A9115B8DE97005A2F2D /* GPHTTPRequestLibraryTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GPHTTPRequestLibraryTests.octest;
+			remoteRef = 5C5C0A9015B8DE97005A2F2D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5C88139F151CE7AA006BCDC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C8813DE151CF3F1006BCDC9 /* bold.png in Resources */,
+				5C8813E0151CF3F1006BCDC9 /* orderlist.png in Resources */,
+				5C8813E1151CF3F1006BCDC9 /* strike.png in Resources */,
+				5C8813E2151CF3F1006BCDC9 /* underline.png in Resources */,
+				5C8813E3151CF3F1006BCDC9 /* unorderlist.png in Resources */,
+				5C2FFA561562C00800D87B52 /* italic.png in Resources */,
+				5C8813AF151CE7E7006BCDC9 /* center_justify.png in Resources */,
+				5C8813B0151CE7E7006BCDC9 /* justify_justify.png in Resources */,
+				5C8813B1151CE7E7006BCDC9 /* left_justify.png in Resources */,
+				5C8813B2151CE7E7006BCDC9 /* right_justify.png in Resources */,
+				5C8813B3151CE7E7006BCDC9 /* 37x-Checkmark.png in Resources */,
+				5C8813A9151CE7AA006BCDC9 /* InfoPlist.strings in Resources */,
+				5C8813B6151CE818006BCDC9 /* blueArrow.png in Resources */,
+				5C8813B7151CE818006BCDC9 /* blueArrow@2x.png in Resources */,
+				5CE261671520C3E70022ACA2 /* drag-dot@2x.png in Resources */,
+				5CE261681520C3E70022ACA2 /* loupe-hi@2x.png in Resources */,
+				5CE261691520C3E70022ACA2 /* loupe-lo@2x.png in Resources */,
+				5CE2616A1520C3E70022ACA2 /* loupe-mask@2x.png in Resources */,
+				5CE2616B1520C3E70022ACA2 /* magnifier-ranged-hi@2x.png in Resources */,
+				5CE2616C1520C3E70022ACA2 /* magnifier-ranged-lo-stemless@2x.png in Resources */,
+				5CE2616D1520C3E70022ACA2 /* magnifier-ranged-lo@2x.png in Resources */,
+				5CE2616E1520C3E70022ACA2 /* magnifier-ranged-mask@2x.png in Resources */,
+				5C63DEE0156AD1BA00C3EEC0 /* TabBarGlow.png in Resources */,
+				5C63DEE1156AD1BA00C3EEC0 /* TabBarGlow@2x.png in Resources */,
+				5C63DEE2156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png in Resources */,
+				5C63DEE3156AD1BA00C3EEC0 /* TabBarItemSelectedBackground@2x.png in Resources */,
+				5C63DEE4156AD1BA00C3EEC0 /* TabBarNipple.png in Resources */,
+				5C63DEE5156AD1BA00C3EEC0 /* TabBarNipple@2x.png in Resources */,
+				5C3D8FF11573F4100052179A /* timescroll_hourhand.png in Resources */,
+				5C3D8FF21573F4100052179A /* timescroll_hourhand@2x.png in Resources */,
+				5C3D8FF31573F4100052179A /* timescroll_minutehand.png in Resources */,
+				5C3D8FF41573F4100052179A /* timescroll_minutehand@2x.png in Resources */,
+				5C3D8FF51573F4100052179A /* timescroll_pointer.png in Resources */,
+				5C3D8FF61573F4100052179A /* timescroll_pointer@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD4F8C114DC521A00F2CBB3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CD4F8D214DC521A00F2CBB3 /* InfoPlist.strings in Resources */,
+				5C2FFA4C1561A7B100D87B52 /* italic.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5CD4F8C214DC521A00F2CBB3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5C88139D151CE7AA006BCDC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD4F8B014DC521A00F2CBB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CD4F8F714DC52A500F2CBB3 /* ASIAuthenticationDialog.m in Sources */,
+				5CD4F8FA14DC52A500F2CBB3 /* ASIDataCompressor.m in Sources */,
+				5CD4F8FC14DC52A500F2CBB3 /* ASIDataDecompressor.m in Sources */,
+				5CD4F8FE14DC52A500F2CBB3 /* ASIDownloadCache.m in Sources */,
+				5CD4F90014DC52A500F2CBB3 /* ASIFormDataRequest.m in Sources */,
+				5CD4F90214DC52A500F2CBB3 /* ASIHTTPRequest.m in Sources */,
+				5CD4F90614DC52A500F2CBB3 /* ASIInputStream.m in Sources */,
+				5CD4F90814DC52A500F2CBB3 /* ASINetworkQueue.m in Sources */,
+				5CD4F96C14DC54C900F2CBB3 /* GPMessagePostViewController.m in Sources */,
+				5CD4F96E14DC54C900F2CBB3 /* HTMLPostViewController.m in Sources */,
+				5CD4F97014DC54C900F2CBB3 /* GPBubbleTableCell.m in Sources */,
+				5CD4F97214DC54C900F2CBB3 /* GPTableCell.m in Sources */,
+				5CD4F97414DC54C900F2CBB3 /* GPTableHtmlItemCell.m in Sources */,
+				5CD4F97614DC54C900F2CBB3 /* GPTableImageCell.m in Sources */,
+				5CD4F97814DC54C900F2CBB3 /* GPTableMessageCell.m in Sources */,
+				5CD4F97C14DC54C900F2CBB3 /* GPTableViewCell.m in Sources */,
+				5CD4F97E14DC54C900F2CBB3 /* GPTableBubbleItem.m in Sources */,
+				5CD4F98014DC54C900F2CBB3 /* GPTableHTMLItem.m in Sources */,
+				5CD4F98214DC54C900F2CBB3 /* GPTableImageItem.m in Sources */,
+				5CD4F98414DC54C900F2CBB3 /* GPTableMessageItem.m in Sources */,
+				5CD4F98614DC54C900F2CBB3 /* GPTableTextItem.m in Sources */,
+				5CD4F98A14DC54C900F2CBB3 /* GPTableViewItem.m in Sources */,
+				5CD4F98C14DC54C900F2CBB3 /* GPBubbleView.m in Sources */,
+				5CD4F98E14DC54C900F2CBB3 /* GPButton.m in Sources */,
+				5CD4F99014DC54C900F2CBB3 /* GPCommentView.m in Sources */,
+				5CD4F99214DC54C900F2CBB3 /* GPLoadingLabel.m in Sources */,
+				5CD4F99614DC54C900F2CBB3 /* GPReceiptField.m in Sources */,
+				5CD4F99814DC54C900F2CBB3 /* GPYouTubeView.m in Sources */,
+				5CD4F99A14DC54C900F2CBB3 /* GPImageScrollView.m in Sources */,
+				5CD4F99C14DC54C900F2CBB3 /* GPImageView.m in Sources */,
+				5CD4F99E14DC54C900F2CBB3 /* GPImageViewer.m in Sources */,
+				5CD4F9C114DC550200F2CBB3 /* GPNavigator.m in Sources */,
+				5CD4F9CD14DC555100F2CBB3 /* GPCenterLabel.m in Sources */,
+				5CD4F9CF14DC555100F2CBB3 /* GPDragToRefreshView.m in Sources */,
+				5CD4F9D114DC555100F2CBB3 /* GPModel.m in Sources */,
+				5CD4F9D314DC555100F2CBB3 /* GPTableDragRefresh.m in Sources */,
+				5CD4F9D514DC555100F2CBB3 /* GPTableViewController.m in Sources */,
+				5CD4F9EB14DC559A00F2CBB3 /* HTMLColors.m in Sources */,
+				5CD4F9ED14DC559A00F2CBB3 /* HTMLElements.m in Sources */,
+				5CD4F9F014DC559A00F2CBB3 /* HTMLParser.m in Sources */,
+				5CD4F9F214DC559A00F2CBB3 /* HTMLText.m in Sources */,
+				5CD4F9F414DC559A00F2CBB3 /* HTMLTextLabel.m in Sources */,
+				5CD4F9F614DC559A00F2CBB3 /* HTMLTextView.m in Sources */,
+				5CFFA16014DC601900501A3E /* GPTableMoreItem.m in Sources */,
+				5CFFA16514DC615900501A3E /* GPTableMoreCell.m in Sources */,
+				5CFFA19014DC739B00501A3E /* GPPostingViewController.m in Sources */,
+				5C69079B14E02FA200E44620 /* GPLauncherView.m in Sources */,
+				5C6907B214E04C8900E44620 /* GPLauncherButton.m in Sources */,
+				5C2E88AE151784BE0012CE45 /* HTMLLinkViewController.m in Sources */,
+				5C0769991518E8BC0006F70B /* GPTransparentToolbar.m in Sources */,
+				5C88137C151A175A006BCDC9 /* HTMLSettingsViewController.m in Sources */,
+				5C881381151B6778006BCDC9 /* HTMLListViewController.m in Sources */,
+				5CE263701522106B0022ACA2 /* GPDrawExtras.m in Sources */,
+				5C8840FD152E39FB007AEE7D /* GPGridView.m in Sources */,
+				5CA6800115361109001719DC /* GPGridViewController.m in Sources */,
+				5C9B7D5615408D9100856C8A /* GPTableTextFieldCell.m in Sources */,
+				5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */,
+				5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */,
+				5C1431191547137200AEE1FA /* GPTableSearchController.m in Sources */,
+				5C14312715483D6100AEE1FA /* GPLabel.m in Sources */,
+				5C14312B15485E8100AEE1FA /* GPView.m in Sources */,
+				5C14314315488F3F00AEE1FA /* GPPillLabel.m in Sources */,
+				5C14314B1549A6B900AEE1FA /* GPTableDeleteItem.m in Sources */,
+				5C14314F1549A7A800AEE1FA /* GPTableDeleteCell.m in Sources */,
+				5C89A1921551C5D800BF73CE /* GPEmptyTableView.m in Sources */,
+				5C3BD0C91565717200E615D6 /* GPTableFloatingItem.m in Sources */,
+				5C3BD0CE156572A000E615D6 /* GPTableFloatingCell.m in Sources */,
+				5C63DECB156A8BDD00C3EEC0 /* GPTabBarItem.m in Sources */,
+				5C63DED1156AAB5100C3EEC0 /* GPTabBarController.m in Sources */,
+				5C63DF0F156AEB4000C3EEC0 /* GPTableAccessory.m in Sources */,
+				5C0F35A1156D2CD40027A4BB /* GPGridMoreCell.m in Sources */,
+				5C0F35A3156D2CD40027A4BB /* GPGridViewCell.m in Sources */,
+				5C0F35A5156D2CD40027A4BB /* GPGridViewItem.m in Sources */,
+				5C0F35A9156D2D250027A4BB /* GPGridMoreItem.m in Sources */,
+				5C3D8FE91573EAAC0052179A /* GPTimeScroller.m in Sources */,
+				D96B385F15740097004B9F69 /* GPTableSwitchItem.m in Sources */,
+				D96B38641574011C004B9F69 /* GPTableSwitchCell.m in Sources */,
+				5C3D904A157670590052179A /* GPAttachmentView.m in Sources */,
+				5C3D90E41577CA4A0052179A /* GPUtils.m in Sources */,
+				5C3D90E61577CA4A0052179A /* NSDate+Additions.m in Sources */,
+				5C3D90E81577CA4A0052179A /* NSString+GPString.m in Sources */,
+				5C3D90EA1577CA4A0052179A /* UIBarButtonItem+Additions.m in Sources */,
+				5C3D90EC1577CA4A0052179A /* UIImage+Additions.m in Sources */,
+				5C3D90EE1577CA4A0052179A /* UIViewController+Additions.m in Sources */,
+				5C3D90F61577F3880052179A /* GPBackArrowButton.m in Sources */,
+				5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */,
+				5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */,
+				5C5F7D23159CCB7100F42061 /* GPTableMailCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD4F8BF14DC521A00F2CBB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CD4F8D514DC521A00F2CBB3 /* GPLibTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5C5C0A9415B8DEB2005A2F2D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPHTTPRequestLibrary;
+			targetProxy = 5C5C0A9315B8DEB2005A2F2D /* PBXContainerItemProxy */;
+		};
+		5CD4F8CB14DC521A00F2CBB3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5CD4F8B314DC521A00F2CBB3 /* GPLib */;
+			targetProxy = 5CD4F8CA14DC521A00F2CBB3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5C8813A7151CE7AA006BCDC9 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5C8813A8151CE7AA006BCDC9 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5CD4F8D014DC521A00F2CBB3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5CD4F8D114DC521A00F2CBB3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5C8813AB151CE7AA006BCDC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GPLibBundle/GPLibBundle-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2";
+				INFOPLIST_FILE = "GPLibBundle/GPLibBundle-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		5C8813AC151CE7AA006BCDC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GPLibBundle/GPLibBundle-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2";
+				INFOPLIST_FILE = "GPLibBundle/GPLibBundle-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		5CD4F8D614DC521A00F2CBB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5CD4F8D714DC521A00F2CBB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5CD4F8D914DC521A00F2CBB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+				);
+				DSTROOT = /tmp/GPLib.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GPLib/GPLib-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"${SDK_DIR}/usr/include/libxml2/libxml",
+					/usr/include/libxml2,
+					"GPHTTPRequest/**",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2/libxml";
+			};
+			name = Debug;
+		};
+		5CD4F8DA14DC521A00F2CBB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+				);
+				DSTROOT = /tmp/GPLib.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GPLib/GPLib-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"${SDK_DIR}/usr/include/libxml2/libxml",
+					/usr/include/libxml2,
+					"GPHTTPRequest/**",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+		5CD4F8DC14DC521A00F2CBB3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GPLib/GPLib-Prefix.pch";
+				INFOPLIST_FILE = "GPLibTests/GPLibTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		5CD4F8DD14DC521A00F2CBB3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GPLib/GPLib-Prefix.pch";
+				INFOPLIST_FILE = "GPLibTests/GPLibTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5C8813AD151CE7AA006BCDC9 /* Build configuration list for PBXNativeTarget "GPLibBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5C8813AB151CE7AA006BCDC9 /* Debug */,
+				5C8813AC151CE7AA006BCDC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CD4F8AE14DC521A00F2CBB3 /* Build configuration list for PBXProject "GPLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CD4F8D614DC521A00F2CBB3 /* Debug */,
+				5CD4F8D714DC521A00F2CBB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CD4F8D814DC521A00F2CBB3 /* Build configuration list for PBXNativeTarget "GPLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CD4F8D914DC521A00F2CBB3 /* Debug */,
+				5CD4F8DA14DC521A00F2CBB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CD4F8DB14DC521A00F2CBB3 /* Build configuration list for PBXNativeTarget "GPLibTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CD4F8DC14DC521A00F2CBB3 /* Debug */,
+				5CD4F8DD14DC521A00F2CBB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5CD4F8AB14DC521A00F2CBB3 /* Project object */;
+}

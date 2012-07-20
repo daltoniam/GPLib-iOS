@@ -1,0 +1,3 @@
+[submodule "GPHTTPRequest"]
+	path = GPHTTPRequest
+	url = git://github.com/daltoniam/GPHTTPRequest.git

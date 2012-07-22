@@ -79,7 +79,7 @@
 @property(nonatomic,assign)BOOL ignoreXAttachment;
 
 - (id)initWithHTML:(NSString*)html embed:(BOOL)embed frame:(CGRect)frame;
-- (id)initWithAttributedString:(NSArray*)items;
+- (id)initWithAttributedString:(NSAttributedString*)items;
 -(void)setHTML:(NSString*)html embed:(BOOL)embed;
 -(CGFloat)getTextHeight;
 -(void)processHyperLink:(NSString*)link;

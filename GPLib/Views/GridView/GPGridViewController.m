@@ -105,7 +105,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    for(ASIHTTPRequest* request in imageQueue)
+    for(ASIHTTPRequest* request in queue.operations)
         [request clearDelegatesAndCancel];
     model.delegate = nil;
     gridView.delegate = nil;

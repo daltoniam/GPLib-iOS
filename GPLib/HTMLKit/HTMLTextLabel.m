@@ -51,6 +51,15 @@
     videoArray = [[NSMutableArray alloc] init];
 }
 //////////////////////////////////////////////////////////////////////////////
+-(id)init
+{
+    if(self = [super init])
+    {
+        [self commonInit];
+    }
+    return self;
+}
+//////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame 
 {
     if ((self = [super initWithFrame:frame])) 

@@ -33,7 +33,18 @@
 
 #import "GPTableTextItem.h"
 
+//////////////////////////////////////////////////////////////////////////////////
+@protocol GPTableHTMLItemDelegate <NSObject>
+
+@optional
+
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+
+@end
+
 @interface GPTableHTMLItem : GPTableTextItem
+
+@property(nonatomic,assign)id<GPTableHTMLItemDelegate>delegate;
 
 + (GPTableHTMLItem*)itemWithHTML:(NSString*)htmlstring url:(NSString*)url;
 + (GPTableHTMLItem*)itemWithHTML:(NSString*)htmlstring url:(NSString*)url Properties:(NSDictionary*)data;

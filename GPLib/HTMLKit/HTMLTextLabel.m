@@ -37,10 +37,11 @@
 #import "ASIDownloadCache.h"
 #import "HTMLParser.h"
 #import <QuartzCore/QuartzCore.h>
+#import "HTMLText.h"
 
 @implementation HTMLTextLabel
 
-@synthesize extendHeightToFit,attributedText = attributedText,delegate = delegate,rawHTML,ignoreXAttachment;
+@synthesize extendHeightToFit,attributedText = attributedText,delegate = delegate,rawHTML,ignoreXAttachment,autoSizeImages;
 
 //////////////////////////////////////////////////////////////////////////////
 -(void)commonInit
@@ -178,7 +179,30 @@
     UIImage* image = [UIImage imageWithData:[request responseData]];
     for(ImageItem* item in imageArray )
         if([item.URL isEqualToString:request.url.absoluteString])
+        {
             item.imageData = image;
+            if(self.autoSizeImages)
+            {
+                int width = image.size.width;
+                int height = image.size.height;
+                while(width > self.frame.size.width)
+                {
+                    height = height - height/4;//height/2;
+                    width = width - width/4;//width/2;
+                }
+                NSRange validRange = NSMakeRange(0,[self.attributedText length]);
+                [self.attributedText enumerateAttributesInRange:validRange options:0 usingBlock:
+                 ^(NSDictionary *attributes, NSRange range, BOOL *stop) 
+                 {
+                     NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
+                     if([imageurl isEqualToString:request.url.absoluteString])
+                     {
+                         if([self.delegate respondsToSelector:@selector(imageFinished:height:width:)])
+                             [self.delegate imageFinished:item.URL height:height width:width];
+                     }
+                 }];
+            }
+        }
     [self setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////

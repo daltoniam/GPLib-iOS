@@ -60,6 +60,7 @@
 - (void)didSelectImage:(NSString*)imageURL;
 //return any frame motifications or just return imgBound if no changes desired
 - (UIImage*)willLoadImage:(UIImage*)image frame:(CGRect)imgBounds;
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
 
 @end
 
@@ -73,6 +74,7 @@
     NSMutableArray* videoArray;
 }
 @property(nonatomic, assign) BOOL extendHeightToFit;
+@property(nonatomic, assign) BOOL autoSizeImages;
 @property(nonatomic, copy) NSAttributedString* attributedText;
 @property(nonatomic,assign)id<HTMLTextLabelDelegate> delegate;
 @property(nonatomic,retain,readonly)NSString* rawHTML;

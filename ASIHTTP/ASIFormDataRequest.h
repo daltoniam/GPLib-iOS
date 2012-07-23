@@ -10,6 +10,7 @@
 #import "ASIHTTPRequest.h"
 #import "ASIHTTPRequestConfig.h"
 
+//#define DEBUG_FORM_DATA_REQUEST 1
 typedef enum _ASIPostFormat {
     ASIMultipartFormDataPostFormat = 0,
     ASIURLEncodedPostFormat = 1

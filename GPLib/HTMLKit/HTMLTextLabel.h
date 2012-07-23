@@ -34,6 +34,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 #import "GPYouTubeView.h"
+#import "GPHTTPRequest.h"
 
 @interface ImageItem : NSObject
 {
@@ -63,7 +64,7 @@
 
 @end
 
-@interface HTMLTextLabel : UILabel
+@interface HTMLTextLabel : UILabel<GPHTTPRequestDelegate>
 {
     CTFrameRef textFrame;
     NSMutableAttributedString* attributedText;

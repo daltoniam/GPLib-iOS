@@ -32,7 +32,6 @@
 //
 
 #import "GPImageView.h"
-#import "ASIDownloadCache.h"
 #import "GPDrawExtras.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -71,14 +70,11 @@
             [LoadingView startAnimating];
         }
         
-        SendRequest = [[ASIHTTPRequest requestWithURL:[NSURL URLWithString:URL]] retain];
-        [SendRequest setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-        [SendRequest setCachePolicy:ASIAskServerIfModifiedCachePolicy];
-        [SendRequest setDownloadCache:[ASIDownloadCache sharedCache]];
-        [[ASIDownloadCache sharedCache] setShouldRespectCacheControlHeaders:NO];
-        [SendRequest setSecondsToCache:60*60*1]; // Cache for 1 hour
+        SendRequest = [[GPHTTPRequest requestWithURL:[NSURL URLWithString:URL]] retain];
+        [SendRequest setCacheModel:GPHTTPCacheCustomTime];
+        [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
         [SendRequest setDelegate:self];
-        [SendRequest startAsynchronous];
+        [SendRequest startAsync];
     }
     else
     {
@@ -100,7 +96,7 @@
     [SendRequest cancel];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFinished:(GPHTTPRequest *)request
 {
     //if([request didUseCachedResponse])
         //NSLog(@"using cached request: %@",request.url.absoluteString);
@@ -120,7 +116,10 @@
 {
     self.delegate = nil;
     if(SendRequest)
-        [SendRequest clearDelegatesAndCancel];
+    {
+        [SendRequest cancel];
+        SendRequest.delegate = nil;
+    }
     [SendRequest release];
     [LoadingView release];
     [super dealloc];

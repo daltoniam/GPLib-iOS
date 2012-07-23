@@ -31,9 +31,7 @@
  */
 //
 
-/// asi dependancy
-#import "ASIHTTPRequest.h"
-#import "ASIFormDataRequest.h"
+/// GPHTTPRequest
 #import "GPHTTPRequest.h"
 
 //launcher

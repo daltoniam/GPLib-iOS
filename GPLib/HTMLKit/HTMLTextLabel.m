@@ -33,8 +33,6 @@
 
 #import "HTMLTextLabel.h"
 #import "HTMLText.h"
-#import "ASIHTTPRequest.h"
-#import "ASIDownloadCache.h"
 #import "HTMLParser.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -138,14 +136,11 @@
         return;
     else if([url hasPrefix:@"http"])
     {
-        ASIHTTPRequest* SendRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-        [SendRequest setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-        [SendRequest setCachePolicy:ASIAskServerIfModifiedCachePolicy];
-        [SendRequest setDownloadCache:[ASIDownloadCache sharedCache]];
-        [[ASIDownloadCache sharedCache] setShouldRespectCacheControlHeaders:NO];
-        [SendRequest setSecondsToCache:60*60*1]; // Cache for 1 hour
+        GPHTTPRequest* SendRequest = [GPHTTPRequest requestWithString:url];
+        [SendRequest setCacheModel:GPHTTPCacheCustomTime];
+        [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
         [SendRequest setDelegate:self];
-        [SendRequest startAsynchronous];
+        [SendRequest startAsync];
     }
     else
     {
@@ -164,11 +159,11 @@
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFinished:(GPHTTPRequest *)request
 {
     UIImage* image = [UIImage imageWithData:[request responseData]];
     for(ImageItem* item in imageArray )
-        if([item.URL isEqualToString:request.url.absoluteString])
+        if([item.URL isEqualToString:request.URL.absoluteString])
             item.imageData = image;
     [self setNeedsDisplay];
 }

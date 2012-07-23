@@ -32,7 +32,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ASIHTTPRequest.h"
+#import "GPHTTPRequest.h"
 
 @class GPImageView;
 @protocol GPImageViewDelegate <NSObject>
@@ -44,10 +44,10 @@
 
 @end
 
-@interface GPImageView : UIImageView
+@interface GPImageView : UIImageView<GPHTTPRequestDelegate>
 {
     NSString* URL;
-    ASIHTTPRequest *SendRequest;
+    GPHTTPRequest *SendRequest;
     BOOL isQueue;
     BOOL showProgress;
     UIActivityIndicatorView* LoadingView;

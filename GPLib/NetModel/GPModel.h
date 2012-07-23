@@ -31,7 +31,7 @@
  */
 //
 
-#import "ASIHTTPRequest.h"
+#import "GPHTTPRequest.h"
 
 @protocol GPModelDelegate <NSObject>
 
@@ -40,13 +40,13 @@
 /**
  * Received when a request is finished. Implmented by GPTableViewController to hide loading label.
  */
-- (void)modelFinished:(ASIHTTPRequest *)request;
-- (void)modelFailed:(ASIHTTPRequest *)request;
+- (void)modelFinished:(GPHTTPRequest *)request;
+- (void)modelFailed:(GPHTTPRequest *)request;
 - (void)noConnection;
 
 @end
 
-@interface GPModel : NSObject
+@interface GPModel : NSObject<GPHTTPRequestDelegate>
 {
     NSMutableArray* items;
     NSMutableArray* sections;
@@ -67,13 +67,13 @@
 -(void)loadModel:(BOOL)more;
 -(BOOL)enablePaging;
 -(BOOL)autoLoad;
-- (void)requestFinished:(ASIHTTPRequest *)request;
-- (void)requestFailed:(ASIHTTPRequest *)request;
+- (void)requestFinished:(GPHTTPRequest *)request;
+- (void)requestFailed:(GPHTTPRequest *)request;
 - (id)initWithURLString:(NSString*)url;
 -(void)setupinit;
 -(void)noConnect;
 -(NSString*)reachURL;
--(void)cachePolicy:(ASIHTTPRequest*)request;
+-(void)cachePolicy:(GPHTTPRequest*)request;
 -(void)onPost:(NSDictionary*)entries;
 
 @end

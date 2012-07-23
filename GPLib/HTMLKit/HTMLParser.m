@@ -42,11 +42,11 @@
 
 @synthesize RawHTML = RawHTML,Embed;
 
-void elementDidStart(void *ctx,const xmlChar *name,const xmlChar **atts);
-void foundChars(void *ctx,const xmlChar *ch,int len);
-void elementDidEnd(void *ctx,const xmlChar *name);
-void documentDidEnd(void *ctx);
-void error( void * ctx, const char * msg, ... );
+static void elementDidStart(void *ctx,const xmlChar *name,const xmlChar **atts);
+static void foundChars(void *ctx,const xmlChar *ch,int len);
+static void elementDidEnd(void *ctx,const xmlChar *name);
+static void documentDidEnd(void *ctx);
+static void error( void * ctx, const char * msg, ... );
 
 static UIColor* linkColor;
 static NSString* defaultFontName;

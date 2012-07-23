@@ -35,8 +35,9 @@
 #import "GPGridViewCell.h"
 #import "GPLoadingLabel.h"
 #import "GPModel.h"
+#import "GPHTTPRequest.h"
 
-@interface GPGridViewController : UIViewController<GPGridViewDataSource,GPGridViewDelegate,GPModelDelegate>
+@interface GPGridViewController : UIViewController<GPGridViewDataSource,GPGridViewDelegate,GPModelDelegate,GPHTTPRequestDelegate>
 {
     GPGridView* gridView;
     NSMutableArray* items;

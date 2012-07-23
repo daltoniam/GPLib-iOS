@@ -115,16 +115,15 @@
 -(void)sendRequestBackground:(NSURL*)url
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setAllowCompressedResponse:YES];
+    GPHTTPRequest *request = [GPHTTPRequest requestWithURL:url];
     [self cachePolicy:request];
     if(killBackgroundThread) 
     {
         [pool drain];
         return;
     }
-    [request startSynchronous];
-    if([request responseStatusCode] != 200)
+    [request startSync];
+    if([request statusCode] != 200)
         isFinished = YES;
     if(killBackgroundThread) 
     {
@@ -137,9 +136,9 @@
     backgroundThread = nil;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFinished:(GPHTTPRequest *)request
 {
-    if(!self.URL || [request.url.absoluteString hasPrefix:self.URL])
+    if(!self.URL || [request.URL.absoluteString hasPrefix:self.URL])
     {
         //if([NSThread isMainThread])
         if([self enablePaging])
@@ -150,13 +149,13 @@
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)finished:(ASIHTTPRequest *)request
+-(void)finished:(GPHTTPRequest *)request
 {
     if ([self.delegate respondsToSelector:@selector(modelFinished:)])
         [self.delegate modelFinished:request];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFailed:(ASIHTTPRequest *)request
+- (void)requestFailed:(GPHTTPRequest *)request
 {
     //NSError *error = [request error];
     isLoading = NO;
@@ -164,7 +163,7 @@
     
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)failed:(ASIHTTPRequest *)request
+-(void)failed:(GPHTTPRequest *)request
 {
     if ([self.delegate respondsToSelector:@selector(modelFailed:)])
         [self.delegate modelFailed:request];
@@ -222,10 +221,11 @@
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //subclass to set custom ASI caching policy
--(void)cachePolicy:(ASIHTTPRequest*)request
+-(void)cachePolicy:(GPHTTPRequest*)request
 {
-    [request setSecondsToCache:5];
-    [request setCachePolicy:ASIDoNotWriteToCacheCachePolicy|ASIDoNotReadFromCacheCachePolicy];
+    [request setCacheTimeout:5];
+    [request setCacheModel:GPHTTPCacheCustomTime];
+    //[request setCachePolicy:ASIDoNotWriteToCacheCachePolicy|ASIDoNotReadFromCacheCachePolicy];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

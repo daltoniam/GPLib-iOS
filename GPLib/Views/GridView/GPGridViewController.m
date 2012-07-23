@@ -35,8 +35,6 @@
 #import "GPGridViewItem.h"
 #import <objc/runtime.h>
 #import "GPNavigator.h"
-#import "ASIDownloadCache.h"
-#import "ASIHTTPRequest.h"
 #import "GPCenterLabel.h"
 #import "GPGridMoreCell.h"
 #import "GPGridMoreItem.h"
@@ -105,8 +103,11 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    for(ASIHTTPRequest* request in imageQueue)
-        [request clearDelegatesAndCancel];
+    for(GPHTTPRequest* request in imageQueue)
+    {
+        [request cancel];
+        request.delegate = nil;
+    }
     model.delegate = nil;
     gridView.delegate = nil;
     gridView.dataSource = nil;
@@ -266,14 +267,11 @@
         subview.hidden = NO;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(ASIHTTPRequest*)imageRequest:(NSString*)URL
+-(GPHTTPRequest*)imageRequest:(NSString*)URL
 {
-    ASIHTTPRequest* request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:URL]];
-    [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    [request setCachePolicy:ASIAskServerIfModifiedCachePolicy];
-    [request setDownloadCache:[ASIDownloadCache sharedCache]];
-    [[ASIDownloadCache sharedCache] setShouldRespectCacheControlHeaders:NO];
-    [request setSecondsToCache:60*60*1]; // Cache for 1 hour
+    GPHTTPRequest* request = [GPHTTPRequest requestWithURL:[NSURL URLWithString:URL]];
+    [request setCacheModel:GPHTTPCacheCustomTime];
+    [request setTimeout:60*60*1]; // Cache for 1 hour
     [request setDelegate:self];
     return request;
 }
@@ -299,7 +297,7 @@
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFinished:(GPHTTPRequest *)request
 {
     int i = 0;
     NSMutableArray* indexes = [NSMutableArray array];
@@ -308,7 +306,7 @@
         if([object isKindOfClass:[GPGridViewItem class]] && ![object isKindOfClass:[GPGridMoreItem class]])
         {
             GPGridViewItem* item = (GPGridViewItem*)object;
-            if([item.imageURL isEqualToString:request.url.absoluteString])
+            if([item.imageURL isEqualToString:request.URL.absoluteString])
             {
                 item.image = [UIImage imageWithData:[request responseData]];
                 [indexes addObject:[NSNumber numberWithInt:i]];
@@ -316,11 +314,11 @@
         }
         i++;
     }
-    [imageQueue removeObject:request.url.absoluteString];
+    [imageQueue removeObject:request.URL.absoluteString];
     [gridView reloadCellsAtIndexes:indexes];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)modelFinished:(ASIHTTPRequest *)request
+- (void)modelFinished:(GPHTTPRequest *)request
 {
     ActLabel.hidden = YES;
     [items release];
@@ -328,7 +326,7 @@
     [gridView reloadData];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)modelFailed:(ASIHTTPRequest *)request
+- (void)modelFailed:(GPHTTPRequest *)request
 {
     ActLabel.hidden = YES;
 }

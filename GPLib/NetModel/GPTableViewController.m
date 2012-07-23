@@ -450,7 +450,7 @@
     return [GPTableCell class];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)modelFinished:(ASIHTTPRequest *)request
+- (void)modelFinished:(GPHTTPRequest *)request
 {
     /*ActLabel.hidden = YES;
     if([self DragToRefresh])
@@ -475,7 +475,7 @@
         [self showEmptyView];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)modelFailed:(ASIHTTPRequest *)request
+- (void)modelFailed:(GPHTTPRequest *)request
 {
     ActLabel.hidden = YES;
     if([self dragToRefresh])

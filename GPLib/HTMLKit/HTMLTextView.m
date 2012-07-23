@@ -45,10 +45,8 @@
 #include <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 #import "HTMLText.h"
-#import "ASIHTTPRequest.h"
 //temp; remove after testing
 #import "HTMLTextLabel.h"
-#import "ASIDownloadCache.h"
 #import "UIImage+Additions.h"
 
 @implementation HTMLTextView
@@ -583,14 +581,11 @@
         return;
     else if([url hasPrefix:@"http"])
     {
-        ASIHTTPRequest* SendRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-        [SendRequest setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-        [SendRequest setCachePolicy:ASIAskServerIfModifiedCachePolicy];
-        [SendRequest setDownloadCache:[ASIDownloadCache sharedCache]];
-        [[ASIDownloadCache sharedCache] setShouldRespectCacheControlHeaders:NO];
-        [SendRequest setSecondsToCache:60*60*1]; // Cache for 1 hour
+        GPHTTPRequest* SendRequest = [GPHTTPRequest requestWithString:url];
+        [SendRequest setCacheModel:GPHTTPCacheCustomTime];
+        [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
         [SendRequest setDelegate:self];
-        [SendRequest startAsynchronous];
+        [SendRequest startAsync];
     }
     else
     {
@@ -602,19 +597,19 @@
     }
 }
 //////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFinished:(GPHTTPRequest *)request
 {
     UIImage* image = [UIImage imageWithData:[request responseData]];
-    if([request.url.absoluteString rangeOfString:@"i.ytimg.com"].location != NSNotFound)
+    if([request.URL.absoluteString rangeOfString:@"i.ytimg.com"].location != NSNotFound)
     {
         for(ImageItem* item in videoArray )
-            if([[self youtubeThumb:item.URL] isEqualToString:request.url.absoluteString])
+            if([[self youtubeThumb:item.URL] isEqualToString:request.URL.absoluteString])
                 item.imageData = [UIImage imageByScalingProportionallyToSize:CGSizeMake(item.frame.size.width, item.frame.size.height) image:image];;
     }
     else
     {
         for(ImageItem* item in imageArray )
-            if([item.URL isEqualToString:request.url.absoluteString])
+            if([item.URL isEqualToString:request.URL.absoluteString])
                 item.imageData = [UIImage imageByScalingProportionallyToSize:CGSizeMake(item.frame.size.width, item.frame.size.height) image:image];
     }
     [textContentView setNeedsDisplay];

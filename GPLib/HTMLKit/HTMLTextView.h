@@ -33,6 +33,7 @@
 
 #import <CoreText/CoreText.h>
 #import <UIKit/UITextChecker.h>
+#import "GPHTTPRequest.h"
 
 typedef enum {
     HTMLWindowLoupe = 0,
@@ -142,7 +143,7 @@ typedef enum {
 
 @end
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@interface HTMLTextView : UIScrollView <UITextInputTraits,UITextInput>
+@interface HTMLTextView : UIScrollView <UITextInputTraits,UITextInput,GPHTTPRequestDelegate>
 {
     NSDictionary *markedTextStyle;
     id <UITextInputDelegate> inputDelegate;

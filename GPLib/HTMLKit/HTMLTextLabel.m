@@ -197,8 +197,9 @@
                      }
                  }];
             }
+            else
+                [self setNeedsDisplay];
         }
-    [self setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////
 -(BOOL)didLoadURL:(NSString*)url

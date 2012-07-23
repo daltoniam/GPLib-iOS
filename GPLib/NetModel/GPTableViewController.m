@@ -285,6 +285,9 @@
     if(view)
         cell.accessoryView = view;
     
+    if ([object isKindOfClass:[GPTableHTMLItem class]] || [object isKindOfClass:[GPTableMessageItem class]])
+        [object setDelegate:self];
+    
     if(!model.isFinished && [model autoLoad])
     {
         id object = [self tableView:tableView objectForRowAtIndexPath:indexPath];
@@ -297,11 +300,6 @@
             [model loadModel:YES];
         }
     }
-    if ([object isKindOfClass:[GPTableHTMLItem class]] || [object isKindOfClass:[GPTableMessageItem class]])
-    {
-        [object setDelegate:self];
-    }
-    
     return cell;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -528,13 +526,16 @@
             }
         }
     }
-    for(GPTableTextItem* item in items)
+    else
     {
-        NSString* newText = [item.text stringByReplacingOccurrencesOfString:imgURL withString:newImg];
-        if(![newText isEqualToString:item.text])
+        for(GPTableTextItem* item in items)
         {
-            reload = YES;
-            item.text = newText;
+            NSString* newText = [item.text stringByReplacingOccurrencesOfString:imgURL withString:newImg];
+            if(![newText isEqualToString:item.text])
+            {
+                reload = YES;
+                item.text = newText;
+            }
         }
     }
     if(reload)
@@ -544,6 +545,25 @@
             [collect addObject:[self.tableView indexPathForCell:cell]];
         [self.tableView reloadRowsAtIndexPaths:collect withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    if(sections)
+    {
+        for(NSArray* array in items)
+            for(GPTableTextItem* item in array)
+                if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]])
+                    [(GPTableHTMLItem*)item setDelegate:nil];
+    }
+    else
+    {
+        for(GPTableTextItem* item in items)
+            if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]])
+                [(GPTableHTMLItem*)item setDelegate:nil];
+    }
+    model.delegate = nil;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

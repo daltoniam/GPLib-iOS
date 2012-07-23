@@ -193,7 +193,7 @@
     rect.size.height = height;
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
         textContentView.frame = rect;
-    int pad = 40;
+    int pad = 25;
     self.contentSize = CGSizeMake(self.frame.size.width, rect.size.height+pad); //20 for padding
     
     CGRect textBounds = textContentView.bounds;

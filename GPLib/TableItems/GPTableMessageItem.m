@@ -35,6 +35,7 @@
 
 @implementation GPTableMessageItem
 
+@synthesize delegate;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableMessageItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl
 {

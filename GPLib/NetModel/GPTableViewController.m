@@ -297,6 +297,10 @@
             [model loadModel:YES];
         }
     }
+    if ([object isKindOfClass:[GPTableHTMLItem class]] || [object isKindOfClass:[GPTableMessageItem class]])
+    {
+        [object setDelegate:self];
+    }
     
     return cell;
 }
@@ -500,6 +504,46 @@
 {
     [items release];
     items = [model.items mutableCopy]; //temp copy with drag to refresh reloads the data.
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//html text label delegate to reformat photos
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width
+{
+    BOOL reload = NO;
+    NSString* imgURL = [url HTMLImg];
+    NSString* newImg = [url HTMLImg:height width:width];
+    if(sections)
+    {
+        for(NSArray* array in items)
+        {
+            for(GPTableTextItem* item in array)
+            {
+                NSString* newText = [item.text stringByReplacingOccurrencesOfString:imgURL withString:newImg];
+                if(![newText isEqualToString:item.text])
+                {
+                    reload = YES;
+                    item.text = newText;
+                }
+            }
+        }
+    }
+    for(GPTableTextItem* item in items)
+    {
+        NSString* newText = [item.text stringByReplacingOccurrencesOfString:imgURL withString:newImg];
+        if(![newText isEqualToString:item.text])
+        {
+            reload = YES;
+            item.text = newText;
+        }
+    }
+    if(reload)
+    {
+        NSMutableArray* collect = [NSMutableArray arrayWithCapacity:self.tableView.visibleCells.count];
+        for(UITableViewCell* cell in self.tableView.visibleCells)
+            [collect addObject:[self.tableView indexPathForCell:cell]];
+        [self.tableView reloadRowsAtIndexPaths:collect withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

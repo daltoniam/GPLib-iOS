@@ -33,7 +33,18 @@
 
 #import "GPTableImageItem.h"
 
+//////////////////////////////////////////////////////////////////////////////////
+@protocol GPTableMessageItemDelegate <NSObject>
+
+@optional
+
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+
+@end
+
 @interface GPTableMessageItem : GPTableImageItem
+
+@property(nonatomic,assign)id<GPTableMessageItemDelegate>delegate;
 
 + (GPTableMessageItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl;
 + (GPTableMessageItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl URL:(NSString*)url;

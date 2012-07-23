@@ -33,10 +33,12 @@
 
 #import "GPTableCell.h"
 #import "HTMLKit.h"
+#import "GPTableHTMLItem.h"
 
 @interface GPTableHtmlItemCell : GPTableCell<HTMLTextLabelDelegate>
 {
     HTMLTextLabel* HTMLText;
+    GPTableHTMLItem* currentHTMLItem;
 }
 
 @end

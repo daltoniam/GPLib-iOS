@@ -103,7 +103,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    for(GPHTTPRequest* request in imageQueue)
+    for(GPHTTPRequest* request in queue.operations)
     {
         [request cancel];
         request.delegate = nil;

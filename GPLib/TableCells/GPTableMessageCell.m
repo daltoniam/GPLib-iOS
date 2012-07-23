@@ -32,7 +32,6 @@
 //
 
 #import "GPTableMessageCell.h"
-#import "GPTableMessageItem.h"
 #import "GPNavigator.h"
 
 @implementation GPTableMessageCell
@@ -68,6 +67,7 @@
         HTMLText = [[HTMLTextLabel alloc] init];
         HTMLText.delegate = self;
         HTMLText.ignoreXAttachment = YES;
+        HTMLText.autoSizeImages = YES;
         HTMLText.userInteractionEnabled = YES;
         [self.contentView addSubview:HTMLText];
         
@@ -88,6 +88,8 @@
 {
     [super setObject:object];
     GPTableMessageItem* item = (GPTableMessageItem*)object;
+    [currentHTMLItem release];
+    currentHTMLItem = [item retain];
     self.textLabel.text = nil;
     if(item.text)
         [HTMLText setHTML:item.text embed:YES];
@@ -104,9 +106,16 @@
 - (void)didSelectImage:(NSString*)imageURL
 {
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)imageFinished:(NSString *)url height:(int)height width:(int)width
+{
+    if([currentHTMLItem.delegate respondsToSelector:@selector(imageFinished:height:width:)])
+        [currentHTMLItem.delegate imageFinished:url height:height width:width];
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc 
 {
+    [currentHTMLItem release];
     [HTMLText release];
     [super dealloc];
 }

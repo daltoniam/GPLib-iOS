@@ -34,11 +34,13 @@
 #import "GPTableImageCell.h"
 #import "HTMLKit.h"
 #import "GPBubbleView.h"
+#import "GPTableBubbleItem.h"
 
 @interface GPBubbleTableCell : GPTableImageCell<HTMLTextLabelDelegate>
 {
     GPBubbleView* BubbleView;
     HTMLTextLabel* HTMLText;
+    GPTableBubbleItem* currentHTMLItem;
 }
 
 @end

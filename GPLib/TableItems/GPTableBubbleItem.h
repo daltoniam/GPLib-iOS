@@ -33,7 +33,17 @@
 
 #import "GPTableImageItem.h"
 
+@protocol GPTableBubbleItemDelegate <NSObject>
+
+@optional
+
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+
+@end
+
 @interface GPTableBubbleItem : GPTableImageItem
+
+@property(nonatomic,assign)id<GPTableBubbleItemDelegate>delegate;
 
 + (GPTableBubbleItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl;
 + (GPTableBubbleItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl URL:(NSString*)url;

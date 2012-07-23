@@ -73,6 +73,7 @@
     NSString* CurrentHyperLink;
     NSMutableArray* imageArray;
     NSMutableArray* videoArray;
+    BOOL isDrawing;
 }
 @property(nonatomic, assign) BOOL extendHeightToFit;
 @property(nonatomic, assign) BOOL autoSizeImages;

@@ -285,7 +285,7 @@
     if(view)
         cell.accessoryView = view;
     
-    if ([object isKindOfClass:[GPTableHTMLItem class]] || [object isKindOfClass:[GPTableMessageItem class]])
+    if ([object isKindOfClass:[GPTableHTMLItem class]] || [object isKindOfClass:[GPTableBubbleItem class]])
         [object setDelegate:self];
     
     if(!model.isFinished && [model autoLoad])
@@ -554,13 +554,15 @@
     {
         for(NSArray* array in items)
             for(GPTableTextItem* item in array)
-                if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]])
+                if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]] || 
+                    [item isKindOfClass:[GPTableBubbleItem class]])
                     [(GPTableHTMLItem*)item setDelegate:nil];
     }
     else
     {
         for(GPTableTextItem* item in items)
-            if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]])
+            if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]] || 
+                [item isKindOfClass:[GPTableBubbleItem class]])
                 [(GPTableHTMLItem*)item setDelegate:nil];
     }
     model.delegate = nil;

@@ -32,7 +32,6 @@
 //
 
 #import "GPBubbleTableCell.h"
-#import "GPTableBubbleItem.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation GPBubbleTableCell
@@ -75,6 +74,7 @@
         HTMLText = [[HTMLTextLabel alloc] init];
         HTMLText.delegate = self;
         HTMLText.ignoreXAttachment = YES;
+        HTMLText.autoSizeImages = YES;
         [BubbleView addSubview:HTMLText];
         
     }
@@ -111,10 +111,18 @@
 {
     [super setObject:object];
     GPTableBubbleItem* item = (GPTableBubbleItem*)object;
+    [currentHTMLItem release];
+    currentHTMLItem = [item retain];
     self.textLabel.text = nil;
     if(item.text)
         [HTMLText setHTML:item.text embed:YES];
     
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)imageFinished:(NSString *)url height:(int)height width:(int)width
+{
+    if([currentHTMLItem.delegate respondsToSelector:@selector(imageFinished:height:width:)])
+        [currentHTMLItem.delegate imageFinished:url height:height width:width];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //touched a link
@@ -129,6 +137,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc 
 {
+    [currentHTMLItem release];
     [BubbleView release];
     [HTMLText release];
     [super dealloc];

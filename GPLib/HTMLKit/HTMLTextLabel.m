@@ -173,6 +173,7 @@
 {
     UIImage* image = [UIImage imageWithData:[request responseData]];
     for(ImageItem* item in imageArray )
+    {
         if([item.URL isEqualToString:request.URL.absoluteString])
         {
             item.imageData = image;
@@ -197,9 +198,10 @@
                      }
                  }];
             }
-            else
-                [self setNeedsDisplay];
         }
+    }
+    if(!isDrawing)
+        [self setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////
 -(BOOL)didLoadURL:(NSString*)url
@@ -220,6 +222,7 @@
 //////////////////////////////////////////////////////////////////////////////
 - (void)drawTextInRect:(CGRect)rect
 {
+    isDrawing = YES;
     if (self.attributedText) 
     {
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -400,6 +403,7 @@
     }
     else
 		[super drawTextInRect:rect];
+    isDrawing = NO;
 }
 //////////////////////////////////////////////////////////////////////////////
 -(CGFloat)getTextHeight

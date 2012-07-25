@@ -90,6 +90,21 @@
     
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setupLowerTextLabel
+{
+    lowerTextLabel = [[UILabel alloc] init];
+    lowerTextLabel.textAlignment = UITextAlignmentCenter;
+    lowerTextLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1];
+    lowerTextLabel.backgroundColor = [UIColor clearColor];
+    lowerTextLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+    lowerTextLabel.layer.shadowOffset = CGSizeMake(1, 1);
+    lowerTextLabel.layer.shadowOpacity = 0.8;
+    lowerTextLabel.layer.shadowRadius = 1.0;
+    lowerTextLabel.font = [UIFont systemFontOfSize:12];
+    [containerView addSubview:lowerTextLabel];
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setupBlankView
 {
     blankView = [[UIView alloc] init];
@@ -125,26 +140,42 @@
     if(textLabel && imageView)
     {
         int height = self.frame.size.height-30;
+        if(isLowerText)
+            height += 12;
         int top = 0;
         imageView.frame = CGRectMake(1, 1, self.frame.size.width, height);
     //CGSize imageSize = [self imageScale:self.frame.size.height];
         //imageView.frame = CGRectMake(0, top, imageSize.width, imageSize.height);
         //NSLog(@"self.frame.size.width: %f",self.frame.size.width);
         //NSLog(@"height: %f",height);
-        top += imageView.frame.size.height;
-        self.textLabel.frame = CGRectMake(0, top+10, self.frame.size.width, 20);
+        top += imageView.frame.size.height+5;
+        if(!isLowerText)
+            top += 5;
+        self.textLabel.frame = CGRectMake(0, top, self.frame.size.width, 20);
     }
     else if(textLabel)
     {
+        int height = self.frame.size.height-30;
+        if(isLowerText)
+            height += 12;
         if(!blankView)
             [self setupBlankView];
-        blankView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-30);
-        int top = blankView.frame.size.height;
-        self.textLabel.frame = CGRectMake(0, top+10, self.frame.size.width, 20);
+        blankView.frame = CGRectMake(0, 0, self.frame.size.width, height);
+        int top = blankView.frame.size.height+5;
+        if(!isLowerText)
+            top += 5;
+        self.textLabel.frame = CGRectMake(0, top, self.frame.size.width, 20);
     }
     else
         imageView.frame = CGRectMake(1, 1, self.frame.size.width-1, self.frame.size.height-1);
 
+    if(textLabel && isLowerText)
+    {
+        int top = textLabel.frame.size.height + textLabel.frame.origin.y;
+        lowerTextLabel.frame = CGRectMake(0,top, self.frame.size.width, 12);
+    }
+    else
+        lowerTextLabel.frame = CGRectZero;
     if(!touchLayer && imageView)
     {
         touchLayer = [[CAGradientLayer layer] retain];
@@ -271,7 +302,15 @@
         textLabel.titleLabel.font = item.font;
         if(item.color)
             [textLabel setTitleColor:item.color forState:UIControlStateNormal];
-        
+        if(item.infoText)
+        {
+            if(!lowerTextLabel)
+                [self setupLowerTextLabel];
+            lowerTextLabel.text = item.infoText;
+            isLowerText = YES;
+        }
+        else
+            isLowerText = NO;
         
         if(item.image && !imageView)
             [self setupImageView];

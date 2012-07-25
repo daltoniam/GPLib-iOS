@@ -62,6 +62,8 @@
     GPLoadingLabel* loadingLabel;
     BOOL drawShadow;
     UIView* containerView;
+    UILabel* lowerTextLabel;
+    BOOL isLowerText;
 }
 @property(nonatomic,assign)NSInteger columnIndex;
 @property(nonatomic,assign)NSInteger rowIndex;

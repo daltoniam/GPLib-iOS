@@ -34,6 +34,7 @@
 @interface GPGridViewItem : NSObject
 
 @property(nonatomic,copy)NSString* text;
+@property(nonatomic,copy)NSString* infoText;
 @property(nonatomic,retain)UIImage* image;
 @property(nonatomic,retain)NSString* imageURL;
 @property(nonatomic,copy)NSString* NavURL;

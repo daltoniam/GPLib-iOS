@@ -50,13 +50,14 @@
     if(self = [super init])
     {
         self.identifier = indent;
+        containerView = [[UIView alloc] init];
+        [self addSubview:containerView];
     }
     return self;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setupImageView
 {
-    UIView* view = [[[UIView alloc] init] autorelease];
     imageView = [[UIImageView alloc] init];
     //imageView.layer.shadowColor = [UIColor blackColor].CGColor;
     //imageView.layer.shadowOffset = CGSizeMake(1, 2);
@@ -66,8 +67,7 @@
     //imageView.contentMode = UIViewContentModeScaleAspectFill;
     //imageView.contentMode =  UIViewContentModeScaleToFill; 
     //imageView.clipsToBounds = YES;
-    [view addSubview:imageView];
-    [self addSubview:view];
+    [containerView addSubview:imageView];
     [blankView removeFromSuperview];
     if(loadingLabel)
         [imageView addSubview:loadingLabel];
@@ -84,8 +84,9 @@
     textLabel.layer.shadowOffset = CGSizeMake(1, 1);
     textLabel.layer.shadowOpacity = 0.8;
     textLabel.layer.shadowRadius = 1.0;
+    //textLabel.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, textLabel.frame.size.width+1, textLabel.frame.size.height+1)].CGPath;
     [textLabel addTarget:self action:@selector(labelTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:textLabel];
+    [containerView addSubview:textLabel];
     
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +99,7 @@
     //blankView.layer.shadowOpacity = 0.5;
     //blankView.layer.shadowRadius = 1.0;
     //blankView.layer.shouldRasterize = YES;
-    [self addSubview:blankView];
+    [containerView addSubview:blankView];
     
     //HUGE_VALF
 }
@@ -120,11 +121,11 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
+    containerView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     if(textLabel && imageView)
     {
         int height = self.frame.size.height-30;
         int top = 0;
-        imageView.superview.frame = CGRectMake(0, top, self.frame.size.width+1, height+1);
         imageView.frame = CGRectMake(1, 1, self.frame.size.width, height);
     //CGSize imageSize = [self imageScale:self.frame.size.height];
         //imageView.frame = CGRectMake(0, top, imageSize.width, imageSize.height);
@@ -142,10 +143,8 @@
         self.textLabel.frame = CGRectMake(0, top+10, self.frame.size.width, 20);
     }
     else
-    {
-        imageView.superview.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         imageView.frame = CGRectMake(1, 1, self.frame.size.width-1, self.frame.size.height-1);
-    }
+
     if(!touchLayer && imageView)
     {
         touchLayer = [[CAGradientLayer layer] retain];
@@ -325,6 +324,7 @@
     [textLabel release];
     [touchLayer release];
     [blankView release];
+    [containerView release];
     [loadingLabel release];
     [super dealloc];
 }

@@ -98,8 +98,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestFinished:(GPHTTPRequest *)request
 {
-    //if([request didUseCachedResponse])
-        //NSLog(@"using cached request: %@",request.url.absoluteString);
     self.image = [UIImage imageWithData:[request responseData]];
     if(self.borderColor && self.borderWidth)
         self.image = [GPDrawExtras drawBorderAroundImage:self.image color:self.borderColor width:self.borderWidth rounding:self.layer.cornerRadius];

@@ -88,7 +88,7 @@
     for(UIView* view in self.subviews)
         if([view isKindOfClass:[GPGridViewCell class]])
             [view removeFromSuperview];
-    [recycledGridItems removeAllObjects];
+    //[recycledGridItems removeAllObjects];
     [visibleGridItems removeAllObjects];
     UIInterfaceOrientation o = (UIInterfaceOrientation)[[UIApplication sharedApplication] statusBarOrientation];
     columnCount = [self.dataSource numberOfColumnsInGridView:self orientation:o];
@@ -107,8 +107,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)didRotate:(UIInterfaceOrientation)toInterfaceOrientation
 {
-    NSSet* tempSet = [visibleGridItems copy];
-    [recycledGridItems removeAllObjects];
+    for(UIView* view in self.subviews)
+        if([view isKindOfClass:[GPGridViewCell class]])
+            [view removeFromSuperview];
+    //[recycledGridItems removeAllObjects];
     [visibleGridItems removeAllObjects];
     columnCount = [self.dataSource numberOfColumnsInGridView:self orientation:toInterfaceOrientation];
     rowCount = [self.dataSource numberOfRowsInGridView:self];
@@ -117,9 +119,6 @@
     if([self.dataSource respondsToSelector:@selector(spacingBetweenRowsInGridView:)])
         topPadding = [self.dataSource spacingBetweenRowsInGridView:self];
     [self updateGrid:YES];
-    for(UIView* view in tempSet)
-        [view removeFromSuperview];
-    [tempSet release];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateGrid:(BOOL)rotate
@@ -131,9 +130,9 @@
     visibleBounds.origin.y -= rowHeight/2;
     visibleBounds.size.height += rowHeight/2;
     int firstRow = floorf(CGRectGetMinY(visibleBounds) / rowHeight);
-    int lastRow = floorf((CGRectGetMaxY(visibleBounds)-1) / rowHeight);
+    int lastRow = floorf((CGRectGetMaxY(visibleBounds)) / rowHeight); //-1
     firstRow = MAX(firstRow, 0);
-    lastRow  = MIN(lastRow, rowCount - 1);
+    lastRow  = MIN(lastRow, rowCount); //- 1
     
     if(firstRow > 0)
     firstRow--;
@@ -143,6 +142,7 @@
         if (cell.rowIndex < firstRow || cell.rowIndex > lastRow || cell.columnIndex > columnCount) 
         {
             [recycledGridItems addObject:cell];
+            [cell.layer removeAnimationForKey:@"wobble"];
             [cell removeFromSuperview];
         }
     }
@@ -208,6 +208,10 @@
     cell.delegate = self;
     cell.backgroundColor = [UIColor clearColor]; //grayColor
     cell.frame = [self cellFrameFor:col atRow:row isRotate:rotate];
+    if(isEditing)
+        [self wiggleAnimation:cell];
+    //else
+    //    [cell.layer removeAnimationForKey:@"wobble"];
     //cell.imageView.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
     //[cell setNeedsLayout];
 
@@ -322,9 +326,13 @@
         GPGridViewCell* cell = [self findCellAtIndex:index.intValue];
         if(cell)
         {
+            [cell removeFromSuperview];
             [visibleGridItems removeObject:cell];
             GPGridViewCell* newcell = [self.dataSource gridView:self viewAtIndex:index.intValue];
-            [self configureCell:newcell column:cell.columnIndex row:cell.rowIndex isRotate:NO];
+            int col = 0;
+            int row = 0;
+            [self convertIndexToGrid:index.integerValue col:&col row:&row];
+            [self configureCell:newcell column:col row:row isRotate:NO];
             [self addSubview:newcell];
             [visibleGridItems addObject:newcell];
         }
@@ -430,6 +438,7 @@
             [self rowModify:i+1 new:i frame:NO];
         rowCount = [self.dataSource numberOfRowsInGridView:self];
     }];
+    NSLog(@"subviews: %@",self.subviews);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(GPGridViewCell*)cellAtIndex:(NSInteger)index

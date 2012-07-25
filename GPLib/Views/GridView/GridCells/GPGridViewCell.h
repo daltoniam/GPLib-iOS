@@ -61,6 +61,7 @@
     UIView* blankView;
     GPLoadingLabel* loadingLabel;
     BOOL drawShadow;
+    UIView* containerView;
 }
 @property(nonatomic,assign)NSInteger columnIndex;
 @property(nonatomic,assign)NSInteger rowIndex;

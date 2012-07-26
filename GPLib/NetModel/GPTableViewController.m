@@ -218,10 +218,10 @@
         if([self grouped] && view.tag != SECTION_HEADER_TAG) 
         {
             //because tableview is not a team player and does not respect the frame
-            int left = 15;
-            if(self.view.frame.size.width > 480) //must not be an iphone or a popover view
+            int left = self.tableView.frame.size.width/14;//15;
+            if(self.tableView.frame.size.width > 480) //must not be an iphone or a popover view
                 left = 48;
-            UIView* temp = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, _tableView.frame.size.width, view.frame.size.height)] autorelease];
+            UIView* temp = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, view.frame.size.height)] autorelease];
             temp.userInteractionEnabled = YES;
             temp.tag = SECTION_HEADER_TAG;
             [temp addSubview:view];

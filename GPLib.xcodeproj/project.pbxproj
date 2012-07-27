@@ -65,6 +65,10 @@
 		5C3D90F61577F3880052179A /* GPBackArrowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90F41577F3880052179A /* GPBackArrowButton.m */; };
 		5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */; };
 		5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */; };
+		5C5069A915C2D8F0007AD647 /* GPTableTextViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5069A715C2D8F0007AD647 /* GPTableTextViewItem.h */; };
+		5C5069AA15C2D8F0007AD647 /* GPTableTextViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5069A815C2D8F0007AD647 /* GPTableTextViewItem.m */; };
+		5C5069B115C2DC30007AD647 /* GPTableTextViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5069AF15C2DC30007AD647 /* GPTableTextViewCell.h */; };
+		5C5069B215C2DC30007AD647 /* GPTableTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5069B015C2DC30007AD647 /* GPTableTextViewCell.m */; };
 		5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */; };
 		5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */; };
 		5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */; };
@@ -324,6 +328,10 @@
 		5C3D90F41577F3880052179A /* GPBackArrowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBackArrowButton.m; sourceTree = "<group>"; };
 		5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPBarButtonItem.h; path = Common/GPBarButtonItem.h; sourceTree = "<group>"; };
 		5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPBarButtonItem.m; path = Common/GPBarButtonItem.m; sourceTree = "<group>"; };
+		5C5069A715C2D8F0007AD647 /* GPTableTextViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextViewItem.h; sourceTree = "<group>"; };
+		5C5069A815C2D8F0007AD647 /* GPTableTextViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextViewItem.m; sourceTree = "<group>"; };
+		5C5069AF15C2DC30007AD647 /* GPTableTextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextViewCell.h; sourceTree = "<group>"; };
+		5C5069B015C2DC30007AD647 /* GPTableTextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextViewCell.m; sourceTree = "<group>"; };
 		5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPHTTPRequest.xcodeproj; path = GPHTTPRequest/GPHTTPRequest.xcodeproj; sourceTree = "<group>"; };
 		5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMailItem.h; sourceTree = "<group>"; };
 		5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMailItem.m; sourceTree = "<group>"; };
@@ -924,6 +932,8 @@
 				D96B38621574011C004B9F69 /* GPTableSwitchCell.m */,
 				5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */,
 				5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */,
+				5C5069AF15C2DC30007AD647 /* GPTableTextViewCell.h */,
+				5C5069B015C2DC30007AD647 /* GPTableTextViewCell.m */,
 			);
 			path = TableCells;
 			sourceTree = "<group>";
@@ -955,6 +965,8 @@
 				D96B385D15740097004B9F69 /* GPTableSwitchItem.m */,
 				5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */,
 				5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */,
+				5C5069A715C2D8F0007AD647 /* GPTableTextViewItem.h */,
+				5C5069A815C2D8F0007AD647 /* GPTableTextViewItem.m */,
 			);
 			path = TableItems;
 			sourceTree = "<group>";
@@ -1102,6 +1114,8 @@
 				5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */,
 				5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */,
 				5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */,
+				5C5069A915C2D8F0007AD647 /* GPTableTextViewItem.h in Headers */,
+				5C5069B115C2DC30007AD647 /* GPTableTextViewCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1388,6 +1402,8 @@
 				5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */,
 				5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */,
 				5C5F7D23159CCB7100F42061 /* GPTableMailCell.m in Sources */,
+				5C5069AA15C2D8F0007AD647 /* GPTableTextViewItem.m in Sources */,
+				5C5069B215C2DC30007AD647 /* GPTableTextViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

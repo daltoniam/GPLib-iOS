@@ -240,6 +240,7 @@
     s = [s stringByReplacingOccurrencesOfString:@"&times;" withString:@""];
     s = [s stringByReplacingOccurrencesOfString:@"&divide;" withString:@""];
     s = [s stringByReplacingOccurrencesOfString:@"&#39;" withString:@""];
+    s = [s stringByReplacingOccurrencesOfString:@"&#039;" withString:@""];
     
     s = [s stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
     

@@ -80,6 +80,8 @@
 #import "GPTableSwitchCell.h"
 #import "GPTableMailItem.h"
 #import "GPTableMailCell.h"
+#import "GPTableTextViewItem.h"
+#import "GPTableTextViewCell.h"
 /////views
 #import "GPImageView.h"
 #import "GPBubbleView.h"

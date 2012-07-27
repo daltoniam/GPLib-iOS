@@ -58,6 +58,8 @@
 #import "GPTableSwitchCell.h"
 #import "GPTableMailItem.h"
 #import "GPTableMailCell.h"
+#import "GPTableTextViewItem.h"
+#import "GPTableTextViewCell.h"
 
 #import "GPEmptyTableView.h"
 #import "GPNavigator.h"
@@ -359,12 +361,12 @@
                 GPTableTextItem* item = (GPTableTextItem*)object;
                 if(indexPath.row == i)
                 {
-                    if([self isMultiCheckMark]) //if we are not multi check, then we are not allowed to disable
+                    if([self isMultiCheckMark:indexPath.section]) //if we are not multi check, then we are not allowed to disable
                         item.isChecked = !item.isChecked;
                     else
                         item.isChecked = YES;
                 }
-                else if(![self isMultiCheckMark]) //we are not multi so disable the rest
+                else if(![self isMultiCheckMark:indexPath.section]) //we are not multi so disable the rest
                     item.isChecked = NO;
                 
                 NSIndexPath* path = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
@@ -440,6 +442,8 @@
         return [GPTableMoreCell class];
     else if ([object isKindOfClass:[GPTableTextFieldItem class]]) 
         return [GPTableTextFieldCell class];
+    else if ([object isKindOfClass:[GPTableTextViewItem class]]) 
+        return [GPTableTextViewCell class];
     else if ([object isKindOfClass:[GPTableDeleteItem class]]) 
         return [GPTableDeleteCell class];
     else if ([object isKindOfClass:[GPTableSwitchItem class]]) 
@@ -713,7 +717,7 @@
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //subclass this to set if checkmark style is multi selection
--(BOOL)isMultiCheckMark
+-(BOOL)isMultiCheckMark:(int)section
 {
     return NO;
 }

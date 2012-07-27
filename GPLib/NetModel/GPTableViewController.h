@@ -67,7 +67,7 @@
 - (id)initWithOutURL;
 -(BOOL)grouped;
 -(BOOL)checkMarks;
--(BOOL)isMultiCheckMark;
+-(BOOL)isMultiCheckMark:(int)section;
 -(BOOL)checkMarksExpection:(int)section;
 -(BOOL)autoSizeCells;
 -(UIColor*)tableBackground;

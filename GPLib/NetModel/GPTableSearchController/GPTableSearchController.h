@@ -45,6 +45,7 @@
     UISearchDisplayController* searchController;
     BOOL hideSectionTitles;
     NSString* searchText;
+    BOOL didMove;
 }
 -(NSString*)searchURL:(NSString*)searchString;
 -(BOOL)isNetworkSearch;
@@ -60,5 +61,6 @@
 -(BOOL)dimissSearchOnSelect;
 -(BOOL)isSearching;
 -(void)runSearch:(NSString*)searchString;
+-(BOOL)hideSearchBarOnLoad;
 
 @end

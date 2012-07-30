@@ -402,6 +402,14 @@
         else
             [self showEmptyView];
     }
+    if(!didMove && [self hideSearchBarOnLoad])
+    {
+        CGPoint point = self.tableView.contentOffset;
+        point.y += 44;
+        self.tableView.contentOffset = point;
+        if(!model.isLoading)
+            didMove = YES;
+    }
     
     [self.tableView reloadData];
     ActLabel.hidden = YES;
@@ -610,6 +618,12 @@
     }
     else
         [super showEmptyView];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//hide the search bar on the first load
+-(BOOL)hideSearchBarOnLoad
+{
+    return YES;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(BOOL)isSearching

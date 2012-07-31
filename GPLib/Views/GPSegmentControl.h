@@ -66,6 +66,6 @@ typedef enum {
 -(void)setSelector:(SEL)selector target:(id)target AtIndex:(int)index;
 -(void)removeAllSegments;
 -(BOOL)isSegmentSelected:(int)index;
--(void)addTarget:(id)target selector:(SEL)selector;
+-(void)setTarget:(id)target selector:(SEL)selector;
 
 @end

@@ -60,6 +60,9 @@
 #import "GPTableMailCell.h"
 #import "GPTableTextViewItem.h"
 #import "GPTableTextViewCell.h"
+#import "GPTableSegmentItem.h"
+#import "GPTableSegmentCell.h"
+
 
 #import "GPEmptyTableView.h"
 #import "GPNavigator.h"
@@ -280,6 +283,25 @@
     }
     [identifier release];
     
+    if([object isKindOfClass:[GPTableSegmentItem class]])
+    {
+        GPTableSegmentItem* item = (GPTableSegmentItem*)object;
+        if(item.segType == GPTableSegmentAuto)
+        {
+            BOOL isLast = [self isLastObjectInSection:object section:indexPath.section];
+            if(indexPath.row == 0)
+            {
+                item.segType = GPTableSegmentTop;
+                if(isLast)
+                    item.segType = GPTableSegmentOnly;
+            }
+            else if(isLast)
+                item.segType = GPTableSegmentBottom;
+            else
+                item.segType = GPTableSegmentMiddle;
+        }
+    }
+    
     if ([cell isKindOfClass:[GPTableCell class]])
         [(GPTableCell*)cell setObject:object];
     
@@ -329,6 +351,20 @@
     //NSLog(@"items count: %d",[items count]);
     //NSLog(@"indexPath: %@",indexPath);
     return [items objectAtIndex:indexPath.row];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)isLastObjectInSection:(id)object section:(int)section
+{
+    if (sections) 
+    {
+        NSArray* itemArray = [items objectAtIndex:section];
+        if(object == [itemArray lastObject])
+            return YES;
+        
+    }
+    if(object == [items lastObject])
+        return YES;
+    return NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //just allows the cell to turn blue when we are using checkmarks
@@ -444,6 +480,8 @@
         return [GPTableTextFieldCell class];
     else if ([object isKindOfClass:[GPTableTextViewItem class]]) 
         return [GPTableTextViewCell class];
+    else if ([object isKindOfClass:[GPTableSegmentItem class]]) 
+        return [GPTableSegmentCell class];
     else if ([object isKindOfClass:[GPTableDeleteItem class]]) 
         return [GPTableDeleteCell class];
     else if ([object isKindOfClass:[GPTableSwitchItem class]]) 

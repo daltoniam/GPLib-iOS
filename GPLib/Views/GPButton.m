@@ -40,7 +40,7 @@
 
 @implementation GPButton
 
-@synthesize gradientStartColor, gradientEndColor, highlightColor;
+@synthesize gradientStartColor, gradientEndColor, highlightColor,highlightEndColor;
 @synthesize doesPersistent = doesPersistent,isSelected = isSelected,rounding,drawGloss,gradientLength,fillColor;
 @synthesize borderColor,borderWidth,drawInsetShadow;
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,9 @@
     {
         if(isSelected)
         {
-            if(self.highlightColor)
+            if(self.highlightColor && self.highlightEndColor)
+                [GPDrawExtras drawLinearGradient:ctx start:highlightColor end:highlightEndColor rect:currentFrame endLoc:gradientLength];
+            else if(self.highlightColor)
                 [GPDrawExtras drawLinearGradient:ctx start:highlightColor end:highlightColor rect:currentFrame endLoc:gradientLength];
             else
                 [GPDrawExtras drawLinearGradient:ctx start:gradientEndColor end:gradientStartColor rect:currentFrame endLoc:gradientLength]; //swap the gradient backwards

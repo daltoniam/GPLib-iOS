@@ -33,6 +33,8 @@
 
 #import "HTMLSettingsViewController.h"
 #import "UIImage+Additions.h"
+#import "GPButton.h"
+#import "GPSegmentControl.h"
 
 @interface HTMLSettingsViewController ()
 
@@ -135,52 +137,46 @@
 -(void)setupStyleMenu
 {
     //color
-    int left = 0;
     if(![disableSettings objectForKey:HTML_SETTINGS_TEXT_STYLE] || [[disableSettings objectForKey:HTML_SETTINGS_TEXT_STYLE] boolValue])
     {
         NSMutableArray* firstSection = [NSMutableArray array];
         [sections addObject:@"Text Style"];
-        UIView* buttonview = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)] autorelease];
-        UIFont* font = [UIFont boldSystemFontOfSize:18];
+        //UIView* buttonview = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)] autorelease];
         
+        NSMutableArray* segmentItems = [NSMutableArray arrayWithCapacity:4];
         if(![disableSettings objectForKey:HTML_SETTINGS_BOLD] || [[disableSettings objectForKey:HTML_SETTINGS_BOLD] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"bold.png"] istoggle:YES selector:@selector(setBold:) font:font];
-            if([[Settings objectForKey:@"bold"] boolValue])
-                [button swapButtonState];
-            [buttonview addSubview:button];
-            left+= 75;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"bold.png"] selector:@selector(setBold:) isSelected:[[Settings objectForKey:@"bold"] boolValue]];
+            [segmentItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_ITALIC] || [[disableSettings objectForKey:HTML_SETTINGS_ITALIC] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"italic.png"] istoggle:YES selector:@selector(setItalic:) font:font];
-            if([[Settings objectForKey:@"italic"] boolValue])
-                [button swapButtonState];
-            [buttonview addSubview:button];
-            left+= 75;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"italic.png"] selector:@selector(setItalic:) isSelected:[[Settings objectForKey:@"italic"] boolValue]];
+            [segmentItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_UNDERLINE] || [[disableSettings objectForKey:HTML_SETTINGS_UNDERLINE] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"underline.png"] istoggle:YES selector:@selector(setUnder:) font:font];
-            if([[Settings objectForKey:@"underline"] boolValue])
-                [button swapButtonState];
-            [buttonview addSubview:button];
-            left+= 75;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"underline.png"] selector:@selector(setUnder:) isSelected:[[Settings objectForKey:@"underline"] boolValue]];
+            [segmentItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_STRIKE_THROUGH] || [[disableSettings objectForKey:HTML_SETTINGS_STRIKE_THROUGH] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"strike.png"] istoggle:YES selector:@selector(setStrike:) font:font];
-            if([[Settings objectForKey:@"strike"] boolValue])
-                [button swapButtonState];
-            [buttonview addSubview:button];
-            //left+= 75;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"strike.png"] selector:@selector(setStrike:) isSelected:[[Settings objectForKey:@"strike"] boolValue]];
+            [segmentItems addObject:props];
         }
         
-        if(buttonview.subviews.count > 0)
-            [firstSection addObject:buttonview];
+        //if(buttonview.subviews.count > 0)
+        //    [firstSection addObject:buttonview];
+        if(segmentItems.count > 0)
+        {
+            GPTableSegmentItem* item = [GPTableSegmentItem itemWithSegments:segmentItems];
+            item.target = self;
+            item.isMultiSelect = YES;
+            [firstSection addObject:item];
+        }
         
         UIColor* settingcolor = [Settings objectForKey:@"color"];
         int textSize = [[Settings objectForKey:@"size"] intValue];
@@ -213,97 +209,74 @@
     {
         NSMutableArray* secondSection = [NSMutableArray array];
         [sections addObject:@"Paragraph Style"];
-        left = 0;
-        UIView* paraview = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)] autorelease];
-        UIFont* font = [UIFont boldSystemFontOfSize:18];
+        NSMutableArray* segmentItems = [NSMutableArray arrayWithCapacity:4];
         int align = [[Settings objectForKey:@"alignment"] intValue];
         
-    if(![disableSettings objectForKey:HTML_SETTINGS_LEFT_JUSTIFY] || [[disableSettings objectForKey:HTML_SETTINGS_LEFT_JUSTIFY] boolValue])
+        if(![disableSettings objectForKey:HTML_SETTINGS_LEFT_JUSTIFY] || [[disableSettings objectForKey:HTML_SETTINGS_LEFT_JUSTIFY] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"left_justify.png"] istoggle:YES selector:@selector(setAlignment:) font:font];
-            button.tag = kCTLeftTextAlignment;
+            BOOL selected = NO;
             if(align == kCTLeftTextAlignment)
-            {
-                [button swapButtonState];
-                OldAlign = [button retain];
-            }
-            [paraview addSubview:button];
-            left+= 75;
+                selected = YES;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"left_justify.png"] selector:@selector(setAlignment:) isSelected:selected];
+            [segmentItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_CENTER_JUSTIFY] || [[disableSettings objectForKey:HTML_SETTINGS_CENTER_JUSTIFY] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"center_justify.png"] istoggle:YES selector:@selector(setAlignment:) font:font];
-            button.tag = kCTCenterTextAlignment;
+            BOOL selected = NO;
             if(align == kCTCenterTextAlignment)
-            {
-                [button swapButtonState];
-                OldAlign = [button retain];
-            }
-            [paraview addSubview:button];
-            left+= 75;
+                selected = YES;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"center_justify.png"] selector:@selector(setAlignment:) isSelected:selected];
+            [segmentItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_RIGHT_JUSTIFY] || [[disableSettings objectForKey:HTML_SETTINGS_RIGHT_JUSTIFY] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"right_justify.png"] istoggle:YES selector:@selector(setAlignment:) font:font];
-            button.tag = kCTRightTextAlignment;
+            BOOL selected = NO;
             if(align == kCTRightTextAlignment)
-            {
-                [button swapButtonState];
-                OldAlign = [button retain];
-            }
-            [paraview addSubview:button];
-            left+= 75;
+                selected = YES;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"right_justify.png"] selector:@selector(setAlignment:) isSelected:selected];
+            [segmentItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_JUSTIFY_JUSTIFY] || [[disableSettings objectForKey:HTML_SETTINGS_JUSTIFY_JUSTIFY] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"justify_justify.png"] istoggle:YES selector:@selector(setAlignment:) font:font];
-            button.tag = kCTJustifiedTextAlignment;
+            BOOL selected = NO;
             if(align == kCTJustifiedTextAlignment)
-            {
-                [button swapButtonState];
-                OldAlign = [button retain];
-            }
-            [paraview addSubview:button];
-            //left+= 75;
+                selected = YES;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"justify_justify.png"] selector:@selector(setAlignment:) isSelected:selected];
+            [segmentItems addObject:props];
         }
         
-        left = 0;
         BOOL Order = [[Settings objectForKey:@"orderlist"] boolValue];
         BOOL unOrder = [[Settings objectForKey:@"unorderlist"] boolValue];
-        UIView* listview = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)] autorelease];
+        NSMutableArray* listSegItems = [NSMutableArray arrayWithCapacity:2];
         
         if(![disableSettings objectForKey:HTML_SETTINGS_ORDER] || [[disableSettings objectForKey:HTML_SETTINGS_ORDER] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"orderlist.png"] istoggle:YES selector:@selector(setList:) font:font];
-            button.tag = 0;
-            if(Order)
-            {
-                [button swapButtonState];
-                OldList = [button retain];
-            }
-            [listview addSubview:button];
-            left += 225;
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"orderlist.png"] selector:@selector(setList:) isSelected:Order];
+            [listSegItems addObject:props];
         }
         
         if(![disableSettings objectForKey:HTML_SETTINGS_UNORDER] || [[disableSettings objectForKey:HTML_SETTINGS_UNORDER] boolValue])
         {
-            GPButton* button = [self buttonFactory:CGRectMake(left, 0, 65, 35) image:[UIImage libraryImageNamed:@"unorderlist.png"] istoggle:YES selector:@selector(setList:) font:font];
-            button.tag = 1;
-            if(unOrder)
-            {
-                [button swapButtonState];
-                OldList = [button retain];
-            }
-            [listview addSubview:button];
+            GPTableSegmentItemProps* props = [GPTableSegmentItemProps segmentWithImage:[UIImage libraryImageNamed:@"unorderlist.png"] selector:@selector(setList:) isSelected:unOrder];
+            [listSegItems addObject:props];
         }
         
-        if(listview.subviews.count > 0)
-            [secondSection addObject:listview];
-        if(paraview.subviews.count > 0)
-            [secondSection addObject:paraview];
+        if(listSegItems.count > 0)
+        {
+            GPTableSegmentItem* item = [GPTableSegmentItem itemWithSegments:listSegItems];
+            item.target = self;
+            item.isMultiSelect = YES;
+            [secondSection addObject:item];
+        }
+        if(segmentItems.count > 0)
+        {
+            GPTableSegmentItem* item = [GPTableSegmentItem itemWithSegments:segmentItems];
+            item.target = self;
+            [secondSection addObject:item];
+        }
         
         [items addObject:secondSection];
     }
@@ -402,23 +375,6 @@
         [self.delegate viewWasDimissed];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(GPButton*)buttonFactory:(CGRect)frame image:(UIImage*)image istoggle:(BOOL)persist selector:(SEL)sel font:(UIFont*)font
-{
-    GPButton* button = [[[GPButton alloc] initWithFrame:frame] autorelease];
-    button.gradientStartColor = [UIColor colorFromRGB:240 green:240 blue:240 alpha:1];
-    button.gradientEndColor = [UIColor colorFromRGB:212 green:212 blue:212 alpha:1];
-    button.highlightColor = [UIColor colorFromRGB:163 green:215 blue:255 alpha:1];
-    button.doesPersistent = persist;
-    if(font)
-        button.titleLabel.font = font;
-    [button addTarget:self 
-               action:sel
-     forControlEvents:UIControlEventTouchDown];
-    //[button setTitle:text forState:UIControlStateNormal];
-    [button setImage:image forState:UIControlStateNormal];
-    return button;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setBold:(GPButton*)sender
 {
     if([self.delegate respondsToSelector:@selector(updateBold:)])
@@ -445,28 +401,19 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setList:(GPButton*)sender
 {
-    if(!OldList)
-        OldList = [sender retain];
-    if(OldList.tag != sender.tag )
-    {
-        [OldList swapButtonState];
-        [OldList release];
-        OldList = [sender retain];
-    }
+    int tag = 0;
+    if(sender.tag == 0)
+        tag = 1;
+    GPSegmentControl* segControl = (GPSegmentControl*)[sender superview];
+    if([segControl isSegmentSelected:tag])
+        [segControl setSelectedSegment:tag];
+    
     if([self.delegate respondsToSelector:@selector(updateList:)])
         [self.delegate updateList:sender.tag];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setAlignment:(GPButton*)sender
 {
-    if(OldAlign.tag == sender.tag)
-    {
-        [sender swapButtonState];
-        return;
-    }
-    [OldAlign swapButtonState];
-    [OldAlign release];
-    OldAlign = [sender retain];
     if([self.delegate respondsToSelector:@selector(updateAlignment:)])
         [self.delegate updateAlignment:sender.tag];
 }
@@ -502,8 +449,6 @@
     [ColorItem release];
     [textSizeItem release];
     [fontItem release];
-    [OldAlign release];
-    [OldList release];
     [Settings release];
     [disableSettings release];
     [super dealloc];

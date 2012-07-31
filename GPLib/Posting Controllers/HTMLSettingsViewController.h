@@ -37,7 +37,7 @@
 #import "HTMLListViewController.h"
 #import "GPTableTextItem.h"
 #import "GPTableHTMLItem.h"
-#import "GPButton.h"
+#import "GPTableSegmentItem.h"
 #import "HTMLColors.h"
 
 //disable/hide list options
@@ -102,8 +102,6 @@
     GPTableTextItem* ColorItem;
     GPTableTextItem* textSizeItem;
     GPTableTextItem* fontItem;
-    GPButton* OldAlign;
-    GPButton* OldList;
     NSDictionary* disableSettings;
 }
 @property(nonatomic,assign)id<HTMLSettingsDelegate>delegate;

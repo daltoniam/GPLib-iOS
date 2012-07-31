@@ -87,6 +87,7 @@
 -(void)copyRefresh;
 
 -(GPLoadingLabelStyle)actLabelStyle;
+-(BOOL)isLastObjectInSection:(id)object section:(int)section;
 
 @end
 

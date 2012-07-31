@@ -41,6 +41,7 @@
 @property (nonatomic, retain) UIColor* gradientStartColor;
 @property (nonatomic, retain) UIColor* gradientEndColor;
 @property (nonatomic, retain) UIColor* highlightColor;
+@property (nonatomic, retain) UIColor* highlightEndColor;
 @property (nonatomic, assign) BOOL doesPersistent;
 @property (nonatomic, readonly) BOOL isSelected;
 

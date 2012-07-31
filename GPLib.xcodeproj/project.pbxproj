@@ -69,6 +69,12 @@
 		5C5069AA15C2D8F0007AD647 /* GPTableTextViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5069A815C2D8F0007AD647 /* GPTableTextViewItem.m */; };
 		5C5069B115C2DC30007AD647 /* GPTableTextViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5069AF15C2DC30007AD647 /* GPTableTextViewCell.h */; };
 		5C5069B215C2DC30007AD647 /* GPTableTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5069B015C2DC30007AD647 /* GPTableTextViewCell.m */; };
+		5C5F691315C72CEE0077005E /* GPTableSegmentItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F691115C72CEE0077005E /* GPTableSegmentItem.h */; };
+		5C5F691415C72CEE0077005E /* GPTableSegmentItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F691215C72CEE0077005E /* GPTableSegmentItem.m */; };
+		5C5F691B15C72D0E0077005E /* GPTableSegmentCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F691915C72D0E0077005E /* GPTableSegmentCell.h */; };
+		5C5F691C15C72D0E0077005E /* GPTableSegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F691A15C72D0E0077005E /* GPTableSegmentCell.m */; };
+		5C5F691F15C72D200077005E /* GPSegmentControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F691D15C72D200077005E /* GPSegmentControl.h */; };
+		5C5F692015C72D200077005E /* GPSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F691E15C72D200077005E /* GPSegmentControl.m */; };
 		5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */; };
 		5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */; };
 		5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */; };
@@ -333,6 +339,12 @@
 		5C5069AF15C2DC30007AD647 /* GPTableTextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextViewCell.h; sourceTree = "<group>"; };
 		5C5069B015C2DC30007AD647 /* GPTableTextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextViewCell.m; sourceTree = "<group>"; };
 		5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPHTTPRequest.xcodeproj; path = GPHTTPRequest/GPHTTPRequest.xcodeproj; sourceTree = "<group>"; };
+		5C5F691115C72CEE0077005E /* GPTableSegmentItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSegmentItem.h; sourceTree = "<group>"; };
+		5C5F691215C72CEE0077005E /* GPTableSegmentItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableSegmentItem.m; sourceTree = "<group>"; };
+		5C5F691915C72D0E0077005E /* GPTableSegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSegmentCell.h; sourceTree = "<group>"; };
+		5C5F691A15C72D0E0077005E /* GPTableSegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableSegmentCell.m; sourceTree = "<group>"; };
+		5C5F691D15C72D200077005E /* GPSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSegmentControl.h; sourceTree = "<group>"; };
+		5C5F691E15C72D200077005E /* GPSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSegmentControl.m; sourceTree = "<group>"; };
 		5C5F7D1B159CCB5100F42061 /* GPTableMailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMailItem.h; sourceTree = "<group>"; };
 		5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMailItem.m; sourceTree = "<group>"; };
 		5C5F7D20159CCB7100F42061 /* GPTableMailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableMailCell.h; sourceTree = "<group>"; };
@@ -580,6 +592,8 @@
 		5C14313E15488E9100AEE1FA /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				5C5F691D15C72D200077005E /* GPSegmentControl.h */,
+				5C5F691E15C72D200077005E /* GPSegmentControl.m */,
 				5CD4F94914DC54C900F2CBB3 /* GPButton.h */,
 				5CD4F94A14DC54C900F2CBB3 /* GPButton.m */,
 				5C14312415483D6100AEE1FA /* GPLabel.h */,
@@ -908,6 +922,8 @@
 		5CD4F92814DC54C900F2CBB3 /* TableCells */ = {
 			isa = PBXGroup;
 			children = (
+				5C5F691915C72D0E0077005E /* GPTableSegmentCell.h */,
+				5C5F691A15C72D0E0077005E /* GPTableSegmentCell.m */,
 				5CD4F92914DC54C900F2CBB3 /* GPBubbleTableCell.h */,
 				5CD4F92A14DC54C900F2CBB3 /* GPBubbleTableCell.m */,
 				5CD4F92B14DC54C900F2CBB3 /* GPTableCell.h */,
@@ -941,6 +957,8 @@
 		5CD4F93714DC54C900F2CBB3 /* TableItems */ = {
 			isa = PBXGroup;
 			children = (
+				5C5F691115C72CEE0077005E /* GPTableSegmentItem.h */,
+				5C5F691215C72CEE0077005E /* GPTableSegmentItem.m */,
 				5CFFA15D14DC601900501A3E /* GPTableMoreItem.h */,
 				5CFFA15E14DC601900501A3E /* GPTableMoreItem.m */,
 				5CD4F93814DC54C900F2CBB3 /* GPTableBubbleItem.h */,
@@ -1116,6 +1134,9 @@
 				5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */,
 				5C5069A915C2D8F0007AD647 /* GPTableTextViewItem.h in Headers */,
 				5C5069B115C2DC30007AD647 /* GPTableTextViewCell.h in Headers */,
+				5C5F691315C72CEE0077005E /* GPTableSegmentItem.h in Headers */,
+				5C5F691B15C72D0E0077005E /* GPTableSegmentCell.h in Headers */,
+				5C5F691F15C72D200077005E /* GPSegmentControl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1404,6 +1425,9 @@
 				5C5F7D23159CCB7100F42061 /* GPTableMailCell.m in Sources */,
 				5C5069AA15C2D8F0007AD647 /* GPTableTextViewItem.m in Sources */,
 				5C5069B215C2DC30007AD647 /* GPTableTextViewCell.m in Sources */,
+				5C5F691415C72CEE0077005E /* GPTableSegmentItem.m in Sources */,
+				5C5F691C15C72D0E0077005E /* GPTableSegmentCell.m in Sources */,
+				5C5F692015C72D200077005E /* GPSegmentControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

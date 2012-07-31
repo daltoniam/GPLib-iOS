@@ -89,6 +89,7 @@
 {
     [super viewWillAppear:animated];
     [self.tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+    self.tableView.scrollsToTop = YES;
     //[self.tableView reloadData];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

@@ -93,7 +93,7 @@
     [super viewDidDisappear:animated];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
     self.navigationController.navigationBar.translucent = NO;
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    //[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 /////////////////////////////////////////////////////////////////////////////////////

@@ -99,6 +99,7 @@
 #import "GPTabBarItem.h"
 #import "GPTimeScroller.h"
 #import "GPEmptyTableView.h"
+#import "GPSegmentControl.h"
 /////net model
 #import "GPCenterLabel.h"
 #import "GPDragToRefreshView.h"

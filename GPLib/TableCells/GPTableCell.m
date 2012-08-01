@@ -105,7 +105,6 @@ const CGFloat TableCellSmallMargin = 6;
         CGRect frame = self.textLabel.frame;
         CGSize textSize = [self.textLabel.text sizeWithFont:self.textLabel.font constrainedToSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
         int width = frame.size.width - textSize.width;
-        
         frame.size.width = textSize.width;
         self.textLabel.frame = frame;
         
@@ -164,7 +163,7 @@ const CGFloat TableCellSmallMargin = 6;
     if(item.backgroundColor)
     {
         self.backgroundColor = item.backgroundColor;
-        self.contentView.backgroundColor = item.backgroundColor;
+        //self.contentView.backgroundColor = item.backgroundColor;
     }
     if(item.notificationText)
     {

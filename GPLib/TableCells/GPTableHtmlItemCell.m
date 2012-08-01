@@ -75,6 +75,38 @@
     self.textLabel.frame = CGRectZero;
     HTMLText.frame = CGRectMake(TableCellSmallMargin,TableCellSmallMargin,self.contentView.frame.size.width - TableCellSmallMargin,
                                 self.contentView.frame.size.height - TableCellSmallMargin);
+    
+    if(infoLabel)
+    {
+        CGRect frame = HTMLText.frame;
+        CGSize textSize = [infoLabel.text sizeWithFont:infoLabel.font constrainedToSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
+        if(textSize.width > self.contentView.frame.size.width/2)
+            textSize.width = self.contentView.frame.size.width/2;
+        frame.size.width -= textSize.width+TableCellSmallMargin;
+        HTMLText.frame = frame;
+        
+        int left = frame.origin.x + frame.size.width + TableCellSmallMargin;
+        infoLabel.frame = CGRectMake(left, 1, textSize.width, frame.size.height);
+    }
+    else if(notificationLabel) //you can only have info or notification, not both
+    {
+        if(!notificationLabel.text)
+            notificationLabel.frame = CGRectZero;
+        else
+        {
+            CGRect frame = HTMLText.frame;
+            int height = 20;
+            //int width = 35;
+            int width = self.contentView.frame.size.width - (TableCellSmallMargin*2);
+            CGSize infoSize = [notificationLabel.text sizeWithFont:notificationLabel.font constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
+            infoSize.width += 12;
+            if(infoSize.width < 35)
+                infoSize.width = 35;
+            frame.size.width -= infoSize.width;
+            HTMLText.frame = frame;
+            notificationLabel.frame = CGRectMake(frame.size.width+ TableCellSmallMargin*2, (frame.size.height/2)-(height/2)-1, infoSize.width, height);
+        }
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setObject:(id)object 

@@ -193,8 +193,7 @@
     rect.size.height = height;
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
         textContentView.frame = rect;
-    int pad = 25;
-    self.contentSize = CGSizeMake(self.frame.size.width, rect.size.height+pad); //20 for padding
+    self.contentSize = CGSizeMake(self.frame.size.width, rect.size.height);
     
     CGRect textBounds = textContentView.bounds;
     UIBezierPath *path = [UIBezierPath bezierPathWithRect:textBounds]; //textContentView.bounds

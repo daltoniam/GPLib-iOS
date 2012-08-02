@@ -40,6 +40,7 @@ extern CGFloat TableCellDefaultImageSize;
 
 @interface GPTableImageCell : GPTableCell<GPImageViewDelegate>
 {
+    CGSize defaultSize;
     GPImageView* imageView;
     GPTableImageItem* currentObject;
     CGSize imageBounds;

@@ -118,7 +118,7 @@
     if(GPIsPad())
         offset += TableCellSmallMargin*2;
     
-    int top = 25;
+    int top = [self cellSpacing];
     headerView.frame = CGRectMake(offset, top, fullFrame.size.width, 40);
     top += headerView.frame.size.height;
     bodyView.frame = CGRectMake(offset, top, fullFrame.size.width, fullFrame.size.height-top);
@@ -181,6 +181,11 @@
 {
     NSLog(@"view tapped! index: %d",index);
     //do what you want
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+-(int)cellSpacing
+{
+    return 25;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

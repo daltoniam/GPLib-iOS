@@ -45,5 +45,6 @@
 }
 
 -(void)setupTitleLabel;
+-(int)cellSpacing;
 
 @end

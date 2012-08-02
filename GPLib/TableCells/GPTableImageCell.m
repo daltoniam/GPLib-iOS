@@ -73,6 +73,7 @@ CGFloat TableCellDefaultImageSize = 50;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) 
     {
+        defaultSize = CGSizeMake(TableCellDefaultImageSize, TableCellDefaultImageSize);
         imageView =[[GPImageView alloc] init];
         imageView.delegate = self;
         //CALayer * l = [imageView layer];
@@ -148,7 +149,7 @@ CGFloat TableCellDefaultImageSize = 50;
     if(item.imageSize.height)
         imageBounds = item.imageSize;
     else
-        imageBounds = CGSizeMake(TableCellDefaultImageSize, TableCellDefaultImageSize);
+        imageBounds = defaultSize;
     
     if(item.contentMode)
         imageView.contentMode = item.contentMode;

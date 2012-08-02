@@ -33,11 +33,22 @@
 
 #import <UIKit/UIKit.h>
 
+@class GPLabel;
+
+@protocol GPLabelDelegate <NSObject>
+
+//notifies you every time the clock moves forward
+-(void)timeDidChange:(GPLabel*)label hours:(int)hours mins:(int)mins secs:(int)secs;
+
+@end
+
 @interface GPLabel : UILabel
 {
     UIColor* startGlossColor;
     UIColor* endGlossColor;
     int incrementValue;
+    BOOL needHours;
+    NSTimer* workTimer;
 }
 @property(nonatomic,retain)UIColor* highlightColor;
 @property(nonatomic,assign)BOOL isHighlighted;
@@ -52,7 +63,10 @@
 @property (nonatomic, assign)CGFloat radialRadius;
 @property (nonatomic, assign)BOOL drawGloss;
 
+@property(nonatomic,assign)id<GPLabelDelegate>delegate;
+
 @property (nonatomic, retain)UIFont* appearanceFont UI_APPEARANCE_SELECTOR;
 
 -(void)incrementToValue:(int)endValue speed:(float)speed;
+-(void)secondCountDown:(int)secs;
 @end

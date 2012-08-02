@@ -95,8 +95,11 @@
     }
     
     NSString* baseURL = @"";
+    NSString* param = @"&";
+    if([self.URL rangeOfString:@"?"].location == NSNotFound)
+        param = @"?";
     if([self enablePaging])
-        baseURL = [NSString stringWithFormat:@"%@&page=%d",self.URL,page];
+        baseURL = [NSString stringWithFormat:@"%@%@page=%d",self.URL,param,page];
     else
         baseURL = self.URL;
     NSURL *theurl = [NSURL URLWithString:baseURL];

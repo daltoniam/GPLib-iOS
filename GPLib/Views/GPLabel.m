@@ -37,7 +37,7 @@
 @implementation GPLabel
 
 @synthesize textShadowColor,textShadowBlur,textShadowOffset,gradientStartColor,gradientEndColor,gradientLength,radialRadius,drawGloss;
-@synthesize isHighlighted,highlightColor;
+@synthesize isHighlighted,highlightColor,delegate;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)commonInit
 {
@@ -124,7 +124,60 @@
 {
     [startGlossColor release];
     [endGlossColor release];
+    [workTimer invalidate];
+    [workTimer release];
     [super dealloc];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)secondCountDown:(int)secs
+{
+    incrementValue = secs;
+    if(secs/(60*60) > 0)
+        needHours = YES;
+    self.text = [self calculateTimeLeft];
+    [workTimer release];
+    workTimer = [[NSTimer scheduledTimerWithTimeInterval:1
+                                     target:self
+                                   selector:@selector(timeChanged:)
+                                   userInfo:nil
+                                    repeats:YES] retain];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)timeChanged:(NSTimer*)timer
+{
+    incrementValue--;
+    if(incrementValue < 0)
+        [timer invalidate];
+    else
+        self.text = [self calculateTimeLeft];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSString*)calculateTimeLeft
+{
+    int work = incrementValue;
+    NSString* hours = @"";
+    int h = 0;
+    if(needHours)
+    {
+        h = incrementValue/(60*60);
+        hours = [NSString stringWithFormat:@"%d:",h];
+        if(h < 10)
+            hours = [NSString stringWithFormat:@"0%@",hours];
+        work = incrementValue-((60*60)*h);
+    }
+    
+    int mins = work/60;
+    NSString* mintues = [NSString stringWithFormat:@"%d",mins];
+    if(mins < 10)
+        mintues = [NSString stringWithFormat:@"0%@",mintues];
+    
+    int secs = work-(mins*60);
+    NSString* seconds = [NSString stringWithFormat:@"%d",secs];
+    if(secs < 10)
+        seconds = [NSString stringWithFormat:@"0%@",seconds];
+    if([self.delegate respondsToSelector:@selector(timeDidChange:hours:mins:secs:)])
+        [self.delegate timeDidChange:self hours:h mins:mins secs:secs];
+    return [NSString stringWithFormat:@"%@%@:%@",hours,mintues,seconds];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //handy way to make a cool incrementing label (for stats or something)
@@ -132,11 +185,12 @@
 {
     incrementValue = endValue;
     self.text = [NSString stringWithFormat:@"0"];
-    [NSTimer scheduledTimerWithTimeInterval:speed
+    [workTimer release];
+    workTimer = [[NSTimer scheduledTimerWithTimeInterval:speed
                                      target:self
                                    selector:@selector(incrementNow:)
                                    userInfo:nil
-                                    repeats:YES];
+                                    repeats:YES] retain];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)incrementNow:(NSTimer*)timer

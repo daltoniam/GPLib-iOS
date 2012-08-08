@@ -112,7 +112,7 @@
     fullFrame.size.width -= offset*2;
      self.contentView.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(fullFrame.origin.x, fullFrame.size.height, fullFrame.size.width, 7)].CGPath;
     
-    int start = 25;
+    int start = [self cellSpacing];
     int top = start;
     int height = imageBounds.height+TableCellSmallMargin*2;
     if(!imageView.URL && !imageView.image)
@@ -154,6 +154,12 @@
     //imageView.layer.cornerRadius = 2;
     //imageView.layer.masksToBounds = YES;
     imageBounds = CGSizeMake(35, 35);
+    self.accessoryType = UITableViewCellAccessoryNone;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+-(int)cellSpacing
+{
+    return 25;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

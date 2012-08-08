@@ -36,6 +36,7 @@
 
 @implementation GPTableHtmlItemCell
 
+@synthesize delegate;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object 
 {
@@ -113,8 +114,6 @@
 {
     [super setObject:object];
     GPTableHTMLItem* item = (GPTableHTMLItem*)object;
-    [currentHTMLItem release];
-    currentHTMLItem = [item retain];
     if(item.text)
         [HTMLText setHTML:item.text embed:YES];
     
@@ -128,13 +127,12 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)imageFinished:(NSString *)url height:(int)height width:(int)width
 {
-    if([currentHTMLItem.delegate respondsToSelector:@selector(imageFinished:height:width:)])
-        [currentHTMLItem.delegate imageFinished:url height:height width:width];
+    if([self.delegate respondsToSelector:@selector(imageFinished:height:width:)])
+        [self.delegate imageFinished:url height:height width:width];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc 
 {
-    [currentHTMLItem release];
     [HTMLText release];
     [super dealloc];
 }

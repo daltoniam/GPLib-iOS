@@ -57,11 +57,14 @@
     
 	// Draw image to buffer
 	CGContextRef ctx = CGBitmapContextCreate(data,width,height,8,width * 4,CGImageGetColorSpace(image.CGImage),kCGImageAlphaPremultipliedLast);
+    if(!ctx)
+    {
+        free(data);
+        return image;
+    }
 	CGContextDrawImage(ctx, CGRectMake(0, 0, (CGFloat)width, (CGFloat)height), bgimage);
-    
 	//Set the stroke (pen) color
     CGContextSetStrokeColorWithColor(ctx, color.CGColor);
-    
 	//Set the width of the pen mark
 	CGContextSetLineWidth(ctx, borderWidth);
     CGContextSetShadowWithColor (ctx, CGSizeMake(0.5, 0.5), 1, [UIColor blackColor].CGColor);

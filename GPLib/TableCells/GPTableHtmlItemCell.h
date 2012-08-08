@@ -35,10 +35,19 @@
 #import "HTMLKit.h"
 #import "GPTableHTMLItem.h"
 
+@protocol GPTableHTMLCellDelegate <NSObject>
+
+@optional
+
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+
+@end
+
 @interface GPTableHtmlItemCell : GPTableCell<HTMLTextLabelDelegate>
 {
     HTMLTextLabel* HTMLText;
-    GPTableHTMLItem* currentHTMLItem;
 }
+
+@property(nonatomic,assign)id<GPTableHTMLCellDelegate>delegate;
 
 @end

@@ -33,7 +33,7 @@
 
 #import "GPTableTextItem.h"
 
-@class GPTableTextViewCell;
+/*@class GPTableTextViewCell;
 @class GPTableTextViewItem;
 @protocol GPTableTextViewItemDelegate <NSObject>
 
@@ -41,7 +41,7 @@
 //notify that text has been entered
 - (void)textViewTextDidUpdate:(NSString*)text object:(GPTableTextViewItem*)item cell:(GPTableTextViewCell*)cell;
 - (void)returnKeyTapped:(UITextView*)field object:(GPTableTextViewItem*)item cell:(GPTableTextViewCell*)cell;
-@end
+@end*/
 
 
 @interface GPTableTextViewItem : GPTableTextItem
@@ -50,7 +50,7 @@
 @property(nonatomic,assign)BOOL isSecure;
 @property(nonatomic,assign)UITextAutocapitalizationType autoCap;
 @property(nonatomic,assign)UIReturnKeyType returnKey;
-@property(nonatomic,assign)id<GPTableTextViewItemDelegate>delegate;
+//@property(nonatomic,assign)id<GPTableTextViewItemDelegate>delegate;
 @property(nonatomic,assign)BOOL disabled;
 
 + (GPTableTextViewItem*)itemWithText:(NSString*)string height:(NSInteger)height;

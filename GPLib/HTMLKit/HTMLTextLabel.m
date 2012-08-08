@@ -111,6 +111,7 @@
 //draw non text content
 -(void)drawRect:(CGRect)rect
 {
+    isDrawing = YES;
     [super drawRect:rect];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -135,6 +136,7 @@
             //[image drawInRect:imgBounds];
         }
     }
+    isDrawing = NO;
 }
 //////////////////////////////////////////////////////////////////////////////
 //load image from http
@@ -186,8 +188,10 @@
                     height = height - height/4;//height/2;
                     width = width - width/4;//width/2;
                 }
-                NSRange validRange = NSMakeRange(0,[self.attributedText length]);
-                [self.attributedText enumerateAttributesInRange:validRange options:0 usingBlock:
+                //create a temp copy to enumerate through, that way if the attributedText is modified, we are still golden
+                NSAttributedString* tempString = [[[NSAttributedString alloc] initWithAttributedString:self.attributedText] autorelease];
+                NSRange validRange = NSMakeRange(0,[tempString length]);
+                [tempString enumerateAttributesInRange:validRange options:0 usingBlock:
                  ^(NSDictionary *attributes, NSRange range, BOOL *stop) 
                  {
                      NSString* imageurl = [attributes objectForKey:IMAGE_LINK];

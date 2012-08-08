@@ -35,7 +35,7 @@
 
 @implementation GPTableTextViewItem
 
-@synthesize height,isSecure,delegate,autoCap,returnKey,disabled;
+@synthesize height,isSecure,autoCap,returnKey,disabled;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableTextViewItem*)itemWithText:(NSString*)string height:(NSInteger)height

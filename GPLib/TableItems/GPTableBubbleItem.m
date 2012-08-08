@@ -35,7 +35,6 @@
 
 @implementation GPTableBubbleItem
 
-@synthesize delegate;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableBubbleItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl
 {

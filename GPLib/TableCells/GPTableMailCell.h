@@ -41,4 +41,6 @@
     UIView* lineView;
 }
 
+-(int)cellSpacing;
+
 @end

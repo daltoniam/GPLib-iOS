@@ -35,7 +35,7 @@
 
 @implementation GPTableTextFieldCell
 
-@synthesize textField = textField;
+@synthesize textField = textField,delegate;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object 
 {
@@ -97,15 +97,15 @@
 -(void)updateObjectText
 {
     currentObject.text = textField.text;
-    if([currentObject.delegate respondsToSelector:@selector(textDidUpdate:object:cell:)])
-        [currentObject.delegate textDidUpdate:textField.text object:currentObject cell:self];
+    if([self.delegate respondsToSelector:@selector(textDidUpdate:object:cell:)])
+        [self.delegate textDidUpdate:textField.text object:currentObject cell:self];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //move on or dismiss the keyboard
 -(void)returnKeyTapped
 {
-    if([currentObject.delegate respondsToSelector:@selector(returnKeyWasTapped:object:cell:)])
-        [currentObject.delegate returnKeyWasTapped:textField object:currentObject cell:self];
+    if([self.delegate respondsToSelector:@selector(returnKeyWasTapped:object:cell:)])
+        [self.delegate returnKeyWasTapped:textField object:currentObject cell:self];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews

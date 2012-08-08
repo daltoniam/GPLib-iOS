@@ -179,7 +179,8 @@
                 GPGridMoreItem* item = (GPGridMoreItem*)object;
                 item.isLoading = YES;
                 [(GPGridMoreCell *)cell setAnimating:YES];
-                [model loadModel:YES];
+                if(!model.isLoading)
+                    [model loadModel:YES];
             }
         }
         

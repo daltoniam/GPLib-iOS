@@ -305,13 +305,12 @@
     
     if ([cell isKindOfClass:[GPTableCell class]])
         [(GPTableCell*)cell setObject:object];
+    if([cell respondsToSelector:@selector(setDelegate:)])
+        [cell performSelector:@selector(setDelegate:) withObject:self];
     
     GPTableAccessory* view = [self customAccessory:cell.accessoryType];
     if(view)
         cell.accessoryView = view;
-    
-    if ([object isKindOfClass:[GPTableHTMLItem class]] || [object isKindOfClass:[GPTableBubbleItem class]])
-        [object setDelegate:self];
     
     if(!model.isFinished && [model autoLoad])
     {
@@ -558,13 +557,16 @@
     {
         for(NSArray* array in items)
         {
-            for(GPTableTextItem* item in array)
+            if([array isKindOfClass:[NSArray class]])
             {
-                NSString* newText = [item.text stringByReplacingOccurrencesOfString:imgURL withString:newImg];
-                if(![newText isEqualToString:item.text])
+                for(GPTableTextItem* item in array)
                 {
-                    reload = YES;
-                    item.text = newText;
+                    NSString* newText = [item.text stringByReplacingOccurrencesOfString:imgURL withString:newImg];
+                    if(![newText isEqualToString:item.text])
+                    {
+                        reload = YES;
+                        item.text = newText;
+                    }
                 }
             }
         }
@@ -581,32 +583,31 @@
             }
         }
     }
+    if(model.isLoading)
+        reload = NO;
     if(reload)
     {
+        [self.tableView beginUpdates];
         NSMutableArray* collect = [NSMutableArray arrayWithCapacity:self.tableView.visibleCells.count];
         for(UITableViewCell* cell in self.tableView.visibleCells)
             [collect addObject:[self.tableView indexPathForCell:cell]];
-        [self.tableView reloadRowsAtIndexPaths:collect withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:collect withRowAnimation:UITableViewRowAnimationFade]; //UITableViewRowAnimationFade
+        [self.tableView endUpdates];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    if(sections)
+    int section = [self.tableView numberOfSections];
+    for(int i = 0; i <= section; i++)
     {
-        for(NSArray* array in items)
-            for(GPTableTextItem* item in array)
-                if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]] || 
-                    [item isKindOfClass:[GPTableBubbleItem class]])
-                    [(GPTableHTMLItem*)item setDelegate:nil];
-    }
-    else
-    {
-        for(GPTableTextItem* item in items)
-            if ([item isKindOfClass:[GPTableHTMLItem class]] || [item isKindOfClass:[GPTableMessageItem class]] || 
-                [item isKindOfClass:[GPTableBubbleItem class]])
-                [(GPTableHTMLItem*)item setDelegate:nil];
+        for(int j = 0; j < [self.tableView numberOfRowsInSection:i]; j++)
+        {
+            UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:j inSection:i]];
+            if([cell respondsToSelector:@selector(setDelegate:)])
+                [cell performSelector:@selector(setDelegate:) withObject:nil];
+        }
     }
     model.delegate = nil;
 }

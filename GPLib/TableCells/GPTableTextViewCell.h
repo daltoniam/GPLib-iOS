@@ -33,12 +33,22 @@
 
 #import "GPTableCell.h"
 #import "GPTableTextViewItem.h"
+@class GPTableTextViewCell;
+
+@protocol GPTableTextViewCellDelegate <NSObject>
+
+@optional
+//notify that text has been entered
+- (void)textViewTextDidUpdate:(NSString*)text object:(GPTableTextViewItem*)item cell:(GPTableTextViewCell*)cell;
+- (void)returnKeyTapped:(UITextView*)field object:(GPTableTextViewItem*)item cell:(GPTableTextViewCell*)cell;
+@end
 
 @interface GPTableTextViewCell : GPTableCell<UITextViewDelegate>
 {
     UITextView *textView;
     GPTableTextViewItem* currentObject;
 }
+@property(nonatomic,assign)id<GPTableTextViewCellDelegate>delegate;
 @property(nonatomic,retain)UITextView* textView;
 
 @end

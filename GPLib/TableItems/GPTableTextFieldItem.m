@@ -35,7 +35,7 @@
 
 @implementation GPTableTextFieldItem
 
-@synthesize placeHolder,height,isSecure,delegate,keyboardType,autoCap,returnKey,disabled;
+@synthesize placeHolder,height,isSecure,keyboardType,autoCap,returnKey,disabled;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableTextFieldItem*)itemWithText:(NSString*)string placeHolder:(NSString*)holder height:(NSInteger)height
 {

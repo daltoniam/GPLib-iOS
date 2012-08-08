@@ -109,7 +109,15 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
 {
     if(isSearching)
+    {
+        if(section < searchSections.count)
+        {
+            id object = [searchSections objectAtIndex:section];
+            if([object isKindOfClass:[NSString class]])
+                return [searchSections objectAtIndex:section];
+        }
         return nil;
+    }
     if(section < sections.count)
     {
         id object = [sections objectAtIndex:section];
@@ -125,11 +133,33 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if(isSearching)
-        return nil;
     id object = [sections objectAtIndex:section];
     if([object isKindOfClass:[NSString class]] && [object isEqualToString:UITableViewIndexSearch])
         return searchController.searchBar;
+    else if(isSearching)
+    {
+        id object = [searchSections objectAtIndex:section];
+        if([object isKindOfClass:[UIView class]])
+        {
+            UIView* view = (UIView*)[searchSections objectAtIndex:section];
+            if([self grouped] && view.tag != SECTION_HEADER_TAG)
+            {
+                //because tableview is not a team player and does not respect the frame
+                int left = self.tableView.frame.size.width/14;//15;
+                if(self.tableView.frame.size.width > 480) //must not be an iphone or a popover view
+                    left = 48;
+                UIView* temp = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, view.frame.size.height)] autorelease];
+                temp.userInteractionEnabled = YES;
+                temp.tag = SECTION_HEADER_TAG;
+                [temp addSubview:view];
+                view.frame = CGRectMake(left, 0, tableView.frame.size.width-(left*2), view.frame.size.height);
+                [searchSections replaceObjectAtIndex:section withObject:temp];
+                return temp;
+            }
+            return view;
+        }
+        return nil;
+    }
     return [super tableView:tableView viewForHeaderInSection:section];
     
 }
@@ -137,7 +167,26 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if(isSearching)
+    {
+        id object = [searchSections objectAtIndex:section];
+        if([object isKindOfClass:[UIView class]])
+        {
+            UIView* view = (UIView*)object;
+            return view.frame.size.height;
+        }
+        if([object isKindOfClass:[NSString class]])
+        {
+            NSString* string = (NSString*)object;
+            if(string.length > 0)
+            {
+                if([self grouped])
+                    return 44;
+                else
+                    return 24;
+            }
+        }
         return 0;
+    }
     if(section == 0 && sections.count > 0)
         return 44;
     return [super tableView:tableView heightForHeaderInSection:section];
@@ -155,6 +204,12 @@
     [search release];
     searchItems = [[NSMutableArray alloc] init];
     //[self.tableView setContentOffset:CGPointMake(0,44) animated:YES]; 
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //search delegate
@@ -196,6 +251,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)scopeBarFix:(UISearchBar*)searchBar
 {
+    if(![searchBar superview])
+        [searchController.searchResultsTableView.superview addSubview:searchBar];
     searchBar.showsScopeBar = YES;
     [searchBar sizeToFit];
     for(UIView* view in searchBar.subviews)
@@ -267,7 +324,7 @@
     {
         if(searchSections)
             return [[searchItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        if(indexPath.row <= searchItems.count)
+        if(indexPath.row < searchItems.count)
             return [searchItems objectAtIndex:indexPath.row];
     }
     return [super tableView:tableView objectForRowAtIndexPath:indexPath];

@@ -36,11 +36,20 @@
 #import "GPBubbleView.h"
 #import "GPTableBubbleItem.h"
 
+@protocol GPTableBubbleCellDelegate <NSObject>
+
+@optional
+
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+
+@end
+
 @interface GPBubbleTableCell : GPTableImageCell<HTMLTextLabelDelegate>
 {
     GPBubbleView* BubbleView;
     HTMLTextLabel* HTMLText;
-    GPTableBubbleItem* currentHTMLItem;
 }
+
+@property(nonatomic,assign)id<GPTableBubbleCellDelegate>delegate;
 
 @end

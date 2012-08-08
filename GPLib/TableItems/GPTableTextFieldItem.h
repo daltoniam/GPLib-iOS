@@ -33,16 +33,6 @@
 
 #import "GPTableTextItem.h"
 
-@class GPTableTextFieldCell;
-@class GPTableTextFieldItem;
-@protocol GPTableTextFieldItemDelegate <NSObject>
-
-@optional
-//notify that text has been entered
-- (void)textDidUpdate:(NSString*)text object:(GPTableTextFieldItem*)item cell:(GPTableTextFieldCell*)cell;
-- (void)returnKeyWasTapped:(UITextField*)field object:(GPTableTextFieldItem*)item cell:(GPTableTextFieldCell*)cell;
-@end
-
 
 @interface GPTableTextFieldItem : GPTableTextItem
 
@@ -52,7 +42,6 @@
 @property(nonatomic,assign)UIKeyboardType keyboardType;
 @property(nonatomic,assign)UITextAutocapitalizationType autoCap;
 @property(nonatomic,assign)UIReturnKeyType returnKey;
-@property(nonatomic,assign)id<GPTableTextFieldItemDelegate>delegate;
 @property(nonatomic,assign)BOOL disabled;
 
 + (GPTableTextFieldItem*)itemWithText:(NSString*)string placeHolder:(NSString*)holder height:(NSInteger)height;

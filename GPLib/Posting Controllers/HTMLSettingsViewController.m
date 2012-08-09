@@ -414,8 +414,15 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setAlignment:(GPButton*)sender
 {
+    CTTextAlignment align = kCTLeftTextAlignment;
+    if(sender.tag == 1)
+        align = kCTCenterTextAlignment;
+    else if (sender.tag == 2)
+        align = kCTRightTextAlignment;
+    else if (sender.tag == 3)
+        align = kCTJustifiedTextAlignment;
     if([self.delegate respondsToSelector:@selector(updateAlignment:)])
-        [self.delegate updateAlignment:sender.tag];
+        [self.delegate updateAlignment:align];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

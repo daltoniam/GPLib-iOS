@@ -64,6 +64,7 @@
 @property(nonatomic,assign)float heightLimit;
 @property(nonatomic,assign)BOOL shouldDismiss;
 @property(nonatomic,retain)UIImage* uploadImage;
+@property(nonatomic,assign)BOOL formatImage; //resize and color image white.
 -(void)setTextFrame:(UITextView*)textview;
 -(void)resetTextView;
 @end

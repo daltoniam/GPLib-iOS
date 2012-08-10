@@ -74,6 +74,7 @@ static int defaultFontSize;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSAttributedString*)ParseHTML 
 {
+    viewIndex = 0;
     HTMLText = [[NSMutableAttributedString alloc] init];
     RawHTML = [RawHTML stringByStrippingWISWIGElements];
     //NSString* document = [NSString stringWithFormat:@"<x>%@</x>", RawHTML];
@@ -277,6 +278,20 @@ void error( void * ctx, const char * msg, ... )
     {
         NSMutableAttributedString* childString = [[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease];
         [HTMLText appendAttributedString:childString];
+    }
+    else if ([tag isEqualToString:@"gpview"])
+    {
+        float height = [[attributeDict objectForKey:@"height"] floatValue];
+        float width = [[attributeDict objectForKey:@"width"] floatValue];
+        float top = [[attributeDict objectForKey:@"padding"] floatValue];
+        NSMutableAttributedString* childString = nil;
+        if(imageindex % 2 == 0)
+            childString = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+        else
+            childString = [[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease];
+        [childString setViewSpaceTag:height width:width top:top index:viewIndex];
+        [HTMLText appendAttributedString:childString];
+        viewIndex++;
     }
 }
 

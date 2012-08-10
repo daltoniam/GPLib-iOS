@@ -241,11 +241,8 @@
         [self filterLocalItems:searchString];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//this is workaround an apple bug, basically a dirty hack that resets the frame of the scopeBar to be correct
 -(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
 {
-    if(searchBar.showsScopeBar)
-        [self performSelector:@selector(scopeBarFix:) withObject:searchBar afterDelay:0.01];
     return YES;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +257,7 @@
         if([view isKindOfClass:[UISegmentedControl class]])
         {
             CGRect frame = view.frame;
-            frame.origin.y = 44;
+            frame.origin.y = 0; //44
             view.frame = frame;
             
             frame = searchBar.frame;
@@ -273,6 +270,14 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar
 {
     [self runSearch:searchBar.text];
+    //this is workaround an apple bug, basically a dirty hack that resets the frame of the scopeBar to be correct
+    if(searchBar.showsScopeBar)
+        [self performSelector:@selector(scopeBarFix:) withObject:searchBar afterDelay:0.01];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
+{
+    [searchBar resignFirstResponder];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString

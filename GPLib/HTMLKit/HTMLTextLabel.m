@@ -48,6 +48,7 @@
     self.userInteractionEnabled = YES;
     imageArray = [[NSMutableArray alloc] init];
     videoArray = [[NSMutableArray alloc] init];
+    viewArray = [[NSMutableArray alloc] init];
 }
 //////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -99,8 +100,13 @@
 {
     [imageArray removeAllObjects];
     for(ImageItem* item in videoArray)
-        [item.videoView removeFromSuperview];
+        [item.subView removeFromSuperview];
     [videoArray removeAllObjects];
+    
+    for(ImageItem* item in viewArray)
+        [item.subView removeFromSuperview];
+    [viewArray removeAllObjects];
+    
     rawHTML = [html retain];
     HTMLParser* parser = [[[HTMLParser alloc] initWithHTML:html] autorelease];
     parser.Embed = embed;
@@ -117,10 +123,16 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     for(ImageItem* entry in videoArray)
     {
-        [entry.videoView removeFromSuperview];
-        [self addSubview:entry.videoView];
-        [entry.videoView loadVideo];
-        [self bringSubviewToFront:entry.videoView];
+        [entry.subView removeFromSuperview];
+        [self addSubview:entry.subView];
+        [(GPYouTubeView*)entry.subView loadVideo];
+        [self bringSubviewToFront:entry.subView];
+    }
+    for(ImageItem* entry in viewArray)
+    {
+        [entry.subView removeFromSuperview];
+        [self addSubview:entry.subView];
+        [self bringSubviewToFront:entry.subView];
     }
     
     for (ImageItem* entry in imageArray) 
@@ -224,6 +236,14 @@
     return NO;
 }
 //////////////////////////////////////////////////////////////////////////////
+-(BOOL)didAddView:(int)value
+{
+    for(ImageItem* item in viewArray)
+        if(item.subView.tag = value)
+            return YES;
+    return NO;
+}
+//////////////////////////////////////////////////////////////////////////////
 - (void)drawTextInRect:(CGRect)rect
 {
     isDrawing = YES;
@@ -306,6 +326,7 @@
                 NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
                 UIImage* imagedata = [attributes objectForKey:HTML_IMAGE_DATA];
                 NSString* videourl = [attributes objectForKey:VIDEO_LINK];
+                NSNumber* viewSpace = [attributes objectForKey:VIEW_SPACE];
                 
                 if (strikeOut)
                 {
@@ -394,6 +415,38 @@
                     GPYouTubeView* youtube = [[[GPYouTubeView alloc] initWithFrame:frame] autorelease];
                     youtube.URL = videourl;
                     [videoArray addObject:[ImageItem videoItem:youtube url:videourl frame:frame]];
+                }
+                if(viewSpace && ![self didAddView:[viewSpace intValue]])
+                {
+                    if([self.delegate respondsToSelector:@selector(subViewWillLoad:)])
+                    {
+                        float height = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
+                        float width = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
+                        float top = 0;
+                        if([(NSDictionary*)attributes objectForKey:@"padding"])
+                            top = [(NSString*)[(NSDictionary*)attributes objectForKey:@"padding"] floatValue];
+                        top = -top; //we swap to negitive, as the bounds are reversed
+                        CGRect runBounds;
+                        runBounds.size.width = width;
+                        runBounds.size.height = height;
+                        
+                        runBounds.origin.x = xOffset;
+                        runBounds.origin.y = origins[lineIndex].y + self.frame.origin.y + top;
+                        runBounds.origin.y -= descent;
+                        runBounds.origin.y -= height/2;
+                        CGPathRef pathRef = CTFrameGetPath(textFrame); //10
+                        CGRect colRect = CGPathGetBoundingBox(pathRef);
+                        
+                        CGRect frame = CGRectOffset(runBounds, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
+                        //frame.origin.y -= height/2 + 1;
+                        //if(self.ignoreXAttachment)
+                        //    frame.origin.x = 0;
+                        //ask delegate for view and add to array so it will only exist once
+                        UIView* view = [self.delegate subViewWillLoad:[viewSpace intValue]];
+                        view.frame = frame;
+                        view.tag = [viewSpace intValue];
+                        [viewArray addObject:[ImageItem viewItem:view frame:frame]];
+                    }
                 }
 
                 
@@ -560,13 +613,17 @@
     [attributedText release];
     [imageArray release];
     [videoArray release];
+    [viewArray release];
     [super dealloc];
 }
 @end
 //////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 @implementation ImageItem
 
-@synthesize frame = frame,imageData = imageData,URL = URL,videoView,didTransform;
+@synthesize frame = frame,imageData = imageData,URL = URL,subView,didTransform;
+//////////////////////////////////////////////////////////////////////////////
 +(ImageItem*)imageItem:(UIImage*)image url:(NSString*)url frame:(CGRect)rect
 {
     ImageItem* item = [[[ImageItem alloc] init] autorelease];
@@ -575,13 +632,23 @@
     item.imageData = image;
     return item;
 }
+//////////////////////////////////////////////////////////////////////////////
 +(ImageItem*)videoItem:(GPYouTubeView*)view url:(NSString*)url frame:(CGRect)rect
 {
     ImageItem* item = [[[ImageItem alloc] init] autorelease];
     item.URL = url;
     item.frame = rect;
-    item.videoView = view;
+    item.subView = view;
     return item;
 }
+//////////////////////////////////////////////////////////////////////////////
++(ImageItem*)viewItem:(UIView*)view frame:(CGRect)rect
+{
+    ImageItem* item = [[[ImageItem alloc] init] autorelease];
+    item.frame = rect;
+    item.subView = view;
+    return item;
+}
+//////////////////////////////////////////////////////////////////////////////
 
 @end

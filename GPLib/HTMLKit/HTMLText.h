@@ -38,6 +38,7 @@
 #define HYPER_LINK @"GPHyperLink"
 #define IMAGE_LINK @"GPImageLink"
 #define VIDEO_LINK @"GPVideoLink"
+#define VIEW_SPACE @"GPViewSpace"
 #define HTML_LIST @"GPList"
 #define HTML_CLOSE_LIST @"CloseGPList"
 #define HTML_ORDER_LIST @"0"
@@ -82,5 +83,8 @@
 -(NSString*)spanStyle:(NSDictionary*)attributes;
 
 +(NSMutableAttributedString*)spaceString:(NSString*)attrName value:(id)value height:(float)h width:(float)w;
+
+-(void)setViewSpaceTag:(int)height width:(int)width top:(int)top index:(int)index;
+-(void)setViewSpaceTag:(int)height width:(int)width range:(NSRange)range top:(int)top index:(int)index;
 
 @end

@@ -39,9 +39,9 @@
 
 static NSString* DEFAULT_FONT = @"TrebuchetMS";
 void deallocationCallback( void* refCon );
-CGFloat getAscentCallback( void *refCon );
-CGFloat getDescentCallback( void *refCon );
-CGFloat getWidthCallback( void* refCon );
+static CGFloat getAscentCallback( void *refCon );
+static CGFloat getDescentCallback( void *refCon );
+static CGFloat getWidthCallback( void* refCon );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //public factory to create a string with a space
@@ -323,6 +323,25 @@ CGFloat getWidthCallback( void* refCon );
     [self addRunDelegate:range attribs:attribs];
     [self removeAttribute:VIDEO_LINK range:range];
 	[self addAttribute:VIDEO_LINK value:videoURL range:range];
+    for(id key in attribs)
+    {
+        [self removeAttribute:(NSString*)key range:range]; // remove then add for apple leak.
+        [self addAttribute:(NSString*)key value:[attribs objectForKey:key] range:range];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setViewSpaceTag:(int)height width:(int)width top:(int)top index:(int)index
+{
+    [self setViewSpaceTag:height width:width range:NSMakeRange(0,[self length]) top:top index:index];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setViewSpaceTag:(int)height width:(int)width range:(NSRange)range top:(int)top index:(int)index
+{
+    NSDictionary* attribs = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:height],@"height",
+                             [NSNumber numberWithInt:width],@"width",[NSNumber numberWithInt:top],@"top",[NSNumber numberWithInt:index],@"index",nil];
+    [self addRunDelegate:range attribs:attribs];
+    [self removeAttribute:VIEW_SPACE range:range];
+	[self addAttribute:VIEW_SPACE value:[NSNumber numberWithInt:index] range:range];
     for(id key in attribs)
     {
         [self removeAttribute:(NSString*)key range:range]; // remove then add for apple leak.

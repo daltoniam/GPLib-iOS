@@ -54,6 +54,7 @@
 -(NSString*)loadingText;
 -(GPModel*)model:(NSString*)url;
 -(void)fetchData:(NSString*)url;
+-(GPLoadingLabelStyle)actLabelStyle;
 
 -(void)didSelectObject:(id)object gridview:(GPGridView*)gridview item:(GPGridViewCell*)cell index:(NSInteger)index;
 

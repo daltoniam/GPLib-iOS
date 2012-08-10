@@ -89,7 +89,7 @@
     [self.view addSubview:gridView];
     self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
     
-    ActLabel = [[GPLoadingLabel alloc] initWithStyle:GPLoadingLabelWhiteStyle];
+    ActLabel = [[GPLoadingLabel alloc] initWithStyle:[self actLabelStyle]];
     ActLabel.frame = gridView.frame;
     ActLabel.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     ActLabel.text = [self loadingText];
@@ -358,9 +358,15 @@
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //set loading text.
--(NSString*)loadingText;
+-(NSString*)loadingText
 {
     return @"Loading...";
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//set the ActLabel style
+-(GPLoadingLabelStyle)actLabelStyle
+{
+    return GPLoadingLabelWhiteStyle;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

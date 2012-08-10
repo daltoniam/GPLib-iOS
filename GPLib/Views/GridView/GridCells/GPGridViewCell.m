@@ -130,7 +130,8 @@
     view.layer.shadowOffset = size;
     view.layer.shadowOpacity = 0.5;
     view.layer.shadowRadius = 1.0;
-    view.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, view.frame.size.width+size.width, view.frame.size.height+size.height)].CGPath;
+    if(view.frame.size.height < 200)
+        view.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, view.frame.size.width+size.width, view.frame.size.height+size.height)].CGPath;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews
@@ -201,6 +202,7 @@
     }
     if(drawShadow)
         [self setViewShadow];
+    [self isLoadingState:isLoading];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawRect:(CGRect)rect
@@ -320,15 +322,21 @@
             imageView.image = item.image;
         [self isSelected:item.isSelected];
         drawShadow = item.drawDropShadow;
+        isLoading = item.isLoading;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //view to use when expanding
 -(UIView*)expandView
 {
+    UIView* view = nil;
     if(!imageView)
-        return blankView;
-    return self.imageView;
+        view = blankView;
+    else
+        view = self.imageView;
+    if(view.frame.size.width == 0)
+        [self layoutSubviews];
+    return view;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)isSelected:(BOOL)selected

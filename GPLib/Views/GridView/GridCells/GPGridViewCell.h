@@ -64,6 +64,7 @@
     UIView* containerView;
     UILabel* lowerTextLabel;
     BOOL isLowerText;
+    BOOL isLoading;
 }
 @property(nonatomic,assign)NSInteger columnIndex;
 @property(nonatomic,assign)NSInteger rowIndex;

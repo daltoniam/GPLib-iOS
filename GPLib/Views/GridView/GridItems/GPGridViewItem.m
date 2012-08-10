@@ -35,7 +35,7 @@
 
 @implementation GPGridViewItem
 
-@synthesize text, image,NavURL,Properties,imageURL,color,font,isSelected,drawDropShadow,infoText;
+@synthesize text, image,NavURL,Properties,imageURL,color,font,isSelected,drawDropShadow,infoText,isLoading;
 /////////////////////////////////////////////////////////////////////////////////////////
 +(GPGridViewItem*)itemWithImage:(UIImage*)image text:(NSString*)text
 {

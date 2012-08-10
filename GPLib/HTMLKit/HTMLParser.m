@@ -448,15 +448,20 @@ void error( void * ctx, const char * msg, ... )
     {
         int pos = find.location+find.length;
         NSRange end = [style rangeOfString:@";" options:0 range:NSMakeRange(pos, [style length]-pos)];
-        NSString* align = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
-        if([align rangeOfString:@"right"].location != NSNotFound)
-            Alignment = kCTRightTextAlignment;
-        else if([align rangeOfString:@"center"].location != NSNotFound)
-            Alignment = kCTCenterTextAlignment;
-        else if([align rangeOfString:@"justify"].location != NSNotFound)
-            Alignment = kCTJustifiedTextAlignment;
-        else
-            Alignment = kCTLeftTextAlignment;
+        if(end.location == NSNotFound)
+            end = [style rangeOfString:@"'" options:0 range:NSMakeRange(pos, [style length]-pos)];
+        if(end.location != NSNotFound)
+        {
+            NSString* align = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
+            if([align rangeOfString:@"right"].location != NSNotFound)
+                Alignment = kCTRightTextAlignment;
+            else if([align rangeOfString:@"center"].location != NSNotFound)
+                Alignment = kCTCenterTextAlignment;
+            else if([align rangeOfString:@"justify"].location != NSNotFound)
+                Alignment = kCTJustifiedTextAlignment;
+            else
+                Alignment = kCTLeftTextAlignment;
+        }
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

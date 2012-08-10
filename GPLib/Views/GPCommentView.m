@@ -39,7 +39,7 @@
 
 @implementation GPCommentView
 
-@synthesize delegate = delegate,charLimit,heightLimit,shouldDismiss,uploadImage;
+@synthesize delegate = delegate,charLimit,heightLimit,shouldDismiss,uploadImage,formatImage;
 //////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame
 {
@@ -115,8 +115,12 @@
     button.borderColor = [UIColor blackColor];
     button.borderWidth = 0.3;
     int pad = button.rounding + height/3;
-    UIImage* image = [UIImage imageByScalingProportionallyToSize:CGSizeMake(pad,pad) image:self.uploadImage];
-    image = [UIImage imageWithOverlayColor:image color:[UIColor whiteColor]];
+    UIImage* image = self.uploadImage;
+    if(self.formatImage)
+    {
+        image = [UIImage imageByScalingProportionallyToSize:CGSizeMake(pad,pad) image:self.uploadImage];
+        image = [UIImage imageWithOverlayColor:image color:[UIColor whiteColor]];
+    }
     [button setImage:image forState:UIControlStateNormal];
     [button addTarget:self action:@selector(attachmentButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     return button;

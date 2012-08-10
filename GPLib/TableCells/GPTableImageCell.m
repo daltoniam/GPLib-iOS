@@ -104,9 +104,14 @@ CGFloat TableCellDefaultImageSize = 50;
         imageView.frame = CGRectMake(TableCellSmallMargin, top, imageBounds.width, imageBounds.height);
         CGRect frame = self.textLabel.frame;
         frame.origin.x += TableCellSmallMargin + imageBounds.width;
-        //int width = frame.origin.x + frame.size.width;
-        //if(width > self.frame.size.width)
-        frame.size.width -= TableCellSmallMargin + imageBounds.width;
+        if(infoLabel.text)
+        {
+            int width = frame.origin.x + frame.size.width;
+            if(width > self.frame.size.width)
+                frame.size.width -= TableCellSmallMargin + imageBounds.width;
+        }
+        else
+            frame.size.width -= TableCellSmallMargin + imageBounds.width;
         self.textLabel.frame = frame;
     }
     else

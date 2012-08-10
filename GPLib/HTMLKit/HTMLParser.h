@@ -53,6 +53,7 @@
     int imageindex;
     int orderListIndex;
     CTTextAlignment Alignment;
+    int viewIndex;
 }
 @property(nonatomic,copy)NSString* RawHTML;
 @property(nonatomic,assign)BOOL Embed;

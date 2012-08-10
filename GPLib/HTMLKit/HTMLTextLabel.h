@@ -44,10 +44,11 @@
 }
 +(ImageItem*)imageItem:(UIImage*)image url:(NSString*)url frame:(CGRect)rect;
 +(ImageItem*)videoItem:(GPYouTubeView*)view url:(NSString*)url frame:(CGRect)rect;
++(ImageItem*)viewItem:(UIView*)view frame:(CGRect)rect;
 @property(nonatomic, retain) UIImage* imageData;
 @property(nonatomic, copy) NSString* URL;
 @property(nonatomic,assign)CGRect frame;
-@property(nonatomic,retain)GPYouTubeView* videoView;
+@property(nonatomic,retain)UIView* subView;
 @property(nonatomic,assign)BOOL didTransform;
 
 @end
@@ -62,6 +63,8 @@
 //return any frame motifications or just return imgBound if no changes desired
 - (UIImage*)willLoadImage:(UIImage*)image frame:(CGRect)imgBounds;
 -(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+//return the view you want to use a subview
+-(UIView*)subViewWillLoad:(int)index;
 
 @end
 
@@ -73,6 +76,7 @@
     NSString* CurrentHyperLink;
     NSMutableArray* imageArray;
     NSMutableArray* videoArray;
+    NSMutableArray* viewArray;
     BOOL isDrawing;
 }
 @property(nonatomic, assign) BOOL extendHeightToFit;

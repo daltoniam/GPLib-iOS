@@ -49,4 +49,7 @@
 +(NSString*)HTMLStyle:(UIColor*)color fontSize:(int)size underline:(BOOL)under strikethrough:(BOOL)strike;
 -(NSString *)stringByStrippingWISWIGElements;
 -(NSString *)stringByStrippingHTML;
+
++(NSString*)HTMLView:(float)height width:(float)width;
++(NSString*)HTMLView:(float)height width:(float)width top:(float)top;
 @end

@@ -284,7 +284,7 @@
         dateLabelAlpha = 1.0f;
         backgroundFrame = CGRectMake(CGRectGetWidth(self.frame) - 85.0f, 0.0f, 85.0f, CGRectGetHeight(self.frame));
     } 
-    else if ((dateComponents.year == todayComponents.year) && (dateComponents.weekOfYear == todayComponents.weekOfYear)) 
+    else if ((dateComponents.year == todayComponents.year) && [dateComponents respondsToSelector:@selector(weekOfYear)] && (dateComponents.weekOfYear == todayComponents.weekOfYear))
     {
         timeLabelFrame = CGRectMake(30.0f, 4.0f, 100.0f, 10.0f);                
         dateLabelString = [dayOfWeekDateFormatter stringFromDate:date];

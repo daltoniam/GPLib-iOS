@@ -442,7 +442,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
 {
     return [[GPNavigator navigator] createViewControllerFromURL:URL type:GPNavTypeNormal query:query];
 }
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //add this for GPRevealViewController
 -(UIViewController*)GPRevealNavigation:(NSString*)URL
 {
@@ -451,7 +451,16 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         Navigation = [[temp performSelector:@selector(frontNavBar)] retain];
     return temp;
 }
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(UISplitViewController*)splitController:(NSString*)leftURL right:(NSString*)rightURL
+{
+    UIViewController* rightVC = [self viewControllerFromURL:rightURL];
+    Navigation = [[UINavigationController alloc] initWithRootViewController:rightVC];
+    UISplitViewController* split = [[[UISplitViewController alloc] init] autorelease];
+    split.viewControllers = [NSArray arrayWithObjects:[self viewControllerFromURL:leftURL],Navigation, nil];
+    return split;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
     [URLs release];
@@ -459,7 +468,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     [super dealloc];
 }
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated 
 {
     if(self.useCustomBackButton)
@@ -474,5 +483,5 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         }
     }
 }
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 @end

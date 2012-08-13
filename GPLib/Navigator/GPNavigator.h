@@ -81,4 +81,6 @@ typedef enum {
 //add this for GPRevealViewController
 -(UIViewController*)GPRevealNavigation:(NSString*)URL;
 -(void)navigationControllerChange:(UINavigationController*)navBar;
+-(UISplitViewController*)splitController:(NSString*)leftURL right:(NSString*)rightURL;
+
 @end

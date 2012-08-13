@@ -82,19 +82,22 @@
     CGFloat sat;
     CGFloat bright;
     CGFloat alpha;
-    
-    [color getHue:&hue saturation:&sat brightness:&bright alpha:&alpha];
-    if(light)
+    if([color respondsToSelector:@selector(getHue:saturation:brightness:alpha:)])
     {
-        if(bright+val < 1)
-            bright += val;
+        [color getHue:&hue saturation:&sat brightness:&bright alpha:&alpha]; //ios5 only
+        if(light)
+        {
+            if(bright+val < 1)
+                bright += val;
+        }
+        else
+        {
+            if(bright > val)
+                bright -= val;
+        }
+        return [UIColor colorWithHue:hue saturation:sat brightness:bright alpha:alpha];
     }
-    else
-    {
-        if(bright > val)
-            bright -= val;
-    }
-    return [UIColor colorWithHue:hue saturation:sat brightness:bright alpha:alpha];
+    return color; //not what you want, but better than a crash....
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(UIColor*)darkenColor:(UIColor*)color point:(CGFloat)val
@@ -104,3 +107,4 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 @end
+

@@ -451,7 +451,10 @@
     CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
     CTFrameGetLineOrigins(frame, CFRangeMake(0, count), origins);
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
-	for (int i = 0; i < count; i++) 
+    //CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);
+    //CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
+    //CGContextScaleCTM(ctx, 1.0, -1.0);
+	for (int i = 0; i < count; i++)
     {
         CTLineRef line = (CTLineRef)CFArrayGetValueAtIndex((CFArrayRef)lines, i);
         [self drawCustomElements:line ctx:ctx index:count points:origins mainRect:rect];
@@ -482,6 +485,7 @@
         CGFloat descent = 0;
         
         CGFloat width = CTRunGetTypographicBounds((CTRunRef) oneRun,CFRangeMake(0, 0),&ascent,&descent, NULL);
+        CGFloat xOffset = CTLineGetOffsetForStringIndex((CTLineRef)oneLine, CTRunGetStringRange((CTRunRef)oneRun).location, NULL);
         
         NSDictionary *attributes = (NSDictionary *)CTRunGetAttributes((CTRunRef) oneRun);
         
@@ -517,7 +521,7 @@
         
         if(imageurl && ![self didLoadURL:imageurl])
         {
-            float imgheight = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
+            /*float imgheight = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
             float imgwidth = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
             if(imgleft + imgwidth > self.frame.size.width)
             {
@@ -530,7 +534,30 @@
             else
                 [self FetchImage:[ImageItem imageItem:nil url:imageurl frame:CGRectMake(lineBounds.origin.x-imgwidth,y ,imgwidth, imgheight)]]; 
             //lineBounds.origin.y
-            imgleft += imgwidth;
+            imgleft += imgwidth;*/
+            float imgheight = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
+            float imgwidth = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
+            float top = 0;
+            if([(NSDictionary*)attributes objectForKey:@"padding"])
+                top = [(NSString*)[(NSDictionary*)attributes objectForKey:@"padding"] floatValue];
+            top = -top; //we swap to negitive, as the bounds are reversed
+            CGRect runBounds;
+            runBounds.size.width = imgwidth;
+            runBounds.size.height = imgheight;
+            runBounds.origin.x = origins[lineIndex].x + xOffset;
+            runBounds.origin.y = origins[lineIndex].y + self.frame.origin.y + top;
+            runBounds.origin.y -= descent;
+            CGPathRef pathRef = CTFrameGetPath(frame); //10
+            CGRect colRect = CGPathGetBoundingBox(pathRef);
+            
+            CGRect imgBounds = CGRectOffset(runBounds, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
+            //if(self.ignoreXAttachment)
+            imgBounds.origin.x = 0;
+            
+            if(imagedata)
+                [imageArray addObject:[ImageItem imageItem:[UIImage imageByScalingProportionallyToSize:CGSizeMake(imgwidth, imgheight) image:imagedata] url:imageurl frame:imgBounds]]; //(origins[lineIndex].y+10)
+            else
+                [self FetchImage:[ImageItem imageItem:nil url:imageurl frame:imgBounds]];
         }
         if(videourl && ![self didLoadVideo:videourl])
         {

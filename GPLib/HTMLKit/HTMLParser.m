@@ -257,7 +257,16 @@ void error( void * ctx, const char * msg, ... )
                 childString = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
             else
                 childString = [[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease];
-            [childString  setImageTag:imageURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:height,@"height",width,@"width",top,@"padding", nil]];
+            if([imageURL hasPrefix:@"data:"])
+            {
+                NSURL *url = [NSURL URLWithString:imageURL];
+                NSData *imageData = [NSData dataWithContentsOfURL:url];
+                UIImage *image = [UIImage imageWithData:imageData];
+                NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:height,@"height",width,@"width",image,HTML_IMAGE_DATA,top,@"padding", nil];
+                [childString  setImageTag:[NSString stringWithFormat:@"local://image/%d",imageindex] attribs:dict];
+            }
+            else
+                [childString  setImageTag:imageURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:height,@"height",width,@"width",top,@"padding", nil]];
             [HTMLText appendAttributedString:childString];
             imageindex++;
         }

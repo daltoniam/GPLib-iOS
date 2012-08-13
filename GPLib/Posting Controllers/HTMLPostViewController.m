@@ -615,7 +615,7 @@
 -(void)dealloc
 {
     [navBar release];
-    [editButton release];
+    //[editButton release];
     [CurrentColor release];
     [Textview release];
     [contentView release];

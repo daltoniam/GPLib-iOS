@@ -105,9 +105,10 @@
     [super viewDidUnload];
     for(GPHTTPRequest* request in queue.operations)
     {
-        [request cancel];
         request.delegate = nil;
+        [request cancel];
     }
+    [queue cancelAllOperations];
     model.delegate = nil;
     gridView.delegate = nil;
     gridView.dataSource = nil;

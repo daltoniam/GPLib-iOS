@@ -40,7 +40,7 @@ static NSString* EmbedHTML = @"<html>\
 <style>body,html,iframe{margin:0;padding:0;}</style> \
 <meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no, width=%0.0f\"/>\
 </head>\
-<iframe width=\"%0.0f\" height=\"%0.0f\" src=\"%@\" frameborder=\"0\" allowfullscreen></iframe></html>";
+<iframe id=\"yt\" width=\"%0.0f\" height=\"%0.0f\" src=\"%@\" frameborder=\"0\" allowfullscreen></iframe></html>";
 
 @synthesize URL = URL;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +53,15 @@ static NSString* EmbedHTML = @"<html>\
     return self;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)resizeVideo
+{
+    if(self.URL)
+    {
+        [self stringByEvaluatingJavaScriptFromString:
+         [NSString stringWithFormat:@"document.getElementById('yt').width='%0.0fpx'; document.getElementById('yt').height='%0.0fpx';", self.frame.size.width, self.frame.size.height]];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)loadVideo
 {
     if(self.URL)
@@ -61,12 +70,18 @@ static NSString* EmbedHTML = @"<html>\
             self.URL = [self.URL stringByReplacingOccurrencesOfString:@"/v" withString:@"/embed"];
         NSString* html = [NSString stringWithFormat:EmbedHTML,self.frame.size.width, self.frame.size.width, self.frame.size.height,URL];
         [self loadHTMLString:html baseURL:nil];
+        [self resizeVideo];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    [self resizeVideo];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutSubviews {
-    [self stringByEvaluatingJavaScriptFromString:
-     [NSString stringWithFormat:@"yt.width = %0.0f; yt.height = %0.0f", self.frame.size.width, self.frame.size.height]];
+    [self resizeVideo];
     for (id subview in self.subviews)
         if ([[subview class] isSubclassOfClass: [UIScrollView class]])
         {

@@ -32,6 +32,7 @@
 //
 
 #import "GPDrawExtras.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation GPDrawExtras
 
@@ -133,7 +134,14 @@
     [GPDrawExtras drawLinearGradient:ctx start:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.35] end:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1] rect:temp endLoc:1];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth mode:(CGPathDrawingMode)mode
++(CGFloat)roundRectCornerRounding:(UIRectCorner)corners check:(UIRectCorner)desired rounding:(CGFloat)rounding
+{
+    if(corners & desired)
+        return rounding;
+    return 0;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth mode:(CGPathDrawingMode)mode corners:(UIRectCorner)corners
 {
     int pad = strokeWidth + 0.5f;
     if(strokeWidth <= 0)
@@ -143,25 +151,30 @@
     
     CGFloat rounding = radius - strokeWidth;
     CGContextMoveToPoint(ctx,rounding+pad, pad);
-    CGContextAddArcToPoint(ctx, w, pad,w,h+pad, rounding);
-    CGContextAddArcToPoint(ctx, w, h, round(w / 2.0f),h,rounding);
-    CGContextAddArcToPoint(ctx,pad,h,pad,pad,rounding);
-    CGContextAddArcToPoint(ctx,pad,pad,w,pad,rounding);
+    CGContextAddArcToPoint(ctx, w, pad,w,h+pad, [GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerTopRight rounding:rounding]); //top left
+    CGContextAddArcToPoint(ctx, w, h, round(w / 2.0f),h,[GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerBottomRight rounding:rounding]); //bottom right
+    CGContextAddArcToPoint(ctx,pad,h,pad,pad,[GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerBottomLeft rounding:rounding]); //bottom left
+    CGContextAddArcToPoint(ctx,pad,pad,w,pad,[GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerTopLeft rounding:rounding]); //top right
     
     CGContextClosePath(ctx);
     CGContextDrawPath(ctx,mode);
     
     if(!strokeWidth && rounding > 2)
         rounding -= 2;
-    CGContextBeginPath(ctx);
-    CGContextMoveToPoint(ctx,rounding+pad,pad);
-    CGContextAddArcToPoint(ctx, w, pad, w, h+pad, rounding);
-    CGContextAddArcToPoint(ctx, w, h, round(w / 2.0f), h,rounding);
-    CGContextAddArcToPoint(ctx, pad,h, pad, pad, rounding);
     
-    CGContextAddArcToPoint(ctx, pad,pad,w, pad, rounding);
+    CGContextBeginPath(ctx);
+    CGContextMoveToPoint(ctx,rounding+pad,pad); 
+    CGContextAddArcToPoint(ctx, w, pad, w, h+pad, [GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerTopRight rounding:rounding]);//top left
+    CGContextAddArcToPoint(ctx, w, h, round(w / 2.0f), h,[GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerBottomRight rounding:rounding]);//bottom right
+    CGContextAddArcToPoint(ctx, pad,h, pad, pad, [GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerBottomLeft rounding:rounding]);//bottom left
+    CGContextAddArcToPoint(ctx, pad,pad,w, pad, [GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerTopLeft rounding:rounding]);//top right
     CGContextClosePath(ctx);
     CGContextClip(ctx);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth mode:(CGPathDrawingMode)mode
+{
+    return [GPDrawExtras drawRoundRect:ctx width:width height:height rounding:radius stroke:strokeWidth mode:mode corners:UIRectCornerAllCorners];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth
@@ -184,6 +197,19 @@
     CGContextSetStrokeColorWithColor(ctx, color.CGColor);
     CGContextStrokePath(ctx);
     CGContextRestoreGState(ctx);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
++(void)roundCorners:(UIView*)view corner:(UIRectCorner)round rounding:(float)rounding
+{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds
+                                                   byRoundingCorners:round
+                                                         cornerRadii:CGSizeMake(rounding, rounding)]; //8.0
+    
+    maskPath.lineWidth = 1;
+    CAShapeLayer *maskLayer = [[[CAShapeLayer alloc] init] autorelease];
+    maskLayer.frame = view.bounds;
+    maskLayer.path = maskPath.CGPath;
+    view.layer.mask = maskLayer;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

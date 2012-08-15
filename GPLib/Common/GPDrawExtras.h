@@ -45,6 +45,9 @@
 
 +(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth;
 +(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth mode:(CGPathDrawingMode)mode;
++(void)drawRoundRect:(CGContextRef)ctx width:(int)width height:(int)height rounding:(CGFloat)radius stroke:(CGFloat)strokeWidth mode:(CGPathDrawingMode)mode corners:(UIRectCorner)corners;
 
 +(void)drawInsetShadow:(CGContextRef)ctx rect:(CGRect)frame rounding:(CGFloat)radius color:(UIColor*)color;
+
++(void)roundCorners:(UIView*)view corner:(UIRectCorner)round rounding:(float)rounding;
 @end

@@ -100,18 +100,29 @@
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)viewDidUnload
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidUnload];
+    [super viewWillAppear:animated];
+    if(!model.delegate)
+        model.delegate = self;
+    if(!gridView.delegate)
+        gridView.delegate = self;
+    if(!gridView.dataSource)
+        gridView.dataSource = self;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)viewWillDisappear:(BOOL)animated
+{
+    model.delegate = nil;
     for(GPHTTPRequest* request in queue.operations)
     {
         request.delegate = nil;
         [request cancel];
     }
     [queue cancelAllOperations];
-    model.delegate = nil;
     gridView.delegate = nil;
     gridView.dataSource = nil;
+    [super viewWillDisappear:animated];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSInteger)numberOfRowsInGridView:(GPGridView*)gridview
@@ -195,7 +206,7 @@
 {
     id object = [items objectAtIndex:index];
     
-    if ([object isKindOfClass:[GPTableMoreItem class]])
+    if ([object isKindOfClass:[GPGridMoreItem class]])
     {
         if(!model.isLoading)
         {
@@ -323,8 +334,10 @@
 - (void)modelFinished:(GPHTTPRequest *)request
 {
     ActLabel.hidden = YES;
-    [items release];
-    items = [model.items retain]; 
+    if(!items)
+        items = [[NSMutableArray alloc] initWithCapacity:model.items.count];
+    [items removeAllObjects];
+    [items addObjectsFromArray:model.items];
     [gridView reloadData];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

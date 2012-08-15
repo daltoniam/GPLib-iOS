@@ -74,6 +74,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)loadModel:(BOOL)more
 {
+    if(isLoading)
+        return;
     isLoading = YES;
     if(more)
     {
@@ -147,13 +149,13 @@
         if([self enablePaging])
             if(!isFinished)
                 [items addObject:[GPTableMoreItem itemWithLoading:@"Load More..." isAutoLoad:[self autoLoad]]];
-        isLoading = NO;
         [self performSelectorOnMainThread:@selector(finished:) withObject:request waitUntilDone:NO];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)finished:(GPHTTPRequest *)request
 {
+    isLoading = NO;
     if ([self.delegate respondsToSelector:@selector(modelFinished:)])
         [self.delegate modelFinished:request];
 }
@@ -161,13 +163,12 @@
 - (void)requestFailed:(GPHTTPRequest *)request
 {
     //NSError *error = [request error];
-    isLoading = NO;
     [self performSelectorOnMainThread:@selector(Failed:) withObject:request waitUntilDone:NO];
-    
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)failed:(GPHTTPRequest *)request
 {
+    isLoading = NO;
     if ([self.delegate respondsToSelector:@selector(modelFailed:)])
         [self.delegate modelFailed:request];
 }

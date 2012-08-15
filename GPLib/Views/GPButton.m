@@ -42,7 +42,7 @@
 
 @synthesize gradientStartColor, gradientEndColor, highlightColor,highlightEndColor;
 @synthesize doesPersistent = doesPersistent,isSelected = isSelected,rounding,drawGloss,gradientLength,fillColor;
-@synthesize borderColor,borderWidth,drawInsetShadow;
+@synthesize borderColor,borderWidth,drawInsetShadow,roundCorners;
 //////////////////////////////////////////////////////////////////////////////////////////////
 +(GPButton*)defaultButton:(CGRect)frame
 {
@@ -58,6 +58,7 @@
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.titleLabel.font = [UIFont systemFontOfSize:12];
     self.titleLabel.textColor = [UIColor blackColor];
+    self.roundCorners = UIRectCornerAllCorners;
 	//self.layer.borderWidth = 1.0f; 
     //self.highlightColor = [UIColor colorWithRed:1/255.0f green:97/255.0f blue:231/255.0f alpha:1.0];
     //self.gradientStartColor = [UIColor whiteColor];
@@ -110,8 +111,13 @@
         CGContextSetFillColorWithColor(ctx, self.fillColor.CGColor);
     
     if(rounding > 0)
-        [GPDrawExtras drawRoundRect:ctx width:width height:height rounding:rounding stroke:self.borderWidth];
-    else
+    {
+        CGPathDrawingMode mode = kCGPathFill;
+        if(self.borderWidth)
+            mode = kCGPathFillStroke;
+        [GPDrawExtras drawRoundRect:ctx width:width height:height rounding:rounding stroke:self.borderWidth mode:mode corners:self.roundCorners];
+    }
+    else if(self.borderWidth > 0)
     {
         self.layer.borderWidth = self.borderWidth;
         self.layer.borderColor = self.borderColor.CGColor;

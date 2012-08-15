@@ -54,6 +54,7 @@
 @property(nonatomic,retain)UIColor* borderColor;
 
 @property(nonatomic,assign)BOOL drawInsetShadow;
+@property(nonatomic,assign)UIRectCorner roundCorners;
 
 //simulates a touch of the button
 -(void)swapButtonState;

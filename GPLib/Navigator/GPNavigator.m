@@ -39,6 +39,9 @@
 
 -(void)navOpenPopOver:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame;
 -(void)navOpenModal:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left type:(GPNavType)type;
+-(NSString*)determineSelURL:(NSString*)URLString query:(NSDictionary*)query;
+-(id)runSelector:(SEL)sel class:(Class)class params:(NSArray*)params;
+-(NSString*)pathFromURL:(NSURL*)URL;
 
 @end
 

@@ -69,9 +69,6 @@ typedef enum {
 -(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView;
 
 -(id)createViewControllerFromURL:(NSString*)URL type:(GPNavType)type query:(NSDictionary*)query;
--(NSString*)determineSelURL:(NSString*)URLString query:(NSDictionary*)query;
--(id)runSelector:(SEL)sel class:(Class)class params:(NSArray*)params;
--(NSString*)pathFromURL:(NSURL*)URL;
 -(void)dismissModal;
 -(void)popNavigation;
 -(void)dismissGridView:(UIView*)view;

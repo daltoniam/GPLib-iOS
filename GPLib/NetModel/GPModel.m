@@ -74,8 +74,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)loadModel:(BOOL)more
 {
-    if(isLoading)
-        return;
+    //if(isLoading)
+    //    return;
     isLoading = YES;
     if(more)
     {

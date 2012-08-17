@@ -141,7 +141,7 @@
     if(textLabel && imageView)
     {
         int height = self.frame.size.height-30;
-        if(isLowerText)
+        if(!isLowerText)
             height += 12;
         int top = 0;
         imageView.frame = CGRectMake(1, 1, self.frame.size.width, height);
@@ -157,7 +157,7 @@
     else if(textLabel)
     {
         int height = self.frame.size.height-30;
-        if(isLowerText)
+        if(!isLowerText)
             height += 12;
         if(!blankView)
             [self setupBlankView];

@@ -88,8 +88,11 @@
     else
         [self pageLayout];
     for(UIView* view in attachmentViews)
+    {
         for(UIView* label in view.subviews)
             label.frame = CGRectMake(0, 0, view.frame.size.width, 20);
+    }
+    pageControl.currentPage = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setFrame:(CGRect)frame
@@ -104,6 +107,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 -(void)pageLayout
 {
+    pagePad = 0;
     int left = 0;
     for(UIView* view in attachmentViews)
     {
@@ -127,25 +131,41 @@
 -(void)gridLayout
 {
     int pad = 10;
+    pagePad = pad;
     int left = pad;
     int width = self.frame.size.width/gridPageCount;
     for(UIView* view in attachmentViews)
     {
         view.frame = CGRectMake(left, pad,width-(pad + pad/gridPageCount), self.frame.size.height-(pad*2));
         left += view.frame.size.width + pad;
+        //for(UIView* label in view.subviews)
+        //    label.frame = CGRectMake(0, -pad, view.frame.size.width, 20);
     }
     CGRect bounds = contentView.bounds;
     int size = [attachmentViews count];
     if(size % gridPageCount != 0)
         size += gridPageCount;
     size = size/gridPageCount;
-    contentView.contentSize = CGSizeMake((bounds.size.width - pad/gridPageCount) * size, bounds.size.height);
+    //CGSizeMake((bounds.size.width - pad/gridPageCount) * size, bounds.size.height);
+    contentView.contentSize = CGSizeMake(( (bounds.size.width-pad/2) /gridPageCount) * size, bounds.size.height);
     contentView.backgroundColor = [UIColor clearColor];
+    
+    if(attachmentViews.count > 0 && !pageControl)
+        [self setupPager];
+    pageControl.frame = CGRectMake(0, self.frame.size.height-36, self.frame.size.width, 36);
+    int count = [attachmentViews count]/gridPageCount;
+    if(count > 1)
+        pageControl.numberOfPages = count;
+    else
+        pageControl.numberOfPages = 0;
+    pageControl.currentPage = 0;
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addAttachment:(NSString*)url text:(NSString*)text
 {
-    [self addAttachment:url text:text contentMode:UIViewContentModeScaleToFill backColor:[UIColor colorWithWhite:0.95 alpha:1]];
+    //UIViewContentModeScaleToFill [UIColor colorWithWhite:0.95 alpha:1]
+    [self addAttachment:url text:text contentMode:UIViewContentModeScaleToFill backColor:[UIColor colorWithWhite:0.98 alpha:1]];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 //does the magic
@@ -210,7 +230,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    int page = contentView.contentOffset.x/contentView.frame.size.width;
+    int page = contentView.contentOffset.x/(contentView.frame.size.width-pagePad);
     pageControl.currentPage = page;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

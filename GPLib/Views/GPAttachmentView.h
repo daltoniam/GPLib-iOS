@@ -46,6 +46,7 @@
     UIScrollView* contentView;
     NSMutableArray* attachmentViews;
     UIPageControl* pageControl;
+    int pagePad;
 }
 
 -(void)addAttachment:(NSString*)url text:(NSString*)text contentMode:(UIViewContentMode)mode backColor:(UIColor*)color;

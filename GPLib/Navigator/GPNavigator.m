@@ -262,7 +262,8 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)])
         [[[UIApplication sharedApplication].delegate window].rootViewController presentModalViewController:navigationController animated:YES];
     else
-        [Navigation.visibleViewController presentModalViewController:navigationController animated:YES];
+        [Navigation.visibleViewController.view.window.rootViewController presentModalViewController:navigationController animated:YES];
+        //[Navigation.visibleViewController presentModalViewController:navigationController animated:YES];
     currentViewController = navigationController;
     [navigationController release];
 }
@@ -408,10 +409,12 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     }
     else if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)])
         [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
+    else if(currentViewController)
+        [currentViewController dismissModalViewControllerAnimated:YES]; //parentViewController
     else
-        [Navigation.visibleViewController dismissModalViewControllerAnimated:YES]; //parentViewController
+        [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
     
-    currentViewController  = nil;
+    currentViewController = nil;
 }
 /////////////////////////////////////////////////////////////
 //popNavController view

@@ -122,6 +122,12 @@ static int REVEAL_OFFSET;
     //[backViewController viewDidDisappear:animated];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    [backViewController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+    return [frontNavBar shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [frontNavBar willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -132,6 +138,12 @@ static int REVEAL_OFFSET;
 {
     [frontNavBar didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [backViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [frontNavBar willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [backViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidLoad

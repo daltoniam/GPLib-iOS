@@ -269,7 +269,7 @@
     {
         CGPoint restorePoint = [page pointToCenterAfterRotation];
         CGFloat restoreScale = [page scaleToRestoreAfterRotation];
-        page.frame = [self frameForPageAtIndex:page.index orientation:toInterfaceOrientation];
+        page.frame = [self frameForPageAtIndex:page.index orientation:UIInterfaceOrientationPortrait];
         [page setMaxMinZoomScalesForCurrentBounds];
         [page restoreCenterPoint:restorePoint scale:restoreScale];
         

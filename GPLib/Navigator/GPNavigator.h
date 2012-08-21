@@ -53,20 +53,21 @@ typedef enum {
 @property(nonatomic, readonly)UIViewController* visibleViewController;
 @property(nonatomic, readonly)NSMutableDictionary* URLs;
 @property(nonatomic, assign)BOOL useCustomBackButton;
-@property(nonatomic, assign)BOOL searchAppStore;
 
 @property(nonatomic, retain)UIPopoverController* popOver;
 +(GPNavigator*)navigator;
 
 -(SEL)selectorFromURL:(NSString*)URLstring;
 -(void)mapViewController:(Class)ViewClass toURL:(NSString*)URL;
--(void)openURL:(NSString*)URL;
--(void)openURL:(NSString*)URL NavType:(GPNavType)type;
--(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query;
--(void)openURL:(NSString*)URL view:(UIView*)gridView query:(NSDictionary*)query;
--(void)openURL:(NSString*)URL query:(NSDictionary*)query frame:(CGRect)frame;
--(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left;
--(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView;
+-(BOOL)openURL:(NSString*)URL;
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type;
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query;
+-(BOOL)openURL:(NSString*)URL view:(UIView*)gridView query:(NSDictionary*)query;
+-(BOOL)openURL:(NSString*)URL query:(NSDictionary*)query frame:(CGRect)frame;
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left;
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView;
+-(BOOL)openExternalURL:(NSString*)URL searchString:(NSString*)search;
+-(BOOL)openExternalURL:(NSString*)URL;
 
 -(id)createViewControllerFromURL:(NSString*)URL type:(GPNavType)type query:(NSDictionary*)query;
 -(void)dismissModal;

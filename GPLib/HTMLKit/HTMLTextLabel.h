@@ -59,7 +59,9 @@
 
 //delegate options
 - (void)didSelectLink:(NSString*)link;
+- (void)didLongPressLink:(NSString*)link frame:(CGRect)frame;
 - (void)didSelectImage:(NSString*)imageURL;
+- (void)didLongPressImage:(NSString*)imageURL;
 //return any frame motifications or just return imgBound if no changes desired
 - (UIImage*)willLoadImage:(UIImage*)image frame:(CGRect)imgBounds;
 -(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
@@ -78,6 +80,7 @@
     NSMutableArray* videoArray;
     NSMutableArray* viewArray;
     BOOL isDrawing;
+    BOOL isLongPress;
 }
 @property(nonatomic, assign) BOOL extendHeightToFit;
 @property(nonatomic, assign) BOOL autoSizeImages;

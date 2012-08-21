@@ -37,6 +37,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "HTMLText.h"
 
+#define LONG_PRESS_THRESHOLD 0.75
+
 @implementation HTMLTextLabel
 
 @synthesize extendHeightToFit,attributedText = attributedText,delegate = delegate,rawHTML,ignoreXAttachment,autoSizeImages;
@@ -534,12 +536,19 @@
 //////////////////////////////////////////////////////////////////////////////
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
 {
+    isLongPress = NO;
     UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
     CFIndex idx = [self characterIndexAtPoint:pt];
     if(idx != NSNotFound && idx < [attributedText length])
     {
         NSDictionary* attribs = [attributedText attributesAtIndex:idx effectiveRange:NULL];
+        NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithDictionary:attribs];
+        [dict setValue:[NSValue valueWithCGPoint:pt] forKey:@"point"];
+        
+        [self performSelector:@selector(fireLongPress:)
+                   withObject:dict
+                   afterDelay:LONG_PRESS_THRESHOLD];
         NSString* hyperlink = [attribs objectForKey:HYPER_LINK];
         if(hyperlink)
         {
@@ -552,6 +561,7 @@
 //////////////////////////////////////////////////////////////////////////////
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     if(CurrentHyperLink)
     {
         CurrentHyperLink = nil;
@@ -563,6 +573,12 @@
 //handles hyperlink clicking
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
 {
+    if(isLongPress)
+    {
+        isLongPress = NO;
+        [self.nextResponder touchesEnded:touches withEvent:event];
+        return;
+    }
     if(CurrentHyperLink)
     {
         CurrentHyperLink = nil;
@@ -591,6 +607,27 @@
         }
     }
     [self.nextResponder touchesEnded:touches withEvent:event];
+}
+//////////////////////////////////////////////////////////////////////////////
+- (void)fireLongPress:(NSDictionary*)attribs
+{
+    isLongPress = YES;
+    CurrentHyperLink = nil;
+    [self setNeedsDisplay];
+    NSString* hyperlink = [attribs objectForKey:HYPER_LINK];
+    NSString* imageURL = [attribs objectForKey:IMAGE_LINK];
+    if([delegate respondsToSelector:@selector(didLongPressLink:frame:)] && hyperlink)
+    {
+        CGPoint pt = [[attribs objectForKey:@"point"] CGPointValue];
+        CGRect frame = CGRectMake(pt.x, pt.y, hyperlink.length, 14);
+        [delegate didLongPressLink:hyperlink frame:frame];
+        return;
+    }
+    if([delegate respondsToSelector:@selector(didLongPressImage:)] && imageURL)
+    {
+        [delegate didLongPressImage:hyperlink];
+        return;
+    }
 }
 //////////////////////////////////////////////////////////////////////////////
 -(void)setNeedsDisplay 

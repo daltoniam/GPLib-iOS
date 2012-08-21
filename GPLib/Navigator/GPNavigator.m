@@ -47,7 +47,7 @@
 
 @implementation GPNavigator
 
-@synthesize navigationController = Navigation,URLs = URLs,popOver,useCustomBackButton,searchAppStore;
+@synthesize navigationController = Navigation,URLs = URLs,popOver,useCustomBackButton;
 
 NSString* GPHTTPLINKSURL = @"http"; //use to map your http links to a view controller (probably with a webview)
 
@@ -79,40 +79,40 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
 }
 /////////////////////////////////////////////////////////////
 //open a URL normally
--(void)openURL:(NSString*)URL
+-(BOOL)openURL:(NSString*)URL
 {
-    [self openURL:URL NavType:GPNavTypeNormal];
+    return [self openURL:URL NavType:GPNavTypeNormal];
 }
 /////////////////////////////////////////////////////////////
 //Open a URL and specify the way it will be displayed.
--(void)openURL:(NSString*)URL NavType:(GPNavType)type
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type
 {
-    [self openURL:URL NavType:type query:nil];
+    return [self openURL:URL NavType:type query:nil];
 }
 /////////////////////////////////////////////////////////////.
--(void)openURL:(NSString*)URL view:(UIView*)gridView query:(NSDictionary*)query
+-(BOOL)openURL:(NSString*)URL view:(UIView*)gridView query:(NSDictionary*)query
 {
-    [self openURL:URL NavType:GPNavTypeGrid query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:gridView];
+    return [self openURL:URL NavType:GPNavTypeGrid query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:gridView];
 }
 /////////////////////////////////////////////////////////////
--(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query
 {
-    [self openURL:URL NavType:type query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:nil];
+    return [self openURL:URL NavType:type query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:nil];
 }
 /////////////////////////////////////////////////////////////
--(void)openURL:(NSString*)URL query:(NSDictionary*)query frame:(CGRect)frame
+-(BOOL)openURL:(NSString*)URL query:(NSDictionary*)query frame:(CGRect)frame
 {
-    [self openURL:URL NavType:GPNavTypePopOver query:query rightbtn:nil leftbtn:nil frame:frame view:nil];
+    return [self openURL:URL NavType:GPNavTypePopOver query:query rightbtn:nil leftbtn:nil frame:frame view:nil];
 }
 /////////////////////////////////////////////////////////////
--(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left
 {
-    [self openURL:URL NavType:type query:query rightbtn:right leftbtn:left frame:CGRectZero view:nil];
+    return [self openURL:URL NavType:type query:query rightbtn:right leftbtn:left frame:CGRectZero view:nil];
 }
 /////////////////////////////////////////////////////////////
 //open a URL and send a url along too. This will override whatever URL init you had
 //and use the initWithNavigatorURL:query: if query is not nil. 
--(void)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView
 {
     if(type == GPNavTypeGrid && !gridView)
         type = GPNavTypeModal;
@@ -167,7 +167,30 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
                 }
             }
         }
+        return YES;
     }
+    return NO;
+}
+/////////////////////////////////////////////////////////////
+//open a URL to another application
+-(BOOL)openExternalURL:(NSString*)URL
+{
+    return [self openExternalURL:URL searchString:nil];
+}
+/////////////////////////////////////////////////////////////
+//open a URL to another application and search appstore
+-(BOOL)openExternalURL:(NSString*)URL searchString:(NSString*)search
+{
+    NSURL* interURL = [NSURL URLWithString:URL];
+    if([[UIApplication sharedApplication] canOpenURL:interURL])
+        return [[UIApplication sharedApplication] openURL:interURL];
+    if(search)
+    {
+        interURL = [NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.com/apps/%@",search]];
+        if([[UIApplication sharedApplication] canOpenURL:interURL])
+            return [[UIApplication sharedApplication] openURL:interURL];
+    }
+    return NO;
 }
 /////////////////////////////////////////////////////////////
 -(id)createViewControllerFromURL:(NSString*)URL type:(GPNavType)type query:(NSDictionary*)query
@@ -190,22 +213,6 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     NSString* selURL = [self determineSelURL:URL query:query];
     if([selURL isEqualToString:GPHTTPLINKSURL])
         params = [NSArray arrayWithObjects:[NSURL URLWithString:URL],query,nil];
-    if([selURL isEqualToString:@""])
-    {
-        NSURL* interURL = [NSURL URLWithString:URL];
-        if([[UIApplication sharedApplication] canOpenURL:interURL])
-        {
-            [[UIApplication sharedApplication] openURL:interURL];
-            return nil;
-        }
-        interURL = [NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.com/apps/%@",interURL.scheme]];
-        if([[UIApplication sharedApplication] canOpenURL:interURL] && self.searchAppStore)
-        {
-            [[UIApplication sharedApplication] openURL:interURL];
-            return nil;
-        }
-            
-    }
     Class class = [URLs objectForKey:selURL];
     SEL sel = [self selectorFromURL:selURL];
     

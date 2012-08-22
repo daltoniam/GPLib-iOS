@@ -80,6 +80,7 @@
     top += Field.frame.size.height;
     LineView = [[UIView alloc] initWithFrame:CGRectMake(left, top, self.view.frame.size.width, 1)];
     LineView.backgroundColor = [UIColor lightGrayColor];
+    LineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [ScrollView addSubview:LineView];
     top += LineView.frame.size.height;
     textView = [[UITextView alloc] initWithFrame:CGRectMake(left, top, self.view.frame.size.width, self.view.frame.size.height-top)];

@@ -147,14 +147,14 @@
         size += gridPageCount;
     size = size/gridPageCount;
     //CGSizeMake((bounds.size.width - pad/gridPageCount) * size, bounds.size.height);
-    contentView.contentSize = CGSizeMake(( (bounds.size.width-pad/2) /gridPageCount) * size, bounds.size.height);
+    contentView.contentSize = CGSizeMake(( (bounds.size.width-pad/2)) * size, bounds.size.height);
     contentView.backgroundColor = [UIColor clearColor];
     
     if(attachmentViews.count > 0 && !pageControl)
         [self setupPager];
     pageControl.frame = CGRectMake(0, self.frame.size.height-36, self.frame.size.width, 36);
     int count = [attachmentViews count]/gridPageCount;
-    if(count > 1)
+    if(count >= 1 && attachmentViews.count != gridPageCount)
         pageControl.numberOfPages = count;
     else
         pageControl.numberOfPages = 0;

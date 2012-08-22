@@ -81,6 +81,7 @@
     NSMutableArray* viewArray;
     BOOL isDrawing;
     BOOL isLongPress;
+    NSMutableArray* requestArray;
 }
 @property(nonatomic, assign) BOOL extendHeightToFit;
 @property(nonatomic, assign) BOOL autoSizeImages;

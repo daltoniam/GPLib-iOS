@@ -162,11 +162,14 @@
         return;
     else if([url hasPrefix:@"http"])
     {
+        if(!requestArray)
+            requestArray = [[NSMutableArray alloc] init];
         GPHTTPRequest* SendRequest = [GPHTTPRequest requestWithString:url];
         [SendRequest setCacheModel:GPHTTPCacheCustomTime];
         [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
         [SendRequest setDelegate:self];
         [SendRequest startAsync];
+        [requestArray addObject:SendRequest];
     }
     else
     {
@@ -187,6 +190,7 @@
 //////////////////////////////////////////////////////////////////////////////
 - (void)requestFinished:(GPHTTPRequest *)request
 {
+    [requestArray removeObject:request];
     UIImage* image = [UIImage imageWithData:[request responseData]];
     for(ImageItem* item in imageArray )
     {
@@ -573,6 +577,7 @@
 //handles hyperlink clicking
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     if(isLongPress)
     {
         isLongPress = NO;
@@ -647,6 +652,13 @@
 		CFRelease(textFrame);
 		textFrame = NULL;
     }
+    self.delegate = nil;
+    for(GPHTTPRequest* request in requestArray)
+    {
+        [request cancel];
+        request.delegate = nil;
+    }
+    [requestArray release];
     [attributedText release];
     [imageArray release];
     [videoArray release];

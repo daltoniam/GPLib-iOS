@@ -307,7 +307,7 @@ void error( void * ctx, const char * msg, ... )
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)foundCharacters:(NSString*)string
 {
-    //NSLog(@"string: Text: %@",string);
+    //NSLog(@"string: Text: [%@]",string);
     if(string)
     {
         if(isBlockQuote)

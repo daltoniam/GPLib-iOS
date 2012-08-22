@@ -109,6 +109,7 @@
         gridView.delegate = self;
     if(!gridView.dataSource)
         gridView.dataSource = self;
+    [gridView reloadData];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewWillDisappear:(BOOL)animated

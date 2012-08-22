@@ -38,7 +38,7 @@
 @interface GPNavigator()
 
 -(void)navOpenPopOver:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame;
--(void)navOpenModal:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left type:(GPNavType)type;
+-(void)navOpenModal:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left type:(GPNavType)type useRoot:(BOOL)root;
 -(NSString*)determineSelURL:(NSString*)URLString query:(NSDictionary*)query;
 -(id)runSelector:(SEL)sel class:(Class)class params:(NSArray*)params;
 -(NSString*)pathFromURL:(NSURL*)URL;
@@ -92,27 +92,32 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
 /////////////////////////////////////////////////////////////.
 -(BOOL)openURL:(NSString*)URL view:(UIView*)gridView query:(NSDictionary*)query
 {
-    return [self openURL:URL NavType:GPNavTypeGrid query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:gridView];
+    return [self openURL:URL NavType:GPNavTypeGrid query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:gridView useRoot:NO];
 }
 /////////////////////////////////////////////////////////////
 -(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query
 {
-    return [self openURL:URL NavType:type query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:nil];
+    return [self openURL:URL NavType:type query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:nil useRoot:NO];
+}
+/////////////////////////////////////////////////////////////
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query useRoot:(BOOL)root
+{
+    return [self openURL:URL NavType:type query:query rightbtn:nil leftbtn:nil frame:CGRectZero view:nil useRoot:root];
 }
 /////////////////////////////////////////////////////////////
 -(BOOL)openURL:(NSString*)URL query:(NSDictionary*)query frame:(CGRect)frame
 {
-    return [self openURL:URL NavType:GPNavTypePopOver query:query rightbtn:nil leftbtn:nil frame:frame view:nil];
+    return [self openURL:URL NavType:GPNavTypePopOver query:query rightbtn:nil leftbtn:nil frame:frame view:nil useRoot:NO];
 }
 /////////////////////////////////////////////////////////////
 -(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left
 {
-    return [self openURL:URL NavType:type query:query rightbtn:right leftbtn:left frame:CGRectZero view:nil];
+    return [self openURL:URL NavType:type query:query rightbtn:right leftbtn:left frame:CGRectZero view:nil useRoot:NO];
 }
 /////////////////////////////////////////////////////////////
 //open a URL and send a url along too. This will override whatever URL init you had
 //and use the initWithNavigatorURL:query: if query is not nil. 
--(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView useRoot:(BOOL)root
 {
     if(type == GPNavTypeGrid && !gridView)
         type = GPNavTypeModal;
@@ -138,7 +143,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         {
             if(type == GPNavTypeModal || type == GPNavTypeFlip || type == GPNavTypeDissolve || type == GPNavTypeCurl ||
                type == GPNavTypeModalForm || type == GPNavTypeModalPage)
-                [self navOpenModal:temp rightbtn:right leftbtn:left type:type];
+                [self navOpenModal:temp rightbtn:right leftbtn:left type:type useRoot:root];
             
             else if(type == GPNavTypePopOver)
                 [self navOpenPopOver:temp rightbtn:right leftbtn:left frame:frame];
@@ -243,7 +248,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     return [object autorelease];
 }
 /////////////////////////////////////////////////////////////
--(void)navOpenModal:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left type:(GPNavType)type
+-(void)navOpenModal:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left type:(GPNavType)type useRoot:(BOOL)root
 {
     if(type == GPNavTypeCurl)
         temp.modalTransitionStyle = UIModalTransitionStylePartialCurl;
@@ -266,12 +271,17 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         temp.navigationItem.rightBarButtonItem = right;
     if(left)
         temp.navigationItem.leftBarButtonItem = left;
-    if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)])
+    if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)] || root)
         [[[UIApplication sharedApplication].delegate window].rootViewController presentModalViewController:navigationController animated:YES];
     else
-        [Navigation.visibleViewController.view.window.rootViewController presentModalViewController:navigationController animated:YES];
-        //[Navigation.visibleViewController presentModalViewController:navigationController animated:YES];
+        [Navigation.visibleViewController presentModalViewController:navigationController animated:YES];
+        
     currentViewController = navigationController;
+    if(!modalArray)
+        modalArray = [[NSMutableArray alloc] init];
+    [modalArray addObject:Navigation];
+    [Navigation release];
+    Navigation = [navigationController retain];
     [navigationController release];
 }
 /////////////////////////////////////////////////////////////
@@ -409,18 +419,27 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
 //dimissModal view
 -(void)dismissModal
 {
+    [self dismissModal:NO];
+}
+/////////////////////////////////////////////////////////////
+//dismiss modal view with root
+-(void)dismissModal:(BOOL)root
+{
     if(self.popOver)
     {
         [self.popOver dismissPopoverAnimated:YES];
         self.popOver = nil;
+        currentViewController = nil;
+        return;
     }
-    else if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)])
+    else if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)] || root)
         [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
-    else if(currentViewController)
-        [currentViewController dismissModalViewControllerAnimated:YES]; //parentViewController
     else
-        [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
+        [Navigation.visibleViewController dismissModalViewControllerAnimated:YES];
     
+    [Navigation release];
+    Navigation = [[modalArray lastObject] retain];
+    [modalArray removeLastObject];
     currentViewController = nil;
 }
 /////////////////////////////////////////////////////////////

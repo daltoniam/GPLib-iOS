@@ -48,6 +48,7 @@ typedef enum {
     NSMutableDictionary* URLs;
     UINavigationController* Navigation;
     UIViewController* currentViewController;
+    NSMutableArray* modalArray;
 }
 @property(nonatomic, readonly, retain)UINavigationController* navigationController;
 @property(nonatomic, readonly)UIViewController* visibleViewController;
@@ -62,15 +63,17 @@ typedef enum {
 -(BOOL)openURL:(NSString*)URL;
 -(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type;
 -(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query;
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query useRoot:(BOOL)root;
 -(BOOL)openURL:(NSString*)URL view:(UIView*)gridView query:(NSDictionary*)query;
 -(BOOL)openURL:(NSString*)URL query:(NSDictionary*)query frame:(CGRect)frame;
 -(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left;
--(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView;
+-(BOOL)openURL:(NSString*)URL NavType:(GPNavType)type query:(NSDictionary*)query rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)gridView useRoot:(BOOL)useRoot;
 -(BOOL)openExternalURL:(NSString*)URL searchString:(NSString*)search;
 -(BOOL)openExternalURL:(NSString*)URL;
 
 -(id)createViewControllerFromURL:(NSString*)URL type:(GPNavType)type query:(NSDictionary*)query;
 -(void)dismissModal;
+-(void)dismissModal:(BOOL)root;
 -(void)popNavigation;
 -(void)dismissGridView:(UIView*)view;
 -(UIViewController*)viewControllerFromURL:(NSString*)URL;

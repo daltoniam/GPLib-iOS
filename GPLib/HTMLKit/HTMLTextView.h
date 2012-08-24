@@ -1,5 +1,5 @@
 //
-//  HTMLTextView.h
+//  HTMLTextView.m
 //  GPLib
 //
 //  Created by Dalton Cherry on 12/12/11.
@@ -29,39 +29,11 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  */
-//
 
+#import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 #import <UIKit/UITextChecker.h>
-#import "GPHTTPRequest.h"
 
-typedef enum {
-    HTMLWindowLoupe = 0,
-    HTMLWindowMagnify,
-} HTMLWindowType;
-
-typedef enum {
-    HTMLSelectionTypeLeft = 0,
-    HTMLSelectionTypeRight,
-} HTMLSelectionType;
-///////////////////////////////////////////////////////////////////////
-@class HTMLTextView;
-@interface HTMLContentView : UIView
-{
-@private
-    HTMLTextView* delegate;
-}
-@property(nonatomic,assign) HTMLTextView* delegate;
-@end
-///////////////////////////////////////////////////////////////////////
-@interface HTMLCaretView : UIView 
-{
-    NSTimer *blinkTimer;
-}
-
-- (void)delayBlink;
-- (void)show;
-@end
 ///////////////////////////////////////////////////////////////////////
 @interface HTMLLoupeView : UIView {
 @private
@@ -70,7 +42,6 @@ typedef enum {
 - (void)setContentImage:(UIImage*)image;
 @end
 ///////////////////////////////////////////////////////////////////////
-
 @interface HTMLMagnifyView : UIView {
 @private
     UIImage *contentImage;
@@ -78,56 +49,104 @@ typedef enum {
 - (void)setContentImage:(UIImage*)image;
 @end
 ///////////////////////////////////////////////////////////////////////
-@interface HTMLTextWindow : UIWindow 
-{
-@private
-    UIView *_view;
-    HTMLWindowType type;
-    HTMLSelectionType selectionType;
-    BOOL showing;
-    
-}
-@property(nonatomic,assign) HTMLWindowType type;
-@property(nonatomic,assign) HTMLSelectionType selectionType;
-@property(nonatomic,readonly,getter=isShowing) BOOL showing;
-- (void)setType:(HTMLWindowType)type;
-- (void)renderWithContentView:(UIView*)view fromRect:(CGRect)rect;
-- (void)showFromView:(UIView*)view rect:(CGRect)rect;
-- (void)hide:(BOOL)animated;
-- (void)updateWindowTransform;
-@end
-///////////////////////////////////////////////////////////////////////
-@interface HTMLSelectionView : UIView {
-@private
-    UIView *leftDot;
-    UIView *rightDot;
-    UIView *leftCaret;
-    UIView *rightCaret;
-}
-- (void)setBeginCaret:(CGRect)begin endCaret:(CGRect)rect;
-@end
-///////////////////////////////////////////////////////////////////////
-@interface HTMLIndexedPosition : UITextPosition {
-    NSUInteger               _index;
-    id <UITextInputDelegate> _inputDelegate;
-}
-
-@property (nonatomic) NSUInteger index;
-+ (HTMLIndexedPosition *)positionWithIndex:(NSUInteger)index;
-
-@end
-
-///////////////////////////////////////////////////////////////////////
 @interface HTMLIndexedRange : UITextRange {
-    NSRange _range;
+    NSRange range;
 }
 
 @property (nonatomic) NSRange range;
 + (HTMLIndexedRange *)rangeWithNSRange:(NSRange)range;
 @end
 ///////////////////////////////////////////////////////////////////////
+@interface HTMLIndexedPosition : UITextPosition {
+    NSUInteger               index;
+    id <UITextInputDelegate> inputDelegate;
+}
+
+@property (nonatomic) NSUInteger index;
++ (HTMLIndexedPosition *)positionWithIndex:(NSUInteger)index;
+
+@end
+///////////////////////////////////////////////////////////////////////
+
+@protocol HTMLInputViewDelegate <NSObject>
+
+-(void)updateSize:(CGSize)size;
+
+@property(nonatomic,retain) UIFont* font;
+@property(nonatomic,retain) UIColor* textColor;
+@property(nonatomic,assign) BOOL strikeText;
+@property(nonatomic,assign) BOOL boldText;
+@property(nonatomic,assign) BOOL italizeText;
+@property(nonatomic,assign) BOOL underlineText;
+@property(nonatomic,assign) CTTextAlignment textAlignment;
+@property(nonatomic) UITextAutocorrectionType autocorrectionType;
+@property(nonatomic) UIKeyboardType keyboardType;
+@property(nonatomic) UIKeyboardAppearance keyboardAppearance;
+@property(nonatomic) UIReturnKeyType returnKeyType;
+@property(nonatomic) BOOL enablesReturnKeyAutomatically;
+@property(nonatomic,assign) BOOL editable;
+@property(nonatomic,assign) NSRange selectedRange;
+
+-(void)addImage:(UIImage*)image;
+-(void)addImageURL:(NSString*)imageURL;
+
+- (BOOL)textViewShouldBeginEditing;
+- (BOOL)textViewShouldEndEditing;
+
+- (void)textViewDidBeginEditing;
+- (void)textViewDidEndEditing;
+
+- (BOOL)textView:(NSRange)range replacementText:(NSString *)text;
+- (void)textViewDidChange;
+- (void)textViewDidUpdateText:(NSString*)text;
+
+@end
+
+@interface HTMLInputView : UIView<UITextInput,UITextInputTraits,UIGestureRecognizerDelegate> //UITextInputTraits
+{
+    id <UITextInputDelegate> inputDelegate;
+    UITextInputStringTokenizer *tokenizer;
+    UITextRange *markedTextRange;
+    NSDictionary *markedTextStyle;
+    UITextRange *selectedTextRange;
+    NSMutableAttributedString* attribString;
+    UIView* caretView;
+    CTFrameRef textFrame;
+    HTMLLoupeView* magnifyView;
+    HTMLMagnifyView* caretMagnifyView;
+    UITextChecker* textChecker;
+    NSDictionary* correctionDict;
+    UIView* leftCaretView;
+    UIView* rightCaretView;
+    BOOL ignoreSelectionMenu;
+    NSMutableArray* imageURLArray;
+    NSMutableDictionary* imageURLData;
+    BOOL isDrawing;
+}
+
+@property(nonatomic,assign) id<HTMLInputViewDelegate>delegate;
+@property(nonatomic,retain) NSMutableAttributedString* attribString;
+@property(nonatomic) UITextAutocapitalizationType autocapitalizationType;
+
+@property(nonatomic,assign) BOOL editable;
+@property(nonatomic) NSRange selectedRange;
+
+@property(nonatomic,retain) NSDictionary *correctionAttributes;
+@property(nonatomic,retain) NSMutableDictionary *menuItemActions;
+@property(nonatomic) NSRange correctionRange;
+
+@property(nonatomic,retain)UIColor* selectionColor;
+
+-(void)addImage:(UIImage*)image;
+-(void)addImageURL:(NSString*)imageURL;
+
+@end
+
+///////////////////////////////////////////////////////////////////////
 @class HTMLTextView;
-@protocol HTMLTextViewDelegate <NSObject, UIScrollViewDelegate>
+
+@protocol HTMLTextViewDelegate <UIScrollViewDelegate>
+
 @optional
 
 - (BOOL)HTMLTextViewShouldBeginEditing:(HTMLTextView *)textView;
@@ -136,104 +155,23 @@ typedef enum {
 - (void)HTMLTextViewDidBeginEditing:(HTMLTextView *)textView;
 - (void)HTMLTextViewDidEndEditing:(HTMLTextView *)textView;
 
-- (void)HTMLTextViewDidChange:(HTMLTextView *)textView string:(NSString*)string;
-- (void)HTMLTextViewWillChange:(HTMLTextView *)textView string:(NSString*)string;
-
-- (void)HTMLTextViewDidChangeSelection:(HTMLTextView *)textView;
+- (BOOL)HTMLTextView:(HTMLTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (void)HTMLTextViewDidChange:(HTMLTextView *)textView;
+- (void)HTMLTextViewDidUpdateText:(HTMLTextView *)textView text:(NSString*)text;
 
 @end
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@interface HTMLTextView : UIScrollView <UITextInputTraits,UITextInput,GPHTTPRequestDelegate>
-{
-    NSDictionary *markedTextStyle;
-    id <UITextInputDelegate> inputDelegate;
-    UITextInputStringTokenizer *tokenizer;
-    UITextChecker* textChecker;
-    UILongPressGestureRecognizer *longPress;
-    NSMutableAttributedString  *attributedString;
-    BOOL editing;
-    BOOL editable; 
-    BOOL spellCheck;
-    BOOL ignoreSelectionMenu;
-    
-    NSRange markedRange; 
-    NSRange selectedRange;
-    NSRange correctionRange;
-    NSRange linkRange;
-    
-    CTFramesetterRef    framesetter;
-    CTFrameRef          frame;
-    id <HTMLTextViewDelegate> delegate;
-    HTMLContentView* textContentView;
-    HTMLTextWindow* textWindow;
-    HTMLCaretView* caretView;
-    HTMLSelectionView* selectionView;
-    NSMutableArray* imageArray;
-    NSMutableArray* videoArray;
-    NSMutableArray* textArray;
-    NSDictionary* stringAttributes;
-    NSInteger textCount;
+
+@interface HTMLTextView : UIScrollView<HTMLInputViewDelegate>{
+    HTMLInputView* inputView;
 }
-- (void)textChanged;
--(void)appendString:(NSMutableAttributedString*)string;
--(void)drawCustomElements:(CTLineRef)oneLine ctx:(CGContextRef)ctx index:(int)lineIndex points:(CGPoint*)origins mainRect:(CGRect)mainRect;
-@property(nonatomic) UITextAutocapitalizationType autocapitalizationType;
-@property(nonatomic) UITextAutocorrectionType autocorrectionType;        
-@property(nonatomic) UIKeyboardType keyboardType;                       
-@property(nonatomic) UIKeyboardAppearance keyboardAppearance;             
-@property(nonatomic) UIReturnKeyType returnKeyType;                    
-@property(nonatomic) BOOL enablesReturnKeyAutomatically; 
-@property(nonatomic,copy) NSMutableAttributedString *attributedString;
-@property(nonatomic,retain)NSDictionary* stringAttributes;
-@property(nonatomic,assign) id <HTMLTextViewDelegate> delegate;
-@property(nonatomic,assign) BOOL editable;
-@property(nonatomic) NSRange selectedRange;
-@property(nonatomic) NSRange markedRange;
-@property(nonatomic,retain) UIFont *font;
-@property(nonatomic,retain,readonly) NSMutableArray* videoArray;
-@property(nonatomic,retain,readonly) NSMutableArray* imageArray;
-@property(nonatomic,retain,readonly) NSMutableArray* textArray;
-@end
 
+@property(nonatomic,retain) NSMutableAttributedString* attribString;
+@property(nonatomic,assign) id<HTMLTextViewDelegate>delegate;
+
+-(void)reload;
 ///////////////////////////////////////////////////////////////////////
-@interface HTMLTextView (Private)
-
-- (CGRect)caretRectForIndex:(int)index;
-- (CGRect)firstRectForNSRange:(NSRange)range;
-- (NSInteger)closestIndexToPoint:(CGPoint)point;
-- (NSRange)characterRangeAtPoint_:(CGPoint)point;
-- (void)checkSpellingForRange:(NSRange)range;
-- (void)removeCorrectionAttributesForRange:(NSRange)range;
-- (void)insertCorrectionAttributesForRange:(NSRange)range;
-- (void)showCorrectionMenuForRange:(NSRange)range;
-- (void)checkLinksForRange:(NSRange)range;
-- (void)scanAttachments;
-- (void)showMenu;
-- (CGRect)menuPresentationRect;
-
-+ (UIColor *)selectionColor;
-+ (UIColor *)spellingSelectionColor;
-+ (UIColor *)caretColor;
-
 @end
-///////////////////////////////////////////////////////////////////////
-@interface HTMLTextView ()
-@property(nonatomic,retain) NSDictionary *defaultAttributes;
-@property(nonatomic,retain) NSDictionary *correctionAttributes;
-@property(nonatomic,retain) NSMutableDictionary *menuItemActions;
-@property(nonatomic) NSRange correctionRange;
-@end
-///////////////////////////////////////////////////////////////////////
-@interface TextItem : NSObject
-{
-    NSString* text;
-    CGRect frame;
-    NSInteger tag;
-}
-+(TextItem*)textItem:(NSString*)text frame:(CGRect)rect tag:(NSInteger)t;
-@property(nonatomic, copy) NSString* text;
-@property(nonatomic,assign)CGRect frame;
-@property(nonatomic,assign)NSInteger tag;
-@end
+
+
 
 

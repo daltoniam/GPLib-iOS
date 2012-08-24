@@ -1,10 +1,3 @@
-
-/*Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
-
 //
 //  HTMLTextView.m
 //  GPLib
@@ -36,636 +29,239 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  */
-//
-// most of this code is from the ego textview. Huge props to all
-//contrubitors to that project as this gave lots of ground work for this class
-
 
 #import "HTMLTextView.h"
-#include <objc/runtime.h>
-#import <QuartzCore/QuartzCore.h>
 #import "HTMLText.h"
-//temp; remove after testing
-#import "HTMLTextLabel.h"
+#import <objc/runtime.h>
+#import "GPHTTPRequest.h"
+#import <QuartzCore/QuartzCore.h>
 #import "UIImage+Additions.h"
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation HTMLTextView
 
-@synthesize autocapitalizationType;
-@synthesize autocorrectionType;        
-@synthesize keyboardType;                       
-@synthesize keyboardAppearance;             
-@synthesize returnKeyType;                    
-@synthesize enablesReturnKeyAutomatically; 
-@synthesize attributedString = attributedString;
-@synthesize stringAttributes = stringAttributes;
-@synthesize delegate = delegate;
-@synthesize editable = editable;
-@synthesize defaultAttributes;
-@synthesize correctionAttributes;
-@synthesize menuItemActions;
-@synthesize correctionRange;
-@synthesize font;
-@synthesize selectedRange;
-@synthesize markedRange;
-@synthesize markedTextStyle=_markedTextStyle;
-@synthesize inputDelegate=_inputDelegate;
-@synthesize imageArray = imageArray;
-@synthesize textArray = textArray;
-@synthesize videoArray = videoArray;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)commonInit 
+@synthesize boldText,italizeText,underlineText,strikeText,textAlignment,font,textColor;
+@synthesize autocorrectionType,enablesReturnKeyAutomatically,keyboardAppearance,keyboardType,returnKeyType;
+@synthesize editable,delegate;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(id)initWithFrame:(CGRect)frame
 {
-    imageArray = [[NSMutableArray alloc] init];
-    textArray = [[NSMutableArray alloc] init];
-    videoArray = [[NSMutableArray alloc] init];
-    self.alwaysBounceVertical = YES;
-    self.editable = YES;
-    self.backgroundColor = [UIColor whiteColor];
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.clipsToBounds = YES;
-    
-    HTMLContentView *contentView = [[HTMLContentView alloc] initWithFrame:CGRectInset(self.bounds, 8.0f, 8.0f)];
-    contentView.autoresizingMask = self.autoresizingMask;
-    contentView.delegate = self;
-    [self addSubview:contentView];
-    textContentView = [contentView retain];
-    [contentView release];
-    
-    UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-    gesture.delegate = (id<UIGestureRecognizerDelegate>)self;
-    [self addGestureRecognizer:gesture];
-    [gesture release];
-    longPress = gesture;
-    
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
-    [doubleTap setNumberOfTapsRequired:2];
-    [self addGestureRecognizer:doubleTap];
-    [doubleTap release];
-    
-    UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    [self addGestureRecognizer:singleTap];
-    [singleTap release];
-    if(!self.font)
+    if(self = [super initWithFrame:frame])
+    {
+        inputView = [[HTMLInputView alloc] initWithFrame:frame];
+        inputView.delegate = self;
+        [self addSubview:inputView];
         self.font = [UIFont systemFontOfSize:12];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithFrame:(CGRect)frameSize 
-{
-    if ((self = [super initWithFrame:frameSize]))
-        [self commonInit];
-
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)init 
-{
-    if ((self = [self initWithFrame:CGRectZero])) {}
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithCoder: (NSCoder *)aDecoder 
-{
-    if ((self = [super initWithCoder: aDecoder])) 
-        [self commonInit];
-
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc 
-{
-    textWindow=nil;
-    [attributedString release];
-    attributedString = nil;
-    [caretView release]; 
-    caretView = nil;
-    self.menuItemActions = nil;
-    self.defaultAttributes = nil;
-    self.correctionAttributes = nil;
-    [imageArray release];
-    [textArray release];
-    [videoArray release];
-    [super dealloc];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)clearPreviousLayoutInformation 
-{
-    
-    if (framesetter != NULL) 
-    {
-        CFRelease(framesetter);
-        framesetter = NULL;
+        self.textColor = [UIColor blackColor];
+        self.textAlignment = kCTLeftTextAlignment;
+        self.editable = YES;
+        self.contentInset = UIEdgeInsetsMake(5, 5, 5, 5);
     }
-    
-    if (frame != NULL) 
-    {
-        CFRelease(frame);
-        frame = NULL;
-    }
+    return self;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGFloat)boundingWidthForHeight:(CGFloat)height 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setFrame:(CGRect)frame
 {
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, height), NULL);
-    return suggestedSize.width;   
+    [super setFrame:frame];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGFloat)boundingHeightForWidth:(CGFloat)width 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reload
 {
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(width, CGFLOAT_MAX), NULL);
-    return suggestedSize.height;
+    [inputView setNeedsDisplay];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)textChanged 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)updateSize:(CGSize)size
 {
-    
-    if ([[UIMenuController sharedMenuController] isMenuVisible])
-        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:NO];
-    
-    CTFramesetterRef setter = framesetter;
-    framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedString);
-    if (setter!=NULL)
-        CFRelease(setter); 
-    
-    CGRect rect = textContentView.frame;
-    CGFloat height = [self boundingHeightForWidth:rect.size.width];
-    rect.size.height = height;
-    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
-        textContentView.frame = rect;
-    self.contentSize = CGSizeMake(self.frame.size.width, rect.size.height);
-    
-    CGRect textBounds = textContentView.bounds;
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:textBounds]; //textContentView.bounds
-    
-    CTFrameRef frameRef = frame;
-    frame =  CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), [path CGPath], NULL);
-    if (frameRef!=NULL)
-        CFRelease(frameRef);
-    
-    [textContentView setNeedsDisplay];
-    
+    self.contentSize = size;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//- (void)setAttributedString:(NSMutableAttributedString*)string 
--(void)UpdateDelegate:(NSString*)string
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//forward the the input view.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSMutableAttributedString*)attribString
 {
-    
-    /*NSMutableAttributedString *aString = attributedString;
-    attributedString = [string copy];
-    [aString release];
-    aString = nil;*/
-    
-    [self textChanged];
-    
-    if ([delegate respondsToSelector:@selector(HTMLTextViewDidChange:string:)]) 
-        [self.delegate HTMLTextViewDidChange:self string:string];
-    
+    return inputView.attribString;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)willDelegate:(NSString*)string
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setAttribString:(NSMutableAttributedString *)string
 {
-    if ([delegate respondsToSelector:@selector(HTMLTextViewWillChange:string:)]) 
-        [self.delegate HTMLTextViewWillChange:self string:string];
+    inputView.attribString = string;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*-(void)setAttributedString:(NSMutableAttributedString *)string
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setEditable:(BOOL)edit
 {
-    NSMutableAttributedString *aString = attributedString;
-    attributedString = [string copy];
-    [aString release];
-    aString = nil;
-    
-    [self textChanged];
-    
-    if ([delegate respondsToSelector:@selector(HTMLTextViewDidChange:string:)]) 
-        [self.delegate HTMLTextViewDidChange:self string:@""];
-}*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)appendUpdateCaret
-{
-    [self.inputDelegate selectionWillChange:self];
-    
-    self.markedRange = NSMakeRange(NSNotFound, 0);
-    //self.selectedRange = NSMakeRange(attributedString.length, 0);
-    self.selectedRange = NSMakeRange(attributedString.length, 0);
-    
-    [self.inputDelegate selectionDidChange:self];
+    inputView.editable = edit;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)appendString:(NSMutableAttributedString*)string
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSRange)selectedRange
 {
-    self.selectedRange = NSMakeRange(self.selectedRange.location+(string.length-1), 0);
-    [self.attributedString appendAttributedString:string];
-    [self textChanged];
-    [self performSelector:@selector(appendUpdateCaret) withObject:nil afterDelay:0.1];
+    return inputView.selectedRange;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setEditable:(BOOL)edit 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setSelectedRange:(NSRange)range
 {
-    
-    if (edit) 
-    {
-        if (caretView ==  nil)
-            caretView = [[HTMLCaretView alloc] initWithFrame:CGRectZero];
+    inputView.selectedRange = range;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addImage:(UIImage*)image
+{
+    [inputView addImage:image];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addImageURL:(NSString*)imageURL
+{
+    [inputView addImageURL:imageURL];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)textViewShouldBeginEditing
+{
+    if([self.delegate respondsToSelector:@selector(HTMLTextViewShouldBeginEditing:)])
+        return [self.delegate HTMLTextViewShouldBeginEditing:self];
+    return YES;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)textViewShouldEndEditing
+{
+    if([self.delegate respondsToSelector:@selector(HTMLTextViewShouldEndEditing:)])
+        return [self.delegate HTMLTextViewShouldEndEditing:self];
+    return YES;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)textViewDidBeginEditing
+{
+    if([self.delegate respondsToSelector:@selector(HTMLTextViewDidBeginEditing:)])
+        return [self.delegate HTMLTextViewDidBeginEditing:self];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)textViewDidEndEditing
+{
+    if([self.delegate respondsToSelector:@selector(HTMLTextViewDidEndEditing:)])
+        return [self.delegate HTMLTextViewDidEndEditing:self];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)textView:(NSRange)range replacementText:(NSString *)text
+{
+    if([self.delegate respondsToSelector:@selector(HTMLTextView:shouldChangeTextInRange:replacementText:)])
+        return [self.delegate HTMLTextView:self shouldChangeTextInRange:range replacementText:text];
+    return YES;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)textViewDidChange
+{
+    if([self.delegate respondsToSelector:@selector(textViewDidChange:)])
+        return [self.delegate HTMLTextViewDidChange:self];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)textViewDidUpdateText:(NSString *)text
+{
+    if([self.delegate respondsToSelector:@selector(HTMLTextViewDidUpdateText:text:)])
+        return [self.delegate HTMLTextViewDidUpdateText:self text:text];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+@end
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+@implementation HTMLInputView
+
+@synthesize autocapitalizationType;
+@synthesize inputDelegate=inputDelegate,tokenizer = tokenizer,markedTextRange = markedTextRange,markedTextStyle = markedTextStyle;
+@synthesize selectedTextRange = selectedTextRange,attribString = attribString;
+@synthesize selectedRange; //editable
+@synthesize correctionAttributes,correctionRange,menuItemActions,editable = editable;
+//@synthesize boldText,italizeText,underlineText,strikeText,textAlignment,font,textColor;
+@synthesize delegate;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.userInteractionEnabled = YES;
+        self.backgroundColor = [UIColor whiteColor];
+        UITapGestureRecognizer* tap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(receivedTap:)] autorelease];
+        tap.delegate = self;
+        [self addGestureRecognizer:tap];
+        UILongPressGestureRecognizer *gesture = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)] autorelease];
+        [self addGestureRecognizer:gesture];
         
+        tap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)] autorelease];
+        tap.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:tap];
+        
+        attribString = [[NSMutableAttributedString alloc] init];
+        caretView = [[UIView alloc] init];
+        caretView.backgroundColor = [UIColor blueColor];
+        [self blinkAnimation];
+        [self addSubview:caretView];
+        selectedRange = NSMakeRange(0, 0);
         tokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
-        textChecker = [[UITextChecker alloc] init];
-        attributedString = [[NSMutableAttributedString alloc] init];
-        
-        NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:(int)(kCTUnderlineStyleThick|kCTUnderlinePatternDot)], kCTUnderlineStyleAttributeName, (id)[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f].CGColor, kCTUnderlineColorAttributeName, nil];
-        self.correctionAttributes = dictionary;
-        [dictionary release];
-    } 
-    else 
+        self.editable = YES;
+        self.selectionColor = [UIColor colorWithRed:204/255.0f green:221/255.0f blue:237/255.0f alpha:1];
+    }
+    return self;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)canBecomeFirstResponder
+{
+    if(self.editable)
+        if([self.delegate respondsToSelector:@selector(textViewShouldBeginEditing)])
+            return [self.delegate textViewShouldBeginEditing];
+    
+	return self.editable;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)becomeFirstResponder
+{
+    if (editable)
     {
-        
-        if (caretView) 
-        {
-            [caretView removeFromSuperview];
-            [caretView release];
-            caretView=nil;
-        }
-        
-        self.correctionAttributes = nil;
-        if (textChecker!=nil) 
-        {
-            [textChecker release];
-            textChecker=nil;
-        }
-
-        if (tokenizer!=nil)
-        {
-            [tokenizer release];
-            tokenizer=nil;
-        }
-
-        /*if (attributedString != nil) 
-        {
-            [attributedString release];
-            attributedString = nil;
-        }*/
+        if ([self.delegate respondsToSelector:@selector(textViewDidBeginEditing)])
+            [self.delegate textViewDidBeginEditing];
         
     }
+    return [super becomeFirstResponder];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)canResignFirstResponder
+{
+    if (editable && [self.delegate respondsToSelector:@selector(textViewShouldEndEditing)])
+        return [self.delegate textViewShouldEndEditing];
+    return YES;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)resignFirstResponder
+{
+    
+    if (editable)
+    {
+        if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing)])
+            [self.delegate textViewDidEndEditing];
+    }
+	return [super resignFirstResponder];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setEditable:(BOOL)edit
+{
     editable = edit;
-    
+    if([self isFirstResponder] && !editable)
+        [self resignFirstResponder];
+    caretView.hidden = !editable;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Layout methods
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSRange)rangeIntersection:(NSRange)first withSecond:(NSRange)second 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addImage:(UIImage*)image
 {
-    NSRange result = NSMakeRange(NSNotFound, 0);
-    
-    if (first.location > second.location) 
-    {
-        NSRange tmp = first;
-        first = second;
-        second = tmp;
-    }
-    
-    if (second.location < first.location + first.length) 
-    {
-        result.location = second.location;
-        NSUInteger end = MIN(first.location + first.length, second.location + second.length);
-        result.length = end - result.location;
-    }
-    
-    return result;    
+    NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+    [temp setImageData:image];
+    [self.attribString appendAttributedString:temp];
+    [self setNeedsDisplay];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)drawPathFromRects:(NSArray*)array cornerRadius:(CGFloat)cornerRadius 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addImageURL:(NSString*)imageURL
 {
-    
-    if (array==nil || [array count] == 0) return;
-    
-    CGMutablePathRef _path = CGPathCreateMutable();
-    
-    CGRect firstRect = CGRectFromString([array lastObject]);
-    CGRect lastRect = CGRectFromString([array objectAtIndex:0]);  
-    if ([array count]>1)
-        lastRect.size.width = textContentView.bounds.size.width-lastRect.origin.x;
-    
-    if (cornerRadius>0) 
-    {
-        CGPathAddPath(_path, NULL, [UIBezierPath bezierPathWithRoundedRect:firstRect cornerRadius:cornerRadius].CGPath);
-        CGPathAddPath(_path, NULL, [UIBezierPath bezierPathWithRoundedRect:lastRect cornerRadius:cornerRadius].CGPath);
-    } 
-    else 
-    {
-        CGPathAddRect(_path, NULL, firstRect);
-        CGPathAddRect(_path, NULL, lastRect);
-    }
-    
-    if ([array count] > 1) 
-    {
-        
-        CGRect fillRect = CGRectZero;
-        
-        CGFloat originX = ([array count]==2) ? MIN(CGRectGetMinX(firstRect), CGRectGetMinX(lastRect)) : 0.0f;
-        CGFloat originY = firstRect.origin.y + firstRect.size.height;
-        CGFloat width = ([array count]==2) ? originX+MIN(CGRectGetMaxX(firstRect), CGRectGetMaxX(lastRect)) : textContentView.bounds.size.width;
-        CGFloat height =  MAX(0.0f, lastRect.origin.y-originY);
-        
-        fillRect = CGRectMake(originX, originY, width, height);
-        
-        if (cornerRadius>0)
-            CGPathAddPath(_path, NULL, [UIBezierPath bezierPathWithRoundedRect:fillRect cornerRadius:cornerRadius].CGPath);
-        else
-            CGPathAddRect(_path, NULL, fillRect);
-    }
-    
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextAddPath(ctx, _path);
-    CGContextFillPath(ctx);
-    CGPathRelease(_path);
-    
+    NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+    [temp setImageTag:imageURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:@"150",@"height",@"200",@"width",@"0",@"padding", nil]];
+    [self.attribString appendAttributedString:temp];
+    [self setNeedsDisplay];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)drawBoundingRangeAsSelection:(NSRange)selectionRange cornerRadius:(CGFloat)cornerRadius {
-	
-    if (selectionRange.length == 0 || selectionRange.location == NSNotFound) 
-        return;
-    
-    NSMutableArray *pathRects = [[NSMutableArray alloc] init];
-    NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    CGPoint *origins = (CGPoint*)malloc([lines count] * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, [lines count]), origins);
-    NSInteger count = [lines count];
-    
-    for (int i = 0; i < count; i++) 
-    {
-        
-        CTLineRef line = (CTLineRef) [lines objectAtIndex:i];
-        CFRange lineRange = CTLineGetStringRange(line);
-        NSRange range = NSMakeRange(lineRange.location==kCFNotFound ? NSNotFound : lineRange.location, lineRange.length);
-        NSRange intersection = [self rangeIntersection:range withSecond:selectionRange];
-        
-        if (intersection.location != NSNotFound && intersection.length > 0) 
-        {
-            
-            CGFloat xStart = CTLineGetOffsetForStringIndex(line, intersection.location, NULL);
-            CGFloat xEnd = CTLineGetOffsetForStringIndex(line, intersection.location + intersection.length, NULL);
-            
-            CGPoint origin = origins[i];
-            CGFloat ascent, descent;
-            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-            
-            CGRect selectionRect = CGRectMake(origin.x + xStart, origin.y - descent, xEnd - xStart, ascent + descent); 
-            
-            if (range.length==1)
-                selectionRect.size.width = textContentView.bounds.size.width;
-            
-            [pathRects addObject:NSStringFromCGRect(selectionRect)];
-            
-        } 
-    }  
-    
-    [self drawPathFromRects:pathRects cornerRadius:cornerRadius];
-    [pathRects release];
-    free(origins);
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)drawContentInRect:(CGRect)rect 
-{    
-    //CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [[UIColor colorWithRed:0.8f green:0.8f blue:0.8f alpha:1.0f] setFill];
-    [self drawBoundingRangeAsSelection:linkRange cornerRadius:2.0f];
-    [[HTMLTextView selectionColor] setFill];
-    [self drawBoundingRangeAsSelection:self.selectedRange cornerRadius:0.0f];
-    [[HTMLTextView spellingSelectionColor] setFill];
-    [self drawBoundingRangeAsSelection:self.correctionRange cornerRadius:2.0f];
-    
-	CGPathRef framePath = CTFrameGetPath(frame);
-	CGRect frameRect = CGPathGetBoundingBox(framePath);
-    
-    
-    //CTFrameDraw(frame,ctx);
-	NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    NSInteger count = [lines count];
-    textCount = 0;
-    
-    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, count), origins);
-	CGContextRef ctx = UIGraphicsGetCurrentContext();
-    //CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);
-    //CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
-    //CGContextScaleCTM(ctx, 1.0, -1.0);
-	for (int i = 0; i < count; i++)
-    {
-        CTLineRef line = (CTLineRef)CFArrayGetValueAtIndex((CFArrayRef)lines, i);
-        [self drawCustomElements:line ctx:ctx index:count points:origins mainRect:rect];
-        CGContextSetTextPosition(ctx, frameRect.origin.x + origins[i].x, frameRect.origin.y + origins[i].y);
-        CTLineDraw(line, ctx);
-
-	}
-    free(origins);
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)drawCustomElements:(CTLineRef)oneLine ctx:(CGContextRef)ctx index:(int)lineIndex points:(CGPoint*)origins mainRect:(CGRect)mainRect
-{
-    CFArrayRef runs = CTLineGetGlyphRuns(oneLine);
-    CGRect lineBounds = CTLineGetImageBounds(oneLine, ctx);
-    
-    lineBounds.origin.x += origins[lineIndex].x;
-    lineBounds.origin.y += origins[lineIndex].y;
-    lineIndex++;
-    CGFloat offset = 0;
-    CGFloat YOffset = 0;
-    NSInteger imgtop = 0;
-    NSInteger imgleft = 0;
-    
-    for (id oneRun in (NSArray *)runs)
-    {
-        CGFloat ascent = 0;
-        CGFloat descent = 0;
-        
-        CGFloat width = CTRunGetTypographicBounds((CTRunRef) oneRun,CFRangeMake(0, 0),&ascent,&descent, NULL);
-        CGFloat xOffset = CTLineGetOffsetForStringIndex((CTLineRef)oneLine, CTRunGetStringRange((CTRunRef)oneRun).location, NULL);
-        
-        NSDictionary *attributes = (NSDictionary *)CTRunGetAttributes((CTRunRef) oneRun);
-        
-        BOOL strikeOut = [[attributes objectForKey:STRIKE_OUT] boolValue];
-        NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
-        NSString* videourl = [attributes objectForKey:VIDEO_LINK];
-        NSString* list = [attributes objectForKey:HTML_LIST];
-        UIImage* imagedata = [attributes objectForKey:HTML_IMAGE_DATA];
-        
-        if (strikeOut)
-        {
-            CGRect bounds = CGRectMake(lineBounds.origin.x + offset,lineBounds.origin.y,width, ascent + descent);
-            
-            // don't draw too far to the right
-            if (bounds.origin.x + bounds.size.width > CGRectGetMaxX(lineBounds))
-                bounds.size.width = CGRectGetMaxX(lineBounds) - bounds.origin.x;
-            // get text color or use black
-            id color = [attributes objectForKey:(id)kCTForegroundColorAttributeName];
-            
-            if (color)
-                CGContextSetStrokeColorWithColor(ctx, (CGColorRef)color);
-            else
-                CGContextSetGrayStrokeColor(ctx, 0, 1.0);
-            CGFloat y = roundf(bounds.origin.y + (bounds.size.height/2) ); //3.5
-            y -= bounds.size.height + bounds.size.height/2.5;
-            CGContextMoveToPoint(ctx, bounds.origin.x, y);
-            CGContextAddLineToPoint(ctx, bounds.origin.x + bounds.size.width, y);
-            
-            CGContextStrokePath(ctx);
-        }
-        offset += width;
-        YOffset += ascent - descent;
-        
-        if(imageurl && ![self didLoadURL:imageurl])
-        {
-            /*float imgheight = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
-            float imgwidth = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
-            if(imgleft + imgwidth > self.frame.size.width)
-            {
-                imgtop += imgheight;
-                imgleft = 0;
-            }
-            CGFloat y =  mainRect.size.height - lineBounds.origin.y;//roundf(lineBounds.origin.y );
-            if(imagedata)
-                [imageArray addObject:[ImageItem imageItem:[UIImage imageByScalingProportionallyToSize:CGSizeMake(imgwidth, imgheight) image:imagedata] url:imageurl frame:CGRectMake(lineBounds.origin.x-imgwidth,y ,imgwidth, imgheight)]];
-            else
-                [self FetchImage:[ImageItem imageItem:nil url:imageurl frame:CGRectMake(lineBounds.origin.x-imgwidth,y ,imgwidth, imgheight)]]; 
-            //lineBounds.origin.y
-            imgleft += imgwidth;*/
-            float imgheight = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
-            float imgwidth = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
-            float top = 0;
-            if([(NSDictionary*)attributes objectForKey:@"padding"])
-                top = [(NSString*)[(NSDictionary*)attributes objectForKey:@"padding"] floatValue];
-            top = -top; //we swap to negitive, as the bounds are reversed
-            CGRect runBounds;
-            runBounds.size.width = imgwidth;
-            runBounds.size.height = imgheight;
-            runBounds.origin.x = origins[lineIndex].x + xOffset;
-            runBounds.origin.y = origins[lineIndex].y + self.frame.origin.y + top;
-            runBounds.origin.y -= descent;
-            CGPathRef pathRef = CTFrameGetPath(frame); //10
-            CGRect colRect = CGPathGetBoundingBox(pathRef);
-            
-            CGRect imgBounds = CGRectOffset(runBounds, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
-            //if(self.ignoreXAttachment)
-            imgBounds.origin.x = 0;
-            
-            if(imagedata)
-                [imageArray addObject:[ImageItem imageItem:[UIImage imageByScalingProportionallyToSize:CGSizeMake(imgwidth, imgheight) image:imagedata] url:imageurl frame:imgBounds]]; //(origins[lineIndex].y+10)
-            else
-                [self FetchImage:[ImageItem imageItem:nil url:imageurl frame:imgBounds]];
-        }
-        if(videourl && ![self didLoadVideo:videourl])
-        {
-            float vidheight = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
-            float vidwidth = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
-            //CGRect vidframe = CGRectMake(origins[lineIndex].x,(origins[lineIndex].y) ,vidwidth, vidheight);
-            CGFloat y =  mainRect.size.height - lineBounds.origin.y;
-            [self FetchImage:[ImageItem imageItem:nil url:videourl frame:CGRectMake(lineBounds.origin.x-vidwidth,y ,vidwidth, vidheight)]];
-            //[self addSubview:youtube];
-            imgleft += vidwidth;
-            imgtop += vidheight;
-        }
-        NSString* txt = list;
-        if(list)
-        {
-            textCount++;
-            if([list isEqualToString:HTML_ORDER_LIST])
-                txt = [NSString stringWithFormat:@"%d. ",textCount];
-        }
-        if(list && (![self doesContain:txt] || textCount >= textArray.count))
-        {
-            float h = [(NSString*)[(NSDictionary*)attributes objectForKey:@"height"] floatValue];
-            float w = [(NSString*)[(NSDictionary*)attributes objectForKey:@"width"] floatValue];
-            CGFloat y =  (mainRect.size.height - lineBounds.origin.y);
-            int x = 7 - txt.length;
-            [textArray addObject:[TextItem textItem:txt frame:CGRectMake(x,y,w, h) tag:[textArray count] ]]; //lineBounds.origin.x-w
-        }
-            
-    }
-}
-//////////////////////////////////////////////////////////////////////////////
-//load image from http
--(void)FetchImage:(ImageItem*)item
-{
-    NSString* url = nil;
-    if([item.URL rangeOfString:@"youtube"].location != NSNotFound)
-    {
-        [videoArray addObject:item];
-        url = [self youtubeThumb:item.URL];
-    }
-    else
-    {
-        [imageArray addObject:item];
-        url = item.URL;
-    }
-    if(!url)
-        return;
-    else if([url hasPrefix:@"http"])
-    {
-        GPHTTPRequest* SendRequest = [GPHTTPRequest requestWithString:url];
-        [SendRequest setCacheModel:GPHTTPCacheCustomTime];
-        [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
-        [SendRequest setDelegate:self];
-        [SendRequest startAsync];
-    }
-    else
-    {
-        UIImage* image = [UIImage imageNamed:url];
-        if(!image)
-            image = [UIImage imageWithContentsOfFile:url];
-        [(ImageItem*)[imageArray lastObject] setImageData:[UIImage imageByScalingProportionallyToSize:CGSizeMake(item.frame.size.width, item.frame.size.height) image:image]];
-        [textContentView setNeedsDisplay];
-    }
-}
-//////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(GPHTTPRequest *)request
-{
-    UIImage* image = [UIImage imageWithData:[request responseData]];
-    if([request.URL.absoluteString rangeOfString:@"i.ytimg.com"].location != NSNotFound)
-    {
-        for(ImageItem* item in videoArray )
-            if([[self youtubeThumb:item.URL] isEqualToString:request.URL.absoluteString])
-                item.imageData = [UIImage imageByScalingProportionallyToSize:CGSizeMake(item.frame.size.width, item.frame.size.height) image:image];;
-    }
-    else
-    {
-        for(ImageItem* item in imageArray )
-            if([item.URL isEqualToString:request.URL.absoluteString])
-                item.imageData = [UIImage imageByScalingProportionallyToSize:CGSizeMake(item.frame.size.width, item.frame.size.height) image:image];
-    }
-    [textContentView setNeedsDisplay];
-}
-//////////////////////////////////////////////////////////////////////////////
--(BOOL)didLoadURL:(NSString*)url
-{
-    for(ImageItem* item in imageArray)
-        if([item.URL isEqualToString:url])
-            return YES;
-    return NO;
-}
-//////////////////////////////////////////////////////////////////////////////
--(BOOL)didLoadVideo:(NSString*)url
-{
-    for(ImageItem* item in videoArray)
-        if([item.URL isEqualToString:url])
-            return YES;
-    return NO;
-}
-//////////////////////////////////////////////////////////////////////////////
--(ImageItem*)videoForURL:(NSString*)url
-{
-    for(ImageItem* item in videoArray)
-        if([item.URL isEqualToString:url])
-            return item;
-    return nil;
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(NSString*)youtubeThumb:(NSString*)url
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSString*)convertYoutubeURL:(NSString*)url
 {
     NSRange end = [url rangeOfString:@"?"];
     if(end.location != NSNotFound)
@@ -676,203 +272,742 @@
         {
             NSString* video_id = [url substringWithRange:NSMakeRange(start.location+1, (end.location-1)-start.location)];
             //NSLog(@"video_id: %@",video_id);
-            //http://i.ytimg.com/vi/GUPAyGWKd6c/2.jpg
-            return [NSString stringWithFormat:@"http://i.ytimg.com/vi/%@/0.jpg",video_id];
+            //"i.ytimg.com/vi/%@/0.jpg"
+            if(video_id)
+            {
+                 return [NSString stringWithFormat:@"http://i3.ytimg.com/vi/%@/mqdefault.jpg",video_id];
+            }
         }
     }
     return nil;
 }
-//////////////////////////////////////////////////////////////////////////////
--(ImageItem*)itemForURL:(NSString*)url
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)fetchYouTubeURL:(NSString*)url
 {
-    for(ImageItem* item in imageArray)
-        if([item.URL isEqualToString:url])
-            return item;
-    return nil;
+    NSString* imgURL = [self convertYoutubeURL:url];
+    [self fetchImage:imgURL];
 }
-//////////////////////////////////////////////////////////////////////////////
--(TextItem*)itemForText:(NSString*)text
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)fetchImage:(NSString*)url
 {
-    for(TextItem* item in textArray)
-        if([item.text hasPrefix:text])
-            return item;
-    return nil;
+    __block GPHTTPRequest* request = [GPHTTPRequest requestWithString:url];
+    [request setFinishBlock:^{
+        if(!imageURLData)
+            imageURLData = [[NSMutableDictionary alloc] init];
+        [imageURLData setValue:[UIImage imageWithData:[request responseData]] forKey:request.URL.absoluteString];
+        [self reloadStringForImage:request.URL.absoluteString];
+    }];
+    [request startAsync];
 }
-//////////////////////////////////////////////////////////////////////////////
--(BOOL)doesContain:(NSString*)text
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reloadStringForImage:(NSString*)imgURL
 {
-    for(TextItem* item in textArray)
-        if([item.text isEqualToString:text])
-            return YES;
+    NSMutableAttributedString* string = self.attribString;
+    NSRange validRange = NSMakeRange(0,[string length]);
+    __block NSRange find;
+    [string enumerateAttributesInRange:validRange options:0 usingBlock:
+     ^(NSDictionary *attributes, NSRange range, BOOL *stop)
+     {
+         NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
+         if(!imageurl)
+             imageurl = [attributes objectForKey:VIDEO_LINK];
+         if([imageurl isEqualToString:imgURL])
+             find = range;
+     }];
+    if(find.location != NSNotFound && find.location != NSNotFound && find.location < self.attribString.length)
+    {
+        NSString* url = imgURL;
+        if([url rangeOfString:@"youtube.com"].location != NSNotFound)
+            url = [self convertYoutubeURL:url];
+        UIImage* image = [imageURLData objectForKey:url];
+        if(image)
+        {
+            [string setImageData:image range:find];
+            [string removeAttribute:IMAGE_LINK range:find];
+            if(!isDrawing)
+                [self setNeedsDisplay];
+        }
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//handle text input
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)hasText
+{
+    if(self.attribString.length > 0)
+        return YES;
     return NO;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)closestWhiteSpaceIndexToPoint:(CGPoint)point 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)insertText:(NSString *)text
 {
-    
-    point = [self convertPoint:point toView:textContentView];
-    NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    NSInteger count = [lines count];
-    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, count), origins); 
-    
-    __block NSRange returnRange = NSMakeRange(attributedString.length, 0);
-    
-    for (int i = 0; i < lines.count; i++) 
+    if([self.delegate respondsToSelector:@selector(textView:replacementText:)])
     {
-        
-        if (point.y > origins[i].y) {
-            
-            CTLineRef line = (CTLineRef)[lines objectAtIndex:i];
-            CFRange cfRange = CTLineGetStringRange(line);
-            NSRange range = NSMakeRange(cfRange.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length);
-            CGPoint convertedPoint = CGPointMake(point.x - origins[i].x, point.y - origins[i].y);
-            CFIndex cfIndex = CTLineGetStringIndexForPosition(line, convertedPoint);
-            NSInteger index = cfIndex == kCFNotFound ? NSNotFound : cfIndex;
-            
-            if(range.location==NSNotFound)
-                break;
-            
-            if (index>= attributedString.length) 
-            {
-                returnRange = NSMakeRange(attributedString.length, 0);
-                break;
-            }
-            
-            if (range.length <= 1) {
-                returnRange = NSMakeRange(range.location, 0);
-                break;
-            }
-            
-            if (index == range.location) {
-                returnRange = NSMakeRange(range.location, 0);
-                break;                
-            }
-            
-            
-            if (index >= (range.location+range.length)) 
-            {
-                
-                if (range.length > 1 && [attributedString.string characterAtIndex:(range.location+range.length)-1] == '\n') 
-                {
-                    returnRange = NSMakeRange(index-1, 0);
-                    break;
-                } 
-                else 
-                {
-                    returnRange = NSMakeRange(range.location+range.length, 0);
-                    break;
-                }
-                
-            }
-            
-            [attributedString.string enumerateSubstringsInRange:range options:NSStringEnumerationByWords usingBlock:^(NSString *subString, NSRange subStringRange, NSRange enclosingRange, BOOL *stop)
-            {
-                if (NSLocationInRange(index, enclosingRange)) 
-                {
-                    if (index > (enclosingRange.location+(enclosingRange.length/2))) 
-                        returnRange = NSMakeRange(subStringRange.location+subStringRange.length, 0);
-                        
-                    else 
-                        returnRange = NSMakeRange(subStringRange.location, 0);
-                    *stop = YES;
-                }
-                
-            }];
-            
-            break;
+        if(![self.delegate textView:self.selectedRange replacementText:text])
+        {
+            [self setNeedsDisplay];
+            return;
         }
     }
-    
-    return returnRange.location;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)closestIndexToPoint:(CGPoint)point 
-{	
-    point = [self convertPoint:point toView:textContentView];
-    NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    NSInteger count = [lines count];
-    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, count), origins);    
-    CFIndex index = kCFNotFound;
-    
-    for (int i = 0; i < lines.count; i++) 
+    if([self isMenuShowing])
     {
-        if (point.y > origins[i].y) 
+        [self hideMenu];
+        caretView.hidden = NO;
+        [self updateCaretFrame];
+    }
+    if(self.selectedRange.length > 1)
+        [self deleteBackward];
+    ignoreSelectionMenu = NO;
+    NSMutableAttributedString* tempString = [[NSMutableAttributedString alloc] initWithString:text];
+    [tempString setFont:self.delegate.font];
+    [tempString setTextColor:self.delegate.textColor];
+    [tempString setTextBold:self.delegate.boldText];
+    [tempString setTextItalic:self.delegate.italizeText];
+    [tempString setTextStrikeOut:self.delegate.strikeText];
+    [tempString setTextIsUnderlined:self.delegate.underlineText];
+    [tempString setTextAlignment:self.delegate.textAlignment lineBreakMode:kCTLineBreakByWordWrapping];
+    
+    if(self.attribString.length > 2 && [text isEqualToString:@" "])
+    {
+        if([self.attribString.string characterAtIndex:selectedRange.location-1] == ' ' && [self.attribString.string characterAtIndex:selectedRange.location-2] != ' ' && [self.attribString.string characterAtIndex:selectedRange.location-2] != '.')
+            [self.attribString replaceCharactersInRange:NSMakeRange(selectedRange.location-1, 1) withString:@"."];
+            
+    }
+    if(selectedRange.location != NSNotFound && selectedRange.location < self.attribString.length)
+         [self.attribString insertAttributedString:tempString atIndex:selectedRange.location];
+    else
+        [self.attribString appendAttributedString:tempString];
+    [tempString release];
+    if (text.length > 1 || ([text isEqualToString:@" "] || [text isEqualToString:@"\n"]))
+        [self checkSpellingForRange:[self characterRangeAtIndex:self.selectedRange.location-1]];
+    [self setNeedsDisplay];
+    selectedRange.location += text.length;
+    if([self.delegate respondsToSelector:@selector(textViewDidUpdateText:)])
+        [self.delegate textViewDidUpdateText:text];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)deleteBackward
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCorrectionMenuWithoutSelection) object:nil];
+    if(self.attribString.length != 0)
+	{
+        BOOL update = NO;
+		NSRange range = selectedRange;
+        if(range.length == NSNotFound || range.length == 0)
+            range.length = 1;
+        if(range.location > self.attribString.length-1)
+            range.location = self.attribString.length-1;
+        else if(range.length > 1)
+        {
+            update = YES;
+        }
+        else if(range.location > 0 && range.location != self.attribString.length)
+            range.location -= 1;
+		[self.attribString deleteCharactersInRange:range];
+        if(update)
+        {
+            selectedRange.length = 0;
+            caretView.hidden = NO;
+            [self updateCaretFrame];
+            [self hideMenu];
+        }
+        else
+            selectedRange.location -= range.length;
+        ignoreSelectionMenu = NO;
+        int index = selectedRange.location-1;
+        if(index > 0 && index < self.attribString.length && [self.attribString.string characterAtIndex:index] != ' ')
+            [self showCorrectionMenuForIndex:index];
+        [self setNeedsDisplay];
+	}
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//handle touches
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if(touch.view == self)
+        return YES;
+    return NO;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)receivedTap:(UITapGestureRecognizer*)recognizer
+{
+    if(![self isFirstResponder])
+        [self becomeFirstResponder];
+    else
+    {
+        [self hideMenu];
+        caretView.hidden = NO;
+        CGPoint pt = [recognizer locationInView:self];
+        int index = [self closestIndexToPoint:pt];
+        [self.inputDelegate selectionWillChange:self];
+        selectedRange = NSMakeRange(index, 0);
+        [self.inputDelegate selectionDidChange:self];
+        [self updateCaretFrame];
+        [self showCorrectionMenuForIndex:index];
+        [self setNeedsDisplay];
+    }
+    return;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)doubleTap:(UITapGestureRecognizer*)recognizer
+{
+    if(![self isFirstResponder])
+        [self becomeFirstResponder];
+    else
+    {
+        caretView.hidden = YES;
+        CGPoint pt = [recognizer locationInView:self];
+        int index = [self closestIndexToPoint:pt];
+        NSRange range = [self characterRangeAtIndex:index];
+        [self.inputDelegate selectionWillChange:self];
+        //NSLog(@"text at double tap: %@",[self.attribString.string substringWithRange:range]);
+        if(range.location != NSNotFound)
+            selectedRange = range;//NSMakeRange(index, 0);
+        else
+        {
+            selectedRange = NSMakeRange(index, 0);
+            caretView.hidden = NO;
+        }
+        [self.inputDelegate selectionDidChange:self];
+        [self updateCaretFrame];
+        [self setNeedsDisplay];
+        [self showMenu];
+    }
+    return;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)longPress:(UILongPressGestureRecognizer*)recognizer
+{
+    //NSLog(@"long press!");
+    if(!leftCaretView.hidden)
+        return;
+    [magnifyView removeFromSuperview];
+    if(recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        [self hideMenu];
+        CGPoint pt = [recognizer locationInView:self];
+        int index = [self closestIndexToPoint:pt];
+        selectedRange = NSMakeRange(index, 0);
+        [self updateCaretFrame];
+        if(!magnifyView)
+            magnifyView = [[HTMLLoupeView alloc] init];
+        CGRect frame = magnifyView.frame;
+        frame.origin.x = pt.x - frame.size.width/2;
+        frame.origin.y = pt.y - frame.size.height/2;
+        magnifyView.frame = frame;
+        UIImage *image = [self screenshotFromFrame:magnifyView.frame offset:0];
+        [magnifyView setContentImage:image];
+        [self addSubview:magnifyView];
+    }
+    else
+        [self showMenu];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(UIImage*)screenshotFromFrame:(CGRect)frame offset:(int)offset
+{
+    UIGraphicsBeginImageContext(frame.size);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    //CGContextSetFillColorWithColor(context, [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor);
+    //UIRectFill(CGContextGetClipBoundingBox(context));
+    CGContextSaveGState(ctx);
+    CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(-(frame.origin.x), -(frame.origin.y+offset) ));
+    [self.layer renderInContext:ctx];
+    CGContextRestoreGState(ctx);
+    UIImage* viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return viewImage;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//drawing
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)drawRect:(CGRect)rect
+{
+    isDrawing = YES;
+    [self stopBlink];
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [self.backgroundColor set];
+	CGContextFillRect(ctx, rect);
+    CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);
+    CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
+    CGContextScaleCTM(ctx, 1.0, -1.0);
+
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attribString);
+    CGRect frame = self.bounds;
+    CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width,CGFLOAT_MAX),NULL);
+    CGFloat delta = MAX(0.f , ceilf(size.height - frame.size.height)) + 10;
+    frame.origin.y -= delta;
+    frame.size.height += delta;
+    [self.delegate updateSize:CGSizeMake(size.width, frame.size.height)];
+    //self.contentSize = CGSizeMake(size.width, frame.size.height);
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, frame);
+    if(textFrame != NULL)
+        CFRelease(textFrame);
+    textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+    CGPathRelease(path);
+    CFRelease(framesetter);
+    /*if(self.correctionRange.length > 0)
+    {
+        CGRect start = [self caretRectForIndex:correctionRange.location];
+        CGRect end = [self caretRectForIndex:correctionRange.location+correctionRange.length];
+        int width = end.origin.x-start.origin.x;
+        int height = end.size.height + (end.origin.y - start.origin.y);
+        int top = self.frame.size.height-(start.origin.y+height);
+        CGContextSaveGState(ctx);
+        //204 221 237
+        CGContextSetFillColorWithColor(ctx,[UIColor colorWithRed:255/255.0f green:217/255.0f blue:217/255.0f alpha:1].CGColor);
+        CGContextFillRect(ctx,CGRectMake(start.origin.x, top, width, height));
+        CGContextRestoreGState(ctx);
+    }*/
+    if(selectedRange.length > 1)
+        [self drawSelectionColor:ctx];
+    else
+    {
+        leftCaretView.hidden = YES;
+        rightCaretView.hidden = YES;
+    }
+    CTFrameDraw(textFrame, ctx);
+    [self drawCustomElements:ctx];
+    if(selectedRange.length <= 1)
+    {
+        [self updateCaretFrame];
+        [self blinkAnimation];
+    }
+    isDrawing = NO;
+    if([self.delegate respondsToSelector:@selector(textViewDidChange)])
+        [self.delegate textViewDidChange];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)drawCustomElements:(CGContextRef)ctx
+{
+    CFArrayRef leftLines = CTFrameGetLines(textFrame); //textFrame
+    CGPoint *origins = malloc(sizeof(CGPoint)*[(NSArray *)leftLines count]);
+    CTFrameGetLineOrigins(textFrame,CFRangeMake(0, 0), origins);
+    NSInteger lineIndex = 0;
+    int orderCount = 1;
+    for (id oneLine in (NSArray *)leftLines)
+    {
+        CFArrayRef runs = CTLineGetGlyphRuns((CTLineRef)oneLine);
+        for (id oneRun in (NSArray *)runs)
+        {
+            CGFloat ascent = 0;
+            CGFloat descent = 0;
+            
+            CGFloat width = CTRunGetTypographicBounds((CTRunRef) oneRun,CFRangeMake(0, 0),&ascent,&descent, NULL);
+            
+            CGFloat xOffset = CTLineGetOffsetForStringIndex((CTLineRef)oneLine, CTRunGetStringRange((CTRunRef)oneRun).location, NULL);
+            CGFloat height = ascent + descent;
+            
+            CGRect runRect = CGRectMake(origins[lineIndex].x + xOffset,origins[lineIndex].y + self.frame.origin.y,width,height );
+            runRect.origin.y -= descent;
+            CGPathRef pathRef = CTFrameGetPath(textFrame);
+            CGRect colRect = CGPathGetBoundingBox(pathRef);
+            
+            runRect = CGRectOffset(runRect, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
+            runRect = CGRectIntegral(runRect);
+            runRect = CGRectInset(runRect, -1, -1);
+            
+            NSDictionary *attributes = (NSDictionary *)CTRunGetAttributes((CTRunRef) oneRun);
+            
+            BOOL strikeOut = [[attributes objectForKey:STRIKE_OUT] boolValue];
+            NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
+            UIImage* imagedata = [attributes objectForKey:HTML_IMAGE_DATA];
+            NSString* videourl = [attributes objectForKey:VIDEO_LINK];
+            BOOL unOrder = [[attributes objectForKey:HTML_UNORDER_LIST] boolValue];
+            BOOL order = [[attributes objectForKey:HTML_ORDER_LIST] boolValue];
+            if(imageurl || videourl)
+            {
+                if(!imageURLArray)
+                    imageURLArray = [[NSMutableArray alloc] init];
+                if(imageurl && ![imageURLArray containsObject:imageurl])
+                {
+                    [imageURLArray addObject:imageurl];
+                    [self fetchImage:imageurl];
+                }
+                else if(imageurl)
+                    [self reloadStringForImage:imageurl];
+                
+                if(videourl && ![imageURLArray containsObject:videourl])
+                {
+                    [imageURLArray addObject:videourl];
+                    [self fetchYouTubeURL:videourl];
+                }
+                else if(videourl)
+                    [self reloadStringForImage:videourl];
+                
+            }
+            if(unOrder)
+            {
+                //CGFloat y = roundf(runRect.origin.y + (runRect.size.height/2) );
+                CGRect frame = runRect;
+                frame.origin.x += 3;
+                frame.size.height -= 4;
+                frame.size.width = frame.size.height;
+                frame.origin.y += 2;
+
+                CGContextSaveGState(ctx);
+                CGContextSetLineWidth(ctx, 1.0);
+                CGContextSetStrokeColorWithColor(ctx, [UIColor blackColor].CGColor);
+                CGContextAddEllipseInRect(ctx, frame);
+                CGContextFillEllipseInRect(ctx, frame);
+                CGContextRestoreGState(ctx);
+            }
+            if(order)
+            {
+                //CGFloat y = roundf(runRect.origin.y + (runRect.size.height/2) );
+                CGRect frame = runRect;
+                frame.origin.x += 3;
+                frame.size.height -= 4;
+                frame.size.width = frame.size.height;
+                frame.origin.y += 2;
+                NSString* text = [NSString stringWithFormat:@"%d.",orderCount];
+                CGContextSaveGState(ctx);
+                CGContextSelectFont (ctx,[self.delegate.font.fontName UTF8String],14,kCGEncodingMacRoman);
+                CGContextSetCharacterSpacing (ctx, 1);
+                CGContextSetTextDrawingMode (ctx, kCGTextFillStroke);
+                CGContextSetGrayStrokeColor(ctx, 0, 1.0);
+  
+                CGContextShowTextAtPoint (ctx, frame.origin.x, frame.origin.y, [text UTF8String], text.length);
+                //[text drawInRect:frame withFont:[UIFont boldSystemFontOfSize:self.delegate.font.pointSize] ];
+                CGContextRestoreGState(ctx);
+                orderCount++;
+            }
+            if(strikeOut)
+            {
+                CGContextSaveGState(ctx);
+                id color = [attributes objectForKey:(id)kCTForegroundColorAttributeName];
+                
+                if (color)
+                    CGContextSetStrokeColorWithColor(ctx, (CGColorRef)color);
+                else
+                    CGContextSetGrayStrokeColor(ctx, 0, 1.0);
+                CGFloat y = roundf(runRect.origin.y + (runRect.size.height/2) );
+                CGContextMoveToPoint(ctx, runRect.origin.x, y);
+                CGContextAddLineToPoint(ctx, runRect.origin.x + runRect.size.width, y);
+                
+                CGContextStrokePath(ctx);
+                CGContextRestoreGState(ctx);
+            }
+            if(imagedata)
+            {
+                CGRect imgBounds = runRect;
+                imgBounds.size.height = imagedata.size.height;
+                imgBounds.size.width = imagedata.size.width;
+                CGContextDrawImage(ctx, imgBounds, imagedata.CGImage);
+            }
+        }
+        lineIndex++;
+    }
+    free(origins);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)drawSelectionColor:(CGContextRef)ctx
+{
+    CGRect start = [self caretRectForIndex:selectedRange.location];
+    CGRect end = [self caretRectForIndex:selectedRange.location+selectedRange.length];
+
+    [self setSelectionCarets:start end:end];
+    CFArrayRef leftLines = CTFrameGetLines(textFrame); //textFrame
+    CGPoint *origins = malloc(sizeof(CGPoint)*[(NSArray *)leftLines count]);
+    CTFrameGetLineOrigins(textFrame,CFRangeMake(0, 0), origins);
+    NSInteger lineIndex = 0;
+    for (id oneLine in (NSArray *)leftLines)
+    {
+        CTLineRef line = (CTLineRef)oneLine;
+        CFRange lineRange = CTLineGetStringRange(line);
+        NSInteger localIndex = 0;
+        if(selectedRange.length > lineRange.length)
+        {
+            lineRange.length += selectedRange.location;
+            localIndex = selectedRange.location;
+        }
+        else
+            localIndex = selectedRange.location - lineRange.location;
+        
+        if (localIndex >= 0 && localIndex < lineRange.length)
+        {
+            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, selectedRange.location + selectedRange.length);
+            CGFloat xStart = CTLineGetOffsetForStringIndex(line, selectedRange.location, NULL);
+            CGFloat xEnd = CTLineGetOffsetForStringIndex(line, finalIndex, NULL);
+            CGPoint origin = origins[lineIndex];
+            CGFloat ascent, descent;
+            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+            CGRect frame = CGRectMake(origin.x + xStart, origin.y + self.frame.origin.y, xEnd - xStart, ascent + (descent*2));
+            
+            frame.origin.y -= descent;
+            CGPathRef pathRef = CTFrameGetPath(textFrame);
+            CGRect colRect = CGPathGetBoundingBox(pathRef);
+            
+            frame = CGRectOffset(frame, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
+            
+            CGContextSaveGState(ctx);
+            CGContextSetFillColorWithColor(ctx,self.selectionColor.CGColor);
+            CGContextFillRect(ctx,frame);
+            CGContextRestoreGState(ctx);
+            
+        }
+        
+        lineIndex++;
+    }
+    free(origins);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//caretView
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)blinkAnimation
+{
+    CAKeyframeAnimation *animation = nil;
+    animation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+    animation.values = [NSArray arrayWithObjects:[NSNumber numberWithFloat:1.0f], [NSNumber numberWithFloat:1.0f], [NSNumber numberWithFloat:0.0f], [NSNumber numberWithFloat:0.0f], nil];
+    animation.calculationMode = kCAAnimationCubic;
+    animation.duration = 1.0;
+    animation.beginTime = CACurrentMediaTime() + 0.6;
+    animation.repeatCount = CGFLOAT_MAX;
+    [caretView.layer addAnimation:animation forKey:@"BlinkAnimation"];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)stopBlink
+{
+    [caretView.layer removeAnimationForKey:@"BlinkAnimation"];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(CGRect)caretRectForIndex:(int)index
+{
+    NSArray *lines = (NSArray*)CTFrameGetLines(textFrame);
+    int count = lines.count;
+    if(count > 0)
+    {
+        //int index = self.selectedRange.location;
+        index = MAX(index, 0);
+        index = MIN(self.attribString.string.length, index);
+        CGRect returnRect = CGRectZero;
+        
+        CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
+        CTFrameGetLineOrigins(textFrame, CFRangeMake(0, count), origins);
+        for (int i = 0; i < count; i++)
         {
             CTLineRef line = (CTLineRef)[lines objectAtIndex:i];
-            CGPoint convertedPoint = CGPointMake(point.x - origins[i].x, point.y - origins[i].y);
-            index = CTLineGetStringIndexForPosition(line, convertedPoint);  
-            break;
+            CFRange cfRange = CTLineGetStringRange(line);
+            NSRange range = NSMakeRange(range.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length);
+            
+            if (index >= range.location && index <= range.location+range.length)
+            {
+                CGFloat ascent, descent, xPos;
+                xPos = CTLineGetOffsetForStringIndex((CTLineRef)[lines objectAtIndex:i], index, NULL);
+                CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+                CGPoint origin = origins[i];
+                CGFloat height = ascent + (descent*2);
+                //if (selectedRange.length>0 && index != selectedRange.location && range.length == 1)
+                //    xPos = textContentView.bounds.size.width - 3.0f; // selection of entire line
+                
+                if (index > 0 && [self.attribString.string characterAtIndex:index-1] == '\n' && range.length == 1)
+                    xPos = 0.0f; // empty line
+                CGRect runBounds;
+                runBounds.size.width = 3;
+                runBounds.size.height = height;
+                
+                runBounds.origin.x = 0;
+                runBounds.origin.y = (origin.y + self.frame.origin.y) - self.frame.size.height;
+                runBounds.origin.y = -runBounds.origin.y;
+                runBounds.origin.y -= descent;
+                
+                if (index > 0 && index == self.attribString.length && [self.attribString.string characterAtIndex:(index - 1)] == '\n' )
+                {
+                    runBounds.origin.y += height;
+                    CTLineRef line = (CTLineRef)[lines lastObject];
+                    CFRange range = CTLineGetStringRange(line);
+                    xPos = CTLineGetOffsetForStringIndex(line, range.location, NULL);
+                }
+                
+                //runBounds.origin.y -= self.font.leading;
+                if(height > runBounds.origin.y)
+                    runBounds.origin.y -= (height-(self.delegate.font.pointSize+3));
+                
+                returnRect = CGRectMake(origin.x + xPos, runBounds.origin.y, 3, height);
+            }
+            
+        }
+        free(origins);
+        return returnRect;
+    }
+    return CGRectMake(1, 0, 3, self.delegate.font.pointSize);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)updateCaretFrame
+{
+    caretView.frame = [self caretRectForIndex:self.selectedRange.location];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setSelectionCarets:(CGRect)start end:(CGRect)end
+{
+    start.size.height += 10;
+    start.origin.y -= 10;
+    end.size.height += 10;
+    int offset = 12;
+    start.size.width += offset;
+    end.size.width += offset;
+    start.origin.x -= offset/2;
+    end.origin.x -= offset/2;
+    leftCaretView.hidden = NO;
+    rightCaretView.hidden = NO;
+    if(!leftCaretView)
+    {
+        leftCaretView = [[UIView alloc] initWithFrame:start];
+        UIPanGestureRecognizer* pan = [[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(caretDrag:)] autorelease];
+        [leftCaretView addGestureRecognizer:pan];
+        UIImage *dotImage = [UIImage libraryImageNamed:@"drag-dot.png"];
+        UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dotImage.size.width, dotImage.size.height)];
+        [dotView setImage:dotImage];
+        UIView* contanier = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, dotImage.size.width, dotImage.size.height)] autorelease];
+        [contanier addSubview:dotView];
+        [contanier addGestureRecognizer:pan];
+        
+        UIView* line = [[[UIView alloc] initWithFrame:CGRectMake(6, contanier.frame.size.height-5, end.size.width-offset, contanier.frame.size.height)] autorelease];
+        line.tag = 123;
+        line.backgroundColor = [UIColor blueColor];
+        [leftCaretView addSubview:line];
+        
+        [leftCaretView addSubview:contanier];
+        
+        [self addSubview:leftCaretView];
+    }
+    if(!rightCaretView)
+    {
+        rightCaretView = [[UIView alloc] initWithFrame:end];
+        UIPanGestureRecognizer* pan = [[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(caretDrag:)] autorelease];
+        [rightCaretView addGestureRecognizer:pan];
+        
+        UIImage *dotImage = [UIImage libraryImageNamed:@"drag-dot.png"];
+        UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, dotImage.size.width, dotImage.size.height)];
+        [dotView setImage:dotImage];
+        UIView* contanier = [[[UIView alloc] initWithFrame:CGRectMake(0, end.size.height-10, dotImage.size.width, dotImage.size.height)] autorelease];
+        contanier.tag = 234;
+        UIView* line = [[[UIView alloc] initWithFrame:CGRectMake(6, 0, end.size.width-offset, contanier.frame.size.height)] autorelease];
+        line.tag = 123;
+        line.backgroundColor = [UIColor blueColor];
+        [rightCaretView addSubview:line];
+        
+        [contanier addSubview:dotView];
+        [contanier addGestureRecognizer:pan];
+        [rightCaretView addSubview:contanier];
+        [self addSubview:rightCaretView];
+    }
+    
+    leftCaretView.frame = start;
+    rightCaretView.frame = end;
+    for(UIView* view in rightCaretView.subviews)
+    {
+        if(view.tag == 123)
+        {
+            CGRect frame = view.frame;
+            frame.size.height = rightCaretView.frame.size.height-6;
+            view.frame = frame;
+        }
+        if(view.tag == 234)
+        {
+            CGRect frame = view.frame;
+            frame.origin.y = rightCaretView.frame.size.height-17;
+            view.frame = frame;
+        }
+    }
+    for(UIView* view in leftCaretView.subviews)
+    {
+        if(view.tag == 123)
+        {
+            CGRect frame = view.frame;
+            frame.size.height = leftCaretView.frame.size.height-6;
+            view.frame = frame;
+        }
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)caretDrag:(UIPanGestureRecognizer*)sender
+{
+    [self hideMenu];
+    [caretMagnifyView removeFromSuperview];
+    if(sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateChanged)
+    {
+        if(!caretMagnifyView)
+            caretMagnifyView = [[HTMLMagnifyView alloc] init];
+        
+        CGRect frame = caretMagnifyView.frame;
+        frame.origin.x = leftCaretView.center.x - frame.size.width/2;
+        frame.origin.y = leftCaretView.center.y - (frame.size.height+10);
+        caretMagnifyView.frame = frame;
+        UIImage *image = [self screenshotFromFrame:caretMagnifyView.frame offset:(frame.origin.y+10)];
+        [caretMagnifyView setContentImage:image];
+        [self addSubview:caretMagnifyView];
+        
+        CGPoint pt = [sender locationInView:self];
+        int index = [self closestIndexToPoint:pt];
+        if(leftCaretView == [sender view] || leftCaretView == [[sender view] superview])
+        {
+            selectedRange.length += selectedRange.location - index;
+            selectedRange.location = index;
+        }
+        else if(rightCaretView == [sender view] || rightCaretView == [[sender view] superview])
+        {
+            selectedRange.length = index - selectedRange.location;
+        }
+        [self setNeedsDisplay];
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//text cacluation
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSInteger)closestIndexToPoint:(CGPoint)point
+{
+    //point = [self convertPoint:point toView:self];
+    NSArray *lines = (NSArray*)CTFrameGetLines(textFrame);
+    NSInteger count = [lines count];
+    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
+    CTFrameGetLineOrigins(textFrame, CFRangeMake(0, count), origins);
+    CFIndex index = kCFNotFound;
+    
+    if(count > 0)
+    {
+        for (int i = lines.count-1; 0 <= i; i--)
+        {
+            CGFloat yOrigin = (origins[i].y + self.frame.origin.y) - self.frame.size.height;
+            yOrigin = -yOrigin;
+            if (point.y > yOrigin)
+            {
+                CTLineRef line = (CTLineRef)[lines objectAtIndex:i];
+                CGPoint convertedPoint = CGPointMake(point.x - origins[i].x, point.y - origins[i].y);
+                index = CTLineGetStringIndexForPosition(line, convertedPoint);
+                break;
+            }
         }
     }
     
     if (index == kCFNotFound)
-        index = [attributedString length];
+        index = [self.attribString length];
     
     free(origins);
     return index;
     
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSRange)characterRangeAtPoint_:(CGPoint)point 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSRange)characterRangeAtIndex:(NSInteger)index
 {
-    
-    __block NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    
-    CGPoint *origins = (CGPoint*)malloc([lines count] * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, [lines count]), origins);    
+    __block NSArray *lines = (NSArray*)CTFrameGetLines(textFrame);
+    NSInteger count = [lines count];
     __block NSRange returnRange = NSMakeRange(NSNotFound, 0);
     
-    for (int i = 0; i < lines.count; i++) 
+    for (int i=0; i < count; i++)
     {
-        if (point.y > origins[i].y) 
-        {
-            
-            CTLineRef line = (CTLineRef)[lines objectAtIndex:i];
-            CGPoint convertedPoint = CGPointMake(point.x - origins[i].x, point.y - origins[i].y);
-            NSInteger index = CTLineGetStringIndexForPosition(line, convertedPoint);
-            
-            CFRange cfRange = CTLineGetStringRange(line);
-            NSRange range = NSMakeRange(cfRange.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length);
-            
-            [attributedString.string enumerateSubstringsInRange:range options:NSStringEnumerationByWords usingBlock:^(NSString *subString, NSRange subStringRange, NSRange enclosingRange, BOOL *stop)
-            {
-                if (index - subStringRange.location <= subStringRange.length) 
-                {
-                    returnRange = subStringRange;
-                    *stop = YES;
-                }
-                
-            }];
-            break;
-        }
-    }
-    
-    free(origins);
-    return  returnRange;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSRange)characterRangeAtIndex:(NSInteger)index 
-{
-    __block NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    NSInteger count = [lines count];  
-    __block NSRange returnRange = NSMakeRange(NSNotFound, 0);
-    
-    for (int i=0; i < count; i++) 
-    {
-        
         __block CTLineRef line = (CTLineRef)[lines objectAtIndex:i];
         CFRange cfRange = CTLineGetStringRange(line);
         NSRange range = NSMakeRange(cfRange.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length == kCFNotFound ? 0 : cfRange.length);
         
-        if (index >= range.location && index <= range.location+range.length) 
+        if (index >= range.location && index <= range.location+range.length)
         {
-            if (range.length > 1) 
+            if (range.length > 1)
             {
-                [attributedString.string enumerateSubstringsInRange:range options:NSStringEnumerationByWords usingBlock:^(NSString *subString, NSRange subStringRange, NSRange enclosingRange, BOOL *stop){
+                [self.attribString.string enumerateSubstringsInRange:range options:NSStringEnumerationByWords usingBlock:^(NSString *subString, NSRange subStringRange, NSRange enclosingRange, BOOL *stop){
                     
-                    if (index - subStringRange.location <= subStringRange.length) 
+                    if (index - subStringRange.location <= subStringRange.length)
                     {
                         returnRange = subStringRange;
                         *stop = YES;
@@ -886,807 +1021,180 @@
     return returnRange;
     
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGRect)caretRectForIndex:(NSInteger)index 
-{  
-    NSArray *lines = (NSArray*)CTFrameGetLines(frame);
-    
-    // no text / first index
-    if (attributedString.length == 0 || index == 0) 
-    {
-        CGPoint origin = CGPointMake(CGRectGetMinX(textContentView.bounds), CGRectGetMaxY(textContentView.bounds) - self.font.leading);
-        return CGRectMake(origin.x, origin.y, 3, self.font.ascender + fabs(self.font.descender*2));
-    }    
-    
-    // last index is newline
-    if (index == attributedString.length && [attributedString.string characterAtIndex:(index - 1)] == '\n' ) 
-    {
-        CTLineRef line = (CTLineRef)[lines lastObject];
-        CFRange range = CTLineGetStringRange(line);
-        CGFloat xPos = CTLineGetOffsetForStringIndex(line, range.location, NULL);
-        CGFloat ascent, descent;
-        CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-        
-        CGPoint origin;
-        CGPoint *origins = (CGPoint*)malloc(1 * sizeof(CGPoint));
-        int lineCount = [lines count]-1;
-        if(lineCount < 0)
-            lineCount = 0;
-        CTFrameGetLineOrigins(frame, CFRangeMake(lineCount, 0), origins);
-        origin = origins[0];
-        free(origins);
-        
-        origin.y -= self.font.leading;
-        return CGRectMake(origin.x + xPos, floorf(origin.y - descent), 3, ceilf((descent*2) + ascent));  
-    }
-    
-    index = MAX(index, 0);
-    index = MIN(attributedString.string.length, index);
-    
-    NSInteger count = [lines count];  
-    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, count), origins);
-    CGRect returnRect = CGRectZero;
-    
-    for (int i = 0; i < count; i++) 
-    {
-        CTLineRef line = (CTLineRef)[lines objectAtIndex:i];
-        CFRange cfRange = CTLineGetStringRange(line);
-        NSRange range = NSMakeRange(range.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length);
-        
-        if (index >= range.location && index <= range.location+range.length) 
-        {
-            CGFloat ascent, descent, xPos;
-            xPos = CTLineGetOffsetForStringIndex((CTLineRef)[lines objectAtIndex:i], index, NULL); 
-            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-            CGPoint origin = origins[i];
-            
-            if (selectedRange.length>0 && index != selectedRange.location && range.length == 1) 
-                xPos = textContentView.bounds.size.width - 3.0f; // selection of entire line
-                
-             else if ([attributedString.string characterAtIndex:index-1] == '\n' && range.length == 1) 
-                xPos = 0.0f; // empty line
-            returnRect = CGRectMake(origin.x + xPos,  floorf(origin.y - descent), 3, ceilf((descent*2) + ascent));
-            
-        } 
-        
-    }
-    
-    free(origins);
-    return returnRect;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGRect)firstRectForNSRange:(NSRange)range 
-{    
-    NSInteger index = range.location;
-    
-    NSArray *lines = (NSArray *) CTFrameGetLines(frame);
-    NSInteger count = [lines count];
-    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, count), origins);
-    CGRect returnRect = CGRectNull;
-    
-    for (int i = 0; i < count; i++) 
-    {
-        CTLineRef line = (CTLineRef) [lines objectAtIndex:i];
-        CFRange lineRange = CTLineGetStringRange(line);
-        NSInteger localIndex = index - lineRange.location;
-        
-        if (localIndex >= 0 && localIndex < lineRange.length) 
-        {
-            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, range.location + range.length);
-            CGFloat xStart = CTLineGetOffsetForStringIndex(line, index, NULL);
-            CGFloat xEnd = CTLineGetOffsetForStringIndex(line, finalIndex, NULL);
-            CGPoint origin = origins[i];
-            CGFloat ascent, descent;
-            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-            
-            returnRect = [textContentView convertRect:CGRectMake(origin.x + xStart, origin.y - descent, xEnd - xStart, ascent + (descent*2)) toView:self];
-            break;
-        }
-    }
-    
-    free(origins);
-    return returnRect;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UIMenu Actions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: Text Selection
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)selectionChanged 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    
-    if (!editing) {
-        [caretView removeFromSuperview];
+    BOOL editing = YES;
+    if (ignoreSelectionMenu)
+    {
+        if ([NSStringFromSelector(action) hasPrefix:@"spellCheckMenu"])
+            return YES;
+        
+        return NO;
     }
     
-    ignoreSelectionMenu = NO;
+    if (action==@selector(cut:))
+        return (selectedRange.length>0 && editing);
     
-    if (self.selectedRange.length == 0) {
-        
-        if (selectionView!=nil) {
-            [selectionView removeFromSuperview];
-            selectionView=nil;
-        }
-        
-        if (!caretView.superview) {
-            [textContentView addSubview:caretView];
-            [textContentView setNeedsDisplay];            
-        }
-        
-        caretView.frame = [self caretRectForIndex:self.selectedRange.location];
-        [caretView delayBlink];
-        
-        CGRect cframe = caretView.frame;
-        cframe.origin.y -= (self.font.lineHeight*2);
-        [self scrollRectToVisible:[textContentView convertRect:cframe toView:self] animated:YES];
-        
-        [textContentView setNeedsDisplay];
-        
-        longPress.minimumPressDuration = 0.5f;
-        
-    } else {
-        
-        longPress.minimumPressDuration = 0.0f;
-        
-        if ((caretView!=nil) && caretView.superview) {
-            [caretView removeFromSuperview];
-        }
-        
-        if (selectionView==nil) {
-            
-            HTMLSelectionView *view = [[HTMLSelectionView alloc] initWithFrame:textContentView.bounds];
-            [textContentView addSubview:view];
-            selectionView=view;
-            [view release];  
-            
-        }
-        
-        CGRect begin = [self caretRectForIndex:selectedRange.location];
-        CGRect end = [self caretRectForIndex:selectedRange.location+selectedRange.length];
-        [selectionView setBeginCaret:begin endCaret:end];
-        [textContentView setNeedsDisplay];
-        
-    }    
+    else if (action==@selector(copy:))
+        return ((selectedRange.length>0));
     
-    if (self.markedRange.location != NSNotFound) {
-        [textContentView setNeedsDisplay];
-    }
+    else if ((action == @selector(select:) || action == @selector(selectAll:)))
+        return (selectedRange.length==0 && [self hasText]);
+    
+    else if (action == @selector(paste:))
+        return (editing && [[UIPasteboard generalPasteboard] containsPasteboardTypes:[NSArray arrayWithObject:@"public.utf8-plain-text"]]);
+    
+    else if (action == @selector(delete:))
+        return NO;
+    
+    return [super canPerformAction:action withSender:sender];
     
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSRange)markedRange {
-    return markedRange;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSRange)selectedRange {
-    return selectedRange;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setMarkedRange:(NSRange)range {    
-    markedRange = range;
-    //[self selectionChanged];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setSelectedRange:(NSRange)range {
-    selectedRange = NSMakeRange(range.location == NSNotFound ? NSNotFound : MAX(0, range.location), range.length);
-    [self selectionChanged];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setCorrectionRange:(NSRange)range {
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)menuDidHide:(NSNotification*)notification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerDidHideMenuNotification object:nil];
     
-    if (NSEqualRanges(range, correctionRange) && range.location == NSNotFound && range.length == 0) 
+    //if (selectionView)
+    [self showMenu];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)paste:(id)sender
+{
+    NSString *pasteText = [[UIPasteboard generalPasteboard] valueForPasteboardType:@"public.utf8-plain-text"];
+    
+    if (pasteText!=nil)
+        [self insertText:pasteText];
+    [self updateCaretFrame];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)selectAll:(id)sender
+{
+    NSString *string = [self.attribString string];
+    NSString *trimmedString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    self.selectedRange = [self.attribString.string rangeOfString:trimmedString];
+    caretView.hidden = YES;
+    [self setNeedsDisplay];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDidHide:) name:UIMenuControllerDidHideMenuNotification object:nil];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)select:(id)sender
+{
+    int offset = 0;
+    int index = [self closestIndexToPoint:caretView.center];
+    NSRange range = [self characterRangeAtIndex:index];
+    while(range.location == NSNotFound)
     {
-        correctionRange = range;
-        return;
-    }
-    correctionRange = range;
-    if (range.location != NSNotFound && range.length > 0) {
-        
-        if (caretView.superview) {
-            [caretView removeFromSuperview];
-        }
-        
-        [self removeCorrectionAttributesForRange:correctionRange];
-        [self showCorrectionMenuForRange:correctionRange];
-        
-        
-    } 
-    else 
-    {
-        if (!caretView.superview) 
-        {
-            [textContentView addSubview:caretView];
-            [caretView delayBlink];
-        }
-        
-    }
-    [textContentView setNeedsDisplay];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setLinkRange:(NSRange)range 
-{
-    linkRange = range;
-    
-    if (linkRange.length>0) 
-    {
-        if (caretView.superview!=nil)
-            [caretView removeFromSuperview];
-    } 
-    else 
-    {
-        if (caretView.superview==nil) 
-        {
-            if (!caretView.superview) 
-            {
-                [textContentView addSubview:caretView];
-                caretView.frame = [self caretRectForIndex:self.selectedRange.location];
-                [caretView delayBlink];
-            }
-        }
-        
-    }
-    
-    [textContentView setNeedsDisplay];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setLinkRangeFromTextCheckerResults:(NSTextCheckingResult*)results 
-{
-    if (linkRange.length>0) 
-    {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[[results URL] absoluteString] delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open", nil];
-        [actionSheet showInView:self];
-        [actionSheet release];
-    }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+ (UIColor*)selectionColor 
-{
-    static UIColor *color = nil;
-    if (color == nil)
-        color = [[UIColor colorWithRed:0.800f green:0.867f blue:0.929f alpha:1.0f] retain];    
-    return color;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+ (UIColor*)caretColor 
-{
-    static UIColor *color = nil;
-    if (color == nil) 
-        color = [[UIColor colorWithRed:0.259f green:0.420f blue:0.949f alpha:1.0f] retain];
-    return color;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+ (UIColor*)spellingSelectionColor 
-{
-    static UIColor *color = nil;
-    if (color == nil)
-        color = [[UIColor colorWithRed:1.000f green:0.851f blue:0.851f alpha:1.0f] retain];
-    return color;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: UITextInput methods
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Replacing and Returning Text
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSString *)textInRange:(UITextRange *)range 
-{
-    if(!attributedString || attributedString.string.length == 0)
-        return nil;
-    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
-    return ([attributedString.string substringWithRange:r.range]);
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)replaceRange:(UITextRange *)range withText:(NSString *)text 
-{    
-    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
-    
-    NSRange selectedNSRange = self.selectedRange;
-    if ((r.range.location + r.range.length) <= selectedNSRange.location) 
-        selectedNSRange.location -= (r.range.length - text.length);
-    else 
-        selectedNSRange = [self rangeIntersection:r.range withSecond:selectedRange];
-    
-    [attributedString replaceCharactersInRange:r.range withString:text];
-    self.selectedRange = selectedNSRange;
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Working with Marked and Selected Text
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextRange *)selectedTextRange 
-{
-    return [HTMLIndexedRange rangeWithNSRange:self.selectedRange];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setSelectedTextRange:(UITextRange *)range 
-{
-    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
-    self.selectedRange = r.range;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextRange *)markedTextRange 
-{
-    return [HTMLIndexedRange rangeWithNSRange:self.markedRange];    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange 
-{
-    NSRange selectedNSRange = self.selectedRange;
-    NSRange markedTextRange = self.markedRange;
-    
-    if (markedTextRange.location != NSNotFound) 
-    {
-        if (!markedText)
-            markedText = @"";
-        
-        [attributedString replaceCharactersInRange:markedTextRange withString:markedText];
-        markedTextRange.length = markedText.length;
-        
-    } 
-    else if (selectedNSRange.length > 0) 
-    {
-        [attributedString replaceCharactersInRange:selectedNSRange withString:markedText];
-        markedTextRange.location = selectedNSRange.location;
-        markedTextRange.length = markedText.length;
-        
-    }
-    else 
-    {
-        //NSDictionary* attribs = nil;
-        //if(selectedNSRange.location != NSNotFound && [attributedString length] > 0)
-          //  attribs = [attributedString attributesAtIndex:selectedNSRange.location-1 effectiveRange:NULL];
-        NSAttributedString *string = [[NSAttributedString alloc] initWithString:markedText attributes:self.stringAttributes]; //self.defaultAttributes
-        [attributedString insertAttributedString:string atIndex:selectedNSRange.location];  
-        [string release];
-        
-        markedTextRange.location = selectedNSRange.location;
-        markedTextRange.length = markedText.length;
-    }
-    
-    selectedNSRange = NSMakeRange(self.selectedRange.location + markedTextRange.location, self.selectedRange.length);
-    
-    //self.attributedString = _attributedString;
-    self.markedRange = markedTextRange;
-    self.selectedRange = selectedNSRange;    
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)unmarkText 
-{    
-    NSRange markedTextRange = self.markedRange;
-    
-    if (markedTextRange.location == NSNotFound)
-        return;
-    
-    markedTextRange.location = NSNotFound;
-    self.markedRange = markedTextRange;   
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Computing Text Ranges and Text Positions
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition*)beginningOfDocument {
-    return [HTMLIndexedPosition positionWithIndex:0];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition*)endOfDocument {
-    return [HTMLIndexedPosition positionWithIndex:attributedString.length];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition 
-{    
-    HTMLIndexedPosition *from = (HTMLIndexedPosition *)fromPosition;
-    HTMLIndexedPosition *to = (HTMLIndexedPosition *)toPosition;    
-    NSRange range = NSMakeRange(MIN(from.index, to.index), ABS(to.index - from.index));
-    return [HTMLIndexedRange rangeWithNSRange:range];    
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition*)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset 
-{    
-    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;    
-    NSInteger end = pos.index + offset;
-	
-    if (end > attributedString.length || end < 0)
-        return nil;
-    
-    return [HTMLIndexedPosition positionWithIndex:end];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition*)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset 
-{
-    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
-    NSInteger newPos = pos.index;
-    
-    switch (direction) 
-    {
-        case UITextLayoutDirectionRight:
-            newPos += offset;
+        offset++;
+        int back = index - offset;
+        if(back < 0)
             break;
-        case UITextLayoutDirectionLeft:
-            newPos -= offset;
+        range = [self characterRangeAtIndex:back];
+        if(range.location != NSNotFound)
             break;
-        UITextLayoutDirectionUp: // not supported right now
-            break; 
-        UITextLayoutDirectionDown: // not supported right now
-            break;
-        default:
-            break;
-            
-    }
-    
-    if (newPos < 0)
-        newPos = 0;
-    
-    if (newPos > attributedString.length)
-        newPos = attributedString.length;
-    
-    return [HTMLIndexedPosition positionWithIndex:newPos];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Evaluating Text Positions
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other 
-{
-    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
-    HTMLIndexedPosition *o = (HTMLIndexedPosition *)other;
-    
-    if (pos.index == o.index) 
-        return NSOrderedSame;
-    if (pos.index < o.index) 
-        return NSOrderedAscending;
-     else 
-        return NSOrderedDescending;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition 
-{
-    HTMLIndexedPosition *f = (HTMLIndexedPosition *)from;
-    HTMLIndexedPosition *t = (HTMLIndexedPosition *)toPosition;
-    return (t.index - f.index);
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Text Input Delegate and Text Input Tokenizer
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id <UITextInputTokenizer>)tokenizer {
-    return tokenizer;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Text Layout, writing direction and position
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction {
-    
-    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
-    NSInteger pos = r.range.location;
-    
-    switch (direction) 
-    {
-        case UITextLayoutDirectionUp:
-        case UITextLayoutDirectionLeft:
-            pos = r.range.location;
-            break;
-        case UITextLayoutDirectionRight:
-        case UITextLayoutDirectionDown:            
-            pos = r.range.location + r.range.length;
-            break;
-    }
-    
-    return [HTMLIndexedPosition positionWithIndex:pos];        
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction 
-{    
-    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
-    NSRange result = NSMakeRange(pos.index, 1);
-    
-    switch (direction) 
-    {
-        case UITextLayoutDirectionUp:
-        case UITextLayoutDirectionLeft:
-            result = NSMakeRange(pos.index - 1, 1);
-            break;
-        case UITextLayoutDirectionRight:
-        case UITextLayoutDirectionDown:            
-            result = NSMakeRange(pos.index, 1);
-            break;
-    }
-    
-    return [HTMLIndexedRange rangeWithNSRange:result];   
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction {
-    return UITextWritingDirectionLeftToRight;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range {
-    // only ltr supported for now.
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Geometry
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGRect)firstRectForRange:(UITextRange *)range 
-{    
-    HTMLIndexedRange *r = (HTMLIndexedRange *)range;    
-    return [self firstRectForNSRange:r.range];   
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGRect)caretRectForPosition:(UITextPosition *)position 
-{
-    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
-	return [self caretRectForIndex:pos.index];    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UIView *)textInputView 
-{
-    return textContentView;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Hit testing
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition*)closestPositionToPoint:(CGPoint)point {
-    
-    HTMLIndexedPosition *position = [HTMLIndexedPosition positionWithIndex:[self closestIndexToPoint:point]];
-    return position;
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextPosition*)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range 
-{	
-    HTMLIndexedPosition *position = [HTMLIndexedPosition positionWithIndex:[self closestIndexToPoint:point]];
-    return position;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITextRange*)characterRangeAtPoint:(CGPoint)point 
-{	
-    HTMLIndexedRange *range = [HTMLIndexedRange rangeWithNSRange:[self characterRangeAtPoint_:point]];
-    return range;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: UITextInput - Styling Information
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSDictionary*)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction 
-{    
-    HTMLIndexedPosition *pos = (HTMLIndexedPosition*)position;
-    NSInteger index = MAX(pos.index, 0);
-    index = MIN(index, attributedString.length-1);
-    
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:1];
-    if(attributedString.length > 0)
-    {
-        NSDictionary *attribs = [attributedString attributesAtIndex:index effectiveRange:nil];
-        
-        CTFontRef ctFont = (CTFontRef)[attribs valueForKey:(NSString*)kCTFontAttributeName];
-        UIFont *afont = [UIFont fontWithName:(NSString*)CTFontCopyFamilyName(ctFont) size:CTFontGetSize(ctFont)];
-        if(!afont)
-            afont = self.font;
-        //[afont release];
-        [dictionary setObject:self.font forKey:UITextInputTextFontKey];
-    }
-    else
-        [dictionary setObject:self.font forKey:UITextInputTextFontKey];
-    
-    return dictionary;
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: UIKeyInput methods
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)hasText {
-    return (attributedString.length != 0);
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)insertText:(NSString *)text attribs:(NSDictionary*)attr
-{    
-    [self willDelegate:text];
-    NSRange selectedNSRange = self.selectedRange;
-    NSRange markedTextRange = self.markedRange;
-    
-    NSDictionary* attribs = self.stringAttributes;
-
-    if(selectedNSRange.location != NSNotFound && selectedNSRange.location != 0 && [attributedString length] > 0)
-    {
-        attribs = [attributedString attributesAtIndex:selectedNSRange.location-1 effectiveRange:NULL];
-        if([attribs objectForKey:(NSString*)kCTRunDelegateAttributeName] &&  attributedString && selectedNSRange.location > 1)
-            attribs = [attributedString attributesAtIndex:selectedNSRange.location-2 effectiveRange:NULL];
-        //stringAttributes = attribs;
-    }
-    if(attr)
-        attribs = attr;
-    NSAttributedString *newString = [[NSAttributedString alloc] initWithString:text attributes:attribs]; //self.defaultAttributes
-    
-    if(correctionRange.location != NSNotFound && correctionRange.length > 0)
-    {
-        [attributedString replaceCharactersInRange:self.correctionRange withAttributedString:newString];
-        selectedNSRange.length = 0;
-        selectedNSRange.location = (self.correctionRange.location+text.length);
-        self.correctionRange = NSMakeRange(NSNotFound, 0);
-        
-    } 
-    else if (markedTextRange.location != NSNotFound) 
-    {
-        [attributedString replaceCharactersInRange:markedTextRange withAttributedString:newString];
-        selectedNSRange.location = markedTextRange.location + text.length;
-        selectedNSRange.length = 0;
-        markedTextRange = NSMakeRange(NSNotFound, 0); 
-        
-    } 
-    else if (selectedNSRange.length > 0) 
-    {
-        [attributedString replaceCharactersInRange:selectedNSRange withAttributedString:newString];
-        selectedNSRange.length = 0;
-        selectedNSRange.location = (selectedNSRange.location + text.length);
-        
-    } 
-    else 
-    {
-        [attributedString insertAttributedString:newString atIndex:selectedNSRange.location];        
-        selectedNSRange.location += text.length;
-    }
-    
-    [newString release];
-    
-    //self.attributedString = _mutableAttributedString;
-    [self UpdateDelegate:text];
-    self.markedRange = markedTextRange;
-    self.selectedRange = selectedNSRange;  
-    
-    if (text.length > 1 || ([text isEqualToString:@" "] || [text isEqualToString:@"\n"])) 
-        [self checkSpellingForRange:[self characterRangeAtIndex:self.selectedRange.location-1]];
-        
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)insertText:(NSString *)text 
-{
-    [self insertText:text attribs:nil];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)deleteBackward  
-{    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCorrectionMenuWithoutSelection) object:nil];
-    
-    NSRange selectedNSRange = self.selectedRange;
-    NSRange markedTextRange = self.markedRange;
-    
-    NSString* text = [[attributedString mutableString] substringWithRange:selectedNSRange];
-    [self willDelegate:text];
-    
-    if(selectedNSRange.location != NSNotFound && [attributedString length] > 0)
-    {
-        if(selectedNSRange.length == 0 && selectedNSRange.location != 0)
-        {
-            NSDictionary* attribs = [attributedString attributesAtIndex:selectedNSRange.location-1 effectiveRange:NULL];
-            ImageItem* item = [self itemForURL:[attribs objectForKey:IMAGE_LINK]];
-            if(item)
-                [imageArray removeObject:item];
-            
-            if([attribs objectForKey:HTML_LIST] && [textArray lastObject])
-                [textArray removeLastObject];
-        }
         else
         {
-            [attributedString enumerateAttribute:IMAGE_LINK inRange:selectedNSRange options:0 usingBlock:
-             ^(id value, NSRange range, BOOL *stop) 
-             {
-                 ImageItem* item = [self itemForURL:value];
-                 [imageArray removeObject:item];
-             }];
-            [attributedString enumerateAttribute:VIDEO_LINK inRange:selectedNSRange options:0 usingBlock:
-             ^(id value, NSRange range, BOOL *stop) 
-             {
-                 ImageItem* item = [self videoForURL:value];
-                 [videoArray removeObject:item];
-             }];
-            
-            [attributedString enumerateAttribute:HTML_LIST inRange:selectedNSRange options:0 usingBlock:
-             ^(id value, NSRange range, BOOL *stop) 
-             {
-                 if([textArray lastObject])
-                     [textArray removeLastObject];
-             }];
+            int forward = index + offset;
+            if(forward > self.attribString.length)
+                break;
+            range = [self characterRangeAtIndex:forward];
+            if(range.location != NSNotFound)
+                break;
         }
     }
-    //[self UpdateDelegate];
-    if (correctionRange.location != NSNotFound && correctionRange.length > 0) 
+        
+    if(range.location != NSNotFound)
     {
-        [attributedString beginEditing];
-        [attributedString deleteCharactersInRange:self.correctionRange];
-        [attributedString endEditing];
-        self.correctionRange = NSMakeRange(NSNotFound, 0);
-        selectedNSRange.length = 0;
-    } 
-    else if (markedTextRange.location != NSNotFound) 
-    {
-        [attributedString beginEditing];
-        [attributedString deleteCharactersInRange:selectedNSRange];
-        [attributedString endEditing];
-        
-        selectedNSRange.location = markedTextRange.location;
-        selectedNSRange.length = 0;
-        markedTextRange = NSMakeRange(NSNotFound, 0);
-    } 
-    else if (selectedNSRange.length > 0) 
-    {
-        
-        [attributedString beginEditing];
-        [attributedString deleteCharactersInRange:selectedNSRange];
-        [attributedString endEditing];
-        
-        selectedNSRange.length = 0;
-        
-    } 
-    else if (selectedNSRange.location > 0) 
-    {
-        NSInteger index = MAX(0, selectedNSRange.location-1);
-        index = MIN(attributedString.length-1, index);
-        if ([attributedString.string characterAtIndex:index] == ' ') 
-            [self performSelector:@selector(showCorrectionMenuWithoutSelection) withObject:nil afterDelay:0.2f];
-        
-        selectedNSRange.location--;
-        selectedNSRange.length = 1;
-        
-        text = [[attributedString mutableString] substringWithRange:selectedNSRange];
-        
-        [attributedString beginEditing];
-        [attributedString deleteCharactersInRange:selectedNSRange];
-        [attributedString endEditing];
-        
-        selectedNSRange.length = 0;
-        
+        caretView.hidden = YES;
+        self.selectedRange = range;
+        [self setNeedsDisplay];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDidHide:) name:UIMenuControllerDidHideMenuNotification object:nil];
     }
-    [self UpdateDelegate:@""];
-    //self.attributedString = _mutableAttributedString;
-    self.markedRange = markedTextRange;
-    self.selectedRange = selectedNSRange; 
-    
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: Spell Checking
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)insertCorrectionAttributesForRange:(NSRange)range 
-{    
-    [attributedString addAttributes:self.correctionAttributes range:range];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)removeCorrectionAttributesForRange:(NSRange)range 
-{    
-    //NSMutableAttributedString *string = [attributedString mutableCopy];
-    [attributedString removeAttribute:(NSString*)kCTUnderlineStyleAttributeName range:range];
-    //self.attributedString = string;
-    //[string release];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)checkSpellingForRange:(NSRange)range 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)cut:(id)sender
 {
-    //[attributedString setAttributedString:self.attributedString];
-    [self UpdateDelegate:@""];
+    NSString *string = [self.attribString.string substringWithRange:selectedRange];
+    [[UIPasteboard generalPasteboard] setValue:string forPasteboardType:@"public.utf8-plain-text"];
+
+    [self.attribString deleteCharactersInRange:selectedRange];
     
+    [self.inputDelegate textWillChange:self];
+    [self.inputDelegate textDidChange:self];
+    
+    self.selectedRange = NSMakeRange(selectedRange.location, 0);
+    [self updateCaretFrame];
+    [self setNeedsDisplay];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)copy:(id)sender
+{
+    NSString *string = [self.attribString.string substringWithRange:selectedRange];
+    [[UIPasteboard generalPasteboard] setValue:string forPasteboardType:@"public.utf8-plain-text"];
+    [self updateCaretFrame];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)delete:(id)sender
+{
+    [self.attribString deleteCharactersInRange:selectedRange];
+    [self.inputDelegate textWillChange:self];
+    [self.inputDelegate textDidChange:self];
+    self.selectedRange = NSMakeRange(selectedRange.location, 0);
+    [self setNeedsDisplay];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)replace:(id)sender
+{    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (CGRect)menuPresentationRect
+{
+    CGRect rect = [self convertRect:caretView.frame toView:self];
+    return rect;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)showMenu
+{
+    UIMenuController *menuController = [UIMenuController sharedMenuController];
+    
+    if ([menuController isMenuVisible])
+        [menuController setMenuVisible:NO animated:NO];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [menuController setMenuItems:nil];
+        [menuController setTargetRect:[self menuPresentationRect] inView:self];
+        [menuController update];
+        [menuController setMenuVisible:YES animated:YES];
+    });
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)isMenuShowing
+{
+    UIMenuController *menuController = [UIMenuController sharedMenuController];
+    return [menuController isMenuVisible];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)hideMenu
+{
+    UIMenuController *menuController = [UIMenuController sharedMenuController];
+    [menuController setMenuVisible:NO animated:NO];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//check spelling
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)checkSpellingForRange:(NSRange)range
+{
+    //still some work before this works correctly.
     NSInteger location = range.location-1;
     NSInteger currentOffset = MAX(0, location);
     NSRange currentRange;
-    NSString *string = self.attributedString.string;
+    NSString *string = self.attribString.string;
     NSRange stringRange = NSMakeRange(0, string.length-1);
     NSArray *guesses;
     BOOL done = NO;
@@ -1695,12 +1203,18 @@
     if (!language)
         language = @"en_US";
     
-    while (!done) 
+    if(!textChecker)
+    {
+        textChecker = [[UITextChecker alloc] init];
+        correctionDict = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:(int)(kCTUnderlineStyleThick|kCTUnderlinePatternDot)], kCTUnderlineStyleAttributeName, (id)[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f].CGColor, kCTUnderlineColorAttributeName, nil];
+        
+    }
+    while (!done)
     {
         if(stringRange.location != NSNotFound && string.length > 0 && stringRange.length < string.length)
             currentRange = [textChecker rangeOfMisspelledWordInString:string range:stringRange startingAt:currentOffset wrap:NO language:language];
         
-        if (currentRange.location == NSNotFound || currentRange.location > range.location) 
+        if (currentRange.location == NSNotFound || currentRange.location > range.location)
         {
             done = YES;
             continue;
@@ -1708,370 +1222,94 @@
         
         guesses = [textChecker guessesForWordRange:currentRange inString:string language:language];
         
-        if (guesses!=nil) 
-            [attributedString addAttributes:self.correctionAttributes range:currentRange];
+        if (guesses!=nil)
+            [self.attribString addAttributes:correctionDict range:currentRange];
         
         currentOffset = currentOffset + (currentRange.length-1);
-        
     }
     
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: Gestures
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (HTMLTextWindow*)htmlTextWindow 
-{    
-    if (textWindow==nil) 
-    {
-        HTMLTextWindow *window = nil;
-        
-        for (HTMLTextWindow *aWindow in [[UIApplication sharedApplication] windows])
-        {
-            if ([aWindow isKindOfClass:[HTMLTextWindow class]]) 
-            {
-                window = aWindow;
-                window.frame = [[UIScreen mainScreen] bounds];
-                break;
-            }
-        }
-        
-        if (window==nil) 
-            window = [[HTMLTextWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        
-        window.windowLevel = UIWindowLevelStatusBar;
-        window.hidden = NO;
-        textWindow=window;
-        
-    }
-    return textWindow;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)longPress:(UILongPressGestureRecognizer*)gesture 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//spelling menu
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)spellingCorrection:(UIMenuController*)sender
 {
+    NSRange replacementRange = correctionRange;
     
-    if (gesture.state==UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) 
+    if (replacementRange.location==NSNotFound || replacementRange.length==0)
+        replacementRange = [self characterRangeAtIndex:self.selectedRange.location];
+    
+    if (replacementRange.location!=NSNotFound && replacementRange.length!=0)
     {
-        if (linkRange.length>0 && gesture.state == UIGestureRecognizerStateBegan) 
-        {
-            gesture.enabled=NO;
-            gesture.enabled=YES;
-        }
-        
-        
-        UIMenuController *menuController = [UIMenuController sharedMenuController];
-        if ([menuController isMenuVisible]) {
-            [menuController setMenuVisible:NO animated:NO];
-        }
-        
-        CGPoint point = [gesture locationInView:self];
-        BOOL selection = (selectionView!=nil);
-        
-        if (!selection && caretView!=nil)
-            [caretView show];
-
-        
-        textWindow = [self htmlTextWindow];
-        [textWindow updateWindowTransform];
-        [textWindow setType:selection ? HTMLWindowMagnify : HTMLWindowLoupe];
-        
-        point.y -= 20.0f;
-        NSInteger index = [self closestIndexToPoint:point];
-        
-        if (selection) {
-            
-            if (gesture.state == UIGestureRecognizerStateBegan)
-                textWindow.selectionType = (index > (selectedRange.location+(selectedRange.length/2))) ? HTMLSelectionTypeRight : HTMLSelectionTypeLeft;
-            
-            CGRect rect = CGRectZero;
-            if (textWindow.selectionType == HTMLSelectionTypeLeft) 
-            {
-                NSInteger begin = MAX(0, index);
-                begin = MIN(selectedRange.location+selectedRange.length-1, begin);
-                
-                NSInteger end = selectedRange.location + selectedRange.length;
-                end = MIN(attributedString.string.length, end-begin);
-                
-                self.selectedRange = NSMakeRange(begin, end);
-                index = selectedRange.location;
-                
-            } 
-            else 
-            {
-                NSInteger length = MIN(index-selectedRange.location, attributedString.string.length-selectedRange.location);
-                length = MAX(1, length);                    
-                self.selectedRange = NSMakeRange(self.selectedRange.location, length);
-                index = (selectedRange.location+selectedRange.length); 
-                
-            }
-            
-            rect = [self caretRectForIndex:index];
-            
-            if (gesture.state == UIGestureRecognizerStateBegan)
-                [textWindow showFromView:textContentView rect:[textContentView convertRect:rect toView:textWindow]];
-                
-            else
-                [textWindow renderWithContentView:textContentView fromRect:[textContentView convertRect:rect toView:textWindow]];
-            
-        } 
-        else 
-        {
-            CGPoint location = [gesture locationInView:textWindow];
-            CGRect rect = CGRectMake(location.x, location.y, caretView.bounds.size.width, caretView.bounds.size.height);
-            
-            self.selectedRange = NSMakeRange(index, 0);
-            
-            if (gesture.state == UIGestureRecognizerStateBegan)
-                [textWindow showFromView:textContentView rect:rect];
-
-            else
-                [textWindow renderWithContentView:textContentView fromRect:rect];
-        }
-        
-    } 
-    else 
-    {
-        if (caretView!=nil)
-            [caretView delayBlink];
-        
-        if ((textWindow!=nil)) 
-        {
-            [textWindow hide:YES];
-            textWindow=nil;
-        }
-        
-        if (gesture.state == UIGestureRecognizerStateEnded) 
-        {
-            if (self.selectedRange.location!=NSNotFound && self.selectedRange.length>0) 
-                [self showMenu];
-        }
+        NSString *text = [self.menuItemActions objectForKey:NSStringFromSelector(_cmd)];
+        [self.inputDelegate textWillChange:self];
+        [self replaceRange:[HTMLIndexedRange rangeWithNSRange:replacementRange] withText:text];
+        [self.inputDelegate textDidChange:self];
+        replacementRange.length = text.length;
+        [self.attribString removeAttribute:(NSString*)kCTUnderlineStyleAttributeName range:replacementRange];
+        [self setNeedsDisplay];
     }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)doubleTap:(UITapGestureRecognizer*)gesture 
-{
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showMenu) object:nil];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCorrectionMenu) object:nil];
-    
-    NSInteger index = [self closestWhiteSpaceIndexToPoint:[gesture locationInView:self]];
-    NSRange range = [self characterRangeAtIndex:index];
-    if (range.location!=NSNotFound && range.length>0) 
-    {
-        [self.inputDelegate selectionWillChange:self];
-        self.selectedRange = range;
-        [self.inputDelegate selectionDidChange:self];
-        
-        if (![[UIMenuController sharedMenuController] isMenuVisible])
-            [self performSelector:@selector(showMenu) withObject:nil afterDelay:0.1f];
-    } 
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)tap:(UITapGestureRecognizer*)gesture 
-{
-    if (editable && ![self isFirstResponder]) 
-    {
-        [self becomeFirstResponder];  
-        return;
-    }
-    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showMenu) object:nil];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCorrectionMenu) object:nil];
     
     self.correctionRange = NSMakeRange(NSNotFound, 0);
-    if (self.selectedRange.length>0)
-        self.selectedRange = NSMakeRange(selectedRange.location, 0);
+    self.menuItemActions = nil;
+    [sender setMenuItems:nil];
     
-    NSInteger index = [self closestWhiteSpaceIndexToPoint:[gesture locationInView:self]];
-    
-    UIMenuController *menuController = [UIMenuController sharedMenuController];
-    if ([menuController isMenuVisible]) 
-        [menuController setMenuVisible:NO animated:NO];
-    else 
-    {
-        if (index==self.selectedRange.location) 
-            [self performSelector:@selector(showMenu) withObject:nil afterDelay:0.35f];
-        else 
-            if (editing)
-                [self performSelector:@selector(showCorrectionMenu) withObject:nil afterDelay:0.35f];
-    }
-    
-    [self.inputDelegate selectionWillChange:self];
-    
-    self.markedRange = NSMakeRange(NSNotFound, 0);
-    self.selectedRange = NSMakeRange(index, 0);
-    
-    [self.inputDelegate selectionDidChange:self];
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: UIGestureRecognizerDelegate
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)spellCheckMenuEmpty:(id)sender
 {
-    if ([gestureRecognizer isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")]) 
-    {
-        UIMenuController *menuController = [UIMenuController sharedMenuController];
-        if ([menuController isMenuVisible])
-            [menuController setMenuVisible:NO animated:NO];
-
-    }
-    return NO;
+    self.correctionRange = NSMakeRange(NSNotFound, 0);
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)showCorrectionMenuForIndex:(int)index
 {
-    if (gestureRecognizer==longPress) 
-    {
-        if (selectedRange.length>0 && selectionView!=nil) 
-        {            
-            return CGRectContainsPoint(CGRectInset([textContentView convertRect:selectionView.frame toView:self], -20.0f, -20.0f) , [gestureRecognizer locationInView:self]);
-        }
-        
-    }
-    return YES;
+    self.correctionRange = NSMakeRange(NSNotFound, 0);
+    //self.selectedRange.location == NSNotFound self.selectedRange.location > self.attribString.length||
+    if(index > self.attribString.length || self.attribString.length == 0)
+        return;
+    if(index == self.attribString.length)
+        index--;
+    NSDictionary* attribs = [self.attribString attributesAtIndex:index effectiveRange:NULL];
+    BOOL needs = YES;
+    for(id key in correctionDict)
+        if(![attribs objectForKey:key])
+            needs = NO;
+    if(needs)
+        [self performSelector:@selector(showCorrectionMenuWithoutSelection) withObject:nil afterDelay:0.35];
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: UIResponder
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)canBecomeFirstResponder
-{    
-    if (editable && [delegate respondsToSelector:@selector(HTMLTextViewShouldBeginEditing:)])
-        return [self.delegate HTMLTextViewShouldBeginEditing:self];
-
-    return YES;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)becomeFirstResponder 
-{    
-    if (editable) 
-    {
-        editing = YES;
-        if ([delegate respondsToSelector:@selector(HTMLTextViewDidBeginEditing:)])
-            [self.delegate HTMLTextViewDidBeginEditing:self];
-
-        [self selectionChanged];
-    }
-    return [super becomeFirstResponder];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)canResignFirstResponder 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)showCorrectionMenuWithoutSelection
 {
-    if (editable && [delegate respondsToSelector:@selector(HTMLTextViewShouldEndEditing:)]) 
-        return [self.delegate HTMLTextViewShouldEndEditing:self];
-    return YES;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)resignFirstResponder 
-{
-    
-    if (editable) 
-    {
-        editing = NO;	
-        if ([delegate respondsToSelector:@selector(HTMLTextViewDidEndEditing:)]) 
-            [self.delegate HTMLTextViewDidEndEditing:self];
-        
-        [self selectionChanged];
-    }
-	return [super resignFirstResponder];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: UIMenu Presentation
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGRect)menuPresentationRect 
-{
-    
-    CGRect rect = [textContentView convertRect:caretView.frame toView:self];
-    
-    if (selectedRange.location != NSNotFound && selectedRange.length > 0) 
-    {
-        if (selectionView!=nil)
-            rect = [textContentView convertRect:selectionView.frame toView:self];
-        else 
-            rect = [self firstRectForNSRange:selectedRange];
-        
-    } 
-    else if (editing && correctionRange.location != NSNotFound && correctionRange.length > 0) 
-        rect = [self firstRectForNSRange:correctionRange];
-    
-    return rect;
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)showMenu 
-{
-    UIMenuController *menuController = [UIMenuController sharedMenuController];
-    
-    if ([menuController isMenuVisible])
-        [menuController setMenuVisible:NO animated:NO]; 
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [menuController setMenuItems:nil];
-        [menuController setTargetRect:[self menuPresentationRect] inView:self];
-        [menuController update];
-        [menuController setMenuVisible:YES animated:YES]; 
-    });
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)showCorrectionMenu 
-{
-    if (editing) 
+    BOOL editing = YES;
+    if (editing)
     {
         NSRange range = [self characterRangeAtIndex:self.selectedRange.location];
         if(range.location > 1000)
             return;
-        if (range.location!=NSNotFound && range.length>1) 
+        if (range.location!=NSNotFound && range.length>1)
         {
             NSString *language = [[UITextChecker availableLanguages] objectAtIndex:0];
             if (!language)
                 language = @"en_US";
-            if(range.location != NSNotFound && attributedString.string > 0 && range.length < attributedString.string.length)
-                self.correctionRange = [textChecker rangeOfMisspelledWordInString:attributedString.string range:range startingAt:0 wrap:YES language:language];
+            if(range.location != NSNotFound && self.attribString.string > 0 && range.length < self.attribString.string.length)
+                self.correctionRange = [textChecker rangeOfMisspelledWordInString:self.attribString.string range:range startingAt:0 wrap:YES language:language];
             
         }
-    }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)showCorrectionMenuWithoutSelection 
-{
-    if (editing) 
-    {
-        NSRange range = [self characterRangeAtIndex:self.selectedRange.location];
         [self showCorrectionMenuForRange:range];
-    } 
+    }
     else
         [self showMenu];
     
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)showCorrectionMenuForRange:(NSRange)range 
-{    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)showCorrectionMenuForRange:(NSRange)range
+{
     if (range.location==NSNotFound || range.length==0) return;
     
     range.location = MAX(0, range.location);
-    range.length = MIN(attributedString.string.length, range.length);
+    range.length = MIN(self.attribString.string.length, range.length);
     
-    [self removeCorrectionAttributesForRange:range];
+    [self.attribString removeAttribute:(NSString*)kCTUnderlineStyleAttributeName range:range];
     
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     
@@ -2082,11 +1320,11 @@
     if (!language)
         language = @"en_US";
     
-    NSArray *guesses = [textChecker guessesForWordRange:range inString:attributedString.string language:language];
+    NSArray *guesses = [textChecker guessesForWordRange:range inString:self.attribString.string language:language];
     
     [menuController setTargetRect:[self menuPresentationRect] inView:self];
     
-    if (guesses!=nil && [guesses count]>0) 
+    if (guesses!=nil && [guesses count]>0)
     {
         NSMutableArray *items = [[NSMutableArray alloc] init];
         
@@ -2098,7 +1336,7 @@
             NSString *selString = [NSString stringWithFormat:@"spellCheckMenu_%i:", [word hash]];
             SEL sel = sel_registerName([selString UTF8String]);
             
-            [self.menuItemActions setObject:word forKey:NSStringFromSelector(sel)]; 
+            [self.menuItemActions setObject:word forKey:NSStringFromSelector(sel)];
             class_addMethod([self class], sel, [[self class] instanceMethodForSelector:@selector(spellingCorrection:)], "v@:@");
             
             UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:word action:sel];
@@ -2109,171 +1347,463 @@
             }
         }
         
-        [menuController setMenuItems:items];  
+        [menuController setMenuItems:items];
         [items release];
         
-    } 
-    else 
+    }
+    else
     {
         
         UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:@"No Replacements Found" action:@selector(spellCheckMenuEmpty:)];
         [menuController setMenuItems:[NSArray arrayWithObject:item]];
-        [item release];        
+        [item release];
     }
     
     [menuController setMenuVisible:YES animated:YES];
     
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: UIMenu Actions
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender 
-{    
-    if (self.correctionRange.length>0 || ignoreSelectionMenu) 
-    {
-        if ([NSStringFromSelector(action) hasPrefix:@"spellCheckMenu"])
-            return YES;
-    
-        return NO;
-    }
-    
-    if (action==@selector(cut:)) 
-        return (selectedRange.length>0 && editing);
-
-    else if (action==@selector(copy:)) 
-        return ((selectedRange.length>0));
-
-    else if ((action == @selector(select:) || action == @selector(selectAll:))) 
-        return (selectedRange.length==0 && [self hasText]);
-
-    else if (action == @selector(paste:))
-        return (editing && [[UIPasteboard generalPasteboard] containsPasteboardTypes:[NSArray arrayWithObject:@"public.utf8-plain-text"]]);
-    
-    else if (action == @selector(delete:))
-        return NO;
-    
-    return [super canPerformAction:action withSender:sender];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)spellingCorrection:(UIMenuController*)sender 
-{    
-    NSRange replacementRange = correctionRange;
-    
-    if (replacementRange.location==NSNotFound || replacementRange.length==0) 
-        replacementRange = [self characterRangeAtIndex:self.selectedRange.location];
-
-    if (replacementRange.location!=NSNotFound && replacementRange.length!=0) 
-    {
-        NSString *text = [self.menuItemActions objectForKey:NSStringFromSelector(_cmd)];
-        [self.inputDelegate textWillChange:self];       
-        [self replaceRange:[HTMLIndexedRange rangeWithNSRange:replacementRange] withText:text];
-        [self.inputDelegate textDidChange:self];       
-        replacementRange.length = text.length;
-        [self removeCorrectionAttributesForRange:replacementRange];
-    }
-    
-    self.correctionRange = NSMakeRange(NSNotFound, 0);
-    self.menuItemActions = nil;
-    [sender setMenuItems:nil];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)spellCheckMenuEmpty:(id)sender 
-{    
-    self.correctionRange = NSMakeRange(NSNotFound, 0);
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)menuDidHide:(NSNotification*)notification 
-{    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIMenuControllerDidHideMenuNotification object:nil];
-    
-    if (selectionView)
-        [self showMenu];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)paste:(id)sender 
-{    
-    NSString *pasteText = [[UIPasteboard generalPasteboard] valueForPasteboardType:@"public.utf8-plain-text"];
-    
-    if (pasteText!=nil)
-        [self insertText:pasteText];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)selectAll:(id)sender 
-{    
-    NSString *string = [attributedString string];
-    NSString *trimmedString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    self.selectedRange = [attributedString.string rangeOfString:trimmedString];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDidHide:) name:UIMenuControllerDidHideMenuNotification object:nil];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)select:(id)sender 
-{    
-    NSRange range = [self characterRangeAtPoint_:caretView.center];
-    self.selectedRange = range;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDidHide:) name:UIMenuControllerDidHideMenuNotification object:nil];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)cut:(id)sender 
-{    
-    NSString *string = [attributedString.string substringWithRange:selectedRange];
-    [[UIPasteboard generalPasteboard] setValue:string forPasteboardType:@"public.utf8-plain-text"];
-    
-    //[attributedString setAttributedString:self.attributedString];
-    [self UpdateDelegate:string];
-    [attributedString deleteCharactersInRange:selectedRange];
-    
-    [self.inputDelegate textWillChange:self];       
-    //[self setAttributedString:attributedString];
-    [self UpdateDelegate:string];
-    [self.inputDelegate textDidChange:self];       
-    
-    self.selectedRange = NSMakeRange(selectedRange.location, 0);
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)copy:(id)sender 
-{    
-    NSString *string = [self.attributedString.string substringWithRange:selectedRange];
-    [[UIPasteboard generalPasteboard] setValue:string forPasteboardType:@"public.utf8-plain-text"];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)delete:(id)sender 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//mostly unused text input functions and don't need to be changed
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSRange)rangeIntersection:(NSRange)first withSecond:(NSRange)second
 {
-    //NSString *string = [attributedString.string substringWithRange:selectedRange];
-    [self UpdateDelegate:@""];
-    [attributedString deleteCharactersInRange:selectedRange];
-    [self.inputDelegate textWillChange:self];       
-    [self UpdateDelegate:@""];
-    [self.inputDelegate textDidChange:self];   
+    NSRange result = NSMakeRange(NSNotFound, 0);
     
-    self.selectedRange = NSMakeRange(selectedRange.location, 0);
+    if (first.location > second.location)
+    {
+        NSRange tmp = first;
+        first = second;
+        second = tmp;
+    }
+    
+    if (second.location < first.location + first.length)
+    {
+        result.location = second.location;
+        NSUInteger end = MIN(first.location + first.length, second.location + second.length);
+        result.length = end - result.location;
+    }
+    
+    return result;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSString *)textInRange:(UITextRange *)range
+{
+    if(!self.attribString || self.attribString.string.length == 0)
+        return nil;
+    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
+    return ([self.attribString.string substringWithRange:r.range]);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)replaceRange:(UITextRange *)range withText:(NSString *)text
+{
+    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
+    
+    NSRange selectRange = self.selectedRange;
+    if ((r.range.location + r.range.length) <= selectRange.location)
+        selectRange.location -= (r.range.length - text.length);
+    else
+        selectRange = [self rangeIntersection:r.range withSecond:selectedRange];
+    
+    [self.attribString replaceCharactersInRange:r.range withString:text];
+    self.selectedRange = selectRange;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextRange *)selectedTextRange
+{
+    return [HTMLIndexedRange rangeWithNSRange:self.selectedRange];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)setSelectedTextRange:(UITextRange *)range
+{
+    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
+    self.selectedRange = r.range;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
+{
+    //NSLog(@"marked text: %@",markedText);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)unmarkText
+{
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    HTMLIndexedPosition *from = (HTMLIndexedPosition *)fromPosition;
+    HTMLIndexedPosition *to = (HTMLIndexedPosition *)toPosition;
+    NSRange range = NSMakeRange(MIN(from.index, to.index), ABS(to.index - from.index));
+    return [HTMLIndexedRange rangeWithNSRange:range];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
+{
+    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
+    NSInteger end = pos.index + offset;
+	
+    if (end > self.attribString.length || end < 0)
+        return nil;
+    
+    return [HTMLIndexedPosition positionWithIndex:end];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset
+{
+    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
+    NSInteger newPos = pos.index;
+    
+    switch (direction)
+    {
+        case UITextLayoutDirectionRight:
+            newPos += offset;
+            break;
+        case UITextLayoutDirectionLeft:
+            newPos -= offset;
+            break;
+        UITextLayoutDirectionUp: // not supported right now
+            break;
+        UITextLayoutDirectionDown: // not supported right now
+            break;
+        default:
+            break;
+            
+    }
+    
+    if (newPos < 0)
+        newPos = 0;
+    
+    if (newPos > self.attribString.length)
+        newPos = self.attribString.length;
+    
+    return [HTMLIndexedPosition positionWithIndex:newPos];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other
+{
+    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
+    HTMLIndexedPosition *o = (HTMLIndexedPosition *)other;
+    
+    if (pos.index == o.index)
+        return NSOrderedSame;
+    if (pos.index < o.index)
+        return NSOrderedAscending;
+    else
+        return NSOrderedDescending;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition
+{
+    HTMLIndexedPosition *f = (HTMLIndexedPosition *)from;
+    HTMLIndexedPosition *t = (HTMLIndexedPosition *)toPosition;
+    return (t.index - f.index);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
+{
+    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
+    NSInteger pos = r.range.location;
+    
+    switch (direction)
+    {
+        case UITextLayoutDirectionUp:
+        case UITextLayoutDirectionLeft:
+            pos = r.range.location;
+            break;
+        case UITextLayoutDirectionRight:
+        case UITextLayoutDirectionDown:
+            pos = r.range.location + r.range.length;
+            break;
+    }
+    
+    return [HTMLIndexedPosition positionWithIndex:pos];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+{
+    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
+    NSRange result = NSMakeRange(pos.index, 1);
+    
+    switch (direction)
+    {
+        case UITextLayoutDirectionUp:
+        case UITextLayoutDirectionLeft:
+            result = NSMakeRange(pos.index - 1, 1);
+            break;
+        case UITextLayoutDirectionRight:
+        case UITextLayoutDirectionDown:
+            result = NSMakeRange(pos.index, 1);
+            break;
+    }
+    
+    return [HTMLIndexedRange rangeWithNSRange:result];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+{
+    return UITextWritingDirectionLeftToRight;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range
+{
+    //not supported currently
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition*)beginningOfDocument {
+    return [HTMLIndexedPosition positionWithIndex:0];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition*)endOfDocument {
+    return [HTMLIndexedPosition positionWithIndex:self.attribString.length];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* Geometry used to provide, for example, a correction rect. */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (CGRect)firstRectForRange:(UITextRange *)range
+{
+    HTMLIndexedRange *r = (HTMLIndexedRange *)range;
+    return [self firstRectForNSRange:r.range];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (CGRect)caretRectForPosition:(UITextPosition *)position
+{
+    HTMLIndexedPosition *pos = (HTMLIndexedPosition *)position;
+	return [self caretRectForIndex:pos.index];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (CGRect)firstRectForNSRange:(NSRange)range
+{
+    NSInteger index = range.location;
+    
+    NSArray *lines = (NSArray *) CTFrameGetLines(textFrame);
+    NSInteger count = [lines count];
+    CGPoint *origins = (CGPoint*)malloc(count * sizeof(CGPoint));
+    CTFrameGetLineOrigins(textFrame, CFRangeMake(0, count), origins);
+    CGRect returnRect = CGRectNull;
+    
+    for (int i = 0; i < count; i++)
+    {
+        CTLineRef line = (CTLineRef) [lines objectAtIndex:i];
+        CFRange lineRange = CTLineGetStringRange(line);
+        NSInteger localIndex = index - lineRange.location;
+        
+        if (localIndex >= 0 && localIndex < lineRange.length)
+        {
+            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, range.location + range.length);
+            CGFloat xStart = CTLineGetOffsetForStringIndex(line, index, NULL);
+            CGFloat xEnd = CTLineGetOffsetForStringIndex(line, finalIndex, NULL);
+            CGPoint origin = origins[i];
+            CGFloat ascent, descent;
+            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+            
+            returnRect = [self convertRect:CGRectMake(origin.x + xStart, origin.y - descent, xEnd - xStart, ascent + (descent*2)) toView:self];
+            break;
+        }
+    }
+    
+    free(origins);
+    return returnRect;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (id <UITextInputTokenizer>)tokenizer {
+    return tokenizer;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* Hit testing. */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition*)closestPositionToPoint:(CGPoint)point
+{
+    HTMLIndexedPosition *position = [HTMLIndexedPosition positionWithIndex:[self closestIndexToPoint:point]];
+    return position;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextPosition*)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range
+{
+    HTMLIndexedPosition *position = [HTMLIndexedPosition positionWithIndex:[self closestIndexToPoint:point]];
+    return position;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextRange*)characterRangeAtPoint:(CGPoint)point
+{
+    int index = [self closestIndexToPoint:caretView.center];
+    NSRange r = [self characterRangeAtIndex:index];
+    HTMLIndexedRange *range = [HTMLIndexedRange rangeWithNSRange:r];
+    return range;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSDictionary*)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+{
+    HTMLIndexedPosition *pos = (HTMLIndexedPosition*)position;
+    NSInteger index = MAX(pos.index, 0);
+    index = MIN(index, self.attribString.length-1);
+    
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:1];
+    if(self.attribString.length > 0)
+    {
+        NSDictionary *attribs = [self.attribString attributesAtIndex:index effectiveRange:nil];
+        
+        CTFontRef ctFont = (CTFontRef)[attribs valueForKey:(NSString*)kCTFontAttributeName];
+        UIFont *afont = [UIFont fontWithName:(NSString*)CTFontCopyFamilyName(ctFont) size:CTFontGetSize(ctFont)];
+        if(!afont)
+            [dictionary setObject:self.delegate.font forKey:UITextInputTextFontKey];
+        else
+        {
+            [dictionary setObject:afont forKey:UITextInputTextFontKey];
+            //[afont release];
+        }
+    }
+    else
+        [dictionary setObject:self.delegate.font forKey:UITextInputTextFontKey];
+    
+    //NSLog(@"dictonary: %@",dictionary);
+    return dictionary;
     
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)replace:(id)sender 
-{    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UIView *)textInputView
+{
+    return self;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITextAutocorrectionType)autocorrectionType {
+    return UITextAutocorrectionTypeDefault;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)dealloc
+{
+    [attribString release];
+    [caretView release];
+    [magnifyView release];
+    [caretMagnifyView release];
+    [leftCaretView release];
+    [rightCaretView release];
+    [correctionDict release];
+    [textChecker release];
+    [tokenizer release];
+    [imageURLData release];
+    [super dealloc];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@end
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//supporting views
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//HTMLLoupeView
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation HTMLLoupeView
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)init
+{
+    if ((self = [super initWithFrame:CGRectMake(0.0f, 0.0f, 127.0f, 127.0f)]))
+        self.backgroundColor = [UIColor clearColor];
+    return self;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [[UIImage libraryImageNamed:@"loupe-lo.png"] drawInRect:rect];
+    
+    if ((contentImage!=nil))
+    {
+        CGContextSaveGState(ctx);
+        CGContextClipToMask(ctx, rect, [UIImage libraryImageNamed:@"loupe-mask.png"].CGImage);
+        [contentImage drawInRect:rect];
+        CGContextRestoreGState(ctx);
+    }
+    
+    [[UIImage libraryImageNamed:@"loupe-hi.png"] drawInRect:rect];
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)setContentImage:(UIImage *)image
+{
+    [contentImage release], contentImage=nil;
+    contentImage = [image retain];
+    [self setNeedsDisplay];
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+    [contentImage release], contentImage=nil;
+    [super dealloc];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@end
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//HTMLMagnifyView
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation HTMLMagnifyView
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)init
+{
+    if ((self = [super initWithFrame:CGRectMake(0.0f, 0.0f, 145.0f, 59.0f)]))
+        self.backgroundColor = [UIColor clearColor];
+    return self;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [[UIImage libraryImageNamed:@"magnifier-ranged-lo.png"] drawInRect:rect];
+    
+    if ((contentImage!=nil))
+    {
+        CGContextSaveGState(ctx);
+        CGContextClipToMask(ctx, rect, [UIImage libraryImageNamed:@"magnifier-ranged-mask.png"].CGImage);
+        [contentImage drawInRect:rect];
+        CGContextRestoreGState(ctx);
+    }
+    [[UIImage libraryImageNamed:@"magnifier-ranged-hi.png"] drawInRect:rect];
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)setContentImage:(UIImage *)image
+{
+    [contentImage release], contentImage=nil;
+    contentImage = [image retain];
+    [self setNeedsDisplay];
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+    [contentImage release], contentImage=nil;
+    [super dealloc];
 }
 
 @end
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: HTMLIndexedPosition
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-@implementation HTMLIndexedPosition 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//HTMLIndexedPosition
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation HTMLIndexedPosition
 @synthesize index=_index;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+ (HTMLIndexedPosition *)positionWithIndex:(NSUInteger)index 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
++ (HTMLIndexedPosition *)positionWithIndex:(NSUInteger)index
 {
     HTMLIndexedPosition *pos = [[HTMLIndexedPosition alloc] init];
     pos.index = index;
@@ -2281,608 +1811,39 @@
 }
 
 @end
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: EGOIndexedRange
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//HTMLIndexedRange
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation HTMLIndexedRange 
-@synthesize range=_range;
+@implementation HTMLIndexedRange
+@synthesize range=range;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+ (HTMLIndexedRange *)rangeWithNSRange:(NSRange)theRange 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
++ (HTMLIndexedRange *)rangeWithNSRange:(NSRange)theRange
 {
     if (theRange.location == NSNotFound)
-        return nil;    
+        return nil;
     HTMLIndexedRange *range = [[HTMLIndexedRange alloc] init];
     range.range = theRange;
     return [range autorelease];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (UITextPosition *)start {
     return [HTMLIndexedPosition positionWithIndex:self.range.location];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (UITextPosition *)end {
 	return [HTMLIndexedPosition positionWithIndex:(self.range.location + self.range.length)];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(BOOL)isEmpty {
     return (self.range.length == 0);
 }
-
-@end
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: HTMLContentView
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-@implementation HTMLContentView
-
-@synthesize delegate= delegate;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithFrame:(CGRect)frame 
-{
-    if ((self = [super initWithFrame:frame])) 
-    {
-        self.userInteractionEnabled = NO;
-        self.layer.geometryFlipped = YES;
-        self.backgroundColor = [UIColor whiteColor];
-    }
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)layoutSubviews 
-{
-    [super layoutSubviews];
-    [self.delegate textChanged]; // reset layout on frame / orientation change
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)drawRect:(CGRect)rect 
-{    
-    [delegate drawContentInRect:rect];
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    // Flip the coordinate system
-    CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);
-    CGContextTranslateCTM(ctx, 0, self.bounds.size.height);
-    CGContextScaleCTM(ctx, 1.0, -1.0);
-    int i = 0;
-    for (ImageItem* entry in delegate.imageArray) 
-    {
-        UIImage* image = entry.imageData;
-        if(image)
-        {
-            CGRect imgBounds = entry.frame;
-            //CGContextDrawImage(ctx, imgBounds, image.CGImage);
-            [image drawInRect:imgBounds];
-        }
-        i++;
-    }
-    for (ImageItem* entry in delegate.videoArray) 
-    {
-        UIImage* image = entry.imageData;
-        if(image)
-        {
-            CGRect imgBounds = entry.frame;
-            [image drawInRect:imgBounds];
-        }
-    }
-    for(TextItem* item in delegate.textArray)
-    {
-        NSString* text = item.text;
-        if([text isEqualToString:HTML_UNORDER_LIST])
-        {
-            CGRect frame =item.frame;
-            frame.size.width = 8;
-            frame.origin.y += 8;
-            frame.size.height = 8;
-            CGContextSetLineWidth(ctx, 1.0);
-            CGContextSetStrokeColorWithColor(ctx, [UIColor blackColor].CGColor);
-            CGContextAddEllipseInRect(ctx, frame);
-            CGContextFillEllipseInRect(ctx, frame);
-        }
-        else
-            [text drawInRect:item.frame withFont:[UIFont boldSystemFontOfSize:item.frame.size.height] ];
-        
-    }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@end
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: HTMLCaretView
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-@implementation HTMLCaretView
-
-static const NSTimeInterval kInitialBlinkDelay = 0.6f;
-static const NSTimeInterval kBlinkRate = 1.0;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithFrame:(CGRect)frame 
-{
-    if ((self = [super initWithFrame:frame]))
-        self.backgroundColor = [HTMLTextView caretColor];
-
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)show 
-{    
-    [self.layer removeAllAnimations];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)didMoveToSuperview 
-{    
-    if (self.superview)
-        [self delayBlink];
-    else 
-        [self.layer removeAllAnimations];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)delayBlink 
-{    
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-    animation.values = [NSArray arrayWithObjects:[NSNumber numberWithFloat:1.0f], [NSNumber numberWithFloat:1.0f], [NSNumber numberWithFloat:0.0f], [NSNumber numberWithFloat:0.0f], nil];
-    animation.calculationMode = kCAAnimationCubic;
-    animation.duration = kBlinkRate;
-    animation.beginTime = CACurrentMediaTime() + kInitialBlinkDelay;
-    animation.repeatCount = CGFLOAT_MAX;
-    [self.layer addAnimation:animation forKey:@"BlinkAnimation"];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-    [super dealloc];
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @end
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: HTMLLoupeView
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-@implementation HTMLLoupeView
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)init 
-{
-    if ((self = [super initWithFrame:CGRectMake(0.0f, 0.0f, 127.0f, 127.0f)])) 
-        self.backgroundColor = [UIColor clearColor];
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)drawRect:(CGRect)rect 
-{
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    [[UIImage libraryImageNamed:@"loupe-lo.png"] drawInRect:rect];
-    
-    if ((contentImage!=nil)) 
-    {
-        CGContextSaveGState(ctx);
-        CGContextClipToMask(ctx, rect, [UIImage libraryImageNamed:@"loupe-mask.png"].CGImage);
-        [contentImage drawInRect:rect];        
-        CGContextRestoreGState(ctx);
-    }
-    
-    [[UIImage libraryImageNamed:@"loupe-hi.png"] drawInRect:rect];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setContentImage:(UIImage *)image 
-{    
-    [contentImage release], contentImage=nil;
-    contentImage = [image retain];
-    [self setNeedsDisplay];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-    [contentImage release], contentImage=nil;
-    [super dealloc];
-}
-
-@end
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: HTMLTextWindow
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-@implementation HTMLTextWindow
-
-@synthesize showing=_showing;
-@synthesize selectionType=_selectionType;
-@synthesize type=_type;
-
-static const CGFloat kLoupeScale = 1.2f;
-static const CGFloat kMagnifyScale = 1.0f;
-static const NSTimeInterval kDefaultAnimationDuration = 0.15f;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithFrame:(CGRect)frame 
-{    
-    if ((self = [super initWithFrame:frame])) 
-    {
-        self.backgroundColor = [UIColor clearColor];
-        _type = HTMLWindowLoupe;
-    }
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)selectionForRange:(NSRange)range {
-    return range.location;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)showFromView:(UIView*)view rect:(CGRect)rect 
-{
-    CGPoint pos = CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect));
-    
-    if (!_showing) 
-    {
-        if (_view == nil) 
-        {
-            UIView *view;
-            if (_type==HTMLWindowLoupe) 
-                view = [[HTMLLoupeView alloc] init];
-            else 
-                view = [[HTMLMagnifyView alloc] init];
-    
-            [self addSubview:view];
-            _view=view;
-            [view release];
-        }
-        
-        CGRect frame = _view.frame;
-        frame.origin.x = floorf(pos.x - (_view.bounds.size.width/2));
-        frame.origin.y = floorf(pos.y - _view.bounds.size.height);
-        
-        if (_type==HTMLWindowMagnify) 
-        {
-            frame.origin.y = MAX(frame.origin.y+8.0f, 0.0f);
-            frame.origin.x += 2.0f;
-        } else 
-            frame.origin.y = MAX(frame.origin.y-10.0f, -40.0f);
-        
-        CGRect originFrame = frame;
-        frame.origin.y += frame.size.height/2;
-        _view.frame = frame;
-        _view.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
-        _view.alpha = 0.01f;
-        
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            
-            _view.alpha = 1.0f;
-            _view.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
-            _view.frame = originFrame;
-            
-        } completion:^(BOOL finished) {
-            
-            _showing=YES;
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (0.0f*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self renderWithContentView:view fromRect:rect];
-            });
-            
-        }];
-        
-    }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)hide:(BOOL)animated 
-{    
-    if ((_view!=nil))
-    {
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            
-            CGRect frame = _view.frame;
-            CGPoint center = _view.center;
-            frame.origin.x = floorf(center.x-(frame.size.width/2));
-            frame.origin.y = center.y;
-            _view.frame = frame;
-            _view.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
-            
-        } completion:^(BOOL finished) 
-        {
-            _showing=NO;
-            [_view removeFromSuperview];
-            _view=nil;
-            self.windowLevel = UIWindowLevelNormal;
-            self.hidden = YES;
-            
-        }];
-        
-    }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (UIImage*)screenshotFromCaretFrame:(CGRect)rect inView:(UIView*)view scale:(BOOL)scale 
-{    
-    CGRect offsetRect = [self convertRect:rect toView:view];
-    offsetRect.origin.y += ((UIScrollView*)view.superview).contentOffset.y;
-    offsetRect.origin.y -= _view.bounds.size.height+20.0f;
-    offsetRect.origin.x -= (_view.bounds.size.width/2);
-    
-    //CGFloat magnifyScale = 1.0f; 
-    
-    if (scale) 
-    {
-        //CGFloat max = 24.0f;
-        // magnifyScale = max/offsetRect.size.height;
-        // NSLog(@"max %f scale %f", max, magnifyScale);
-    } else if (rect.size.height < 22.0f) 
-    {
-        //magnifyScale = 22.0f/offsetRect.size.height;
-        //NSLog(@"cale %f", magnifyScale);
-    }
-    
-    UIGraphicsBeginImageContextWithOptions(_view.bounds.size, YES, [[UIScreen mainScreen] scale]);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(ctx, [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f].CGColor);
-    UIRectFill(CGContextGetClipBoundingBox(ctx));
-    
-    CGContextSaveGState(ctx);
-    CGContextTranslateCTM(ctx, 0, view.bounds.size.height);
-    CGContextScaleCTM(ctx, 1.0, -1.0);
-    
-    //    CGContextConcatCTM(ctx, CGAffineTransformMakeScale(magnifyScale, magnifyScale));
-    CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(-(offsetRect.origin.x), offsetRect.origin.y));
-    
-    UIView *selectionView = nil;
-    CGRect selectionFrame = CGRectZero;
-    
-    for (UIView *subview in view.subviews)
-        if ([subview isKindOfClass:[HTMLSelectionView class]]) 
-            selectionView = subview;
-    
-    if (selectionView!=nil) 
-    {
-        selectionFrame = selectionView.frame;
-        CGRect newFrame = selectionFrame;
-        newFrame.origin.y = (selectionFrame.size.height - view.bounds.size.height) - ((selectionFrame.origin.y + selectionFrame.size.height) - view.bounds.size.height);
-        selectionView.frame = newFrame;
-    }
-    
-    [view.layer renderInContext:ctx];
-    
-    if (selectionView!=nil)
-        selectionView.frame = selectionFrame;
-    
-    CGContextRestoreGState(ctx);
-    UIImage *aImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return aImage;
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)renderWithContentView:(UIView*)view fromRect:(CGRect)rect 
-{    
-    CGPoint pos = CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect));
-    
-    if (_showing && _view!=nil) 
-    {
-        CGRect frame = _view.frame;
-        frame.origin.x = floorf((pos.x - (_view.bounds.size.width/2)) + (rect.size.width/2));
-        frame.origin.y = floorf(pos.y - _view.bounds.size.height);
-        
-        if (_type == HTMLWindowMagnify)
-        {
-            frame.origin.y = MAX(0.0f, frame.origin.y);
-            rect = [self convertRect:rect toView:view];
-        } else 
-        {
-            frame.origin.y = MAX(frame.origin.y-10.0f, -40.0f);
-            rect = [self convertRect:rect toView:view];
-        }
-        _view.frame = frame;
-        
-        UIImage *image = [self screenshotFromCaretFrame:rect inView:view scale:(_type==HTMLWindowMagnify)];
-        [(HTMLLoupeView*)_view setContentImage:image];
-        
-    }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)updateWindowTransform 
-{    
-    self.frame = [[UIScreen mainScreen] bounds];
-    switch ([[UIApplication sharedApplication] statusBarOrientation]) 
-    {
-        case UIInterfaceOrientationPortrait:
-            self.layer.transform = CATransform3DIdentity;
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            self.layer.transform = CATransform3DMakeRotation((M_PI/180)*90, 0, 0, 1);
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            self.layer.transform = CATransform3DMakeRotation((M_PI/180)*-90, 0, 0, 1);
-            break;
-        case UIInterfaceOrientationPortraitUpsideDown:
-            self.layer.transform = CATransform3DMakeRotation((M_PI/180)*180, 0, 0, 1);
-            break;
-        default:
-            break;
-    }
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)layoutSubviews 
-{
-    [super layoutSubviews];
-    [self updateWindowTransform];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc 
-{
-    _view=nil;
-    [super dealloc];
-}
-
-@end
-
-
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: EGOMagnifyView
-/////////////////////////////////////////////////////////////////////////////
-
-@implementation HTMLMagnifyView
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)init 
-{
-    if ((self = [super initWithFrame:CGRectMake(0.0f, 0.0f, 145.0f, 59.0f)]))
-        self.backgroundColor = [UIColor clearColor];
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)drawRect:(CGRect)rect 
-{    
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    [[UIImage libraryImageNamed:@"magnifier-ranged-lo.png"] drawInRect:rect];
-    
-    if ((contentImage!=nil)) 
-    {
-        CGContextSaveGState(ctx);
-        CGContextClipToMask(ctx, rect, [UIImage libraryImageNamed:@"magnifier-ranged-mask.png"].CGImage);
-        [contentImage drawInRect:rect];        
-        CGContextRestoreGState(ctx);
-    }
-    [[UIImage libraryImageNamed:@"magnifier-ranged-hi.png"] drawInRect:rect];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setContentImage:(UIImage *)image 
-{    
-    [contentImage release], contentImage=nil;
-    contentImage = [image retain];
-    [self setNeedsDisplay];
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-    [contentImage release], contentImage=nil;
-    [super dealloc];
-}
-
-@end
-
-
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: HTMLSelectionView
-/////////////////////////////////////////////////////////////////////////////
-
-@implementation HTMLSelectionView
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithFrame:(CGRect)frame 
-{
-    if ((self = [super initWithFrame:frame])) 
-    {
-        self.backgroundColor = [UIColor clearColor]; 
-        self.userInteractionEnabled = NO;
-        self.layer.geometryFlipped = YES;
-    }
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setBeginCaret:(CGRect)begin endCaret:(CGRect)end 
-{    
-    if(!self.superview) return;
-
-    self.frame = CGRectMake(begin.origin.x, begin.origin.y + begin.size.height, end.origin.x - begin.origin.x, (end.origin.y-end.size.height)-begin.origin.y);   
-    begin = [self.superview convertRect:begin toView:self];
-    end = [self.superview convertRect:end toView:self];
-    
-    
-    if (leftCaret == nil) 
-    {
-        UIView *view = [[UIView alloc] initWithFrame:begin];
-        view.backgroundColor = [HTMLTextView caretColor];
-        [self addSubview:view]; 
-        leftCaret=[view retain];
-        [view release];
-    }
-    
-    if (leftDot == nil) 
-    {
-        UIImage *dotImage = [UIImage libraryImageNamed:@"drag-dot.png"];
-        UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, dotImage.size.width, dotImage.size.height)];
-        [view setImage:dotImage];
-        [self addSubview:view];
-        leftDot = view;
-        [view release];
-    }
-    
-    CGFloat _dotShadowOffset = 5.0f;
-    leftCaret.frame = begin;
-    leftDot.frame = CGRectMake(floorf(leftCaret.center.x - (leftDot.bounds.size.width/2)), leftCaret.frame.origin.y-(leftDot.bounds.size.height-_dotShadowOffset), leftDot.bounds.size.width, leftDot.bounds.size.height);
-    
-    if (rightCaret==nil) 
-    {
-        UIView *view = [[UIView alloc] initWithFrame:end];
-        view.backgroundColor = [HTMLTextView caretColor];
-        [self addSubview:view];
-        rightCaret = [view retain];
-        [view release];
-    }
-    
-    if (rightDot==nil)
-    {
-        UIImage *dotImage = [UIImage libraryImageNamed:@"drag-dot.png"];
-        UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, dotImage.size.width, dotImage.size.height)];
-        [view setImage:dotImage];
-        [self addSubview:view];
-        rightDot = view;
-        [view release];
-    }
-    
-    rightCaret.frame = end;
-    rightDot.frame = CGRectMake(floorf(rightCaret.center.x - (rightDot.bounds.size.width/2)), CGRectGetMaxY(rightCaret.frame), rightDot.bounds.size.width, rightDot.bounds.size.height);
-    
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc 
-{    
-    [leftCaret release], leftCaret=nil;
-    [rightCaret release], rightCaret=nil;
-    rightDot=nil;
-    leftDot=nil;
-    [super dealloc];
-}
-
-@end
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-@implementation TextItem
-
-@synthesize frame = frame,text = text,tag =tag;
-+(TextItem*)textItem:(NSString*)text frame:(CGRect)rect tag:(NSInteger)tag
-{
-    TextItem* item = [[[TextItem alloc] init] autorelease];
-    item.text = text;
-    item.frame = rect;
-    item.tag = tag;
-    return item;
-}
-
-@end
 

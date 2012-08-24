@@ -186,8 +186,8 @@ static CGFloat getWidthCallback( void* refCon );
         {
             if(isBold)
             {
-                NSString* fontName = [(NSString*)CTFontCopyFullName(currentFont) autorelease];
-                NSLog(@"[HTML String]: can't find a bold font variant for font %@. Try another font family instead.",fontName);
+                //NSString* fontName = [(NSString*)CTFontCopyFullName(currentFont) autorelease];
+                //NSLog(@"[HTML String]: can't find a bold font variant for font %@. Try another font family instead.",fontName);
             }
 
 		}
@@ -225,8 +225,8 @@ static CGFloat getWidthCallback( void* refCon );
         {
             if(isItalic)
             {
-                NSString* fontName = [(NSString*)CTFontCopyFullName(currentFont) autorelease];
-                NSLog(@"[HTML String]: can't find a Italic font variant for font %@. Try another font family instead.",fontName);
+                //NSString* fontName = [(NSString*)CTFontCopyFullName(currentFont) autorelease];
+                //NSLog(@"[HTML String]: can't find a Italic font variant for font %@. Try another font family instead.",fontName);
             }
 		}
         
@@ -296,6 +296,21 @@ static CGFloat getWidthCallback( void* refCon );
     CFRelease(delegate);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setImageData:(UIImage*)image
+{
+    [self setImageData:image range:NSMakeRange(0,[self length])];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setImageData:(UIImage*)image range:(NSRange)range
+{
+    NSString* h = [NSString stringWithFormat:@"%f",image.size.height];
+    NSString* w = [NSString stringWithFormat:@"%f",image.size.width];
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:h,@"height",w,@"width", nil];
+    [self addRunDelegate:range attribs:dict];
+    [self removeAttribute:HTML_IMAGE_DATA range:range];
+	[self addAttribute:HTML_IMAGE_DATA value:image range:range];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setImageTag:(NSString*)imageURL attribs:(NSDictionary*)attribs
 {
     [self setImageTag:imageURL range:NSMakeRange(0,[self length]) attribs:attribs];
@@ -347,6 +362,32 @@ static CGFloat getWidthCallback( void* refCon );
         [self removeAttribute:(NSString*)key range:range]; // remove then add for apple leak.
         [self addAttribute:(NSString*)key value:[attribs objectForKey:key] range:range];
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setOrderList:(BOOL)list
+{
+    [self setOrderList:list range:NSMakeRange(0,[self length])];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setOrderList:(BOOL)list range:(NSRange)range
+{
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"8",@"height",@"20",@"width", nil];
+    [self addRunDelegate:range attribs:dict];
+    [self removeAttribute:HTML_ORDER_LIST range:range]; // Work around for Apple leak
+	[self addAttribute:HTML_ORDER_LIST value:[NSNumber numberWithBool:list] range:range];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setUnOrderList:(BOOL)list
+{
+    [self setUnOrderList:list range:NSMakeRange(0,[self length])];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setUnOrderList:(BOOL)list range:(NSRange)range
+{
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"8",@"height",@"10",@"width", nil];
+    [self addRunDelegate:range attribs:dict];
+    [self removeAttribute:HTML_UNORDER_LIST range:range]; // Work around for Apple leak
+	[self addAttribute:HTML_UNORDER_LIST value:[NSNumber numberWithBool:list] range:range];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //delegates for rundelegate

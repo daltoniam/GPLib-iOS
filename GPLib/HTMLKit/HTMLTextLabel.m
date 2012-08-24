@@ -299,12 +299,6 @@
         for (id oneLine in (NSArray *)leftLines)
         {
             CFArrayRef runs = CTLineGetGlyphRuns((CTLineRef)oneLine);
-            CGRect lineBounds = CTLineGetImageBounds((CTLineRef)oneLine, ctx);
-            
-            lineBounds.origin.x += origins[lineIndex].x;
-            lineBounds.origin.y += origins[lineIndex].y;
-            //lineIndex++;
-            CGFloat offset = 0;
             
             for (id oneRun in (NSArray *)runs)
             {
@@ -316,14 +310,14 @@
                 CGFloat xOffset = CTLineGetOffsetForStringIndex((CTLineRef)oneLine, CTRunGetStringRange((CTRunRef)oneRun).location, NULL);
                 CGFloat height = ascent + descent;
                 
-                CGRect highlightRect = CGRectMake(origins[lineIndex].x + xOffset,origins[lineIndex].y + self.frame.origin.y,width,height );
-                highlightRect.origin.y -= descent;
+                CGRect runRect = CGRectMake(origins[lineIndex].x + xOffset,origins[lineIndex].y + self.frame.origin.y,width,height );
+                runRect.origin.y -= descent;
                 CGPathRef pathRef = CTFrameGetPath(textFrame);
                 CGRect colRect = CGPathGetBoundingBox(pathRef);
                 
-                highlightRect = CGRectOffset(highlightRect, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
-                highlightRect = CGRectIntegral(highlightRect);	
-                highlightRect = CGRectInset(highlightRect, -1, -1);
+                runRect = CGRectOffset(runRect, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
+                runRect = CGRectIntegral(runRect);	
+                runRect = CGRectInset(runRect, -1, -1);
                 
                 NSDictionary *attributes = (NSDictionary *)CTRunGetAttributes((CTRunRef) oneRun);
                 
@@ -336,26 +330,20 @@
                 
                 if (strikeOut)
                 {
-                    CGRect bounds = CGRectMake(lineBounds.origin.x + offset,lineBounds.origin.y,width, height);
-                    
-                    // don't draw too far to the right
-                    if (bounds.origin.x + bounds.size.width > CGRectGetMaxX(lineBounds))
-                        bounds.size.width = CGRectGetMaxX(lineBounds) - bounds.origin.x;
-                    // get text color or use black
+                    CGContextSaveGState(ctx);
                     id color = [attributes objectForKey:(id)kCTForegroundColorAttributeName];
                     
                     if (color)
                         CGContextSetStrokeColorWithColor(ctx, (CGColorRef)color);
                     else
                         CGContextSetGrayStrokeColor(ctx, 0, 1.0);
-                    CGFloat y = roundf(bounds.origin.y + (bounds.size.height/2) )-6; //3.5
-                    CGContextMoveToPoint(ctx, bounds.origin.x, y);
-                    CGContextAddLineToPoint(ctx, (bounds.origin.x - 5) + bounds.size.width, y);
+                    CGFloat y = roundf(runRect.origin.y + (runRect.size.height/2) );
+                    CGContextMoveToPoint(ctx, runRect.origin.x, y);
+                    CGContextAddLineToPoint(ctx, runRect.origin.x + runRect.size.width, y);
                     
                     CGContextStrokePath(ctx);
+                    CGContextRestoreGState(ctx);
                 }
-                
-                offset += width;
                 
                 UIColor* highlight = [UIColor clearColor];
                 if(hyperlink && [hyperlink isEqualToString:CurrentHyperLink])
@@ -365,7 +353,7 @@
                 {
                     CGContextSaveGState(ctx);
                     CGContextSetFillColorWithColor(ctx,highlight.CGColor);
-                    CGContextFillRect(ctx,highlightRect);
+                    CGContextFillRect(ctx,runRect);
                     CGContextRestoreGState(ctx);
                     [self processHyperLink:hyperlink];
                 }

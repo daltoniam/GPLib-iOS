@@ -50,6 +50,6 @@
 -(NSString *)stringByStrippingWISWIGElements;
 -(NSString *)stringByStrippingHTML;
 
-+(NSString*)HTMLView:(float)height width:(float)width;
-+(NSString*)HTMLView:(float)height width:(float)width top:(float)top;
++(NSString*)HTMLText:(float)height width:(float)width;
++(NSString*)HTMLText:(float)height width:(float)width top:(float)top;
 @end

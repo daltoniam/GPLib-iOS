@@ -39,10 +39,12 @@
 #define IMAGE_LINK @"GPImageLink"
 #define VIDEO_LINK @"GPVideoLink"
 #define VIEW_SPACE @"GPViewSpace"
+
+#define HTML_ORDER_LIST @"GPOrderList"
+#define HTML_UNORDER_LIST @"GPUnOrderList"
+
 #define HTML_LIST @"GPList"
 #define HTML_CLOSE_LIST @"CloseGPList"
-#define HTML_ORDER_LIST @"0"
-#define HTML_UNORDER_LIST @"1"
 
 #define HTML_IMAGE_DATA @"GPImageData"
 
@@ -78,6 +80,15 @@
 
 -(void)setYoutubeTag:(NSString*)videoURL attribs:(NSDictionary*)attribs;
 -(void)setYoutubeTag:(NSString*)videoURL range:(NSRange)range attribs:(NSDictionary*)attribs;
+
+-(void)setImageData:(UIImage*)image;
+-(void)setImageData:(UIImage*)image range:(NSRange)range;
+
+-(void)setOrderList:(BOOL)list;
+-(void)setOrderList:(BOOL)list range:(NSRange)range;
+
+-(void)setUnOrderList:(BOOL)list;
+-(void)setUnOrderList:(BOOL)list range:(NSRange)range;
 
 -(NSString*)convertToHTML;
 -(NSString*)spanStyle:(NSDictionary*)attributes;

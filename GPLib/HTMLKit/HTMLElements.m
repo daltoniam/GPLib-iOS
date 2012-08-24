@@ -143,13 +143,13 @@
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //returns image tag with size
-+(NSString*)HTMLView:(float)height width:(float)width
++(NSString*)HTMLText:(float)height width:(float)width
 {
     return [NSString stringWithFormat:@"<gpview height=\"%f\" width=\"%f\"/>",height,width];
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //returns image tag with size and top padding
-+(NSString*)HTMLView:(float)height width:(float)width top:(float)top
++(NSString*)HTMLText:(float)height width:(float)width top:(float)top
 {
     return [NSString stringWithFormat:@"<gpview height=\"%f\" width=\"%f\" padding=\"%f\"/>",height,width,top];
 }

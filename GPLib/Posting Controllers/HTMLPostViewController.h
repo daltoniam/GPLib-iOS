@@ -50,17 +50,8 @@
 @interface HTMLPostViewController : GPTableViewController<HTMLTextViewDelegate,HTMLSettingsDelegate,HTMLLinkViewControllerDelegate,UIPopoverControllerDelegate>
 {
     id<HTMLPostDelegate> delegate;
-    UIColor* CurrentColor;
-    NSInteger CurrentSize;
-    NSString* FontName;
     HTMLTextView* Textview;
-    BOOL isBold;
-    BOOL isUnderLine;
-    BOOL isItalic;
-    BOOL isStrike;
     BOOL isEditing;
-    int orderListIndex;
-    CTTextAlignment Alignment;
     UIBarButtonItem* editButton;
     UINavigationController* navBar;
     BOOL isOrderList;

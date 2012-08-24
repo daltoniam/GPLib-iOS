@@ -103,7 +103,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"tbbackground.jpg"]];
+    self.view.backgroundColor = [UIColor whiteColor];
     int h = self.view.frame.size.height;//self.view.frame.size.height/2.09; // 1.88
     //if(GPIsPad())
       //  h = self.view.frame.size.height/1.54; //1.40
@@ -114,7 +114,7 @@
     Textview.scrollEnabled = NO;
     if(tempAttribString)
     {
-        [Textview appendString:tempAttribString];
+        [Textview.attribString appendAttributedString:tempAttribString];
         [tempAttribString release];
     }
     
@@ -129,10 +129,6 @@
     
      ActLabel.hidden = YES;
     [Textview becomeFirstResponder];
-    Alignment = kCTLeftTextAlignment;
-    CurrentColor = [UIColor blackColor];
-    CurrentSize = 12;
-    FontName = @"Helvetica";//@"TrebuchetMS";
     sections = [[NSMutableArray alloc] initWithCapacity:3];
     
     [_tableView removeFromSuperview];
@@ -208,15 +204,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)didCreate:(NSString*)link
 {
-    [Textview.attributedString setTextIsHyperLink:link range:Textview.selectedRange];
-    [Textview.attributedString setTextColor:[UIColor blueColor] range:Textview.selectedRange];
-    [Textview.attributedString setTextIsUnderlined:YES range:Textview.selectedRange];
+    [Textview.attribString setTextIsHyperLink:link range:Textview.selectedRange];
+    [Textview.attribString setTextColor:[UIColor blueColor] range:Textview.selectedRange];
+    [Textview.attribString setTextIsUnderlined:YES range:Textview.selectedRange];
     if(!link || link.length == 0)
     {
-        [Textview.attributedString setTextColor:[UIColor blackColor] range:Textview.selectedRange];
-        [Textview.attributedString setTextIsUnderlined:NO range:Textview.selectedRange];
+        [Textview.attribString setTextColor:[UIColor blackColor] range:Textview.selectedRange];
+        [Textview.attribString setTextIsUnderlined:NO range:Textview.selectedRange];
     }
-    [Textview textChanged];
     if(!GPIsPad())
         [self dismissModalViewControllerAnimated:YES];
     [navBar popViewControllerAnimated:YES];
@@ -250,7 +245,6 @@
     Textview.userInteractionEnabled = YES;
     [Textview becomeFirstResponder];
     isEditing = NO;
-    [self updateStringSettings];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(BOOL)isHyperLinkReady
@@ -262,53 +256,40 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateBold:(BOOL)bold
 {
-    isBold = bold;
     if(Textview.selectedRange.length > 0)
-    {
-        CTFontRef font = (CTFontRef)[Textview.stringAttributes objectForKey:(NSString*)kCTFontAttributeName];
-        if(!font)
-            [Textview.attributedString setFontName:FontName size:CurrentSize range:Textview.selectedRange];
-        [Textview.attributedString setTextBold:isBold range:Textview.selectedRange];
-        [Textview textChanged];
-    }
+        [Textview.attribString setTextBold:bold range:Textview.selectedRange];
+    else
+        Textview.boldText = bold;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateItalic:(BOOL)italic
 {
-    isItalic = italic;
     if(Textview.selectedRange.length > 0)
-    {
-        CTFontRef font = (CTFontRef)[Textview.stringAttributes objectForKey:(NSString*)kCTFontAttributeName];
-        if(!font)
-            [Textview.attributedString setFontName:FontName size:CurrentSize range:Textview.selectedRange];
-        [Textview.attributedString setTextItalic:isItalic range:Textview.selectedRange];
-        [Textview textChanged];
-    }
+        [Textview.attribString setTextItalic:italic range:Textview.selectedRange];
+    else
+        Textview.italizeText = italic;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateUnderLine:(BOOL)isUnder
 {
-    isUnderLine = isUnder;
     if(Textview.selectedRange.length > 0)
-    {
-        [Textview.attributedString setTextIsUnderlined:isUnderLine range:Textview.selectedRange];
-        [Textview textChanged];
-    }
+        [Textview.attribString setTextIsUnderlined:isUnder range:Textview.selectedRange];
+    else
+        Textview.underlineText = isUnder;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateStrike:(BOOL)strike
 {
-    isStrike = strike;
     if(Textview.selectedRange.length > 0)
-    {
-        [Textview.attributedString setTextStrikeOut:isStrike range:Textview.selectedRange];
-        [Textview textChanged];
-    }
+        [Textview.attribString setTextStrikeOut:strike range:Textview.selectedRange];
+    else
+        Textview.strikeText = strike;
+    
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateAlignment:(NSInteger)align
 {
-    Alignment = align;
+    Textview.textAlignment = align;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateList:(NSInteger)listType
@@ -317,13 +298,13 @@
     {
         NSRange attrib = Textview.selectedRange;
         if(attrib.location > 0 && attrib.location != NSNotFound)
-            [Textview.attributedString addAttribute:HTML_CLOSE_LIST value:[NSNumber numberWithBool:YES] range:NSMakeRange(attrib.location-1, 1)];
+            [Textview.attribString addAttribute:HTML_CLOSE_LIST value:[NSNumber numberWithBool:YES] range:NSMakeRange(attrib.location-1, 1)];
     }
     else if(isUnorderList)
     {
         NSRange attrib = Textview.selectedRange;
         if(attrib.location > 0 && attrib.location != NSNotFound)
-            [Textview.attributedString addAttribute:HTML_CLOSE_LIST value:[NSNumber numberWithBool:YES] range:NSMakeRange(attrib.location-1, 1)];
+            [Textview.attribString addAttribute:HTML_CLOSE_LIST value:[NSNumber numberWithBool:YES] range:NSMakeRange(attrib.location-1, 1)];
     }
         
     if(listType == 0)
@@ -347,7 +328,7 @@
     if(isUnorderList)
         val = HTML_UNORDER_LIST;
     NSMutableAttributedString* tempString = [NSMutableAttributedString spaceString:HTML_LIST value:val height:13 width:20];
-    [Textview appendString:tempString];
+    [Textview.attribString appendAttributedString:tempString];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)didSelectItem:(id)object path:(NSIndexPath*)indexPath
@@ -355,9 +336,9 @@
     GPTableTextItem* item = (GPTableTextItem*)object;
     if([item.NavURL isEqualToString:HYPER_LINK])
     {
-        NSString* text = [Textview.attributedString.string substringWithRange:Textview.selectedRange];
+        NSString* text = [Textview.attribString.string substringWithRange:Textview.selectedRange];
         NSString* link = nil;
-        NSDictionary* attribs = [Textview.attributedString attributesAtIndex:Textview.selectedRange.location longestEffectiveRange:NULL inRange:Textview.selectedRange];
+        NSDictionary* attribs = [Textview.attribString attributesAtIndex:Textview.selectedRange.location longestEffectiveRange:NULL inRange:Textview.selectedRange];
         link = [attribs objectForKey:HYPER_LINK];
         HTMLLinkViewController* linkview = [[[HTMLLinkViewController alloc] initWithText:text link:link] autorelease];
         linkview.delegate = self;
@@ -370,38 +351,40 @@
         }
         return;
     }
+    int fontSize = Textview.font.pointSize;
+    NSString* fontName = Textview.font.fontName;
     NSString* type = [item.Properties objectForKey:@"type"];
     if([type isEqualToString:KEYWORD_HTML_COLOR])
-        CurrentColor = item.color;
+        Textview.textColor = item.color;
     else if([type isEqualToString:KEYWORD_HTML_SIZE])
-        CurrentSize = item.font.pointSize;
+        fontSize = item.font.pointSize;
     else if([type isEqualToString:KEYWORD_HTML_FONT])
-        FontName = item.text;
+        fontName = item.text;
     
     if(Textview.selectedRange.length > 0)
     {
         if([type isEqualToString:KEYWORD_HTML_COLOR])
-            [Textview.attributedString setTextColor:item.color range:Textview.selectedRange];
+            [Textview.attribString setTextColor:item.color range:Textview.selectedRange];
         else if([type isEqualToString:KEYWORD_HTML_SIZE])
-            [Textview.attributedString setFontName:FontName size:item.font.pointSize range:Textview.selectedRange];
+            [Textview.attribString setFontName:fontName size:fontSize range:Textview.selectedRange];
         else if([type isEqualToString:KEYWORD_HTML_FONT])
-            [Textview.attributedString setFontName:FontName size:item.font.pointSize range:Textview.selectedRange];
-        [Textview textChanged];
+            [Textview.attribString setFontName:fontName size:fontSize range:Textview.selectedRange];
     }
+    else
+        Textview.font = [UIFont fontWithName:fontName size:fontSize];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
     [navBar popToRootViewControllerAnimated:YES];
     isEditing = NO;
-    [self updateStringSettings];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //posting
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)PostText
 {
-    NSString* rawhtml = [Textview.attributedString convertToHTML];
+    NSString* rawhtml = [Textview.attribString convertToHTML];
     if([delegate respondsToSelector:@selector(HTMLDidPost:)])
         [delegate HTMLDidPost:rawhtml];
 }
@@ -443,7 +426,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)CancelText
 {
-    if(![Textview.attributedString.mutableString isEqualToString:@""])
+    if(![Textview.attribString.mutableString isEqualToString:@""])
     {
         UIAlertView *alert = [[UIAlertView alloc] init];
         [alert setTitle:@"Confirm"];
@@ -475,80 +458,18 @@
 //sub class createSettingsQuery if you have your own custom settings
 -(NSDictionary*)createSettingsQuery
 {
-    [self updateEditValues];
     NSMutableDictionary* dic = [[[NSMutableDictionary alloc] initWithCapacity:7] autorelease];
-    [dic setObject:[NSNumber numberWithBool:isBold] forKey:@"bold"];
-    [dic setObject:[NSNumber numberWithBool:isItalic] forKey:@"italic"];
-    [dic setObject:[NSNumber numberWithBool:isStrike] forKey:@"strike"];
-    [dic setObject:[NSNumber numberWithBool:isUnderLine] forKey:@"underline"];
-    [dic setObject:[NSNumber numberWithInt:Alignment] forKey:@"alignment"];
-    [dic setObject:CurrentColor forKey:@"color"];
-    [dic setObject:FontName forKey:@"font"];
-    [dic setObject:[NSNumber numberWithInt:CurrentSize] forKey:@"size"];
+    [dic setObject:[NSNumber numberWithBool:Textview.boldText] forKey:@"bold"];
+    [dic setObject:[NSNumber numberWithBool:Textview.italizeText] forKey:@"italic"];
+    [dic setObject:[NSNumber numberWithBool:Textview.strikeText] forKey:@"strike"];
+    [dic setObject:[NSNumber numberWithBool:Textview.underlineText] forKey:@"underline"];
+    [dic setObject:[NSNumber numberWithInt:Textview.textAlignment] forKey:@"alignment"];
+    [dic setObject:Textview.textColor forKey:@"color"];
+    [dic setObject:Textview.font.fontName forKey:@"font"];
+    [dic setObject:[NSNumber numberWithInt:Textview.font.pointSize] forKey:@"size"];
     [dic setObject:[NSNumber numberWithBool:isOrderList] forKey:@"orderlist"];
     [dic setObject:[NSNumber numberWithBool:isUnorderList] forKey:@"unorderlist"];
     return dic;
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)updateEditValues
-{
-    NSDictionary* attribs = [self getAttributesAtIndex:Textview.selectedRange.location-1];
-    CTFontRef font = (CTFontRef)[attribs objectForKey:(NSString*)kCTFontAttributeName];
-    if(font)
-    {
-        CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(font);
-        isItalic = ((traits & kCTFontItalicTrait) == kCTFontItalicTrait);
-        isBold = ((traits & kCTFontBoldTrait) == kCTFontBoldTrait);
-        CTParagraphStyleRef parastyles = (CTParagraphStyleRef)[attribs objectForKey:(NSString*)kCTParagraphStyleAttributeName];
-        CTParagraphStyleGetValueForSpecifier(parastyles,kCTParagraphStyleSpecifierAlignment,sizeof(CTTextAlignment),&Alignment);
-        
-        [CurrentColor release];
-        if([attribs objectForKey:(NSString*)kCTForegroundColorAttributeName])
-            CurrentColor = [[UIColor colorWithCGColor:(CGColorRef)[attribs objectForKey:(NSString*)kCTForegroundColorAttributeName]] retain];
-        else
-            CurrentColor = [[UIColor blackColor] retain];
-        isUnderLine = NO;
-        int32_t line = [[attribs objectForKey:(NSString*)kCTUnderlineStyleAttributeName] intValue]; 
-        if(line == (kCTUnderlineStyleSingle|kCTUnderlinePatternSolid))
-            isUnderLine = YES;
-        isStrike = [[attribs objectForKey:STRIKE_OUT] boolValue];
-        CurrentSize = CTFontGetSize(font);
-    }
-
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(NSDictionary*)getAttributesAtIndex:(int)index
-{
-    if(index < Textview.attributedString.length && index > 0)
-       return [Textview.attributedString attributesAtIndex:index effectiveRange:NULL];
-    return nil;
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//update the attributes the string will apply when typing
--(void)updateStringSettings
-{
-    NSMutableAttributedString* tempString = [[[NSMutableAttributedString alloc] initWithString:@"text"] autorelease];
-    [tempString setFontName:FontName size:CurrentSize];
-    [tempString setTextBold:isBold];
-    [tempString setTextIsUnderlined:isUnderLine];
-    [tempString setTextItalic:isItalic];
-    [tempString setTextStrikeOut:isStrike];
-    [tempString setTextAlignment:Alignment lineBreakMode:kCTLineBreakByWordWrapping];
-    [tempString setTextColor:CurrentColor];
-    NSDictionary* dic = [tempString attributesAtIndex:0 longestEffectiveRange:NULL inRange:NSMakeRange(0, 4)];
-    Textview.stringAttributes = [dic retain];
-    
-    NSRange attrib = Textview.selectedRange;
-    if(attrib.location > 0 && attrib.location != NSNotFound)
-    {
-        [Textview.attributedString setTextColor:CurrentColor range:NSMakeRange(attrib.location-1, 1)];
-        [Textview.attributedString setFontName:FontName size:CurrentSize range:NSMakeRange(attrib.location-1, 1)];
-        [Textview.attributedString setTextBold:isBold range:NSMakeRange(attrib.location-1, 1)];
-        [Textview.attributedString setTextIsUnderlined:isUnderLine range:NSMakeRange(attrib.location-1, 1)];
-        [Textview.attributedString setTextItalic:isItalic range:NSMakeRange(attrib.location-1, 1)];
-        [Textview.attributedString setTextStrikeOut:isStrike range:NSMakeRange(attrib.location-1, 1)];
-        [Textview.attributedString setTextAlignment:Alignment lineBreakMode:kCTLineBreakByWordWrapping range:NSMakeRange(attrib.location-1, 1)];
-    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //subclass this to set custom settings menu. then handle your custom delegates manually
@@ -567,22 +488,19 @@
 {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)HTMLTextViewDidChange:(HTMLTextView *)textView string:(NSString*)string
+- (BOOL)HTMLTextView:(HTMLTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     [self resizeContentArea:textView];
-    if([string isEqualToString:@"\n"] && (isOrderList || isUnorderList ))
+    /*if([string isEqualToString:@"\n"] && (isOrderList || isUnorderList ))
     {
        [self startList];
     }
-    if(textView.attributedString.length-string.length <= 0 && (isOrderList || isUnorderList) && textView.attributedString.length > 0)
+    if(textView.attribString.length-string.length <= 0 && (isOrderList || isUnorderList) && textView.attribString.length > 0)
     {
         isOrderList = NO;
         isUnorderList = NO;
-    }
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)HTMLTextViewWillChange:(HTMLTextView *)textView string:(NSString*)string
-{
+    }*/
+    return YES;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)resizeContentArea:(HTMLTextView *)textView
@@ -615,8 +533,6 @@
 -(void)dealloc
 {
     [navBar release];
-    //[editButton release];
-    [CurrentColor release];
     [Textview release];
     [contentView release];
     [super dealloc];

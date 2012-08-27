@@ -115,6 +115,7 @@
     if(tempAttribString)
     {
         [Textview.attribString appendAttributedString:tempAttribString];
+        [Textview reload];
         [tempAttribString release];
     }
     
@@ -152,6 +153,7 @@
         navBar.view.frame = frame;
     }
         [view release];
+    [self resizeContentArea:Textview];
     
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +174,7 @@
     keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
     
     // Animate up or down
-    [UIView beginAnimations:nil context:nil];
+    /*[UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.2];
     //[UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
@@ -184,7 +186,7 @@
         newFrame.size.height += keyboardFrame.size.height;
     Textview.frame = newFrame;
     
-    [UIView commitAnimations];
+    [UIView commitAnimations];*/
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)keyboardWillShow:(NSNotification *)aNotification {
@@ -195,7 +197,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)keyboardWillHide:(NSNotification *)aNotification 
 {
-        [self moveTextViewForKeyboard:aNotification up:NO]; 
+    [self moveTextViewForKeyboard:aNotification up:NO]; 
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -294,19 +296,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateList:(NSInteger)listType
 {
-    if(isOrderList && listType == 0)
-    {
-        NSRange attrib = Textview.selectedRange;
-        if(attrib.location > 0 && attrib.location != NSNotFound)
-            [Textview.attribString addAttribute:HTML_CLOSE_LIST value:[NSNumber numberWithBool:YES] range:NSMakeRange(attrib.location-1, 1)];
-    }
-    else if(isUnorderList)
-    {
-        NSRange attrib = Textview.selectedRange;
-        if(attrib.location > 0 && attrib.location != NSNotFound)
-            [Textview.attribString addAttribute:HTML_CLOSE_LIST value:[NSNumber numberWithBool:YES] range:NSMakeRange(attrib.location-1, 1)];
-    }
-        
     if(listType == 0)
         isOrderList = !isOrderList;
     else
@@ -316,19 +305,6 @@
         isOrderList = NO;
     if(isOrderList)
         isUnorderList = NO;
-    if(isOrderList || isUnorderList)
-    {
-        [self startList];
-    }
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)startList
-{
-    NSString* val = HTML_ORDER_LIST;
-    if(isUnorderList)
-        val = HTML_UNORDER_LIST;
-    NSMutableAttributedString* tempString = [NSMutableAttributedString spaceString:HTML_LIST value:val height:13 width:20];
-    [Textview.attribString appendAttributedString:tempString];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)didSelectItem:(id)object path:(NSIndexPath*)indexPath
@@ -409,9 +385,9 @@
                 frame.origin.y -= 300;
                 navBar.view.frame = frame;
                 
-                frame = Textview.frame;
-                frame.size.height -= 50;
-                Textview.frame = frame;
+                //frame = Textview.frame;
+                //frame.size.height -= 50;
+                //Textview.frame = frame;
                 [UIView commitAnimations];
             }
         }
@@ -458,15 +434,48 @@
 //sub class createSettingsQuery if you have your own custom settings
 -(NSDictionary*)createSettingsQuery
 {
+    BOOL isItalic = Textview.italizeText;
+    BOOL isBold = Textview.boldText;
+    BOOL isStrike = Textview.strikeText;
+    BOOL isUnder = Textview.underlineText;
+    CGFloat size = Textview.font.pointSize;
+    NSString* fontName = Textview.font.fontName;
+    UIColor* textcolor = Textview.textColor;
+    CTTextAlignment alignment = Textview.textAlignment;
+    
+    if(Textview.selectedRange.location != NSNotFound && Textview.selectedRange.location > 0 && Textview.selectedRange.location < Textview.attribString.length)
+    {
+        NSDictionary* attributes = [Textview.attribString attributesAtIndex:Textview.selectedRange.location effectiveRange:NULL];
+        
+        CTFontRef font = (CTFontRef)[attributes objectForKey:(NSString*)kCTFontAttributeName];
+        CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(font);
+        isItalic = ((traits & kCTFontItalicTrait) == kCTFontItalicTrait);
+        isBold = ((traits & kCTFontBoldTrait) == kCTFontBoldTrait);
+        isStrike = [[attributes objectForKey:STRIKE_OUT] boolValue];
+        CTParagraphStyleRef parastyles = (CTParagraphStyleRef)[attributes objectForKey:(NSString*)kCTParagraphStyleAttributeName];
+
+        CTParagraphStyleGetValueForSpecifier(parastyles,kCTParagraphStyleSpecifierAlignment,sizeof(CTTextAlignment),&alignment);
+        size = CTFontGetSize(font);
+        fontName = [(NSString*)CTFontCopyFamilyName(font) autorelease];
+        
+        UIColor* tempColor = [UIColor colorWithCGColor:(CGColorRef)[attributes objectForKey:(NSString*)kCTForegroundColorAttributeName]];
+        if(tempColor)
+            textcolor = tempColor;
+
+        int32_t line = [[attributes objectForKey:(NSString*)kCTUnderlineStyleAttributeName] intValue];
+        if(line == (kCTUnderlineStyleSingle|kCTUnderlinePatternSolid))
+            isUnder = YES;
+    }
+    
     NSMutableDictionary* dic = [[[NSMutableDictionary alloc] initWithCapacity:7] autorelease];
-    [dic setObject:[NSNumber numberWithBool:Textview.boldText] forKey:@"bold"];
-    [dic setObject:[NSNumber numberWithBool:Textview.italizeText] forKey:@"italic"];
-    [dic setObject:[NSNumber numberWithBool:Textview.strikeText] forKey:@"strike"];
-    [dic setObject:[NSNumber numberWithBool:Textview.underlineText] forKey:@"underline"];
-    [dic setObject:[NSNumber numberWithInt:Textview.textAlignment] forKey:@"alignment"];
-    [dic setObject:Textview.textColor forKey:@"color"];
-    [dic setObject:Textview.font.fontName forKey:@"font"];
-    [dic setObject:[NSNumber numberWithInt:Textview.font.pointSize] forKey:@"size"];
+    [dic setObject:[NSNumber numberWithBool:isBold] forKey:@"bold"];
+    [dic setObject:[NSNumber numberWithBool:isItalic] forKey:@"italic"];
+    [dic setObject:[NSNumber numberWithBool:isStrike] forKey:@"strike"];
+    [dic setObject:[NSNumber numberWithBool:isUnder] forKey:@"underline"];
+    [dic setObject:[NSNumber numberWithInt:alignment] forKey:@"alignment"];
+    [dic setObject:textcolor forKey:@"color"];
+    [dic setObject:fontName forKey:@"font"];
+    [dic setObject:[NSNumber numberWithInt:size] forKey:@"size"];
     [dic setObject:[NSNumber numberWithBool:isOrderList] forKey:@"orderlist"];
     [dic setObject:[NSNumber numberWithBool:isUnorderList] forKey:@"unorderlist"];
     return dic;
@@ -488,38 +497,50 @@
 {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)HTMLTextViewDidUpdateText:(HTMLTextView *)textView text:(NSString*)text
+{
+    if([text isEqualToString:@"\n"] && textView.attribString.length > 1 && isspace([textView.attribString.string characterAtIndex:textView.selectedRange.location-2]) )
+    {
+        isOrderList = isUnorderList = NO;
+    }
+    else if([text isEqualToString:@"\n"] && (isOrderList || isUnorderList ))
+    {
+        NSMutableAttributedString* string = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+        [string setOrderList:isOrderList];
+        [string setUnOrderList:isUnorderList];
+        [textView.attribString appendAttributedString:string];
+        textView.selectedRange = NSMakeRange(textView.selectedRange.location+1, textView.selectedRange.length);
+        [textView reload];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)HTMLTextView:(HTMLTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     [self resizeContentArea:textView];
-    /*if([string isEqualToString:@"\n"] && (isOrderList || isUnorderList ))
-    {
-       [self startList];
-    }
-    if(textView.attribString.length-string.length <= 0 && (isOrderList || isUnorderList) && textView.attribString.length > 0)
-    {
-        isOrderList = NO;
-        isUnorderList = NO;
-    }*/
     return YES;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)resizeContentArea:(HTMLTextView *)textView
 {
-    int keyboard = 250;
-    
-    int pad = 30;
-    int h = textView.contentSize.height+ keyboard;
-    contentView.contentSize = CGSizeMake(textView.contentSize.width, h+pad);
-    int yoffset = h - textView.frame.size.height;
-    CGRect frame = textView.frame;
-    frame.size.height = h;
-    textView.frame = frame;
-    if(yoffset > 0 && textView.frame.size.height > self.view.frame.size.height)
+    int keyboard = keyboardFrame.size.height;
+    int check = self.view.frame.size.height - keyboard;
+    int h = textView.contentSize.height + 20;
+    if((textView.contentSize.height) > check-10)
     {
+        h += keyboard + 70;
+        int yoffset = textView.contentSize.height - oldOffset;
+        
         CGPoint offset = contentView.contentOffset;
         offset.y += yoffset;
         [contentView setContentOffset:offset animated:YES];
     }
+    contentView.contentSize = CGSizeMake(textView.contentSize.width, h);
+    
+    CGRect frame = textView.frame;
+    frame.size.height = h;
+    textView.frame = frame;
+    
+    oldOffset = textView.contentSize.height;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

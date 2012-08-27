@@ -89,6 +89,7 @@
 
 -(void)addImage:(UIImage*)image;
 -(void)addImageURL:(NSString*)imageURL;
+-(void)addVideoURL:(NSString*)videoURL;
 
 - (BOOL)textViewShouldBeginEditing;
 - (BOOL)textViewShouldEndEditing;
@@ -139,6 +140,7 @@
 
 -(void)addImage:(UIImage*)image;
 -(void)addImageURL:(NSString*)imageURL;
+-(void)addVideoURL:(NSString*)videoURL;
 
 @end
 

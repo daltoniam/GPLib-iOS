@@ -371,7 +371,7 @@ static CGFloat getWidthCallback( void* refCon );
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setOrderList:(BOOL)list range:(NSRange)range
 {
-    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"8",@"height",@"20",@"width", nil];
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"8",@"height",@"22",@"width", nil];
     [self addRunDelegate:range attribs:dict];
     [self removeAttribute:HTML_ORDER_LIST range:range]; // Work around for Apple leak
 	[self addAttribute:HTML_ORDER_LIST value:[NSNumber numberWithBool:list] range:range];
@@ -428,10 +428,9 @@ CGFloat getWidthCallback( void* ref )
     __block BOOL closeItalic = NO;
     __block NSString* closeSpan = nil;
     __block BOOL partag = YES;
-    __block BOOL listtag = NO;
-    __block BOOL listelement = NO;
-    __block NSString* lastListType = nil;
+    __block BOOL lastListOrdered = NO;
     __block CTTextAlignment oldAlign = kCTLeftTextAlignment;
+    __block BOOL listProgress = NO;
     [self enumerateAttributesInRange:validRange options:0 usingBlock:
      ^(NSDictionary *attributes, NSRange range, BOOL *stop) 
     {
@@ -449,23 +448,24 @@ CGFloat getWidthCallback( void* ref )
             oldAlign = Alignment;
             updateAlign = YES;
         }
-        BOOL closeList = NO;
+        
         NSString* imageURL = [attributes objectForKey:IMAGE_LINK];
         NSString* videoURL = [attributes objectForKey:VIDEO_LINK];
         NSString* hyperLink = [attributes objectForKey:HYPER_LINK];
-        NSString* listtype = [attributes objectForKey:HTML_LIST];
-        BOOL closeListTag = [[attributes objectForKey:HTML_CLOSE_LIST] boolValue];
-        if(listtag && !listtype && closeListTag)
-            closeList = YES;
-        if(listtype && !listtag)
+        BOOL unOrder = [[attributes objectForKey:HTML_UNORDER_LIST] boolValue];
+        BOOL order = [[attributes objectForKey:HTML_ORDER_LIST] boolValue];
+        
+        if(unOrder || order)
         {
-            lastListType = [listtype copy];
-            listtag = YES;
-            if([listtype isEqualToString:HTML_ORDER_LIST])
+            if(order)
                 [html appendString:@"<ol>"];
             else
                 [html appendString:@"<ul>"];
+            listProgress = YES;
+            lastListOrdered = order;
         }
+        else
+            listProgress = NO;
         
         //////////////////////////////////////////////////
         //build Dom.
@@ -484,13 +484,10 @@ CGFloat getWidthCallback( void* ref )
             closeItalic = NO;
             [html appendString:@"</em>"];
         }
-        if(closeList && listtag)
-            listtag = NO;
 
-        if(listtag && !listelement)
+        if(order || unOrder)
         {
             [html appendString:@"<li>"];
-            listelement = YES; //list element in progress
         }
         if(partag)
         {
@@ -554,18 +551,9 @@ CGFloat getWidthCallback( void* ref )
             [html appendString:@"</p>"];
             partag = YES;
         }
-        if(listelement && [parString characterAtIndex:parString.length-1] == '\n')
+        if(order || unOrder)
         {
             [html appendString:@"</li>"];
-            listelement = NO;
-        }
-        if(closeList)
-        {
-            closeList = NO;
-            if([lastListType isEqualToString:HTML_ORDER_LIST])
-                [html appendString:@"</ol>"];
-            else
-                [html appendString:@"</ul>"];
         }
      }]; 
     if(closeBold)
@@ -574,10 +562,10 @@ CGFloat getWidthCallback( void* ref )
         [html appendString:@"</em>"];
     if(closeSpan)
         [html appendString:@"</span>"];
-    if(listelement)
+    if(listProgress)
     {
         [html appendString:@"</li>"];
-        if([lastListType isEqualToString:HTML_ORDER_LIST])
+        if(lastListOrdered)
             [html appendString:@"</ol>"];
         else
             [html appendString:@"</ul>"];

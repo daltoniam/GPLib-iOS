@@ -112,6 +112,11 @@
     [inputView addImageURL:imageURL];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addVideoURL:(NSString*)videoURL
+{
+    [inputView addVideoURL:videoURL];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)textViewShouldBeginEditing
 {
     if([self.delegate respondsToSelector:@selector(HTMLTextViewShouldBeginEditing:)])
@@ -186,14 +191,15 @@
         tap.numberOfTapsRequired = 2;
         [self addGestureRecognizer:tap];
         
+        self.editable = YES;
         attribString = [[NSMutableAttributedString alloc] init];
         caretView = [[UIView alloc] init];
         caretView.backgroundColor = [UIColor blueColor];
         [self blinkAnimation];
         [self addSubview:caretView];
+        caretView.hidden = YES;
         selectedRange = NSMakeRange(0, 0);
         tokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
-        self.editable = YES;
         self.selectionColor = [UIColor colorWithRed:204/255.0f green:221/255.0f blue:237/255.0f alpha:1];
     }
     return self;
@@ -216,6 +222,7 @@
             [self.delegate textViewDidBeginEditing];
         
     }
+    caretView.hidden = NO;
     return [super becomeFirstResponder];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,6 +241,7 @@
         if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing)])
             [self.delegate textViewDidEndEditing];
     }
+    caretView.hidden = YES;
 	return [super resignFirstResponder];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,6 +265,14 @@
 {
     NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
     [temp setImageTag:imageURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:@"150",@"height",@"200",@"width",@"0",@"padding", nil]];
+    [self.attribString appendAttributedString:temp];
+    [self setNeedsDisplay];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addVideoURL:(NSString*)videoURL
+{
+    NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+    [temp setYoutubeTag:videoURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:@"250",@"height",@"300",@"width",@"0",@"padding", nil]];
     [self.attribString appendAttributedString:temp];
     [self setNeedsDisplay];
 }
@@ -538,7 +554,14 @@
     CGFloat delta = MAX(0.f , ceilf(size.height - frame.size.height)) + 10;
     frame.origin.y -= delta;
     frame.size.height += delta;
-    [self.delegate updateSize:CGSizeMake(size.width, frame.size.height)];
+    //self.frame = frame;
+    [self.delegate updateSize:CGSizeMake(size.width, size.height)]; //frame.size.height
+    if(size.height > self.frame.size.height)
+    {
+        CGRect f = self.frame;
+        f.size.height = size.height;
+        self.frame = f;
+    }
     //self.contentSize = CGSizeMake(size.width, frame.size.height);
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, frame);

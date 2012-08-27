@@ -72,7 +72,7 @@
         if(!GPIsPad())
         {
             self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:SegControl] autorelease];
-            self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"dismiss" style:UIBarButtonItemStyleBordered target:self action:@selector(dimiss)] autorelease];
+            self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage libraryImageNamed:@"icon-caret-down.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(dimiss)] autorelease];
         }
         else
             self.navigationItem.titleView = SegControl;

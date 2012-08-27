@@ -96,6 +96,8 @@
 		5C6907B114E04C8900E44620 /* GPLauncherButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C6907AF14E04C8900E44620 /* GPLauncherButton.h */; };
 		5C6907B214E04C8900E44620 /* GPLauncherButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C6907B014E04C8900E44620 /* GPLauncherButton.m */; };
 		5C6907B914E18A5D00E44620 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C6907B814E18A5D00E44620 /* CoreText.framework */; };
+		5C70C40615EBD82900FAD7FA /* icon-caret-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C70C40415EBD82900FAD7FA /* icon-caret-down.png */; };
+		5C70C40715EBD82900FAD7FA /* icon-caret-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C70C40515EBD82900FAD7FA /* icon-caret-down@2x.png */; };
 		5C88137B151A175A006BCDC9 /* HTMLSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */; };
 		5C88137C151A175A006BCDC9 /* HTMLSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */; };
 		5C881380151B6778006BCDC9 /* HTMLListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C88137E151B6778006BCDC9 /* HTMLListViewController.h */; };
@@ -366,6 +368,8 @@
 		5C6907AF14E04C8900E44620 /* GPLauncherButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPLauncherButton.h; path = Launcher/GPLauncherButton.h; sourceTree = "<group>"; };
 		5C6907B014E04C8900E44620 /* GPLauncherButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPLauncherButton.m; path = Launcher/GPLauncherButton.m; sourceTree = "<group>"; };
 		5C6907B814E18A5D00E44620 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		5C70C40415EBD82900FAD7FA /* icon-caret-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-caret-down.png"; path = "../../../../../../Downloads/icons/icon-caret-down.png"; sourceTree = "<group>"; };
+		5C70C40515EBD82900FAD7FA /* icon-caret-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-caret-down@2x.png"; path = "../../../../../../Downloads/icons/icon-caret-down@2x.png"; sourceTree = "<group>"; };
 		5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLSettingsViewController.h; sourceTree = "<group>"; };
 		5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLSettingsViewController.m; sourceTree = "<group>"; };
 		5C88137E151B6778006BCDC9 /* HTMLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLListViewController.h; sourceTree = "<group>"; };
@@ -680,6 +684,8 @@
 		5C881382151CDE54006BCDC9 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				5C70C40415EBD82900FAD7FA /* icon-caret-down.png */,
+				5C70C40515EBD82900FAD7FA /* icon-caret-down@2x.png */,
 				5C2FFA4B1561A7B100D87B52 /* italic.png */,
 				5CE2615F1520C3E70022ACA2 /* drag-dot@2x.png */,
 				5CE261601520C3E70022ACA2 /* loupe-hi@2x.png */,
@@ -1301,6 +1307,8 @@
 				5C3D8FF41573F4100052179A /* timescroll_minutehand@2x.png in Resources */,
 				5C3D8FF51573F4100052179A /* timescroll_pointer.png in Resources */,
 				5C3D8FF61573F4100052179A /* timescroll_pointer@2x.png in Resources */,
+				5C70C40615EBD82900FAD7FA /* icon-caret-down.png in Resources */,
+				5C70C40715EBD82900FAD7FA /* icon-caret-down@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

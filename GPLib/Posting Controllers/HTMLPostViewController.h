@@ -59,6 +59,7 @@
     NSMutableAttributedString* tempAttribString;
     UIScrollView* contentView;
     CGRect keyboardFrame;
+    int oldOffset;
 }
 
 -(void)editText;
@@ -68,7 +69,8 @@
 @property(nonatomic,assign)id<HTMLPostDelegate> delegate;
 @property(nonatomic,retain)UIPopoverController* Popover;
 
-
 -(id)initWithHTML:(NSString*)html;
+
+-(void)resizeContentArea:(HTMLTextView *)textView;
 
 @end

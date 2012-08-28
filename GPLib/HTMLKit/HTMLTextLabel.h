@@ -89,10 +89,12 @@
 @property(nonatomic,assign)id<HTMLTextLabelDelegate> delegate;
 @property(nonatomic,retain,readonly)NSString* rawHTML;
 @property(nonatomic,assign)BOOL ignoreXAttachment;
+@property(nonatomic,assign)CTFramesetterRef cachedFramesetter;
 
 - (id)initWithHTML:(NSString*)html embed:(BOOL)embed frame:(CGRect)frame;
 - (id)initWithAttributedString:(NSAttributedString*)items;
 -(void)setHTML:(NSString*)html embed:(BOOL)embed;
+-(void)setAttributedString:(NSAttributedString *)string height:(CGFloat)height frame:(CTFramesetterRef)framesetter;
 -(CGFloat)getTextHeight;
 -(void)processHyperLink:(NSString*)link;
 @end

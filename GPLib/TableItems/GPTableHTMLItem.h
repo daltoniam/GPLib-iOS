@@ -32,10 +32,15 @@
 //
 
 #import "GPTableTextItem.h"
+#import <CoreText/CoreText.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 
 @interface GPTableHTMLItem : GPTableTextItem
+
+@property(nonatomic,assign)CGFloat rowHeight;
+@property(nonatomic,assign)CTFramesetterRef cachedFramesetter;
+@property(nonatomic,retain)NSAttributedString* cachedAttribString;
 
 + (GPTableHTMLItem*)itemWithHTML:(NSString*)htmlstring url:(NSString*)url;
 + (GPTableHTMLItem*)itemWithHTML:(NSString*)htmlstring url:(NSString*)url Properties:(NSDictionary*)data;

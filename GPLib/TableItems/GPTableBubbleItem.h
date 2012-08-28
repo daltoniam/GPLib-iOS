@@ -32,8 +32,13 @@
 //
 
 #import "GPTableImageItem.h"
+#import <CoreText/CoreText.h>
 
 @interface GPTableBubbleItem : GPTableImageItem
+
+@property(nonatomic,assign)CGFloat rowHeight;
+@property(nonatomic,assign)CTFramesetterRef cachedFramesetter;
+@property(nonatomic,retain)NSAttributedString* cachedAttribString;
 
 + (GPTableBubbleItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl;
 + (GPTableBubbleItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl URL:(NSString*)url;

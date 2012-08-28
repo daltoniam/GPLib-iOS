@@ -125,6 +125,16 @@ CGFloat TableCellDefaultImageSize = 50;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setImageView:(UIImage*)image
+{
+    imageView.image = image;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSString*)imageURL
+{
+    return imageView.URL;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setObject:(id)object 
 {
     [super setObject:object];
@@ -133,14 +143,17 @@ CGFloat TableCellDefaultImageSize = 50;
     currentObject = [object retain];
     
     imageView.URL = item.ImageURL;
-    imageView.image = item.DefaultImage;
-    if(!item.imageData)
+    if(item.imageData)
+        imageView.image = item.imageData;
+    else
+        imageView.image = item.DefaultImage;
+    /*if(!item.imageData)
     {
         [imageView stopImage];
         [imageView fetchImage]; //these are cached so no worries on making a bunch of network request.
     }
     else
-        imageView.image = item.imageData;
+        imageView.image = item.imageData;*/
     
     imageView.layer.cornerRadius = item.imageRounding;
     if(item.imageRounding <= 0) 
@@ -168,12 +181,12 @@ CGFloat TableCellDefaultImageSize = 50;
     topJustify = item.topJustifyImage;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
--(void)imageDidFinish:(GPImageView*)view
+/*-(void)imageDidFinish:(GPImageView*)view
 {
     if([view.URL isEqualToString:currentObject.ImageURL])
         currentObject.imageData = [view.image retain];
         
-}
+}*/
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc 
 {

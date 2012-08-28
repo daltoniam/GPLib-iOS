@@ -41,9 +41,10 @@
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object
 {
     CGFloat maxWidth = tableView.frame.size.width - 80;
-    CGFloat height = [super tableView:tableView rowHeightForObject:object];
-    
     GPTableMailItem* item = (GPTableMailItem*)object;
+    if(item.rowHeight)
+        return item.rowHeight;
+    CGFloat height = [super tableView:tableView rowHeightForObject:object];
 
     HTMLTextLabel* view = [[[HTMLTextLabel alloc] initWithHTML:item.title embed:YES frame:CGRectMake(0, 0, maxWidth, 0)] autorelease];
     view.ExtendHeightToFit = YES;
@@ -148,7 +149,10 @@
     {
         if(!titleLabel)
             [self setupTitleLabel];
-        [titleLabel setHTML:item.title embed:YES];
+        if(item.cachedTitleAttribString && item.cachedTitleFramesetter)
+            [titleLabel setAttributedString:item.cachedTitleAttribString height:item.rowHeight frame:item.cachedTitleFramesetter];
+        else
+            [titleLabel setHTML:item.title embed:YES];
     }
     
     //imageView.layer.cornerRadius = 2;

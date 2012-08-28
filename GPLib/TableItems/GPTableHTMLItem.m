@@ -35,6 +35,7 @@
 
 @implementation GPTableHTMLItem
 
+@synthesize rowHeight,cachedFramesetter,cachedAttribString;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableHTMLItem*)itemWithHTML:(NSString*)htmlstring url:(NSString*)url
 {

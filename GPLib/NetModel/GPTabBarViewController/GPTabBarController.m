@@ -184,7 +184,7 @@
       	
     {
         
-        UINavigationController* controller = [[UINavigationController alloc] initWithRootViewController:vc];
+        UINavigationController* controller = [[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
         [[GPNavigator navigator] navigationControllerChange:controller];
 
         controller.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height);

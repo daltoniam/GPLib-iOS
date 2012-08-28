@@ -157,6 +157,7 @@
         
         GPTableTextItem* item = (GPTableTextItem*)[fontArray objectAtIndex:index];
         item.isChecked = YES;
+        [fontArray release];
     }
     [self.tableView reloadData];
 }

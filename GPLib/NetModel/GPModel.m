@@ -80,7 +80,10 @@
     if(more)
     {
         page++;
-        [items removeLastObject];
+        if(sections) //my best guess, could be wrong
+            [[items lastObject] removeLastObject];
+        else
+            [items removeLastObject];
     }
     else
     {
@@ -148,7 +151,12 @@
         //if([NSThread isMainThread])
         if([self enablePaging])
             if(!isFinished)
-                [items addObject:[GPTableMoreItem itemWithLoading:@"Load More..." isAutoLoad:[self autoLoad]]];
+            {
+                if(sections)
+                    [[items lastObject] addObject:[GPTableMoreItem itemWithLoading:@"Load More..." isAutoLoad:[self autoLoad]]];
+                else
+                    [items addObject:[GPTableMoreItem itemWithLoading:@"Load More..." isAutoLoad:[self autoLoad]]];
+            }
         [self performSelectorOnMainThread:@selector(finished:) withObject:request waitUntilDone:NO];
     }
 }

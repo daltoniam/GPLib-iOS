@@ -41,7 +41,7 @@
 
 @implementation HTMLTextLabel
 
-@synthesize extendHeightToFit,attributedText = attributedText,delegate = delegate,rawHTML,ignoreXAttachment,autoSizeImages;
+@synthesize extendHeightToFit,attributedText = attributedText,delegate = delegate,rawHTML,ignoreXAttachment,autoSizeImages,cachedFramesetter;
 
 //////////////////////////////////////////////////////////////////////////////
 -(void)commonInit
@@ -51,6 +51,18 @@
     imageArray = [[NSMutableArray alloc] init];
     videoArray = [[NSMutableArray alloc] init];
     viewArray = [[NSMutableArray alloc] init];
+}
+//////////////////////////////////////////////////////////////////////////////
+-(void)commonClean
+{
+    [imageArray removeAllObjects];
+    for(ImageItem* item in videoArray)
+        [item.subView removeFromSuperview];
+    [videoArray removeAllObjects];
+    
+    for(ImageItem* item in viewArray)
+        [item.subView removeFromSuperview];
+    [viewArray removeAllObjects];
 }
 //////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -100,20 +112,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 -(void)setHTML:(NSString*)html embed:(BOOL)embed
 {
-    [imageArray removeAllObjects];
-    for(ImageItem* item in videoArray)
-        [item.subView removeFromSuperview];
-    [videoArray removeAllObjects];
-    
-    for(ImageItem* item in viewArray)
-        [item.subView removeFromSuperview];
-    [viewArray removeAllObjects];
-    
+    [self commonClean];
     rawHTML = [html retain];
     HTMLParser* parser = [[[HTMLParser alloc] initWithHTML:html] autorelease];
     parser.Embed = embed;
     self.attributedText = [parser ParseHTML];
+    self.cachedFramesetter = NULL;
     [self setNeedsDisplay];
+}
+////////////////////////////////////////////////////////////////////////////////////////
+//much higher preformance than setHTML, use when possible.
+-(void)setAttributedString:(NSAttributedString *)string height:(CGFloat)height frame:(CTFramesetterRef)framesetter
+{
+    [self commonClean];
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+    self.attributedText = string;
+    self.cachedFramesetter = framesetter;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //draw non text content
@@ -270,11 +286,12 @@
         
 		if (textFrame == NULL) 
         {
-			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedText);
+            if(!self.cachedFramesetter)
+                self.cachedFramesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedText);
 			CGRect frame = self.bounds;
 			if (self.extendHeightToFit)
             {
-                CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width,CGFLOAT_MAX),NULL);
+                CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(self.cachedFramesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width,CGFLOAT_MAX),NULL);
                 CGFloat delta = MAX(0.f , ceilf(size.height - frame.size.height)) + 10;
                 frame.origin.y -= delta;
                 frame.size.height += delta;
@@ -285,9 +302,9 @@
 			}
 			CGMutablePathRef path = CGPathCreateMutable();
 			CGPathAddRect(path, NULL, frame);
-			textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+			textFrame = CTFramesetterCreateFrame(self.cachedFramesetter,CFRangeMake(0,0), path, NULL);
 			CGPathRelease(path);
-			CFRelease(framesetter);
+			//CFRelease(framesetter);
 		}
         
 		CTFrameDraw(textFrame, ctx);
@@ -461,16 +478,18 @@
 {
     if (attributedText) 
     {
-        CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedText);
+        if(!self.cachedFramesetter)
+            self.cachedFramesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedText);
         CGRect frame = self.bounds;
         if (self.extendHeightToFit)
         {
             //NSLog(@"frame.size.width: %f",frame.size.width);
-            CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width,CGFLOAT_MAX),NULL);
+            CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(self.cachedFramesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width,CGFLOAT_MAX),NULL);
             //NSLog(@"size: %f",size.height);
             CGFloat delta = MAX(0.f , ceilf(size.height - frame.size.height)) + 10;
             frame.origin.y -= delta;
             frame.size.height += delta;
+            //CFRelease(framesetter);
             //NSLog(@"text label frame height: %f",frame.size.height);
         }
         return frame.size.height;
@@ -630,6 +649,11 @@
 		CFRelease(textFrame);
 		textFrame = NULL;
     }
+    /*if(self.cachedFramesetter)
+    {
+        CFRelease(self.cachedFramesetter);
+        self.cachedFramesetter = NULL;
+    }*/
 	[super setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -639,6 +663,11 @@
     {
 		CFRelease(textFrame);
 		textFrame = NULL;
+    }
+    if(self.cachedFramesetter)
+    {
+        CFRelease(self.cachedFramesetter);
+        self.cachedFramesetter = NULL;
     }
     self.delegate = nil;
     for(GPHTTPRequest* request in requestArray)

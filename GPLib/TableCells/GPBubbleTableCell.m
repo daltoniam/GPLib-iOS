@@ -31,6 +31,7 @@
  */
 //
 
+#import "GPUtils.h"
 #import "GPBubbleTableCell.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -41,6 +42,8 @@
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object 
 {
     GPTableBubbleItem* item = (GPTableBubbleItem*)object;
+    if(item.rowHeight) //we cache rowHeight for preformance reasons
+        return item.rowHeight;
     CGFloat maxWidth = tableView.frame.size.width - 80;
     //CGFloat ImageSize = [super tableView:tableView rowHeightForObject:object];
     HTMLTextLabel* view = [[[HTMLTextLabel alloc] initWithHTML:item.text embed:YES frame:CGRectMake(0, 0, maxWidth, 0)] autorelease];
@@ -113,7 +116,9 @@
     [super setObject:object];
     GPTableBubbleItem* item = (GPTableBubbleItem*)object;
     self.textLabel.text = nil;
-    if(item.text)
+    if(item.cachedAttribString && item.cachedFramesetter) //if you are smart, you will calculate and cache this in your model.
+        [HTMLText setAttributedString:item.cachedAttribString height:item.rowHeight frame:item.cachedFramesetter];
+    else if(item.text)
         [HTMLText setHTML:item.text embed:YES];
     
 }

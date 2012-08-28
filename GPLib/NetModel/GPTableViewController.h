@@ -51,6 +51,8 @@
     NSMutableArray* sections;
     UIView* emptyView;
     GPTimeScroller* timeScroller;
+    NSMutableArray* imageURLs;
+    NSOperationQueue* imageQueue;
 }
 
 @property(nonatomic,readonly,retain)GPModel* model;

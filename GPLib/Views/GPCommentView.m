@@ -123,7 +123,7 @@
     }
     [button setImage:image forState:UIControlStateNormal];
     [button addTarget:self action:@selector(attachmentButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    return button;
+    return [button autorelease];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews
@@ -132,7 +132,7 @@
     if(self.uploadImage && !attachButton)
     {
         attachButton = YES;
-        GPButton* button = [self attachmentButton];
+        GPButton* button = [[self attachmentButton] retain];
         int offset = button.frame.size.width + MARGIN;
         CGRect frame = bubble.frame;
         frame.size.width -= offset;

@@ -46,4 +46,8 @@ extern CGFloat TableCellDefaultImageSize;
     CGSize imageBounds;
     BOOL topJustify;
 }
+
+-(void)setImageView:(UIImage*)image;
+-(NSString*)imageURL;
+
 @end

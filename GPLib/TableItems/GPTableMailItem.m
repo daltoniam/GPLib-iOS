@@ -35,7 +35,7 @@
 
 @implementation GPTableMailItem
 
-@synthesize title;
+@synthesize title,cachedTitleAttribString,cachedTitleFramesetter;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableMailItem*)itemWithHTML:(NSString*)htmlstring title:(NSString*)titleHTML imageURL:(NSString*)imageurl
 {

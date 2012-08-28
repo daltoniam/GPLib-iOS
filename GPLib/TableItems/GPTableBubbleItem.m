@@ -35,6 +35,7 @@
 
 @implementation GPTableBubbleItem
 
+@synthesize rowHeight,cachedFramesetter,cachedAttribString;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableBubbleItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl
 {

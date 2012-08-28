@@ -484,7 +484,7 @@
 //subclass this to set custom settings menu. then handle your custom delegates manually
 -(HTMLSettingsViewController*)settingsMenu
 {
-    return [[HTMLSettingsViewController alloc] initWithExtras:nil];
+    return [[[HTMLSettingsViewController alloc] initWithExtras:nil] autorelease];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //text selection

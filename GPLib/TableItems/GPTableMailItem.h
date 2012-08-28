@@ -32,10 +32,13 @@
 //
 
 #import "GPTableMessageItem.h"
+#import <CoreText/CoreText.h>
 
 @interface GPTableMailItem : GPTableMessageItem
 
 @property(nonatomic,copy)NSString* title;
+@property(nonatomic,assign)CTFramesetterRef cachedTitleFramesetter;
+@property(nonatomic,retain)NSAttributedString* cachedTitleAttribString;
 
 + (GPTableMailItem*)itemWithHTML:(NSString*)htmlstring title:(NSString*)titleHTML imageURL:(NSString*)imageurl;
 

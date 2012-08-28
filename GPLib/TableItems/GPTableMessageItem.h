@@ -32,10 +32,15 @@
 //
 
 #import "GPTableImageItem.h"
+#import <CoreText/CoreText.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 
 @interface GPTableMessageItem : GPTableImageItem
+
+@property(nonatomic,assign)CGFloat rowHeight;
+@property(nonatomic,assign)CTFramesetterRef cachedFramesetter;
+@property(nonatomic,retain)NSAttributedString* cachedAttribString;
 
 + (GPTableMessageItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl;
 + (GPTableMessageItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl URL:(NSString*)url;

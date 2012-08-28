@@ -305,6 +305,10 @@
     
     if ([cell isKindOfClass:[GPTableCell class]])
         [(GPTableCell*)cell setObject:object];
+    
+    if([object isKindOfClass:[GPTableImageItem class]])
+        [self processImageURL:object];
+    
     if([cell respondsToSelector:@selector(setDelegate:)])
         [cell performSelector:@selector(setDelegate:) withObject:self];
     
@@ -334,7 +338,10 @@
     {
         id object = [self tableView:tableView objectForRowAtIndexPath:indexPath];
         Class cls = [self tableView:tableView cellClassForObject:object];
-        return [cls tableView:tableView rowHeightForObject:object];
+        CGFloat height = [cls tableView:tableView rowHeightForObject:object];
+        if([object respondsToSelector:@selector(rowHeight)])
+            [object setRowHeight:height];
+        return height;
     }
     return 44;
 }
@@ -547,6 +554,72 @@
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPHTTPRequest*)fetchImage:(NSString*)url
+{
+    __block GPHTTPRequest* request = [GPHTTPRequest requestWithString:url];
+    [request setCacheModel:GPHTTPCacheCustomTime];
+    [request setTimeout:60*60*1]; // Cache for 1 hour
+    [request setFinishBlock:^{
+        
+        if(sections)
+        {
+            int section = 0;
+            for(NSArray* itemArray in items)
+            {
+                [self reloadImageItems:itemArray url:request section:section];
+                section++;
+            }
+        }
+        else
+            [self reloadImageItems:items url:request section:0];
+
+        
+    }];
+    return request;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reloadImageItems:(NSArray*)arrayItems url:(GPHTTPRequest*)request section:(int)section
+{
+    int i = 0;
+    for(id object in arrayItems)
+    {
+        if([object isKindOfClass:[GPTableImageItem class]])
+        {
+            GPTableImageItem* item = (GPTableImageItem*)object;
+            if([item.ImageURL isEqualToString:request.URL.absoluteString])
+            {
+                item.imageData = [UIImage imageWithData:[request responseData]];
+                UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
+                if([cell isKindOfClass:[GPTableImageCell class]])
+                    [(GPTableImageCell*)cell setImageView:item.imageData];
+            }
+        }
+        i++;
+    }
+    [imageURLs removeObject:request.URL.absoluteString];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)processImageURL:(id)object
+{
+    if([object isKindOfClass:[GPTableImageItem class]])
+    {
+        if(!imageQueue)
+            imageURLs = [[NSMutableArray alloc] initWithCapacity:items.count];
+        if(!imageQueue)
+        {
+            imageQueue = [[NSOperationQueue alloc] init];
+            imageQueue.maxConcurrentOperationCount = 4;
+        }
+        GPTableImageItem* item = (GPTableImageItem*)object;
+        if(!item.imageData && item.ImageURL && ![imageURLs containsObject:item.ImageURL])
+        {
+            [imageURLs addObject:item.ImageURL];
+            [imageQueue addOperation:[self fetchImage:item.ImageURL]];
+        }
+        
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //html text label delegate to reformat photos
 -(void)imageFinished:(NSString*)url height:(int)height width:(int)width
 {
@@ -580,6 +653,8 @@
             {
                 reload = YES;
                 item.text = newText;
+                if([item respondsToSelector:@selector(setRowHeight:)])
+                    [(GPTableMessageItem*)item setRowHeight:0];
             }
         }
     }
@@ -623,6 +698,8 @@
     [refresh release];
     [emptyView release];
     [timeScroller release];
+    [imageQueue release];
+    [imageURLs release];
     [super dealloc];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

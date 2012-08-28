@@ -35,6 +35,7 @@
 
 @implementation GPTableMessageItem
 
+@synthesize rowHeight,cachedFramesetter,cachedAttribString;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableMessageItem*)itemWithHTML:(NSString*)htmlstring imageURL:(NSString*)imageurl
 {

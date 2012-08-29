@@ -155,9 +155,16 @@ const CGFloat TableCellSmallMargin = 6;
     else
         self.accessoryType = UITableViewCellAccessoryNone;
     if(item.NavURL)
+    {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
+    }
     else
+    {
+        self.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryView = nil;
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
     if(item.Properties)
         Properties = [item.Properties retain];
     if(item.backgroundColor)

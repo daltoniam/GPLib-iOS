@@ -210,6 +210,22 @@
 {
     [super viewDidAppear:animated];
     [self.tableView reloadData];
+    if(!isSearching)
+    {
+        for(UIView* view in searchController.searchBar.subviews)
+        {
+            if([view isKindOfClass:[UISegmentedControl class]])
+            {
+                CGRect frame = view.frame;
+                frame.origin.y = 0; //44
+                view.frame = frame;
+                
+                frame = searchController.searchBar.frame;
+                frame.size.height = 44;
+                searchController.searchBar.frame = frame;
+            }
+        }
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //search delegate
@@ -243,25 +259,50 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(BOOL)searchBarShouldEndEditing:(UISearchBar*)searchBar
 {
+    if(searchBar.showsScopeBar)
+        [self performSelector:@selector(scopeBarFix:) withObject:searchBar afterDelay:0.01];
     return YES;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)searchBarShouldBeginEditing:(UISearchBar*)searchBar
+{
+    if(!searchBar.showsScopeBar && searchBar.scopeButtonTitles.count > 0)
+        [self scopeBarFix:searchBar];
+    return YES;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)scopeBarHide:(UISearchBar*)searchBar
+{
+    [self scopeBarFix:searchBar hide:YES];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)scopeBarFix:(UISearchBar*)searchBar
 {
-    if(![searchBar superview])
+    [self scopeBarFix:searchBar hide:NO];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)scopeBarFix:(UISearchBar*)searchBar hide:(BOOL)hide
+{
+    if(![searchBar superview] && !hide)
         [searchController.searchResultsTableView.superview addSubview:searchBar];
-    searchBar.showsScopeBar = YES;
+    searchBar.showsScopeBar = !hide;
     [searchBar sizeToFit];
     for(UIView* view in searchBar.subviews)
     {
         if([view isKindOfClass:[UISegmentedControl class]])
         {
             CGRect frame = view.frame;
-            frame.origin.y = 0; //44
+            if(hide)
+                frame.origin.y = 0;
+            else
+                frame.origin.y = 44;
             view.frame = frame;
             
             frame = searchBar.frame;
-            frame.size.height = 88;
+            if(hide)
+                frame.size.height = 44;
+            else
+                frame.size.height = 88;
             searchBar.frame = frame;
         }
     }
@@ -275,9 +316,11 @@
         [self performSelector:@selector(scopeBarFix:) withObject:searchBar afterDelay:0.01];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
+    if(searchBar.showsScopeBar)
+        [self performSelector:@selector(scopeBarHide:) withObject:searchBar afterDelay:0.01];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString

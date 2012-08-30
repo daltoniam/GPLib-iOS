@@ -105,6 +105,11 @@ const CGFloat TableCellSmallMargin = 6;
         CGRect frame = self.textLabel.frame;
         CGSize textSize = [self.textLabel.text sizeWithFont:self.textLabel.font constrainedToSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
         int width = frame.size.width - textSize.width;
+        if(width < 20)
+        {
+            width = 20;
+            textSize.width -= width;
+        }
         frame.size.width = textSize.width;
         self.textLabel.frame = frame;
         
@@ -160,11 +165,7 @@ const CGFloat TableCellSmallMargin = 6;
         [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
     }
     else
-    {
-        self.accessoryType = UITableViewCellAccessoryNone;
-        self.accessoryView = nil;
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    }
     if(item.Properties)
         Properties = [item.Properties retain];
     if(item.backgroundColor)

@@ -106,9 +106,9 @@ CGFloat TableCellDefaultImageSize = 50;
         frame.origin.x += TableCellSmallMargin + imageBounds.width;
         if(infoLabel.text)
         {
-            int width = frame.origin.x + frame.size.width;
-            if(width > self.frame.size.width)
-                frame.size.width -= TableCellSmallMargin + imageBounds.width;
+            int width = frame.origin.x + frame.size.width + imageBounds.width + TableCellSmallMargin*2;
+            if(width > (self.frame.size.width-(TableCellSmallMargin*2)))
+                frame.size.width -=  imageBounds.width + TableCellSmallMargin;
         }
         else
             frame.size.width -= TableCellSmallMargin + imageBounds.width;

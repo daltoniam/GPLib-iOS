@@ -558,7 +558,7 @@
     frame.origin.y -= delta;
     frame.size.height += delta;
     //self.frame = frame;
-    [self.delegate updateSize:CGSizeMake(size.width, size.height)]; //frame.size.height
+    [self.delegate updateSize:CGSizeMake(size.width, size.height+self.delegate.font.pointSize)]; //frame.size.height
     if(size.height > self.frame.size.height)
     {
         CGRect f = self.frame;

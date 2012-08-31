@@ -112,6 +112,7 @@
     [self.view addSubview:contentView];
     Textview = [[HTMLTextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, h)];
     Textview.scrollEnabled = NO;
+    Textview.contentSize = CGSizeMake(self.view.frame.size.width, h);
     if(tempAttribString)
     {
         [Textview.attribString appendAttributedString:tempAttribString];
@@ -525,6 +526,8 @@
     int keyboard = keyboardFrame.size.height;
     int check = self.view.frame.size.height - keyboard;
     int h = textView.contentSize.height + 20;
+    if(h < self.view.frame.size.height)
+        h = self.view.frame.size.height;
     if((textView.contentSize.height) > check-10)
     {
         h += keyboard + 70;

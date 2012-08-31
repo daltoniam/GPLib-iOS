@@ -58,6 +58,7 @@
 @property(nonatomic,readonly,retain)GPModel* model;
 @property(nonatomic,retain)UITableView* tableView;
 
+-(void)processImageURL:(id)object;
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object;
 - (id)tableView:(UITableView*)tableView objectForRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)tableView:(UITableView*)tableView removeObjectAtIndexPath:(NSIndexPath*)indexPath; 

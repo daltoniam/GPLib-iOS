@@ -38,6 +38,7 @@
 #import "GPTableMoreItem.h"
 #import "GPTableMoreCell.h"
 #import "GPTableAccessory.h"
+#import "GPTableImageItem.h"
 
 @interface GPTableSearchController ()
 
@@ -423,6 +424,8 @@
     
     if ([cell isKindOfClass:[GPTableCell class]])
         [(GPTableCell*)cell setObject:object];
+    if([object isKindOfClass:[GPTableImageItem class]])
+        [self processImageURL:object];
     
     GPTableAccessory* view = [self customAccessory:cell.accessoryType];
     if(view)

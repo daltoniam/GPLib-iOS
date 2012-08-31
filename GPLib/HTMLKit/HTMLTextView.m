@@ -258,6 +258,7 @@
     NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
     [temp setImageData:image];
     [self.attribString appendAttributedString:temp];
+    [self.attribString appendAttributedString:[[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease]];
     [self setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,6 +267,7 @@
     NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
     [temp setImageTag:imageURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:@"150",@"height",@"200",@"width",@"0",@"padding", nil]];
     [self.attribString appendAttributedString:temp];
+    [self.attribString appendAttributedString:[[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease]];
     [self setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,6 +276,7 @@
     NSMutableAttributedString* temp = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
     [temp setYoutubeTag:videoURL attribs:[NSDictionary dictionaryWithObjectsAndKeys:@"250",@"height",@"300",@"width",@"0",@"padding", nil]];
     [self.attribString appendAttributedString:temp];
+    [self.attribString appendAttributedString:[[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease]];
     [self setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -339,7 +342,7 @@
         if(image)
         {
             [string setImageData:image range:find];
-            [string removeAttribute:IMAGE_LINK range:find];
+            //[string removeAttribute:IMAGE_LINK range:find];
             if(!isDrawing)
                 [self setNeedsDisplay];
         }

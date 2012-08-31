@@ -52,4 +52,5 @@ extern CGFloat const TableCellSmallMargin;
 -(void)setObject:(id)object;
 
 -(void)setupBadgeLabel;
+-(int)infoLabelSpace:(CGRect)textFrame;
 @end

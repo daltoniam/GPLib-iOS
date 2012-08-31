@@ -106,9 +106,9 @@ CGFloat TableCellDefaultImageSize = 50;
         frame.origin.x += TableCellSmallMargin + imageBounds.width;
         if(infoLabel.text)
         {
-            int width = frame.origin.x + frame.size.width + imageBounds.width + TableCellSmallMargin*2;
-            if(width > (self.frame.size.width-(TableCellSmallMargin*2)))
-                frame.size.width -=  imageBounds.width + TableCellSmallMargin;
+            CGRect infoFrame = infoLabel.frame;
+            infoFrame.origin.x += TableCellSmallMargin + imageBounds.width;
+            infoLabel.frame = infoFrame;
         }
         else
             frame.size.width -= TableCellSmallMargin + imageBounds.width;
@@ -123,6 +123,11 @@ CGFloat TableCellDefaultImageSize = 50;
         frame.origin.y = TableCellSmallMargin*2;
         self.textLabel.frame = frame;
     }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+-(int)infoLabelSpace:(CGRect)textFrame
+{
+    return textFrame.size.width - imageBounds.width;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setImageView:(UIImage*)image

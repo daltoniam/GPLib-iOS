@@ -104,17 +104,22 @@ const CGFloat TableCellSmallMargin = 6;
     {
         CGRect frame = self.textLabel.frame;
         CGSize textSize = [self.textLabel.text sizeWithFont:self.textLabel.font constrainedToSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
-        int width = frame.size.width - textSize.width;
-        if(width < 20)
+        CGSize infoSize = [self.infoLabel.text sizeWithFont:self.infoLabel.font constrainedToSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
+        int half = [self infoLabelSpace:frame]/2;
+        if(textSize.width > half || infoSize.width > half)
         {
-            width = 20;
-            textSize.width -= width;
+            int offset = half;
+            if(textSize.width > half)
+                textSize = [self.textLabel.text sizeWithFont:self.textLabel.font constrainedToSize:CGSizeMake(half, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
+            else
+                offset += half - textSize.width;
+            infoSize = [self.infoLabel.text sizeWithFont:self.infoLabel.font constrainedToSize:CGSizeMake(offset, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
         }
         frame.size.width = textSize.width;
         self.textLabel.frame = frame;
         
-        int left = frame.origin.x + textSize.width + TableCellSmallMargin;
-        infoLabel.frame = CGRectMake(left, frame.origin.y-1, width, frame.size.height);
+        int left = (half*2) - (infoSize.width - (TableCellSmallMargin*2));
+        infoLabel.frame = CGRectMake(left, frame.origin.y-1, infoSize.width, frame.size.height);
     }
     else if(notificationLabel) //you can only have info or notification, not both
     {
@@ -136,6 +141,11 @@ const CGFloat TableCellSmallMargin = 6;
         }
     }
     
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+-(int)infoLabelSpace:(CGRect)textFrame
+{
+    return textFrame.size.width;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setObject:(id)object 

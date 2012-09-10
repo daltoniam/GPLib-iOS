@@ -100,6 +100,13 @@ const CGFloat TableCellSmallMargin = 6;
 -(void)layoutSubviews
 {
     [super layoutSubviews];
+    if(customGroup)
+    {
+        CGRect frame = self.contentView.frame;
+        frame.origin.x = 8;
+        frame.size.width -= 16;
+        self.contentView.frame = frame;
+    }
     if(infoLabel)
     {
         CGRect frame = self.textLabel.frame;
@@ -202,7 +209,12 @@ const CGFloat TableCellSmallMargin = 6;
     else
         notificationLabel.text = nil;
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//experimental feature
+-(void)isCustomGroup:(BOOL)custom
+{
+    customGroup = custom;
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {

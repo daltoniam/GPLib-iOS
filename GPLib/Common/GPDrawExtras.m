@@ -150,6 +150,7 @@
     int w = width - strokeWidth;
     
     CGFloat rounding = radius - strokeWidth;
+    
     CGContextMoveToPoint(ctx,rounding+pad, pad);
     CGContextAddArcToPoint(ctx, w, pad,w,h+pad, [GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerTopRight rounding:rounding]); //top left
     CGContextAddArcToPoint(ctx, w, h, round(w / 2.0f),h,[GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerBottomRight rounding:rounding]); //bottom right
@@ -161,7 +162,6 @@
     
     if(!strokeWidth && rounding > 2)
         rounding -= 2;
-    
     CGContextBeginPath(ctx);
     CGContextMoveToPoint(ctx,rounding+pad,pad); 
     CGContextAddArcToPoint(ctx, w, pad, w, h+pad, [GPDrawExtras roundRectCornerRounding:corners check:UIRectCornerTopRight rounding:rounding]);//top left

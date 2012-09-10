@@ -41,6 +41,7 @@ extern CGFloat const TableCellSmallMargin;
     NSDictionary* Properties;
     UILabel* infoLabel;
     GPPillLabel* notificationLabel;
+    BOOL customGroup;
 }
 @property(nonatomic,retain)UIColor* notificationTextColor;
 @property(nonatomic,retain)UIColor* notificationHighlightTextColor;
@@ -50,6 +51,7 @@ extern CGFloat const TableCellSmallMargin;
 -(void)setAutoSize:(BOOL)size;
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object;
 -(void)setObject:(id)object;
+-(void)isCustomGroup:(BOOL)custom;
 
 -(void)setupBadgeLabel;
 -(int)infoLabelSpace:(CGRect)textFrame;

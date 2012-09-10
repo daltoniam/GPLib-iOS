@@ -96,7 +96,9 @@
 {
     int width = self.bounds.size.width;
     int height = self.bounds.size.height;
+    CGRect currentFrame = self.bounds;
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
 
     if(self.borderWidth)
     {
@@ -122,8 +124,6 @@
         self.layer.borderWidth = self.borderWidth;
         self.layer.borderColor = self.borderColor.CGColor;
     }
-    
-    CGRect currentFrame = self.bounds;
     
     if (gradientStartColor && gradientEndColor)
     {
@@ -195,6 +195,17 @@
     else
         isSelected = YES;
     [self setNeedsDisplay];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//make the enabled property work for the custom buttons
+-(void)setEnabled:(BOOL)enable
+{
+    [super setEnabled:enable];
+    UIColor* color = self.titleLabel.textColor;
+    if(enable)
+        self.titleLabel.textColor = [color colorWithAlphaComponent:1];
+    else
+        self.titleLabel.textColor = [color colorWithAlphaComponent:0.3];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 /*+(UIButton*)Default:(CGRect)frame

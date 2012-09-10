@@ -39,6 +39,7 @@
 #import "GPTableMoreCell.h"
 #import "GPTableAccessory.h"
 #import "GPTableImageItem.h"
+#import "GPTableImageCell.h"
 
 @interface GPTableSearchController ()
 
@@ -521,6 +522,57 @@
     
     [self.tableView reloadData];
     ActLabel.hidden = YES;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPHTTPRequest*)fetchImage:(NSString*)url
+{
+    if(isSearching)
+    {
+        __block GPHTTPRequest* request = [GPHTTPRequest requestWithString:url];
+        [request setCacheModel:GPHTTPCacheCustomTime];
+        [request setTimeout:60*60*1]; // Cache for 1 hour
+        [request setFinishBlock:^{
+            if(searchSections)
+            {
+                int section = 0;
+                for(NSArray* itemArray in searchItems)
+                {
+                    [self reloadImageItems:itemArray url:request section:section];
+                    section++;
+                }
+            }
+            else
+                [self reloadImageItems:searchItems url:request section:0];
+        }];
+        return request;
+    }
+    return [super fetchImage:url];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reloadImageItems:(NSArray*)arrayItems url:(GPHTTPRequest*)request section:(int)section
+{
+    if(isSearching)
+    {
+        int i = 0;
+        for(id object in arrayItems)
+        {
+            if([object isKindOfClass:[GPTableImageItem class]])
+            {
+                GPTableImageItem* item = (GPTableImageItem*)object;
+                if([item.ImageURL isEqualToString:request.URL.absoluteString])
+                {
+                    item.imageData = [UIImage imageWithData:[request responseData]];
+                    UITableViewCell* cell = [searchController.searchResultsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
+                    if([cell isKindOfClass:[GPTableImageCell class]])
+                        [(GPTableImageCell*)cell setImageView:item.imageData];
+                }
+            }
+            i++;
+        }
+        [imageURLs removeObject:request.URL.absoluteString];
+    }
+    else
+        [super reloadImageItems:arrayItems url:request section:section];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)filterLocalItems:(NSString*)text

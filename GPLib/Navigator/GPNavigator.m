@@ -271,7 +271,14 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         temp.navigationItem.rightBarButtonItem = right;
     if(left)
         temp.navigationItem.leftBarButtonItem = left;
-    if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)] || root)
+    if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)])
+    {
+        if(!currentViewController || modalArray.count == 0)
+            [Navigation.visibleViewController presentModalViewController:navigationController animated:YES];
+        else
+            [[[UIApplication sharedApplication].delegate window].rootViewController presentModalViewController:navigationController animated:YES];
+    }
+    else if(root)
         [[[UIApplication sharedApplication].delegate window].rootViewController presentModalViewController:navigationController animated:YES];
     else
         [Navigation.visibleViewController presentModalViewController:navigationController animated:YES];

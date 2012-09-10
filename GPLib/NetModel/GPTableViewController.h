@@ -59,6 +59,8 @@
 @property(nonatomic,retain)UITableView* tableView;
 
 -(void)processImageURL:(id)object;
+-(GPHTTPRequest*)fetchImage:(NSString*)url;
+-(void)reloadImageItems:(NSArray*)arrayItems url:(GPHTTPRequest*)request section:(int)section;
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object;
 - (id)tableView:(UITableView*)tableView objectForRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)tableView:(UITableView*)tableView removeObjectAtIndexPath:(NSIndexPath*)indexPath; 

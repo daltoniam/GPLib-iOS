@@ -294,10 +294,10 @@ void error( void * ctx, const char * msg, ... )
         float width = [[attributeDict objectForKey:@"width"] floatValue];
         float top = [[attributeDict objectForKey:@"padding"] floatValue];
         NSMutableAttributedString* childString = nil;
-        if(imageindex % 2 == 0)
-            childString = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
-        else
-            childString = [[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease];
+        //if(imageindex % 2 == 0)
+        childString = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
+        //else
+        //    childString = [[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease];
         [childString setViewSpaceTag:height width:width top:top index:viewIndex];
         [HTMLText appendAttributedString:childString];
         viewIndex++;

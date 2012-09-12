@@ -442,9 +442,9 @@
                         runBounds.size.height = height;
                         
                         runBounds.origin.x = xOffset;
-                        runBounds.origin.y = origins[lineIndex].y + self.frame.origin.y + top;
+                        runBounds.origin.y = self.frame.size.height + self.frame.origin.y + top; //origins[lineIndex].y 
                         runBounds.origin.y -= descent;
-                        runBounds.origin.y -= height+5;
+                        runBounds.origin.y -=  origins[lineIndex].y; //height+5;
                         CGPathRef pathRef = CTFrameGetPath(textFrame); //10
                         CGRect colRect = CGPathGetBoundingBox(pathRef);
                         
@@ -455,7 +455,7 @@
                         if(frame.origin.x + width > self.frame.size.width)
                         {
                             frame.origin.x = 0;
-                            frame.origin.y += height+5;
+                            frame.origin.y += height;
                         }
                         //ask delegate for view and add to array so it will only exist once
                         UIView* view = [self.delegate subViewWillLoad:[viewSpace intValue]];

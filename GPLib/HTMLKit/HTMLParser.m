@@ -256,7 +256,7 @@ void error( void * ctx, const char * msg, ... )
             if(imageindex % 2 == 0)
                 childString = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease];
             else
-                childString = [[[NSMutableAttributedString alloc] initWithString:@"\n"] autorelease];
+                childString = [[[NSMutableAttributedString alloc] initWithString:@" "] autorelease]; // \n
             if([imageURL hasPrefix:@"data:"])
             {
                 NSURL *url = [NSURL URLWithString:imageURL];

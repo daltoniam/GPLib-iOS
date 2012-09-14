@@ -267,7 +267,7 @@ static int REVEAL_OFFSET;
     [frontView release];
     [backView release];
     [frontNavBar release];
-    [backViewController release];
+    //[backViewController release];
     [frontViewController release];
     [swipe release];
     [super dealloc];

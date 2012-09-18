@@ -99,6 +99,19 @@
     else
         _tableView.frame = CGRectMake(0, offset, self.view.frame.size.width, self.view.frame.size.height-offset);
     [bubbleview release];
+    [bubbleview bringSubviewToFront:TextView];
+    [bubbleview setNeedsDisplay];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    //bug fix?
+    CGPoint offset = TextView.contentOffset;
+    offset.x += 1;
+    TextView.contentOffset = offset;
+    offset.x -= 1;
+    TextView.contentOffset = offset;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 

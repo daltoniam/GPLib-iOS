@@ -172,7 +172,7 @@
         {
             UIAlertView *alert = [[UIAlertView alloc] init];
             [alert setTitle:@"Confirm"];
-            [alert setMessage:@"Are you sure to want to cancel?"];
+            [alert setMessage:@"Are you sure you want to cancel?"];
             [alert setDelegate:self];
             [alert addButtonWithTitle:@"Yes"];
             [alert addButtonWithTitle:@"No"];

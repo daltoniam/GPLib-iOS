@@ -135,12 +135,14 @@
     if(secs/(60*60) > 0)
         needHours = YES;
     self.text = [self calculateTimeLeft];
+    [workTimer invalidate];
     [workTimer release];
     workTimer = [[NSTimer scheduledTimerWithTimeInterval:1
                                      target:self
                                    selector:@selector(timeChanged:)
                                    userInfo:nil
                                     repeats:YES] retain];
+    [[NSRunLoop currentRunLoop] addTimer:workTimer forMode:NSRunLoopCommonModes];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)timeChanged:(NSTimer*)timer

@@ -105,6 +105,7 @@
     customButton.layer.shouldRasterize = YES;
     customButton.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     GPBarButtonItem* item = [[[GPBarButtonItem alloc] initWithCustomView:customButton] autorelease];
+    item.enabled = YES;
     return item;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

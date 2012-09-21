@@ -229,8 +229,11 @@
     
     if ([date isEqualToDate:lastDate])
         return;
-    
     NSDate *today = [NSDate date];
+    if(!date)
+        date = today;
+    if(!lastDate)
+        lastDate = [[NSDate date] retain];
     
     NSDateComponents *dateComponents = [self componentsFormat:date];
     NSDateComponents *todayComponents = [self componentsFormat:today];    

@@ -84,4 +84,6 @@ typedef enum {
 -(void)navigationControllerChange:(UINavigationController*)navBar;
 -(UISplitViewController*)splitController:(NSString*)leftURL right:(NSString*)rightURL;
 
+-(UITabBarController*)tabBarNavigation:(NSArray*)urls;
+
 @end

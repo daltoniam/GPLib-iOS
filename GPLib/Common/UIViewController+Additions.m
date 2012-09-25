@@ -88,4 +88,48 @@
                      }];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)slideTransition:(UIViewController*)viewController
+{
+    UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+    CGRect frame = viewController.view.frame;
+    frame.origin.x += window.frame.size.width;
+    frame.origin.y = 0;//-64;
+    viewController.view.frame = frame;
+    UIView* shadowView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height)] autorelease];
+    shadowView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
+    [window addSubview:shadowView];
+    [window addSubview:viewController.view];
+    
+    [UIView animateWithDuration:0.3
+                     animations:^(void) {
+                         CGRect frame = viewController.view.frame;
+                         frame.origin.x -= window.frame.size.width;
+                         viewController.view.frame = frame;
+                     } completion:^(BOOL finished) {
+                         [viewController.view removeFromSuperview];
+                         [shadowView removeFromSuperview];
+                         [[[UIApplication sharedApplication].delegate window].rootViewController presentModalViewController:viewController animated:NO];
+                     }];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)dismissSlide
+{
+    UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+    //UIView* shadowView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height)] autorelease];
+    //shadowView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
+    //[window addSubview:shadowView];
+    [window addSubview:self.view];
+    
+    [UIView animateWithDuration:0.3
+                     animations:^(void) {
+                         CGRect frame = self.view.frame;
+                         frame.origin.x += window.frame.size.width;
+                         self.view.frame = frame;
+                     } completion:^(BOOL finished) {
+                         //[self.navigationController.view removeFromSuperview];
+                         [[[UIApplication sharedApplication].delegate window].rootViewController dismissViewControllerAnimated:NO completion:NULL];
+                     }];
+
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end

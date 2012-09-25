@@ -497,6 +497,24 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         Navigation = [[temp performSelector:@selector(frontNavBar)] retain];
     return temp;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//add this for tabBar navigation
+-(UITabBarController*)tabBarNavigation:(NSArray*)urls
+{
+    UITabBarController* tabBar = [[[UITabBarController alloc] init] autorelease];
+    NSMutableArray* array = [NSMutableArray arrayWithCapacity:urls.count];
+    for(NSString* url in urls)
+    {
+        
+        UIViewController* vc = [[GPNavigator navigator] viewControllerFromURL:url];
+        UINavigationController* controller = [[UINavigationController alloc] initWithRootViewController:vc];
+        [array addObject:controller];
+        [controller release];
+    }
+    tabBar.viewControllers = array;
+    return tabBar;
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(UISplitViewController*)splitController:(NSString*)leftURL right:(NSString*)rightURL
 {

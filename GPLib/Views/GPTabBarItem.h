@@ -77,6 +77,7 @@
 @property(nonatomic,assign)NSInteger tabIndex; //index in tab bar
 
 @property(nonatomic,assign)BOOL imageFill;
+@property(nonatomic,assign)BOOL centerImage;
 
 //simulates a touch of the button
 -(void)swapState:(BOOL)selected;

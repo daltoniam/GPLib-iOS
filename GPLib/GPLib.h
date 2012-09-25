@@ -109,6 +109,7 @@
 #import "GPTableSearchController.h"
 #import "GPTabBarController.h"
 #import "GPTableAccessory.h"
+#import "GPSideBarViewController.h"
 ////launcher view
 #import "GPLauncherView.h"
 #import "GPLauncherButton.h"

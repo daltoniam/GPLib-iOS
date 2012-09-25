@@ -35,5 +35,7 @@
 
 -(void)expandView:(UIView*)view toViewController:(UIViewController*)viewController;
 -(void)dismissExpandViewController:(UIView*)view;
+-(void)slideTransition:(UIViewController*)viewController;
+-(void)dismissSlide;
 
 @end

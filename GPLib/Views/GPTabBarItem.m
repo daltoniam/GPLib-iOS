@@ -46,7 +46,7 @@
 @synthesize gradientStartColor, gradientEndColor, selectedColor;
 @synthesize isSelected = isSelected,rounding,drawGloss,gradientLength,fillColor,imageFill;
 @synthesize borderColor,borderWidth;
-@synthesize selectedImageColor,imageColor,image,titleLabel = titleLabel,tabIndex,delegate,selectedImage;
+@synthesize selectedImageColor,imageColor,image,titleLabel = titleLabel,tabIndex,delegate,selectedImage,centerImage;
 //////////////////////////////////////////////////////////////////////////////////////////////
 -(void)Commoninit
 {    
@@ -270,6 +270,8 @@
     }
     if(!imageFill)
         imageView.contentMode = UIViewContentModeScaleAspectFit; //UIViewContentModeCenter
+    if(centerImage)
+        imageView.contentMode = UIViewContentModeCenter;
     [self addSubview:imageView];
     [self bringSubviewToFront:imageView];
 }

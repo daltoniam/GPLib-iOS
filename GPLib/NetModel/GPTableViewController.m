@@ -164,7 +164,7 @@
     ActLabel.text = [self loadingText];
     [self.view addSubview:_tableView];
     [self.view addSubview:ActLabel];
-    if(!model.URL)
+    if(!model.URL || !model.isLoading)
         ActLabel.hidden = YES;
     for(UIView* view in self.view.subviews)
     {

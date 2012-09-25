@@ -37,6 +37,10 @@
 		5C2E88AE151784BE0012CE45 /* HTMLLinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */; };
 		5C2FFA4C1561A7B100D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
 		5C2FFA561562C00800D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
+		5C38CF151612136D00DB5BDC /* GPSideBarViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C38CF131612136D00DB5BDC /* GPSideBarViewController.h */; };
+		5C38CF161612136D00DB5BDC /* GPSideBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C38CF141612136D00DB5BDC /* GPSideBarViewController.m */; };
+		5C38CF42161240C300DB5BDC /* GPSlideView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C38CF40161240C300DB5BDC /* GPSlideView.h */; };
+		5C38CF43161240C300DB5BDC /* GPSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C38CF41161240C300DB5BDC /* GPSlideView.m */; };
 		5C3BD0C81565717200E615D6 /* GPTableFloatingItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3BD0C61565717200E615D6 /* GPTableFloatingItem.h */; };
 		5C3BD0C91565717200E615D6 /* GPTableFloatingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3BD0C71565717200E615D6 /* GPTableFloatingItem.m */; };
 		5C3BD0CD156572A000E615D6 /* GPTableFloatingCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3BD0CB156572A000E615D6 /* GPTableFloatingCell.h */; };
@@ -308,6 +312,10 @@
 		5C2E88AB151784BE0012CE45 /* HTMLLinkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTMLLinkViewController.h; path = ../HTMLKit/HTMLLinkViewController.h; sourceTree = "<group>"; };
 		5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTMLLinkViewController.m; path = ../HTMLKit/HTMLLinkViewController.m; sourceTree = "<group>"; };
 		5C2FFA4B1561A7B100D87B52 /* italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = italic.png; sourceTree = "<group>"; };
+		5C38CF131612136D00DB5BDC /* GPSideBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSideBarViewController.h; sourceTree = "<group>"; };
+		5C38CF141612136D00DB5BDC /* GPSideBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSideBarViewController.m; sourceTree = "<group>"; };
+		5C38CF40161240C300DB5BDC /* GPSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSlideView.h; sourceTree = "<group>"; };
+		5C38CF41161240C300DB5BDC /* GPSlideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSlideView.m; sourceTree = "<group>"; };
 		5C3BD0C61565717200E615D6 /* GPTableFloatingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableFloatingItem.h; sourceTree = "<group>"; };
 		5C3BD0C71565717200E615D6 /* GPTableFloatingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableFloatingItem.m; sourceTree = "<group>"; };
 		5C3BD0CB156572A000E615D6 /* GPTableFloatingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableFloatingCell.h; sourceTree = "<group>"; };
@@ -650,6 +658,17 @@
 			name = HTMLPosting;
 			sourceTree = "<group>";
 		};
+		5C38CF121612136D00DB5BDC /* SideNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				5C38CF131612136D00DB5BDC /* GPSideBarViewController.h */,
+				5C38CF141612136D00DB5BDC /* GPSideBarViewController.m */,
+				5C38CF40161240C300DB5BDC /* GPSlideView.h */,
+				5C38CF41161240C300DB5BDC /* GPSlideView.m */,
+			);
+			path = SideNavigation;
+			sourceTree = "<group>";
+		};
 		5C5C0A8415B8DE97005A2F2D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -784,6 +803,7 @@
 		5CD4F8B914DC521A00F2CBB3 /* GPLib */ = {
 			isa = PBXGroup;
 			children = (
+				5C38CF121612136D00DB5BDC /* SideNavigation */,
 				5C1430B41545A5AC00AEE1FA /* GPReveal */,
 				5C8840F8152E39CC007AEE7D /* gridView */,
 				5C69073714E02BD900E44620 /* Launcher */,
@@ -1143,6 +1163,8 @@
 				5C5F691315C72CEE0077005E /* GPTableSegmentItem.h in Headers */,
 				5C5F691B15C72D0E0077005E /* GPTableSegmentCell.h in Headers */,
 				5C5F691F15C72D200077005E /* GPSegmentControl.h in Headers */,
+				5C38CF151612136D00DB5BDC /* GPSideBarViewController.h in Headers */,
+				5C38CF42161240C300DB5BDC /* GPSlideView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1436,6 +1458,8 @@
 				5C5F691415C72CEE0077005E /* GPTableSegmentItem.m in Sources */,
 				5C5F691C15C72D0E0077005E /* GPTableSegmentCell.m in Sources */,
 				5C5F692015C72D200077005E /* GPSegmentControl.m in Sources */,
+				5C38CF161612136D00DB5BDC /* GPSideBarViewController.m in Sources */,
+				5C38CF43161240C300DB5BDC /* GPSlideView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

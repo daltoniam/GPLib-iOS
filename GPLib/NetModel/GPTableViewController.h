@@ -63,7 +63,8 @@
 -(void)reloadImageItems:(NSArray*)arrayItems url:(GPHTTPRequest*)request section:(int)section;
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object;
 - (id)tableView:(UITableView*)tableView objectForRowAtIndexPath:(NSIndexPath*)indexPath;
-- (void)tableView:(UITableView*)tableView removeObjectAtIndexPath:(NSIndexPath*)indexPath; 
+- (void)tableView:(UITableView*)tableView removeObjectAtIndexPath:(NSIndexPath*)indexPath;
+- (NSIndexPath*)tableView:(UITableView*)tableView indexPathOfObject:(id)object;
 - (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 -(NSString*)loadingText;
 -(GPModel*)model:(NSString*)url;
@@ -76,6 +77,7 @@
 -(BOOL)checkMarksExpection:(int)section;
 -(BOOL)autoSizeCells;
 -(UIColor*)tableBackground;
+-(UIColor*)selectedColor;
 -(void)setupModel:(NSString*)url;
 
 -(NSString*)emptyTableTitle;

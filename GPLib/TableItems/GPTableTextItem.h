@@ -39,6 +39,7 @@
 @property(nonatomic,copy)NSString* infoText;
 @property(nonatomic,retain)UIFont* font;
 @property(nonatomic,retain)UIColor* color;
+@property(nonatomic,retain)UIColor* bevelLineColor; //adds a custom bevel line to the tablecells. I recommend: [UIColor colorWithWhite:0.7 alpha:0.15];
 @property(nonatomic,retain)UIColor* backgroundColor;
 @property(nonatomic,assign)UITextAlignment TextAlignment;
 @property(nonatomic,copy)NSString* NavURL;
@@ -51,6 +52,9 @@
 
 //for things that are not going to be displayed but are needed in the tablecell
 @property(nonatomic,retain)NSDictionary* Properties;
+
+//ignore this, I just use it to figure certain style properties out
+@property(nonatomic,assign)BOOL isGrouped;
 
 + (GPTableTextItem*)itemWithText:(NSString*)string;
 + (GPTableTextItem*)itemWithText:(NSString*)string url:(NSString*)url;

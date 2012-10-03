@@ -173,6 +173,13 @@ static int REVEAL_OFFSET;
 	frontView.layer.shadowOpacity = 1.0f;
 	frontView.layer.shadowRadius = 2.5f;
 	frontView.layer.shadowPath = shadowPath.CGPath;
+    if([self menuSwipeEnabled])
+    {
+        UIPanGestureRecognizer* showMenuSwipe = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGesture:)];
+        showMenuSwipe.delegate = self;
+        [self.view addGestureRecognizer:showMenuSwipe];
+        [showMenuSwipe release];
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidUnload
@@ -195,7 +202,8 @@ static int REVEAL_OFFSET;
     else
     {
         [frontViewController.view removeGestureRecognizer:swipe];
-        //frontViewController.view.userInteractionEnabled = YES;
+        for(UIView* view in frontViewController.view.subviews)
+            view.userInteractionEnabled = YES;
     }
 	
     
@@ -225,9 +233,10 @@ static int REVEAL_OFFSET;
 -(void)addSwipeGesture
 {
     if(!swipe)
-         swipe = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGesture)];
+        swipe = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGesture:)];
     [frontViewController.view addGestureRecognizer:swipe];
-    //frontViewController.view.userInteractionEnabled = YES;
+    for(UIView* view in frontViewController.view.subviews)
+        view.userInteractionEnabled = NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //subclass
@@ -257,9 +266,32 @@ static int REVEAL_OFFSET;
     [self hideFullyAnimation:hide];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)swipeGesture
+-(void)swipeGesture:(UIPanGestureRecognizer*)sender
 {
-    [self revealAnimation:YES];
+    CGPoint location = [sender locationInView:self.view];
+    if(sender.state == UIGestureRecognizerStateEnded)
+    {
+        int offset = REVEAL_OFFSET/2;
+        if(location.x < offset)
+            [self revealAnimation:YES];
+        else
+            [self revealAnimation:NO];
+    }
+    else if(sender.state == UIGestureRecognizerStateBegan || sender.state == UIGestureRecognizerStateChanged)
+    {
+        if(location.x < REVEAL_OFFSET)
+        {
+            [UIView animateWithDuration:0.25f animations:^{
+                frontView.frame = CGRectMake(location.x, 0.0f, frontView.frame.size.width, frontView.frame.size.height);
+            }completion:^(BOOL finished){}];
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//add a gesture to show the menu from any view
+-(BOOL)menuSwipeEnabled
+{
+    return NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

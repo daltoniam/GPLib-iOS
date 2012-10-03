@@ -303,6 +303,9 @@
         }
     }
     
+    if([object isKindOfClass:[GPTableTextItem class]])
+        [(GPTableTextItem*)object setIsGrouped:[self grouped]];
+    
     if ([cell isKindOfClass:[GPTableCell class]])
         [(GPTableCell*)cell setObject:object];
     
@@ -315,6 +318,20 @@
     GPTableAccessory* view = [self customAccessory:cell.accessoryType];
     if(view)
         cell.accessoryView = view;
+    UIColor* selectColor = [self selectedColor];
+    if(selectColor)
+    {
+        UIView* bgView = cell.backgroundView;
+        if(!bgView)
+        {
+            bgView = [[UIView alloc] init];
+            bgView.backgroundColor = selectColor;
+            cell.selectedBackgroundView = bgView;
+            [bgView release];
+        }
+        else
+            bgView.backgroundColor = selectColor;
+    }
     
     if(!model.isFinished && [model autoLoad])
     {
@@ -762,6 +779,37 @@
         [items removeObjectAtIndex:indexPath.row];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+//simple way to get index path of object. Mostly this is a private helper function.
+- (NSIndexPath*)tableView:(UITableView*)tableView indexPathOfObject:(id)object
+{
+    if (sections)
+    {
+        int i = 0;
+        for(NSArray* array in items)
+        {
+            int k = 0;
+            for(id obj in array)
+            {
+                if(obj == object)
+                    return [NSIndexPath indexPathForRow:k inSection:i];
+                k++;
+            }
+            i++;
+        }
+    }
+    else
+    {
+        int i = 0;
+        for(id obj in items)
+        {
+            if(obj == object)
+                return [NSIndexPath indexPathForRow:i inSection:0];
+            i++;
+        }
+    }
+    return nil;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //empty tableview methods
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)showEmptyView
@@ -904,6 +952,12 @@
             return [UIColor groupTableViewBackgroundColor];
     }
     return [UIColor whiteColor];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//set the tableviewcells selection color. Default is nil (the blue background)
+-(UIColor*)selectedColor
+{
+    return nil;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //set the ActLabel style

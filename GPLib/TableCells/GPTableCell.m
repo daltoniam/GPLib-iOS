@@ -87,14 +87,13 @@ const CGFloat TableCellSmallMargin = 6;
     infoLabel.textAlignment = UITextAlignmentRight;
     infoLabel.backgroundColor = [UIColor clearColor];
     infoLabel.numberOfLines = 0;
-    [self.contentView addSubview:infoLabel];
+    //[self.contentView addSubview:infoLabel];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setupBadgeLabel
 {
     notificationLabel = [[GPPillLabel alloc] init];
     [notificationLabel setLineBreakMode:UILineBreakModeCharacterWrap];
-    [self.contentView addSubview:notificationLabel];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews
@@ -147,6 +146,7 @@ const CGFloat TableCellSmallMargin = 6;
             notificationLabel.frame = CGRectMake(frame.size.width+ TableCellSmallMargin*2, (frame.size.height/2)-(height/2)-1, infoSize.width, height);
         }
     }
+    bevelLine.frame = CGRectMake(0, 0.2, self.contentView.frame.size.width, 1);
     
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +164,10 @@ const CGFloat TableCellSmallMargin = 6;
         if(!infoLabel)
             [self setupInfoLabel];
         infoLabel.text = item.infoText;
+        [self.contentView addSubview:infoLabel];
     }
+    else
+        [infoLabel removeFromSuperview];
     if(item.color)
         self.textLabel.textColor = item.color;
     self.textLabel.textAlignment = item.TextAlignment;
@@ -188,7 +191,8 @@ const CGFloat TableCellSmallMargin = 6;
     if(item.backgroundColor)
     {
         self.backgroundColor = item.backgroundColor;
-        //self.contentView.backgroundColor = item.backgroundColor;
+        if(!item.isGrouped)
+            self.contentView.backgroundColor = item.backgroundColor;
     }
     if(item.notificationText)
     {
@@ -205,9 +209,22 @@ const CGFloat TableCellSmallMargin = 6;
         }
         if(item.notificationFillColor)
             notificationLabel.fillColor = item.notificationFillColor;
+        [self.contentView addSubview:notificationLabel];
     }
     else
+    {
         notificationLabel.text = nil;
+        [notificationLabel removeFromSuperview];
+    }
+    if(item.bevelLineColor)
+    {
+        if(!bevelLine)
+            bevelLine = [[UIView alloc] init];
+        bevelLine.backgroundColor = item.bevelLineColor;
+        [self.contentView addSubview:bevelLine];
+    }
+    else
+        [bevelLine removeFromSuperview];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //experimental feature
@@ -247,6 +264,7 @@ const CGFloat TableCellSmallMargin = 6;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
+    [bevelLine release];
     notificationTextColor = nil;
     notificationHighlightTextColor = nil;
     [Properties release];

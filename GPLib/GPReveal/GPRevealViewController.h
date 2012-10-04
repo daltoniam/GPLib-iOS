@@ -62,7 +62,7 @@
 
 @end
 ///////////////////////////////////////////////////////////////////////////////////////
-@interface GPRevealViewController : UIViewController<GPRevealBackDelegate>
+@interface GPRevealViewController : UIViewController<GPRevealBackDelegate,UIGestureRecognizerDelegate>
 {
     UIView* frontView;
     UIView* backView;
@@ -80,7 +80,8 @@
 //this need to be implemented in your subclass!
 -(UIViewController*)frontController;
 -(UIViewController*)backController;
--(void)swipeGesture;
+-(BOOL)menuSwipeEnabled; //default is NO, to avoid any possible conflicts with other view swipes.
+-(void)swipeGesture:(UIPanGestureRecognizer*)sender;
 
 @end
 ///////////////////////////////////////////////////////////////////////////////////////

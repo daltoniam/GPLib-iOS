@@ -42,6 +42,7 @@ extern CGFloat const TableCellSmallMargin;
     UILabel* infoLabel;
     GPPillLabel* notificationLabel;
     BOOL customGroup;
+    UIView* bevelLine;
 }
 @property(nonatomic,retain)UIColor* notificationTextColor;
 @property(nonatomic,retain)UIColor* notificationHighlightTextColor;

@@ -37,7 +37,7 @@
 
 @interface GPNavigator()
 
--(void)navOpenPopOver:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame;
+-(void)navOpenPopOver:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)view;
 -(void)navOpenModal:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left type:(GPNavType)type useRoot:(BOOL)root;
 -(NSString*)determineSelURL:(NSString*)URLString query:(NSDictionary*)query;
 -(id)runSelector:(SEL)sel class:(Class)class params:(NSArray*)params;
@@ -146,7 +146,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
                 [self navOpenModal:temp rightbtn:right leftbtn:left type:type useRoot:root];
             
             else if(type == GPNavTypePopOver)
-                [self navOpenPopOver:temp rightbtn:right leftbtn:left frame:frame];
+                [self navOpenPopOver:temp rightbtn:right leftbtn:left frame:frame view:gridView];
             
             else if(type == GPNavTypeGrid)
             {
@@ -292,7 +292,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     [navigationController release];
 }
 /////////////////////////////////////////////////////////////
--(void)navOpenPopOver:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame
+-(void)navOpenPopOver:(UIViewController*)temp rightbtn:(UIBarButtonItem*)right leftbtn:(UIBarButtonItem*)left frame:(CGRect)frame view:(UIView*)view
 {
     int arrowDirection = UIPopoverArrowDirectionAny;
     if([self.popOver.contentViewController isKindOfClass:[UINavigationController class]] && self.popOver.isPopoverVisible)
@@ -326,7 +326,9 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
                 frame.origin.x = Navigation.visibleViewController.view.frame.size.width/2;
                 frame.origin.y = Navigation.visibleViewController.view.frame.size.height/2;
             }
-            [self.popOver presentPopoverFromRect:frame inView:Navigation.visibleViewController.view permittedArrowDirections:arrowDirection animated:YES]; 
+            if(!view)
+                view = Navigation.visibleViewController.view;
+            [self.popOver presentPopoverFromRect:frame inView:view permittedArrowDirections:arrowDirection animated:YES];
         }
     }
 }

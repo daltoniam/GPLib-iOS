@@ -107,7 +107,7 @@
                 infoSize.width = 35;
             frame.size.width -= infoSize.width;
             HTMLText.frame = frame;
-            notificationLabel.frame = CGRectMake(frame.size.width+ TableCellSmallMargin*2, (frame.size.height/2)-(height/2)-1, infoSize.width, height);
+            notificationLabel.frame = CGRectMake(frame.size.width, (frame.size.height/2)-(height/2)-1, infoSize.width, height); //TableCellSmallMargin*2
         }
     }
 }

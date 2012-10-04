@@ -85,6 +85,18 @@
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if([self.delegate respondsToSelector:@selector(textDidBegin:cell:)])
+        [self.delegate textDidBegin:currentObject cell:self];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if([self.delegate respondsToSelector:@selector(textDidEnd:cell:)])
+        [self.delegate textDidEnd:currentObject cell:self];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if([string isEqualToString:@"\n"])

@@ -445,10 +445,10 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
     else if([[[UIApplication sharedApplication].delegate window].rootViewController respondsToSelector:@selector(isGPNavBar)])
     {
-        if(!currentViewController || modalArray.count == 0)
+        //if(!currentViewController || modalArray.count == 0)
             [Navigation.visibleViewController dismissModalViewControllerAnimated:YES];
-        else
-            [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
+        //else
+        //    [[[UIApplication sharedApplication].delegate window].rootViewController dismissModalViewControllerAnimated:YES];
     }
     else
         [Navigation.visibleViewController dismissModalViewControllerAnimated:YES];

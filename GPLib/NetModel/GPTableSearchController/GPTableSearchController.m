@@ -431,6 +431,20 @@
     GPTableAccessory* view = [self customAccessory:cell.accessoryType];
     if(view)
         cell.accessoryView = view;
+    UIColor* selectColor = [self selectedColor];
+    if(selectColor)
+    {
+        UIView* bgView = cell.backgroundView;
+        if(!bgView)
+        {
+            bgView = [[UIView alloc] init];
+            bgView.backgroundColor = selectColor;
+            cell.selectedBackgroundView = bgView;
+            [bgView release];
+        }
+        else
+            bgView.backgroundColor = selectColor;
+    }
     
     GPModel* tempmodel = model;
     if(isSearching)

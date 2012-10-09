@@ -1,186 +1,223 @@
 //
-//  GPPostingViewController.m
-//  GPLib
+//  PostingViewController.m
+//  TestApp
 //
-//  Created by Dalton Cherry on 12/20/11.
-//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
-//
-/*
- http://github.com/daltoniam/GPLib-iOS
- 
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
- 
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
- */
+//  Created by Dalton Cherry on 10/5/12.
+//  Copyright (c) 2012 Basement Krew. All rights reserved.
 //
 
 #import "GPPostingViewController.h"
-#import "GPBubbleView.h"
-#import "GPImageView.h"
-#import "HTMLKit.h"
-#import "GPTableTextItem.h"
+#import "GPTransparentToolbar.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImage+Additions.h"
+
+@interface GPPostingViewController ()
+
+@end
 
 @implementation GPPostingViewController
 
-@synthesize delegate = delegate;
+@synthesize delegate,textLimit;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) 
-    {
+    if (self) {
         self.navigationItem.rightBarButtonItem =[[[UIBarButtonItem alloc] initWithTitle: @"Post"
                                                                                   style: UIBarButtonItemStyleBordered
                                                                                  target: self
-                                                                                 action:@selector(postText)] autorelease];
+                                                                                 action:@selector(post)] autorelease];
         self.navigationItem.leftBarButtonItem =[[[UIBarButtonItem alloc] initWithTitle: @"Cancel"
                                                                                  style: UIBarButtonItemStyleBordered
                                                                                 target: self
-                                                                                action:@selector(cancelText)] autorelease];
+                                                                                action:@selector(cancel)] autorelease];
     }
     return self;
 }
-
-#pragma mark - View lifecycle
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor underPageBackgroundColor];
-    //UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTextView)];
-    //[self.view addGestureRecognizer:tap];
-    //[tap release];
-    GPImageView* imageView =[[[GPImageView alloc] init] autorelease];
-    int left = 5;
-    int top = 6;
-    imageView.frame = CGRectMake(left, top, 50, 50);
-    imageView.URL = [self photoURL];
-    [imageView fetchImage];
-    CALayer * l = [imageView layer];
-    [l setMasksToBounds:YES];
-    [l setCornerRadius:10.0];
-    [self.view addSubview:imageView];
-    left += 55;
-    GPBubbleView* bubbleview = [[GPBubbleView alloc] initWithFrame:CGRectMake(left, top, 
-                                                                              self.view.frame.size.width-(left + 10), self.view.frame.size.height/2.6)];
-    bubbleview.BorderColor = [UIColor colorWithCSS:@"#CECECE"];
-    top += 5;
-    TextView = [[UITextView alloc] initWithFrame:CGRectMake(15, top, bubbleview.frame.size.width-20, bubbleview.frame.size.height-20)];
-    TextView.delegate = self;
-    TextView.returnKeyType = UIReturnKeyDone;
-    TextView.contentInset = UIEdgeInsetsMake(5, 5, 5, 5);
-    [bubbleview addSubview:TextView];
-    [self.view addSubview:bubbleview];
-    //ActLabel.hidden = YES;
-    [ActLabel removeFromSuperview];
-    [TextView becomeFirstResponder];
-    int offset = bubbleview.frame.origin.y + bubbleview.frame.size.height;
+    self.title = @"Post";
+    int top = 0;
+    int height = 250;
     if(GPIsPad())
-        _tableView.frame = CGRectMake(20, offset, self.view.frame.size.width, self.view.frame.size.height-offset);
-    else
-        _tableView.frame = CGRectMake(0, offset, self.view.frame.size.width, self.view.frame.size.height-offset);
-    [bubbleview release];
-    [bubbleview bringSubviewToFront:TextView];
-    [bubbleview setNeedsDisplay];
+    {
+        CGRect frame = self.view.frame;
+        frame.size.height = 300;
+        frame.size.width = 540;
+        self.view.frame = frame;
+        
+        frame = self.view.superview.frame;
+        frame.size.height = 300;
+        frame.size.width = 540;
+        self.view.superview.frame = frame;
+        self.view.backgroundColor = [UIColor clearColor];
+    }
+    textView = [[UITextView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, height)];
+    textView.delegate = self;
+    //textView.returnKeyType = UIReturnKeyDone;
+    textView.contentInset = UIEdgeInsetsMake(2, 2, 2, 2);
+    [textView becomeFirstResponder];
+    textView.contentSize = CGSizeMake(textView.frame.size.height,textView.contentSize.height);
+    textView.showsHorizontalScrollIndicator = NO;
+    textView.bounces = NO;
+    textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    top += textView.frame.size.height;    
+    buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, 35)];
+    top += buttonView.frame.size.height;
+    buttonView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    buttonView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UIView* topLine = [[[UIView alloc] initWithFrame:CGRectMake(0, buttonView.frame.size.height-0.5, buttonView.frame.size.width, 1)] autorelease];
+    topLine.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    topLine.backgroundColor = [UIColor lightGrayColor];
+    [buttonView addSubview:topLine];
+
+    [self.view addSubview:buttonView];
+    
+    containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, textView.frame.size.width, textView.frame.size.height)];
+    containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:containerView];
+    [containerView addSubview:textView];
+    
+    if(!GPIsPad())
+    {
+        contentView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, self.view.frame.size.height-top)];
+        contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        contentView.backgroundColor = buttonView.backgroundColor;
+        contentView.pagingEnabled = YES;
+        contentView.showsHorizontalScrollIndicator = NO;
+        contentView.showsVerticalScrollIndicator = NO;
+        [self.view addSubview:contentView];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShow:)
+                                                     name:UIKeyboardWillShowNotification //UIKeyboardDidShowNotification
+                                                   object:nil];
+    }
+    [self layoutButtons];
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)viewDidAppear:(BOOL)animated
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)moveTextViewForKeyboard:(NSNotification*)aNotification up:(BOOL)up
 {
-    [super viewDidAppear:animated];
-    //bug fix?
-    CGPoint offset = TextView.contentOffset;
-    offset.x += 1;
-    TextView.contentOffset = offset;
-    offset.x -= 1;
-    TextView.contentOffset = offset;
+    NSDictionary* userInfo = [aNotification userInfo];
+    
+    CGRect keyboardEndFrame;
+    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+
+    CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
+    int height = self.view.frame.size.height - (buttonView.frame.size.height + keyboardFrame.size.height);
+    CGRect newFrame = textView.frame;
+    newFrame.size.height = height;
+    textView.frame = newFrame;
+    containerView.frame = newFrame;
+    [self addShadow];
+    
+    newFrame = buttonView.frame;
+    newFrame.origin.y = height;
+    buttonView.frame = newFrame;
+    
+    newFrame = contentView.frame;
+    newFrame.origin.y = height + buttonView.frame.size.height;
+    newFrame.size.height = keyboardFrame.size.height;
+    contentView.frame = newFrame;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)keyboardWillShow:(NSNotification *)aNotification {
+    [self moveTextViewForKeyboard:aNotification up:YES];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addShadow
 {
-    [self dismissTextView];
-    [self.nextResponder touchesEnded:touches withEvent:event];
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:containerView.bounds];
+    containerView.layer.masksToBounds = NO;
+    containerView.layer.shadowColor = [UIColor blackColor].CGColor;
+    containerView.layer.shadowOffset = CGSizeMake(0.0f, 4.0f);
+    containerView.layer.shadowOpacity = 0.5;
+    containerView.layer.shadowRadius = 4;
+    containerView.layer.shadowPath = shadowPath.CGPath;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)layoutButtons
+{
+    GPTransparentToolbar* toolBar = [[[GPTransparentToolbar alloc] initWithFrame:CGRectMake(0, 0, buttonView.frame.size.width, buttonView.frame.size.height)] autorelease];
+    [buttonView addSubview:toolBar];
+    [toolBar setItems:[self barButtonItems]];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //textview delegate
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)textViewDidBeginEditing:(UITextView *)textView
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)textViewDidBeginEditing:(UITextView *)txtView
 {
-    self.navigationItem.rightBarButtonItem.enabled = NO;
+    if(txtView.text.length == 0)
+        self.navigationItem.rightBarButtonItem.enabled = NO;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)textViewDidEndEditing:(UITextView *)textView
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)textViewDidEndEditing:(UITextView *)txtView
 {
-    if(TextView.text.length > 0)
+    if(txtView.text.length > 0)
         self.navigationItem.rightBarButtonItem.enabled = YES;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text 
-{    
-    if([text isEqualToString:@"\n"]) 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)textView:(UITextView *)txtView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if(limitLabel)
     {
-        [textView resignFirstResponder];
-        return NO;
+        if(self.textLimit <= 0)
+            limitLabel.text = [NSString stringWithFormat:@"%d",[txtView.text length]];
+        else
+        {
+            int offset = self.textLimit - [txtView.text length];
+            limitLabel.text = [NSString stringWithFormat:@"%d",offset];
+            [self performSelector:@selector(checkPostStatus) withObject:nil afterDelay:0.1];
+            if(offset <= 0 && ![text isEqualToString:@""])
+                return NO;
+        }
     }
     return YES;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//posting
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)postText
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)checkPostStatus
 {
-    if(!isPosting)
-    {
-        if([delegate respondsToSelector:@selector(textDidPost:)])
-            [delegate textDidPost:TextView.text];
-    }
+    int count = [textView.text length];
+    int left = self.textLimit - count;
+    if(left <= 0 || count == 0)
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    else
+        self.navigationItem.rightBarButtonItem.enabled = YES;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)cancelText
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//posting
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)post
 {
-    if(!isPosting)
+    if([self.delegate respondsToSelector:@selector(textDidPost:)])
+        [self.delegate textDidPost:textView.text];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)cancel
+{
+    if(![textView.text isEqualToString:@""])
     {
-        if(![TextView.text isEqualToString:@""])
-        {
-            UIAlertView *alert = [[UIAlertView alloc] init];
-            [alert setTitle:@"Confirm"];
-            [alert setMessage:@"Are you sure you want to cancel?"];
-            [alert setDelegate:self];
-            [alert addButtonWithTitle:@"Yes"];
-            [alert addButtonWithTitle:@"No"];
-            [alert show];
-            [alert release];
-        }
-        else
-            if([delegate respondsToSelector:@selector(didCancel)])
-                [delegate didCancel];
+        UIAlertView *alert = [[UIAlertView alloc] init];
+        [alert setTitle:@"Confirm"];
+        [alert setMessage:@"Are you sure you want to cancel?"];
+        [alert setDelegate:self];
+        [alert addButtonWithTitle:@"Yes"];
+        [alert addButtonWithTitle:@"No"];
+        [alert show];
+        [alert release];
     }
+    else
+        if([self.delegate respondsToSelector:@selector(didCancel)])
+            [self.delegate didCancel];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if (buttonIndex == 0)
 	{
-        if([delegate respondsToSelector:@selector(didCancel)])
-            [delegate didCancel];
+        if([self.delegate respondsToSelector:@selector(didCancel)])
+            [self.delegate didCancel];
 	}
 	else if (buttonIndex == 1)
 	{
@@ -188,34 +225,59 @@
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)dismissTextView
+-(void)dismissKeyboard
 {
-    [TextView resignFirstResponder];
+    [textView resignFirstResponder];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass this to enable set to grouped style.
--(BOOL)grouped
-{
-    return YES;
-}
+//Subclass sections
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(UIColor*)tableBackground
+//return an array of barButtonItems. (you will probably want to add flexable space in between each of them)
+-(NSArray*)barButtonItems
 {
-    return [UIColor clearColor];
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass!
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//set the photoURL for the user pic.
--(NSString*)photoURL
-{
+    /*NSMutableArray* array = [NSMutableArray arrayWithCapacity:12];
+    for(int i = 0; i < 4; i++)
+    {
+        if(i != 0)
+        {
+            UIBarButtonItem* item = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+            [array addObject:item];
+        }
+        UIBarButtonItem* item = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(post)] autorelease];
+        [array addObject:item];
+    }
+    UIBarButtonItem* item = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+    [array addObject:item];
+    item = [[[UIBarButtonItem alloc] initWithCustomView:[self textCounter]] autorelease];
+    [array addObject:item];
+    return array;*/
+    //example of usage above
     return nil;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//add this to your in as one of your buttons in the barButtonItems method above to you want to show
+//a text counter of how much text you have left. If textLimit is 0, it will just count up
+-(GPLabel*)textCounter
+{
+    limitLabel = [[GPLabel alloc] initWithFrame:CGRectMake(0, 0, 30, buttonView.frame.size.height)];
+    limitLabel.backgroundColor = [UIColor clearColor];
+    limitLabel.font = [UIFont systemFontOfSize:15];
+    limitLabel.textColor = [UIColor lightGrayColor];
+    limitLabel.text = [NSString stringWithFormat:@"%d",self.textLimit];
+    limitLabel.textShadowBlur = 1;
+    limitLabel.textShadowColor = [UIColor whiteColor];
+    limitLabel.textShadowOffset = CGSizeMake(0, 1);
+    limitLabel.textAlignment = NSTextAlignmentRight;
+    return limitLabel;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
-    [TextView release];
+    [containerView release];
+    [limitLabel release];
+    [buttonView release];
+    [textView release];
     [super dealloc];
 }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
 @end

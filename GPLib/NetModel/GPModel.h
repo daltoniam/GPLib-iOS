@@ -65,6 +65,7 @@
 @property (nonatomic, assign) BOOL isFinished;
 
 -(void)loadModel:(BOOL)more;
+-(void)quitModel;
 -(BOOL)enablePaging;
 -(BOOL)autoLoad;
 - (void)requestFinished:(GPHTTPRequest *)request;

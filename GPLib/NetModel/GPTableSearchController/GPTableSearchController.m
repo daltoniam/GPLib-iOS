@@ -240,6 +240,7 @@
         [searchModel.items removeAllObjects];
         if(searchController.searchBar.scopeButtonTitles.count > 0)
         {
+            searchModel.delegate = nil;
             [searchModel release];
             searchModel = [[self searchModel:url] retain];
             searchModel.delegate = self;
@@ -306,6 +307,7 @@
             else
                 frame.size.height = 88;
             searchBar.frame = frame;
+            view.hidden = hide;
         }
     }
 }
@@ -478,7 +480,7 @@
     if(isSearching)
     {
         [searchItems release];
-        searchItems = [searchModel.items retain];
+        searchItems = [searchModel.items mutableCopy];
         searchSections = [searchModel.sections retain];
         [searchController.searchResultsTableView reloadData];
         ActLabel.hidden = YES;

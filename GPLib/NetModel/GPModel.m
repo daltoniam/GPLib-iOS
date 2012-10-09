@@ -120,6 +120,12 @@
     //[NSThread detachNewThreadSelector:@selector(SendRequestBackground:) toTarget:[GPModel class] withObject:theurl];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)quitModel
+{
+    [backgroundThread cancel];
+    [backgroundThread release];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)sendRequestBackground:(NSURL*)url
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];

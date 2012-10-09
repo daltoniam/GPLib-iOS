@@ -35,18 +35,6 @@
 
 @implementation NSString (GPString)
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+(NSString*)stringWithLocalization:(NSString *)text, ...
-{
-    va_list args;
-    va_start(args, text);
-    text = NSLocalizedString(text, nil);
-    NSString *retVal = [[NSString alloc] initWithFormat:text arguments:args];
-    va_end(args);
-    return [retVal autorelease];
-    
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSString*)encodeURL
 {
@@ -67,11 +55,6 @@
                                                                                                 CFSTR(""),
                                                                                                 kCFStringEncodingUTF8 );
     return [DecodedURL autorelease];
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(NSString*)localizedString
-{
-    return NSLocalizedString(self,nil);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSString*)trimWhiteSpace

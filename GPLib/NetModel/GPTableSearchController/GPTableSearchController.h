@@ -63,4 +63,8 @@
 -(void)runSearch:(NSString*)searchString;
 -(BOOL)hideSearchBarOnLoad;
 
+//ignore these, used to fix scopebar
+-(void)scopeBarHide:(UISearchBar*)searchBar;
+-(void)scopeBarFix:(UISearchBar*)searchBar;
+
 @end

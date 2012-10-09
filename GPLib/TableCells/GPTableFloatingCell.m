@@ -45,7 +45,11 @@
     GPTableFloatingItem* item = (GPTableFloatingItem*)object;
     int attach = 0;
     if(item.attachmentsURLs)
+    {
         attach = 210;
+        if(GPIsPad())
+            attach = 410;
+    }
     
     int header = 65;
     return height + header + attach;
@@ -98,7 +102,7 @@
 {
     attachmentView = [[GPAttachmentView alloc] init];
     attachmentView.delegate = self;
-    attachmentView.isGridStyle = GPIsPad();
+    attachmentView.isSideScroll = YES;
     [bodyView addSubview:attachmentView];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +139,12 @@
     }
     
     if(isAttach)
-        attachmentView.frame = CGRectMake(0, 0, bodyView.frame.size.width, 200);
+    {
+        int h = 200;
+        if(GPIsPad())
+            h = 400;
+        attachmentView.frame = CGRectMake(0, 0, bodyView.frame.size.width, h);
+    }
     else
         attachmentView.frame = CGRectZero;
     int left =TableCellSmallMargin*4;
@@ -164,7 +173,7 @@
             [self setupAttachmentView];
         [attachmentView removeAllItems];
         for(NSString* url in item.attachmentsURLs)
-            [attachmentView addAttachment:url text:nil];
+            [attachmentView addAttachment:url title:nil remove:NO];
         isAttach = YES;
     }
     else

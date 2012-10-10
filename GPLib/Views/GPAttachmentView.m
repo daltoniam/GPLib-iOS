@@ -76,7 +76,6 @@
     scrollView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     pageControl.frame = CGRectMake(scrollView.frame.size.width/2-20, scrollView.frame.size.height-40, 40, 40);
     [self layoutFrames];
-    pageControl.numberOfPages = attachmentViews.count;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutFrames
@@ -104,6 +103,11 @@
             if([subview isKindOfClass:[UILabel class]])
                 subview.frame = CGRectMake(0, 0, view.frame.size.width-10, 20);
     }
+    pageControl.numberOfPages = attachmentViews.count;
+    if(attachmentViews.count < 2)
+        pageControl.hidden = YES;
+    else
+        pageControl.hidden = NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addAttachment:(UIImage*)image remove:(BOOL)canRemove
@@ -226,6 +230,7 @@
     for(UIView* view in attachmentViews)
         [view removeFromSuperview];
     pageControl.numberOfPages = 0;
+    pageControl.hidden = YES;
     [attachmentViews removeAllObjects];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

@@ -158,15 +158,19 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setupPager
 {
-    pageControl = [[UIPageControl alloc] init];
-    pageControl.currentPage = 1;
-    [self addSubview:pageControl];
-    [self bringSubviewToFront:pageControl];
+    if(!pageControl)
+    {
+        pageControl = [[UIPageControl alloc] init];
+        pageControl.currentPage = 1;
+        [self addSubview:pageControl];
+        [self bringSubviewToFront:pageControl];
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addRemoveButton:(GPImageView*)imgView
 {
     UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.tag = imgView.tag;
     [btn setImage:[UIImage libraryImageNamed:@"removeButton.png"] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(removeView:) forControlEvents:UIControlEventTouchUpInside];
     [imgView addSubview:btn];
@@ -174,6 +178,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeView:(UIButton*)btn
 {
+    if([self.delegate respondsToSelector:@selector(didRemoveView:index:)])
+        [self.delegate didRemoveView:self index:btn.tag];
     GPImageView* imgView = [(GPImageView*)btn.superview retain];
     [attachmentViews removeObject:imgView];
     [UIView animateWithDuration:0.35 animations:^{

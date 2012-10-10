@@ -47,17 +47,12 @@
         frame.size.height = 300;
         frame.size.width = 540;
         self.view.frame = frame;
-        
-        frame = self.view.superview.frame;
-        frame.size.height = 300;
-        frame.size.width = 540;
-        self.view.superview.frame = frame;
         self.view.backgroundColor = [UIColor clearColor];
     }
     textView = [[UITextView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, height)];
     textView.delegate = self;
     //textView.returnKeyType = UIReturnKeyDone;
-    textView.contentInset = UIEdgeInsetsMake(2, 2, 2, 2);
+    textView.contentInset = UIEdgeInsetsMake(2, 0, 2, 2);
     [textView becomeFirstResponder];
     textView.contentSize = CGSizeMake(textView.frame.size.height,textView.contentSize.height);
     textView.showsHorizontalScrollIndicator = NO;
@@ -75,7 +70,7 @@
 
     [self.view addSubview:buttonView];
     
-    containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, textView.frame.size.width, textView.frame.size.height)];
+    containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
     containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:containerView];
     [containerView addSubview:textView];
@@ -105,6 +100,15 @@
     [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
 
     CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
+    [self resizeKeyboard:keyboardFrame];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)keyboardWillShow:(NSNotification *)aNotification {
+    [self moveTextViewForKeyboard:aNotification up:YES];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)resizeKeyboard:(CGRect)keyboardFrame
+{
     int height = self.view.frame.size.height - (buttonView.frame.size.height + keyboardFrame.size.height);
     CGRect newFrame = textView.frame;
     newFrame.size.height = height;
@@ -120,10 +124,6 @@
     newFrame.origin.y = height + buttonView.frame.size.height;
     newFrame.size.height = keyboardFrame.size.height;
     contentView.frame = newFrame;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)keyboardWillShow:(NSNotification *)aNotification {
-    [self moveTextViewForKeyboard:aNotification up:YES];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addShadow

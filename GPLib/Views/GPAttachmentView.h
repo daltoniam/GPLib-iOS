@@ -40,6 +40,7 @@
 
 //notify that the image is done loading
 -(void)didTapView:(GPAttachmentView*)view index:(int)index;
+-(void)didRemoveView:(GPAttachmentView*)view index:(int)index;
 
 @end
 

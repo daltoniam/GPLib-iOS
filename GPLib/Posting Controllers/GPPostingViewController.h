@@ -36,4 +36,7 @@
 -(void)post;
 -(void)cancel;
 
+-(void)checkPostStatus;
+-(void)resizeKeyboard:(CGRect)keyboardFrame;
+
 @end

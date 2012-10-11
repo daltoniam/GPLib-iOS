@@ -75,14 +75,15 @@
     [self.view addSubview:containerView];
     [containerView addSubview:textView];
     
+    contentView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, self.view.frame.size.height-top)];
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    contentView.backgroundColor = buttonView.backgroundColor;
+    contentView.pagingEnabled = YES;
+    contentView.showsHorizontalScrollIndicator = NO;
+    contentView.showsVerticalScrollIndicator = NO;
+    
     if(!GPIsPad())
     {
-        contentView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, self.view.frame.size.height-top)];
-        contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        contentView.backgroundColor = buttonView.backgroundColor;
-        contentView.pagingEnabled = YES;
-        contentView.showsHorizontalScrollIndicator = NO;
-        contentView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:contentView];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(keyboardWillShow:)

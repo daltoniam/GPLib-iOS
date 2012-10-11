@@ -92,7 +92,7 @@
         view.frame = CGRectMake(left, top, scrollView.frame.size.width-(pad*2), scrollView.frame.size.height-(pad*2));
         for(UIView* subview in view.subviews)
             if([subview isKindOfClass:[UIButton class]])
-                subview.frame = CGRectMake(view.frame.size.width-19, -6, 25, 25);
+                subview.frame = CGRectMake(-6, -6, 25, 25);
         if(view.image)
             [self addViewShadow:view];
         if(isSideScroll)

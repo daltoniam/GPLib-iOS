@@ -1,9 +1,9 @@
 //
-//  GPAttachmentView.h
+//  GPPostingViewController.h
 //  GPLib
 //
-//  Created by Dalton Cherry on 5/30/12.
-//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
+//  Created by Dalton Cherry on 12/20/11.
+//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
  http://github.com/daltoniam/GPLib-iOS
@@ -31,32 +31,26 @@
  */
 //
 
-#import "GPImageView.h"
+#import "GPTableViewController.h"
 
-@class GPAttachmentView;
-@protocol GPAttachmentViewDelegate <NSObject>
+@protocol GPPostTableDelegate <NSObject>
 
 @optional
 
-//notify that the image is done loading
--(void)didTapView:(GPAttachmentView*)view index:(int)index;
--(void)didRemoveView:(GPAttachmentView*)view index:(int)index;
+//notify that the post button has been clicked
+- (void)textDidPost:(NSString*)htmltext;
+- (void)didCancel;
 
 @end
 
-@interface GPAttachmentView : UIView<UIScrollViewDelegate,GPImageViewDelegate>
+@interface GPPostingTableViewController : GPTableViewController<UITextViewDelegate>
 {
-    UIScrollView* scrollView;
-    NSMutableArray* attachmentViews;
-    UIPageControl* pageControl;
+    id<GPPostTableDelegate> delegate;
+    UITextView* TextView;
+    BOOL isPosting;
 }
+-(NSString*)photoURL;
+-(void)dismissTextView;
 
-@property(nonatomic,assign)BOOL isSideScroll; //paging to side to side instead of up and down
-@property(nonatomic,assign)id<GPAttachmentViewDelegate>delegate;
-
--(void)addAttachment:(UIImage*)image remove:(BOOL)canRemove;
--(void)addAttachment:(NSString*)imgURL title:(NSString*)title remove:(BOOL)canRemove;
--(void)removeAllItems;
--(UIView*)viewAtIndex:(int)index;
-
+@property(nonatomic,assign)id<GPPostTableDelegate> delegate;
 @end

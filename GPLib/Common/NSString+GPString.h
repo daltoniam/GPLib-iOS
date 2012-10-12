@@ -39,7 +39,5 @@
 -(NSString*)decodeURL;
 -(NSString*)stringByStrippingHTML;
 -(NSString*)stringByPaddingTheLeftToLength:(NSUInteger) newLength withString:(NSString *) padString startingAtIndex:(NSUInteger) padIndex;
--(NSString*)localizedString;
 -(NSString*)trimWhiteSpace;
-+(NSString*)stringWithLocalization:(NSString *)text, ...;
 @end

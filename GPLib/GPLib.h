@@ -102,6 +102,7 @@
 #import "GPTimeScroller.h"
 #import "GPEmptyTableView.h"
 #import "GPSegmentControl.h"
+#import "GPAttachmentView.h"
 /////net model
 #import "GPCenterLabel.h"
 #import "GPDragToRefreshView.h"

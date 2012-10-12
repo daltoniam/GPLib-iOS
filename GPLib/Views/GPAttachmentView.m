@@ -32,216 +32,227 @@
 //
 
 #import "GPAttachmentView.h"
-#import "GPImageView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImage+Additions.h"
 
 @implementation GPAttachmentView
 
-@synthesize delegate,isGridStyle,gridPageCount;
-////////////////////////////////////////////////////////////////////////////////////////////
+@synthesize isSideScroll,delegate;
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)commonInit
 {
-    contentView = [[UIScrollView alloc] init];
-    contentView.pagingEnabled = YES;
-    contentView.delegate = self;
-    contentView.backgroundColor = [UIColor blackColor];
-    contentView.showsVerticalScrollIndicator = NO;
-    contentView.showsHorizontalScrollIndicator = NO;
-    [self addSubview:contentView];
+    scrollView = [[UIScrollView alloc] init];
+    scrollView.pagingEnabled = YES;
+    scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.delegate = self;
+    [self addSubview:scrollView];
     attachmentViews = [[NSMutableArray alloc] init];
-    self.gridPageCount = 3;
+    self.userInteractionEnabled = YES;
 }
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(id)init
+{
+    if(self = [super init])
+    {
+        [self commonInit];
+    }
+    return self;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) 
+    if (self)
     {
         [self commonInit];
     }
     return self;
 }
-////////////////////////////////////////////////////////////////////////////////////////////
--(id)init
-{
-    self = [super init];
-    if (self) 
-    {
-        [self commonInit];
-    }
-    return self;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)setupPager
-{
-    pageControl = [[UIPageControl alloc] init];
-    [self addSubview:pageControl];
-    [self bringSubviewToFront:pageControl];
-}
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    contentView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    if(self.isGridStyle)
-        [self gridLayout];
-    else
-        [self pageLayout];
-    for(UIView* view in attachmentViews)
-    {
-        for(UIView* label in view.subviews)
-            label.frame = CGRectMake(0, 0, view.frame.size.width, 20);
-    }
-    pageControl.currentPage = 0;
+    scrollView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    pageControl.frame = CGRectMake(scrollView.frame.size.width/2-20, scrollView.frame.size.height-40, 40, 40);
+    [self layoutFrames];
 }
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)setFrame:(CGRect)frame
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)layoutFrames
 {
-    [super setFrame:frame];
-    contentView.frame = frame;
-    if(self.isGridStyle)
-        [self gridLayout];
+    if(isSideScroll)
+        scrollView.contentSize = CGSizeMake(scrollView.frame.size.width*attachmentViews.count, scrollView.frame.size.height);
     else
-        [self pageLayout];
-}
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)pageLayout
-{
-    pagePad = 0;
-    int left = 0;
-    for(UIView* view in attachmentViews)
-    {
-        view.frame = CGRectMake(left, 0,self.frame.size.width, self.frame.size.height);
-        left += view.frame.size.width;
-    }
-    CGRect bounds = contentView.bounds;
-    contentView.contentSize = CGSizeMake((bounds.size.width * [attachmentViews count]), bounds.size.height);
-    if(attachmentViews.count > 0 && !pageControl)
-        [self setupPager];
-    pageControl.frame = CGRectMake(0, self.frame.size.height-30, self.frame.size.width, 36);
-    int count = [attachmentViews count];
-    if(count > 1)
-        pageControl.numberOfPages = count;
-    else
-        pageControl.numberOfPages = 0;
-    pageControl.currentPage = 0;
-    contentView.backgroundColor = [UIColor blackColor];
-}
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)gridLayout
-{
-    int pad = 10;
-    pagePad = pad;
+        scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, scrollView.frame.size.height*attachmentViews.count);
+    int pad = 6;
+    int top = pad;
     int left = pad;
-    int width = self.frame.size.width/gridPageCount;
-    for(UIView* view in attachmentViews)
+    for(GPImageView* view in attachmentViews)
     {
-        view.frame = CGRectMake(left, pad,width-(pad + pad/gridPageCount), self.frame.size.height-(pad*2));
-        left += view.frame.size.width + pad;
-        //for(UIView* label in view.subviews)
-        //    label.frame = CGRectMake(0, -pad, view.frame.size.width, 20);
+        view.frame = CGRectMake(left, top, scrollView.frame.size.width-(pad*2), scrollView.frame.size.height-(pad*2));
+        for(UIView* subview in view.subviews)
+            if([subview isKindOfClass:[UIButton class]])
+                subview.frame = CGRectMake(-6, -6, 25, 25);
+        if(view.image)
+            [self addViewShadow:view];
+        if(isSideScroll)
+            left += scrollView.frame.size.width;
+        else
+            top += scrollView.frame.size.height;
+        for(UIView* subview in view.subviews)
+            if([subview isKindOfClass:[UILabel class]])
+                subview.frame = CGRectMake(0, 0, view.frame.size.width-10, 20);
     }
-    CGRect bounds = contentView.bounds;
-    int size = [attachmentViews count];
-    if(size % gridPageCount != 0)
-        size += gridPageCount;
-    size = size/gridPageCount;
-    //CGSizeMake((bounds.size.width - pad/gridPageCount) * size, bounds.size.height);
-    contentView.contentSize = CGSizeMake(( (bounds.size.width-pad/2)) * size, bounds.size.height);
-    contentView.backgroundColor = [UIColor clearColor];
-    
-    if(attachmentViews.count > 0 && !pageControl)
-        [self setupPager];
-    pageControl.frame = CGRectMake(0, self.frame.size.height-36, self.frame.size.width, 36);
-    int count = [attachmentViews count]/gridPageCount;
-    if(count >= 1 && attachmentViews.count != gridPageCount)
-        pageControl.numberOfPages = count;
+    pageControl.numberOfPages = attachmentViews.count;
+    if(attachmentViews.count < 2)
+        pageControl.hidden = YES;
     else
-        pageControl.numberOfPages = 0;
-    pageControl.currentPage = 0;
-
+        pageControl.hidden = NO;
 }
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)addAttachment:(NSString*)url text:(NSString*)text
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addAttachment:(UIImage*)image remove:(BOOL)canRemove
 {
-    //UIViewContentModeScaleToFill [UIColor colorWithWhite:0.95 alpha:1]
-    [self addAttachment:url text:text contentMode:UIViewContentModeScaleToFill backColor:[UIColor colorWithWhite:0.98 alpha:1]];
+    GPImageView* imgView = [self setupImgView];
+    imgView.image = image;
+    if(canRemove)
+        [self addRemoveButton:imgView];
 }
-////////////////////////////////////////////////////////////////////////////////////////////
-//does the magic
--(void)addAttachment:(NSString*)url text:(NSString*)text contentMode:(UIViewContentMode)mode backColor:(UIColor*)color
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addAttachment:(NSString*)imgURL title:(NSString*)title remove:(BOOL)canRemove
 {
-    int left = self.frame.size.width*[attachmentViews count];
-    GPImageView* imageView = [[[GPImageView alloc] initWithFrame:CGRectMake(left, 0,self.frame.size.width, self.frame.size.height)] autorelease];
-    imageView.URL = url;
-    imageView.contentMode = mode;//UIViewContentModeScaleAspectFill;//UIViewContentModeScaleAspectFit;
-    [imageView fetchImage];
-    imageView.tag = attachmentViews.count;
-    imageView.backgroundColor = color;
-    imageView.userInteractionEnabled = YES;
-    
-    if(text)
+    GPImageView* imgView = [self setupImgView];
+    imgView.URL = imgURL;
+    imgView.delegate = self;
+    [imgView fetchImage];
+    if(canRemove)
+        [self addRemoveButton:imgView];
+    if(title)
     {
         UILabel* label = [[[UILabel alloc] init] autorelease];
-        label.font = [UIFont boldSystemFontOfSize:12];
-        label.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
+        label.text = title;
         label.textColor = [UIColor whiteColor];
-        label.text = text;
-        label.textAlignment = UITextAlignmentCenter;
-        [imageView addSubview:label];
+        label.backgroundColor = [UIColor clearColor];
+        [imgView addSubview:label];
     }
     
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPImageView*)setupImgView
+{
+    GPImageView* imgView = [[[GPImageView alloc] init] autorelease];
+    imgView.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImage:)];
     tap.numberOfTapsRequired = 1;
-    [imageView addGestureRecognizer:tap];
+    [imgView addGestureRecognizer:tap];
     [tap release];
+    imgView.tag = attachmentViews.count;
     
-    [attachmentViews addObject:imageView];
-    [contentView addSubview:imageView];
+    [attachmentViews addObject:imgView];
+    [scrollView addSubview:imgView];
     [self setNeedsLayout];
+    if(attachmentViews.count > 1)
+        [self setupPager];
+    
+    return imgView;
 }
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setupPager
+{
+    if(!pageControl)
+    {
+        pageControl = [[UIPageControl alloc] init];
+        pageControl.currentPage = 1;
+        [self addSubview:pageControl];
+        [self bringSubviewToFront:pageControl];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addRemoveButton:(GPImageView*)imgView
+{
+    UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.tag = imgView.tag;
+    [btn setImage:[UIImage libraryImageNamed:@"removeButton.png"] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(removeView:) forControlEvents:UIControlEventTouchUpInside];
+    [imgView addSubview:btn];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeView:(UIButton*)btn
+{
+    if([self.delegate respondsToSelector:@selector(didRemoveView:index:)])
+        [self.delegate didRemoveView:self index:btn.tag];
+    GPImageView* imgView = [(GPImageView*)btn.superview retain];
+    [attachmentViews removeObject:imgView];
+    [UIView animateWithDuration:0.35 animations:^{
+        CGRect frame = imgView.frame;
+        if(isSideScroll)
+            frame.origin.y = imgView.frame.size.height+20;
+        else
+            frame.origin.x = imgView.frame.size.width+20;
+        imgView.frame = frame;
+    }completion:^(BOOL finished){
+        [UIView animateWithDuration:0.35 animations:^{
+            [self layoutFrames];
+        }completion:NULL];
+        [imgView removeFromSuperview];
+        [imgView release];
+    }];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scroll
+{
+    int page = 0;
+    if(isSideScroll)
+        page = scroll.contentOffset.x/scroll.frame.size.width;
+    else
+        page = scroll.contentOffset.y/scroll.frame.size.height;
+    pageControl.currentPage = page;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//adds a simple shadow to your view
+-(void)addViewShadow:(UIView*)view
+{
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.bounds];
+    view.layer.masksToBounds = NO;
+    view.layer.shadowColor = [UIColor blackColor].CGColor;
+    view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+    view.layer.shadowOpacity = 0.6;
+    view.layer.shadowRadius = 3.0;
+    view.layer.shadowPath = shadowPath.CGPath;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)didTapImage:(UITapGestureRecognizer*)sender
 {
     if([self.delegate respondsToSelector:@selector(didTapView:index:)])
         [self.delegate didTapView:self index:sender.view.tag];
 }
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(UIView*)viewAtIndex:(int)index
+{
+    return [attachmentViews objectAtIndex:index];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeAllItems
 {
     for(UIView* view in attachmentViews)
         [view removeFromSuperview];
     pageControl.numberOfPages = 0;
+    pageControl.hidden = YES;
     [attachmentViews removeAllObjects];
 }
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)removeViewAtIndex:(int)index
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)imageDidFinish:(GPImageView*)view
 {
-    UIView* view = [attachmentViews objectAtIndex:index];
-    [view removeFromSuperview];
-    [attachmentViews removeObject:view];
-    
+    [self addViewShadow:view];
 }
-////////////////////////////////////////////////////////////////////////////////////////////
--(UIView*)viewAtIndex:(int)index
-{
-    return [attachmentViews objectAtIndex:index];
-}
-////////////////////////////////////////////////////////////////////////////////////////////
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    int page = contentView.contentOffset.x/(contentView.frame.size.width-pagePad);
-    pageControl.currentPage = page;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
-    [contentView release];
-    [attachmentViews release];
     [pageControl release];
+    [scrollView release];
+    [attachmentViews release];
     [super dealloc];
 }
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 @end

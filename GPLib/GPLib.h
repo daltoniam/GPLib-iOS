@@ -84,6 +84,8 @@
 #import "GPTableTextViewCell.h"
 #import "GPTableSegmentItem.h"
 #import "GPTableSegmentCell.h"
+#import "GPTableButtonItem.h"
+#import "GPTableButtonCell.h"
 /////views
 #import "GPImageView.h"
 #import "GPBubbleView.h"

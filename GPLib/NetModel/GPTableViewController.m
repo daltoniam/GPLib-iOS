@@ -62,6 +62,8 @@
 #import "GPTableTextViewCell.h"
 #import "GPTableSegmentItem.h"
 #import "GPTableSegmentCell.h"
+#import "GPTableButtonItem.h"
+#import "GPTableButtonCell.h"
 
 
 #import "GPEmptyTableView.h"
@@ -508,9 +510,11 @@
         return [GPTableSegmentCell class];
     else if ([object isKindOfClass:[GPTableDeleteItem class]]) 
         return [GPTableDeleteCell class];
-    else if ([object isKindOfClass:[GPTableSwitchItem class]]) 
+    else if ([object isKindOfClass:[GPTableSwitchItem class]])
         return [GPTableSwitchCell class];
-    else if ([object isKindOfClass:[GPTableTextItem class]]) 
+    else if ([object isKindOfClass:[GPTableButtonItem class]])
+        return [GPTableButtonCell class];
+    else if ([object isKindOfClass:[GPTableTextItem class]])
         return [GPTableCell class]; 
     
     // This will display an empty white table cell - probably not what you want, but it

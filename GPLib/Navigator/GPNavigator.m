@@ -221,6 +221,9 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
     Class class = [URLs objectForKey:selURL];
     SEL sel = [self selectorFromURL:selURL];
     
+    path = [self pathFromURL:[NSURL URLWithString:selURL]];
+    int selCount = [path componentsSeparatedByString:@"/"].count-1;
+    
     if([selURL isEqualToString:@""] && query)
         params = [NSArray arrayWithObjects:paramsURL,query,nil];
     else if(params && query && paramscount != params.count)
@@ -229,6 +232,9 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         params = [NSArray arrayWithObjects:paramsURL,query,nil];
     else if([NSStringFromSelector(sel) isEqualToString:@"initWithNavigatorURL:query:"] && params && !query && ![selURL isEqualToString:GPHTTPLINKSURL])
         params = [NSArray arrayWithObject:[NSURL URLWithString:[params objectAtIndex:0]]];
+    else if(query && selCount != paramscount)
+        params = [params arrayByAddingObject:query];
+        
     
     if(![class instancesRespondToSelector:sel])
     {

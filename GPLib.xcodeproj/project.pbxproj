@@ -231,6 +231,10 @@
 		5CFFA19014DC739B00501A3E /* GPPostingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFFA18E14DC739B00501A3E /* GPPostingViewController.m */; };
 		5CFFA19514DC754A00501A3E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9F914DC566C00F2CBB3 /* UIKit.framework */; };
 		5CFFA1A114DC79BE00501A3E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CFFA1A014DC79BE00501A3E /* SystemConfiguration.framework */; };
+		D934648E162734F600C1AF45 /* GPTableButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D934648C162734F600C1AF45 /* GPTableButtonItem.h */; };
+		D934648F162734F600C1AF45 /* GPTableButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D934648D162734F600C1AF45 /* GPTableButtonItem.m */; };
+		D9346496162736D500C1AF45 /* GPTableButtonCell.h in Headers */ = {isa = PBXBuildFile; fileRef = D9346494162736D500C1AF45 /* GPTableButtonCell.h */; };
+		D9346497162736D500C1AF45 /* GPTableButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D9346495162736D500C1AF45 /* GPTableButtonCell.m */; };
 		D96B385E15740097004B9F69 /* GPTableSwitchItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D96B385C15740097004B9F69 /* GPTableSwitchItem.h */; };
 		D96B385F15740097004B9F69 /* GPTableSwitchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D96B385D15740097004B9F69 /* GPTableSwitchItem.m */; };
 		D96B38631574011C004B9F69 /* GPTableSwitchCell.h in Headers */ = {isa = PBXBuildFile; fileRef = D96B38611574011C004B9F69 /* GPTableSwitchCell.h */; };
@@ -514,6 +518,10 @@
 		5CFFA18D14DC739B00501A3E /* GPPostingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPPostingViewController.h; sourceTree = "<group>"; };
 		5CFFA18E14DC739B00501A3E /* GPPostingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPPostingViewController.m; sourceTree = "<group>"; };
 		5CFFA1A014DC79BE00501A3E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		D934648C162734F600C1AF45 /* GPTableButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableButtonItem.h; sourceTree = "<group>"; };
+		D934648D162734F600C1AF45 /* GPTableButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableButtonItem.m; sourceTree = "<group>"; };
+		D9346494162736D500C1AF45 /* GPTableButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableButtonCell.h; sourceTree = "<group>"; };
+		D9346495162736D500C1AF45 /* GPTableButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableButtonCell.m; sourceTree = "<group>"; };
 		D96B385C15740097004B9F69 /* GPTableSwitchItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSwitchItem.h; sourceTree = "<group>"; };
 		D96B385D15740097004B9F69 /* GPTableSwitchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableSwitchItem.m; sourceTree = "<group>"; };
 		D96B38611574011C004B9F69 /* GPTableSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSwitchCell.h; sourceTree = "<group>"; };
@@ -976,6 +984,8 @@
 				5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */,
 				5C5069AF15C2DC30007AD647 /* GPTableTextViewCell.h */,
 				5C5069B015C2DC30007AD647 /* GPTableTextViewCell.m */,
+				D9346494162736D500C1AF45 /* GPTableButtonCell.h */,
+				D9346495162736D500C1AF45 /* GPTableButtonCell.m */,
 			);
 			path = TableCells;
 			sourceTree = "<group>";
@@ -1011,6 +1021,8 @@
 				5C5F7D1C159CCB5100F42061 /* GPTableMailItem.m */,
 				5C5069A715C2D8F0007AD647 /* GPTableTextViewItem.h */,
 				5C5069A815C2D8F0007AD647 /* GPTableTextViewItem.m */,
+				D934648C162734F600C1AF45 /* GPTableButtonItem.h */,
+				D934648D162734F600C1AF45 /* GPTableButtonItem.m */,
 			);
 			path = TableItems;
 			sourceTree = "<group>";
@@ -1165,6 +1177,8 @@
 				5C5F691F15C72D200077005E /* GPSegmentControl.h in Headers */,
 				5C38CF151612136D00DB5BDC /* GPSideBarViewController.h in Headers */,
 				5C38CF42161240C300DB5BDC /* GPSlideView.h in Headers */,
+				D934648E162734F600C1AF45 /* GPTableButtonItem.h in Headers */,
+				D9346496162736D500C1AF45 /* GPTableButtonCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1460,6 +1474,8 @@
 				5C5F692015C72D200077005E /* GPSegmentControl.m in Sources */,
 				5C38CF161612136D00DB5BDC /* GPSideBarViewController.m in Sources */,
 				5C38CF43161240C300DB5BDC /* GPSlideView.m in Sources */,
+				D934648F162734F600C1AF45 /* GPTableButtonItem.m in Sources */,
+				D9346497162736D500C1AF45 /* GPTableButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

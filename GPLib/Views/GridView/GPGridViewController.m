@@ -283,10 +283,30 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(GPHTTPRequest*)imageRequest:(NSString*)URL
 {
-    GPHTTPRequest* request = [GPHTTPRequest requestWithURL:[NSURL URLWithString:URL]];
+    __block GPHTTPRequest* request = [GPHTTPRequest requestWithURL:[NSURL URLWithString:URL]];
     [request setCacheModel:GPHTTPCacheCustomTime];
     [request setTimeout:60*60*1]; // Cache for 1 hour
-    [request setDelegate:self];
+    [request setFinishBlock:^{
+        
+        int i = 0;
+        NSMutableArray* indexes = [NSMutableArray array];
+        for(id object in items)
+        {
+            if([object isKindOfClass:[GPGridViewItem class]] && ![object isKindOfClass:[GPGridMoreItem class]])
+            {
+                GPGridViewItem* item = (GPGridViewItem*)object;
+                if([item.imageURL isEqualToString:request.URL.absoluteString])
+                {
+                    item.image = [UIImage imageWithData:[request responseData]];
+                    [indexes addObject:[NSNumber numberWithInt:i]];
+                }
+            }
+            i++;
+        }
+        [imageQueue removeObject:request.URL.absoluteString];
+        [gridView reloadCellsAtIndexes:indexes];
+        
+    }];
     return request;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,27 +329,6 @@
         }
             
     }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(GPHTTPRequest *)request
-{
-    int i = 0;
-    NSMutableArray* indexes = [NSMutableArray array];
-    for(id object in items)
-    {
-        if([object isKindOfClass:[GPGridViewItem class]] && ![object isKindOfClass:[GPGridMoreItem class]])
-        {
-            GPGridViewItem* item = (GPGridViewItem*)object;
-            if([item.imageURL isEqualToString:request.URL.absoluteString])
-            {
-                item.image = [UIImage imageWithData:[request responseData]];
-                [indexes addObject:[NSNumber numberWithInt:i]];
-            }
-        }
-        i++;
-    }
-    [imageQueue removeObject:request.URL.absoluteString];
-    [gridView reloadCellsAtIndexes:indexes];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)modelFinished:(GPHTTPRequest *)request

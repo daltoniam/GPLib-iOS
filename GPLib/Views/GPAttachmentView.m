@@ -34,6 +34,7 @@
 #import "GPAttachmentView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Additions.h"
+#import "GPLabel.h"
 
 @implementation GPAttachmentView
 
@@ -128,10 +129,13 @@
         [self addRemoveButton:imgView];
     if(title)
     {
-        UILabel* label = [[[UILabel alloc] init] autorelease];
+        GPLabel* label = [[[GPLabel alloc] init] autorelease];
         label.text = title;
-        label.textColor = [UIColor whiteColor];
+        label.textColor = [UIColor colorWithWhite:0.95 alpha:1];
         label.backgroundColor = [UIColor clearColor];
+        label.textShadowBlur = 1;
+        label.textShadowColor = [UIColor blackColor];
+        label.textShadowOffset = CGSizeMake(0, 1);
         [imgView addSubview:label];
     }
     

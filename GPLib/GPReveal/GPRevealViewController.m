@@ -162,8 +162,8 @@ static int REVEAL_OFFSET;
     [self.view addSubview:backView];
     [backView addSubview:backViewController.view];
     
-    [self addChildViewController:frontNavBar];
     [self addChildViewController:backViewController];
+    [self addChildViewController:frontNavBar];
     [self.view bringSubviewToFront:frontView];
     
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:frontView.bounds];

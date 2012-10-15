@@ -41,7 +41,7 @@
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object 
 {
     GPTableMessageItem* item = (GPTableMessageItem*)object;
-    CGFloat maxWidth = tableView.frame.size.width - 80;
+    CGFloat maxWidth = tableView.frame.size.width - 100;
     //CGFloat ImageSize = [super tableView:tableView rowHeightForObject:object];
     if(item.rowHeight) //we cache rowHeight for preformance reasons
         return item.rowHeight;

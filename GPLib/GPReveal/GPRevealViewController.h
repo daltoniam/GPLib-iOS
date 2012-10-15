@@ -62,7 +62,7 @@
 
 @end
 ///////////////////////////////////////////////////////////////////////////////////////
-@interface GPRevealViewController : UIViewController<GPRevealBackDelegate,UIGestureRecognizerDelegate>
+@interface GPRevealViewController : UIViewController<GPRevealBackDelegate,UIGestureRecognizerDelegate> 
 {
     UIView* frontView;
     UIView* backView;

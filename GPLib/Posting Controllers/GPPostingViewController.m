@@ -90,7 +90,8 @@
                                                      name:UIKeyboardWillShowNotification //UIKeyboardDidShowNotification
                                                    object:nil];
     }
-    [self layoutButtons];
+    else
+        [self layoutButtons];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)moveTextViewForKeyboard:(NSNotification*)aNotification up:(BOOL)up
@@ -125,6 +126,7 @@
     newFrame.origin.y = height + buttonView.frame.size.height;
     newFrame.size.height = keyboardFrame.size.height;
     contentView.frame = newFrame;
+    [self layoutButtons];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addShadow
@@ -140,9 +142,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutButtons
 {
-    GPTransparentToolbar* toolBar = [[[GPTransparentToolbar alloc] initWithFrame:CGRectMake(0, 0, buttonView.frame.size.width, buttonView.frame.size.height)] autorelease];
-    [buttonView addSubview:toolBar];
-    [toolBar setItems:[self barButtonItems]];
+    if(!didLayoutButtons)
+    {
+        didLayoutButtons = YES;
+        GPTransparentToolbar* toolBar = [[[GPTransparentToolbar alloc] initWithFrame:CGRectMake(0, 0, buttonView.frame.size.width, buttonView.frame.size.height)] autorelease];
+        [buttonView addSubview:toolBar];
+        [toolBar setItems:[self barButtonItems]];
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //textview delegate

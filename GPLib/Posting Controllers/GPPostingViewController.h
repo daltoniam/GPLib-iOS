@@ -26,6 +26,7 @@
     GPLabel* limitLabel;
     UIView* containerView;
     UIScrollView* contentView;
+    BOOL didLayoutButtons;
 }
 @property(nonatomic,assign)id<GPPostDelegate> delegate;
 @property(nonatomic,assign)NSInteger textLimit; //default is 0 (no limit)

@@ -88,21 +88,29 @@
     int pad = 6;
     int top = pad;
     int left = pad;
-    for(GPImageView* view in attachmentViews)
+    for(UIView* view in attachmentViews)
     {
+        GPImageView* imgView = nil;
         view.frame = CGRectMake(left, top, scrollView.frame.size.width-(pad*2), scrollView.frame.size.height-(pad*2));
         for(UIView* subview in view.subviews)
-            if([subview isKindOfClass:[UIButton class]])
-                subview.frame = CGRectMake(-6, -6, 25, 25);
-        if(view.image)
+        {
+            if([subview isKindOfClass:[GPImageView class]])
+                imgView = (GPImageView*)subview;
+        }
+        imgView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+        if(imgView.image)
             [self addViewShadow:view];
         if(isSideScroll)
             left += scrollView.frame.size.width;
         else
             top += scrollView.frame.size.height;
-        for(UIView* subview in view.subviews)
+        for(UIView* subview in imgView.subviews)
+        {
             if([subview isKindOfClass:[UILabel class]])
                 subview.frame = CGRectMake(0, 0, view.frame.size.width-10, 20);
+            else if([subview isKindOfClass:[UIButton class]])
+                subview.frame = CGRectMake(-6, -6, 25, 25);
+        }
     }
     pageControl.numberOfPages = attachmentViews.count;
     if(attachmentViews.count < 2)
@@ -144,15 +152,20 @@
 -(GPImageView*)setupImgView
 {
     GPImageView* imgView = [[[GPImageView alloc] init] autorelease];
+    UIView* containerView = [[[UIView alloc] init] autorelease];
     imgView.userInteractionEnabled = YES;
+    imgView.contentMode = UIViewContentModeScaleAspectFit;
+    containerView.userInteractionEnabled = YES;
+    containerView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImage:)];
     tap.numberOfTapsRequired = 1;
-    [imgView addGestureRecognizer:tap];
+    [containerView addGestureRecognizer:tap];
     [tap release];
-    imgView.tag = attachmentViews.count;
+    containerView.tag = attachmentViews.count;
+    [containerView addSubview:imgView];
     
-    [attachmentViews addObject:imgView];
-    [scrollView addSubview:imgView];
+    [attachmentViews addObject:containerView];
+    [scrollView addSubview:containerView];
     [self setNeedsLayout];
     if(attachmentViews.count > 1)
         [self setupPager];
@@ -171,34 +184,34 @@
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)addRemoveButton:(GPImageView*)imgView
+-(void)addRemoveButton:(UIView*)view
 {
     UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.tag = imgView.tag;
+    btn.tag = view.tag;
     [btn setImage:[UIImage libraryImageNamed:@"removeButton.png"] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(removeView:) forControlEvents:UIControlEventTouchUpInside];
-    [imgView addSubview:btn];
+    [view addSubview:btn];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeView:(UIButton*)btn
 {
     if([self.delegate respondsToSelector:@selector(didRemoveView:index:)])
         [self.delegate didRemoveView:self index:btn.tag];
-    GPImageView* imgView = [(GPImageView*)btn.superview retain];
-    [attachmentViews removeObject:imgView];
+    UIView* view = [btn.superview.superview retain];
+    [attachmentViews removeObject:view];
     [UIView animateWithDuration:0.35 animations:^{
-        CGRect frame = imgView.frame;
+        CGRect frame = view.frame;
         if(isSideScroll)
-            frame.origin.y = imgView.frame.size.height+20;
+            frame.origin.y = view.frame.size.height+20;
         else
-            frame.origin.x = imgView.frame.size.width+20;
-        imgView.frame = frame;
+            frame.origin.x = view.frame.size.width+20;
+        view.frame = frame;
     }completion:^(BOOL finished){
         [UIView animateWithDuration:0.35 animations:^{
             [self layoutFrames];
         }completion:NULL];
-        [imgView removeFromSuperview];
-        [imgView release];
+        [view removeFromSuperview];
+        [view release];
     }];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +245,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(UIView*)viewAtIndex:(int)index
 {
-    return [attachmentViews objectAtIndex:index];
+    GPImageView* imgView = nil;
+    UIView* mainView = [attachmentViews objectAtIndex:index];
+    for(UIView* view in mainView.subviews)
+        if([view isKindOfClass:[GPImageView class]])
+            imgView = (GPImageView*)view;
+    if(imgView)
+        return imgView;
+    return mainView;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeAllItems
@@ -246,7 +266,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)imageDidFinish:(GPImageView*)view
 {
-    [self addViewShadow:view];
+    [self addViewShadow:view.superview];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

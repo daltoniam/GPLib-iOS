@@ -138,6 +138,8 @@
 		5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */; };
 		5CA6800015361109001719DC /* GPGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA67FFE15361109001719DC /* GPGridViewController.h */; };
 		5CA6800115361109001719DC /* GPGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA67FFF15361109001719DC /* GPGridViewController.m */; };
+		5CA8D0A2162CB2C3009AC119 /* GPTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA8D0A0162CB2C3009AC119 /* GPTableView.h */; };
+		5CA8D0A3162CB2C3009AC119 /* GPTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA8D0A1162CB2C3009AC119 /* GPTableView.m */; };
 		5CD4F8B814DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
 		5CD4F8C614DC521A00F2CBB3 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8C514DC521A00F2CBB3 /* SenTestingKit.framework */; };
 		5CD4F8C914DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
@@ -433,6 +435,8 @@
 		5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextFieldItem.m; sourceTree = "<group>"; };
 		5CA67FFE15361109001719DC /* GPGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridViewController.h; path = GridView/GPGridViewController.h; sourceTree = "<group>"; };
 		5CA67FFF15361109001719DC /* GPGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridViewController.m; path = GridView/GPGridViewController.m; sourceTree = "<group>"; };
+		5CA8D0A0162CB2C3009AC119 /* GPTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPTableView.h; path = GPTableView/GPTableView.h; sourceTree = "<group>"; };
+		5CA8D0A1162CB2C3009AC119 /* GPTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPTableView.m; path = GPTableView/GPTableView.m; sourceTree = "<group>"; };
 		5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGPLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5CD4F8BB14DC521A00F2CBB3 /* GPLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPLib-Prefix.pch"; sourceTree = "<group>"; };
@@ -789,6 +793,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		5CA8D09B162CB29F009AC119 /* GPTableView */ = {
+			isa = PBXGroup;
+			children = (
+				5CA8D0A0162CB2C3009AC119 /* GPTableView.h */,
+				5CA8D0A1162CB2C3009AC119 /* GPTableView.m */,
+			);
+			name = GPTableView;
+			sourceTree = "<group>";
+		};
 		5CD4F8A914DC521A00F2CBB3 = {
 			isa = PBXGroup;
 			children = (
@@ -833,6 +846,7 @@
 		5CD4F8B914DC521A00F2CBB3 /* GPLib */ = {
 			isa = PBXGroup;
 			children = (
+				5CA8D09B162CB29F009AC119 /* GPTableView */,
 				5C38CF121612136D00DB5BDC /* SideNavigation */,
 				5C1430B41545A5AC00AEE1FA /* GPReveal */,
 				5C8840F8152E39CC007AEE7D /* gridView */,
@@ -1208,6 +1222,7 @@
 				D9346496162736D500C1AF45 /* GPTableButtonCell.h in Headers */,
 				5C00A974161E1EE20066951F /* GPSideBarView.h in Headers */,
 				5C1155D616233A3200212A4C /* GPPostingViewController.h in Headers */,
+				5CA8D0A2162CB2C3009AC119 /* GPTableView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1513,6 +1528,7 @@
 				D9346497162736D500C1AF45 /* GPTableButtonCell.m in Sources */,
 				5C00A975161E1EE20066951F /* GPSideBarView.m in Sources */,
 				5C1155D716233A3200212A4C /* GPPostingViewController.m in Sources */,
+				5CA8D0A3162CB2C3009AC119 /* GPTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

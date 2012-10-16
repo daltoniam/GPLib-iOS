@@ -39,8 +39,9 @@
     UILabel* subTextLabel;
     UIImageView* imageView;
 }
--(void)setMainText:(NSString*)mainText;
--(void)setSubText:(NSString*)text;
--(void)setImage:(UIImage*)image;
+
+@property(nonatomic,copy)NSString* mainText;
+@property(nonatomic,copy)NSString* subText;
+@property(nonatomic,retain)UIImage* image;
 
 @end

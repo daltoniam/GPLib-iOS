@@ -32,6 +32,8 @@
 //
 
 #import "GPTableViewController.h"
+#import "GPTableTextItem.h"
+#import "GPNavigator.h"
 
 @interface GPTableViewController ()
 
@@ -89,6 +91,30 @@
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //subclass stuff
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//using gpnavigator to navigate. Does nothing if GPNavigator is not used and will have to override
+//to provide navigation
+- (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath
+{
+    if ([object respondsToSelector:@selector(NavURL)])
+    {
+        NSString* URL = [object NavURL];
+        if([object isKindOfClass:[GPTableTextItem class]])
+        {
+            GPTableTextItem* item = (GPTableTextItem*)object;
+            NSString* theURL = item.NavURL;
+            if (theURL)
+            {
+                if(item.Properties)
+                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.Properties];
+                else
+                    [[GPNavigator navigator] openURL:URL];
+            }
+        }
+        else if (URL)
+            [[GPNavigator navigator] openURL:URL];
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(GPModel*)setupModel
 {

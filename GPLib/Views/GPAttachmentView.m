@@ -156,7 +156,7 @@
     imgView.userInteractionEnabled = YES;
     imgView.contentMode = UIViewContentModeScaleAspectFit;
     containerView.userInteractionEnabled = YES;
-    containerView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
+    containerView.backgroundColor = [UIColor clearColor];//[UIColor colorWithWhite:0.95 alpha:1];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImage:)];
     tap.numberOfTapsRequired = 1;
     [containerView addGestureRecognizer:tap];

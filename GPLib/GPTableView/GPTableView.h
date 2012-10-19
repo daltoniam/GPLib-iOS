@@ -66,6 +66,12 @@
 //implement this to handle searching
 -(void)didRunSearch:(NSString*)string;
 
+//when the search controller is brought up
+-(void)willBeginSearch;
+
+//when the search controller is dismissed.
+-(void)willStopSearch;
+
 @end
 
 @interface GPTableView : UIView<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
@@ -76,7 +82,7 @@
     GPTimeScroller* timeScroller;
     BOOL isRefreshing;
     BOOL didBeginUpdate;
-    UISearchDisplayController* searchController;
+    BOOL searchButtonTapped;
 }
 //default delegate implementation, nothing special
 @property(nonatomic,assign)id<GPTableViewDelegate>delegate;
@@ -111,6 +117,12 @@
 //this enables the table view to act as a selection menu with checkmarks.
 @property(nonatomic,assign)BOOL checkMarks;
 
+//this is the for the tableView separatorColor
+@property(nonatomic,retain)UIColor* separatorColor;
+
+//hide all accessoryViews. Default is NO, but showSearch, set this to YES.
+@property(nonatomic,assign)BOOL hideAccessoryViews;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //search properties
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +150,15 @@
 //set this to make get search query from every key and not just the search button
 @property(nonatomic,assign)BOOL isAutoSearch;
 
+//this is the searchController used for searching, (the searchBar)
+@property(nonatomic,retain)UISearchDisplayController* searchController;
+
+//set if you want the ScrollIndicator to show. Default is YES.
+@property(nonatomic,assign)BOOL showsHorizontalScrollIndicator;
+
+//set if you want the ScrollIndicator to show. Default is YES.
+@property(nonatomic,assign)BOOL showsVerticalScrollIndicator;
+
 -(id)initWithFrame:(CGRect)frame isGrouped:(BOOL)grouped;
 -(id)init:(BOOL)grouped;
 
@@ -155,6 +176,10 @@
 
 //remove unused sections from the tableView
 -(void)clearEmptySections;
+
+
+//I am exposing this for now. I want to think of a better way around not have searchController.
+-(void)setupSearchController;
 
 
 //adding/removing to tableView with animation
@@ -185,6 +210,8 @@
 -(void)removeObjectAtIndex:(NSIndexPath*)indexPath;
 -(void)removeObjectAtIndex:(NSIndexPath*)indexPath animation:(UITableViewRowAnimation)animation;
 
+//reload a section
+-(void)reloadSection:(int)section animation:(UITableViewRowAnimation)animation;
 
 //remove a section
 -(void)removeSection:(int)section;
@@ -194,6 +221,7 @@
 -(void)addSection:(NSArray*)objects;
 -(void)addSection:(NSArray*)objects animation:(UITableViewRowAnimation)animation;
 
+//insert a section
 -(void)insertSection:(int)section objects:(NSArray*)objects;
 -(void)insertSection:(int)section objects:(NSArray*)objects animation:(UITableViewRowAnimation)animation;
 

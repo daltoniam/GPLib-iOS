@@ -75,10 +75,13 @@ static const CGFloat RefreshDeltaY = -65.0f;
 static const CGFloat HeaderVisibleHeight = 60.0f;
 
 @synthesize items,sections,isGrouped,selectedColor,variableHeight,emptyView,dragToRefresh,refreshHeader,hideSeparator;
-@synthesize checkMarks,numberIndex,truncateCount,searchItems,searchSections,isSearching,hideSectionTitles,isAutoSearch;
+@synthesize checkMarks,numberIndex,truncateCount,searchItems,searchSections,isSearching,hideSectionTitles,isAutoSearch,searchController;
+@synthesize hideAccessoryViews;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)commonInit:(BOOL)grouped
 {
+    self.showsHorizontalScrollIndicator = YES;
+    self.showsVerticalScrollIndicator = YES;
     UITableViewStyle style = UITableViewStylePlain;
     if(grouped)
         style = UITableViewStyleGrouped;
@@ -173,7 +176,10 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     [self showEmptyView];
     if(self.showSearch)
         [self clearEmptySections];
-    [tableView reloadData];
+    if(isSearching)
+        [self.searchController.searchResultsTableView reloadData];
+    else
+        [tableView reloadData];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)refreshComplete
@@ -433,6 +439,15 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         [self endUpdate];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reloadSection:(int)section animation:(UITableViewRowAnimation)animation
+{
+    if(!didBeginUpdate)
+        [tableView beginUpdates];
+    [tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:animation];
+    if(!didBeginUpdate)
+        [self endUpdate];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)insertSection:(int)section objects:(NSArray*)objects
 {
     [self insertSection:section objects:objects animation:UITableViewRowAnimationNone];
@@ -551,6 +566,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         if(view)
             cell.accessoryView = view;
     }
+    if(self.hideAccessoryViews)
+        cell.accessoryType = UITableViewCellAccessoryNone;
     if(self.selectedColor)
     {
         UIView* bgView = cell.backgroundView;
@@ -668,9 +685,9 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //simple way to query the our items/sections array for the correct item
-- (id)tableView:(UITableView*)tableView objectForRowAtIndexPath:(NSIndexPath*)indexPath
+- (id)tableView:(UITableView*)table objectForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if(isSearching)
+    if(isSearching || table == searchController.searchResultsTableView)
     {
         if (searchSections)
         {
@@ -1092,11 +1109,15 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     isSearching = YES;
+    if([self.delegate respondsToSelector:@selector(willBeginSearch)])
+        [self.delegate willBeginSearch];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
     isSearching = NO;
+    if([self.delegate respondsToSelector:@selector(willStopSearch)])
+        [self.delegate willStopSearch];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)runSearch:(NSString*)string
@@ -1109,6 +1130,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     [self runSearch:searchBar.text];
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
@@ -1125,9 +1148,40 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         {
             searchItems = [[NSMutableArray alloc] init];
             [self setupSearchSections];
+            self.hideAccessoryViews = YES;
         }
     }
     _showSearch = show;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setShowsHorizontalScrollIndicator:(BOOL)shows
+{
+    tableView.showsHorizontalScrollIndicator = shows;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)showsHorizontalScrollIndicator
+{
+    return tableView.showsHorizontalScrollIndicator;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setShowsVerticalScrollIndicator:(BOOL)shows
+{
+    tableView.showsVerticalScrollIndicator = shows;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)showsVerticalScrollIndicator
+{
+    return tableView.showsVerticalScrollIndicator;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setSeparatorColor:(UIColor *)color
+{
+    tableView.separatorColor = color;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(UIColor*)separatorColor
+{
+    return tableView.separatorColor;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

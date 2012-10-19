@@ -98,8 +98,8 @@
                 imgView = (GPImageView*)subview;
         }
         imgView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
-        if(imgView.image)
-            [self addViewShadow:view];
+        //if(imgView.image)
+        //    [self addViewShadow:view];
         if(isSideScroll)
             left += scrollView.frame.size.width;
         else
@@ -266,7 +266,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)imageDidFinish:(GPImageView*)view
 {
-    [self addViewShadow:view.superview];
+    //[self addViewShadow:view.superview];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

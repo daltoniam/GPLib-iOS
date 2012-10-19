@@ -32,6 +32,7 @@
 //
 
 #import "GPTableTextItem.h"
+#import <objc/runtime.h>
 
 @implementation GPTableTextItem
 
@@ -140,4 +141,53 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     return [self.text compare:otherObject.text];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName
+{
+    if(entityName && ctx)
+    {
+        GPTableItem* item = (GPTableItem*)[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
+        item.text = self.text;
+        item.navURL = self.NavURL;
+        item.restoreClassName = [self getClassName];
+        return item;
+    }
+    return nil;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++(GPTableTextItem*)restoreItemFromDisk:(NSManagedObject*)object
+{
+    if([object isKindOfClass:[NSManagedObject class]])
+    {
+        GPTableItem* objectItem = (GPTableItem*)object;
+        GPTableTextItem* item = [GPTableTextItem itemWithText:objectItem.text];
+        item.NavURL = objectItem.navURL;
+        return item;
+    }
+    return nil;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSString*)getClassName
+{
+    const char* className = class_getName([self class]);
+    NSString* identifier = [[[NSString alloc] initWithBytesNoCopy:(char*)className
+                                                           length:strlen(className)
+                                                         encoding:NSASCIIStringEncoding freeWhenDone:NO] autorelease];
+    return identifier;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@implementation GPTableItem
+
+@dynamic text;
+@dynamic imageData;
+@dynamic imageURL;
+@dynamic navURL;
+@dynamic rowHeight;
+@dynamic restoreClassName;
+
+@end
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

@@ -124,5 +124,28 @@
     item.imageRounding = rounding;
     return item;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString *)entityName
+{
+    GPTableItem* item = (GPTableItem*)[super saveItemToDisk:ctx entityName:entityName];
+    item.imageData = UIImagePNGRepresentation(self.imageData);
+    item.imageURL = self.ImageURL;
+    return item;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++(id)restoreItemFromDisk:(NSManagedObject*)object
+{
+    if([object isKindOfClass:[GPTableItem class]])
+    {
+        GPTableItem* objectItem = (GPTableItem*)object;
+        GPTableImageItem* item = [GPTableImageItem itemWithImage:objectItem.imageURL text:objectItem.text];
+        item.NavURL = objectItem.navURL;
+        item.imageData = [UIImage imageWithData:objectItem.imageData];
+        return item;
+    }
+    return nil;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end

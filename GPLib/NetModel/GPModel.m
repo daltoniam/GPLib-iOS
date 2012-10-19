@@ -2,8 +2,8 @@
 //  GPModel.m
 //  GPLib
 //
-//  Created by Dalton Cherry on 12/22/11.
-//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
+//  Created by Dalton Cherry on 10/18/12.
+//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
  http://github.com/daltoniam/GPLib-iOS
@@ -32,219 +32,282 @@
 //
 
 #import "GPModel.h"
-//#import "Reachability.h"
-#import "GPTableMoreItem.h"
 #import "GPReachability.h"
+#import <objc/runtime.h>
 
 @implementation GPModel
 
-@synthesize URL, delegate = _delegate,items = items,sections = sections,isLoading = isLoading, isFinished = isFinished;
+@synthesize paging,page,isLoading,items,URL,delegate;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)init
+-(id)init
 {
-    if ((self = [super init])) 
+    if(self = [super init])
     {
+        self.page = 1;
         items = [[NSMutableArray alloc] init];
-        sections = [[NSMutableArray alloc] init];
-        page = 1;
-        isLoading = NO;
-        isFinished = NO;
-        [self setupinit];
-        killBackgroundThread = NO;
     }
-    
     return self;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithURLString:(NSString*)url 
+-(id)initWithURL:(NSString*)url
 {
-    if ((self = [super init])) 
+    if(self = [super init])
     {
+        self.page = 1;
         self.URL = url;
         items = [[NSMutableArray alloc] init];
-        page = 1;
-        isLoading = NO;
-        isFinished = NO;
-        [self setupinit];
     }
-    
     return self;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)loadModel:(BOOL)more
+-(void)fetchFromNetwork
 {
-    //if(isLoading)
-    //    return;
-    isLoading = YES;
-    if(more)
+    if(self.URL)
     {
-        page++;
-        if(sections) //my best guess, could be wrong
-            [[items lastObject] removeLastObject];
+        [items removeAllObjects];
+        isLoading = YES;
+        NSString* hostName = [[NSURL URLWithString:self.URL] host];
+        if(![GPReachability isHostReachable:hostName])
+        {
+            page = 1;
+            [self noConnect];
+            return;
+        }
+        
+        NSString* baseURL = @"";
+        NSString* param = @"&";
+        if([self.URL rangeOfString:@"?"].location == NSNotFound)
+            param = @"?";
+        if(self.paging)
+            baseURL = [NSString stringWithFormat:@"%@%@page=%d",self.URL,param,page];
         else
-            [items removeLastObject];
+            baseURL = self.URL;
+        if(baseURL)
+        {
+            page++;
+            [self performSelectorInBackground:@selector(fetchNetworkContent:) withObject:baseURL];
+        }
+        else
+            [self networkFailed];
     }
-    else
-    {
-        [items removeAllObjects];
-        page = 1;
-    }
-    
-    if(![GPReachability isHostReachable:[self reachURL]])
-    {
-        page = 1;
-        [items removeAllObjects];
-        [self noConnect];
-        return;
-    }
-    
-    NSString* baseURL = @"";
-    NSString* param = @"&";
-    if([self.URL rangeOfString:@"?"].location == NSNotFound)
-        param = @"?";
-    if([self enablePaging])
-        baseURL = [NSString stringWithFormat:@"%@%@page=%d",self.URL,param,page];
-    else
-        baseURL = self.URL;
-    NSURL *theurl = [NSURL URLWithString:baseURL];
-    if(theurl)
-    {
-        backgroundThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendRequestBackground:) object:theurl];
-        [backgroundThread start];
-    }
-    else
-        [self failed:nil];
-    
-    //[self performSelectorInBackground:@selector(SendRequestBackground:) withObject:theurl];
-    //[NSThread detachNewThreadSelector:@selector(SendRequestBackground:) toTarget:[GPModel class] withObject:theurl];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)quitModel
+-(void)fetchFromDisk
 {
-    [backgroundThread cancel];
-    [backgroundThread release];
+    [self fetchFromDisk:nil];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)sendRequestBackground:(NSURL*)url
+-(void)fetchFromDisk:(NSArray*)sortDescriptors
+{
+    if(!lock)
+        lock = [[NSLock alloc] init];
+    [self performSelectorInBackground:@selector(fetchDiskContent:) withObject:sortDescriptors];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)saveObject:(id)object
+{
+    if(self.entityName)
+    {
+        if(!lock)
+            lock = [[NSLock alloc] init];
+        [lock lock];
+        if([object respondsToSelector:@selector(saveItemToDisk:entityName:)])
+        {
+            BOOL save = YES;
+            if([self.delegate respondsToSelector:@selector(modelShouldSaveObject:object:)])
+                save = [self.delegate modelShouldSaveObject:self object:object];
+            if(save)
+                [object performSelector:@selector(saveItemToDisk:entityName:) withObject:[self objectCtx] withObject:self.entityName];
+        }
+        [[self objectCtx] save:nil];
+        [lock unlock];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)saveObjects:(NSArray*)array
+{
+    if(self.entityName)
+    {
+        if(!lock)
+            lock = [[NSLock alloc] init];
+        [lock lock];
+        for(id object in array)
+        {
+            if([object respondsToSelector:@selector(saveItemToDisk:entityName:)])
+            {
+                BOOL save = YES;
+                if([self.delegate respondsToSelector:@selector(modelShouldSaveObject:object:)])
+                    save = [self.delegate modelShouldSaveObject:self object:object];
+                if(save)
+                    [object performSelector:@selector(saveItemToDisk:entityName:) withObject:[self objectCtx] withObject:self.entityName];
+            }
+        }
+        [[self objectCtx] save:nil];
+        [lock unlock];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//subclass stuff
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)cachePolicy:(GPHTTPRequest*)request
+{
+    [request setCacheTimeout:5];
+    [request setCacheModel:GPHTTPCacheCustomTime];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//override to make this do stuff!!!
+-(void)networkFinished:(GPHTTPRequest*)request
+{
+    [self performSelectorOnMainThread:@selector(finished:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:YES];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//override if you want a different DB name
+-(NSString*)databaseName
+{
+    const char* className = class_getName([self class]);
+    NSString* identifier = [[[NSString alloc] initWithBytesNoCopy:(char*)className
+                                                           length:strlen(className)
+                                                         encoding:NSASCIIStringEncoding freeWhenDone:NO] autorelease];
+    return [identifier lowercaseString];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)styleRestoredObject:(id)object
+{
+    
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//private stuff
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)fetchNetworkContent:(NSString*)url
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    GPHTTPRequest *request = [GPHTTPRequest requestWithURL:url];
+    GPHTTPRequest *request = [GPHTTPRequest requestWithString:url];
     [self cachePolicy:request];
-    if(killBackgroundThread) 
-    {
-        [pool drain];
-        return;
-    }
     [request startSync];
-    if([request statusCode] != 200)
-        isFinished = YES;
-    if(killBackgroundThread) 
-    {
-        [pool drain];
-        return;
-    }
-    [self requestFinished:request];
+    if(request.statusCode >= 400)
+        [self networkFailed];
+    else
+        [self networkFinished:request];
     [pool drain];
-    [backgroundThread release];
-    backgroundThread = nil;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(GPHTTPRequest *)request
+-(void)fetchDiskContent:(NSArray*)sortDescriptors
 {
-    if(!self.URL || [request.URL.absoluteString hasPrefix:self.URL])
+    if(self.entityName)
     {
-        //if([NSThread isMainThread])
-        if([self enablePaging])
-            if(!isFinished)
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        [lock lock];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:self.entityName inManagedObjectContext:[self objectCtx]];
+        
+        // Setup the fetch request
+        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+        [request setEntity:entity];
+        
+        [request setSortDescriptors:sortDescriptors];
+        
+        NSArray *managedItems = [[self objectCtx] executeFetchRequest:request error:nil];
+        for(NSManagedObject* object in managedItems)
+        {
+            if([object respondsToSelector:@selector(restoreClassName)])
             {
-                if(sections)
-                    [[items lastObject] addObject:[GPTableMoreItem itemWithLoading:@"Load More..." isAutoLoad:[self autoLoad]]];
-                else
-                    [items addObject:[GPTableMoreItem itemWithLoading:@"Load More..." isAutoLoad:[self autoLoad]]];
+                NSString* className = [object performSelector:@selector(restoreClassName)];
+                if(className)
+                {
+                    Class class = NSClassFromString(className);
+                    if([class respondsToSelector:@selector(restoreItemFromDisk:)])
+                    {
+                        id item = [class performSelector:@selector(restoreItemFromDisk:) withObject:object];
+                        if(item)
+                        {
+                            [self styleRestoredObject:item];
+                            [items addObject:item];
+                        }
+                    }
+                }
             }
-        [self performSelectorOnMainThread:@selector(finished:) withObject:request waitUntilDone:NO];
+        }
+        [self performSelectorOnMainThread:@selector(finished:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+        [lock unlock];
+        [pool drain];
     }
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)finished:(GPHTTPRequest *)request
-{
-    isLoading = NO;
-    if ([self.delegate respondsToSelector:@selector(modelFinished:)])
-        [self.delegate modelFinished:request];
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)requestFailed:(GPHTTPRequest *)request
-{
-    //NSError *error = [request error];
-    [self performSelectorOnMainThread:@selector(Failed:) withObject:request waitUntilDone:NO];
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)failed:(GPHTTPRequest *)request
-{
-    isLoading = NO;
-    if ([self.delegate respondsToSelector:@selector(modelFailed:)])
-        [self.delegate modelFailed:request];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)noConnect
 {
     isLoading = NO;
-    if ([self.delegate respondsToSelector:@selector(noConnection)])
-        [self.delegate noConnection];
+    if ([self.delegate respondsToSelector:@selector(modelnoConnection:)])
+        [self.delegate modelnoConnection:self];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)networkFailed
+{
+    isLoading = NO;
+    if ([self.delegate respondsToSelector:@selector(modelDidFail:)])
+        [self.delegate modelDidFail:self];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)finished:(NSNumber*)boolNum
+{
+    isLoading = NO;
+    if ([self.delegate respondsToSelector:@selector(modelDidFinish:fromDisk:)])
+        [self.delegate modelDidFinish:self fromDisk:[boolNum boolValue]];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
-    [backgroundThread cancel];
-    [backgroundThread release];
-    killBackgroundThread = YES;
-    self.delegate = nil;
     [items release];
-    items = nil;
-    [sections release];
-    sections = nil;
+    [persistentStoreCoordinator release];
+    [managedObjectModel release];
+    [objectCtx release];
+    [lock release];
     [super dealloc];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//Sub Class section!!!!
+//core data stuff
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//use this to setup your own init variables if you are not using a custom init
--(void)setupinit
+- (NSManagedObjectContext*)objectCtx
 {
+    if (objectCtx)
+        return objectCtx;
     
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator)
+    {
+        objectCtx = [[NSManagedObjectContext alloc] init];
+        [objectCtx setPersistentStoreCoordinator:coordinator];
+    }
+    return objectCtx;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass this to enable paging on model.
--(BOOL)enablePaging
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSManagedObjectModel *)managedObjectModel
 {
-    return YES;
+    if (managedObjectModel)
+        return managedObjectModel;
+    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    return managedObjectModel;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass this to enable AutoLoading of Data.
--(BOOL)autoLoad
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    return YES;
+    if (persistentStoreCoordinator != nil)
+        return persistentStoreCoordinator;
+    
+    NSString* dbName = [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
+    NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:dbName]];
+    
+    NSError *error = nil;
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
+        NSLog(@"error: %@",error);
+    
+    return persistentStoreCoordinator;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass this to pick what you use for reachablity check
--(NSString*)reachURL
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSString *)applicationDocumentsDirectory
 {
-    return @"www.google.com";
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass this to set what happens on a post
--(void)onPost:(NSDictionary*)entries
-{
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass to set custom ASI caching policy
--(void)cachePolicy:(GPHTTPRequest*)request
-{
-    [request setCacheTimeout:5];
-    [request setCacheModel:GPHTTPCacheCustomTime];
-    //[request setCachePolicy:ASIDoNotWriteToCacheCachePolicy|ASIDoNotReadFromCacheCachePolicy];
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @end

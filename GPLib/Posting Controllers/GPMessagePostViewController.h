@@ -33,7 +33,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GPReceiptField.h"
-#import "GPTableViewController.h"
+#import "GPOldTableViewController.h"
 
 @protocol GPMessagePostViewDelegate <NSObject>
 
@@ -45,7 +45,7 @@
 
 @end
 
-@interface GPMessagePostViewController : GPTableViewController<GPReceiptFieldDelegate,UITextViewDelegate>
+@interface GPMessagePostViewController : GPOldTableViewController<GPReceiptFieldDelegate,UITextViewDelegate>
 {
     GPReceiptField* Field;
     UIView* LineView;

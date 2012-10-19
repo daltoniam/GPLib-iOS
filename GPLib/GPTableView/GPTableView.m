@@ -75,7 +75,7 @@ static const CGFloat RefreshDeltaY = -65.0f;
 static const CGFloat HeaderVisibleHeight = 60.0f;
 
 @synthesize items,sections,isGrouped,selectedColor,variableHeight,emptyView,dragToRefresh,refreshHeader,hideSeparator;
-@synthesize checkMarks,numberIndex,truncateCount,searchItems,searchSections,isSearching,hideSectionTitles;
+@synthesize checkMarks,numberIndex,truncateCount,searchItems,searchSections,isSearching,hideSectionTitles,isAutoSearch;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)commonInit:(BOOL)grouped
 {
@@ -143,6 +143,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     tableView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     emptyView.frame = tableView.frame;
     [self setupRefreshView];
+    if(self.showSearch)
+        [self setupSearchController];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)showEmptyView
@@ -177,6 +179,13 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 -(void)refreshComplete
 {
     isRefreshing = NO;
+    [refreshHeader setStatus:GPTableHeaderDragRefreshPullToReload];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:TransitionDuration];
+    tableView.contentInset = UIEdgeInsetsZero;
+    [UIView commitAnimations];
+    [refreshHeader setCurrentDate];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)flashScrollIndicators
@@ -467,6 +476,15 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(isSearching)
+    {
+        if (searchSections && searchItems.count > 0)
+        {
+            NSArray* itemArray = [searchItems objectAtIndex:section];
+            return itemArray.count;
+        }
+        return searchItems.count;
+    }
     if (sections && items.count > 0)
     {
         NSArray* itemArray = [items objectAtIndex:section];
@@ -564,6 +582,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if(isSearching)
+        return searchSections ? searchSections.count : 1;
     return sections ? sections.count : 1;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,12 +672,12 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     if(isSearching)
     {
-        if (sections)
+        if (searchSections)
         {
-            NSArray* itemArray = [items objectAtIndex:indexPath.section];
+            NSArray* itemArray = [searchItems objectAtIndex:indexPath.section];
             return [itemArray objectAtIndex:indexPath.row];
         }
-        return [items objectAtIndex:indexPath.row];
+        return [searchItems objectAtIndex:indexPath.row];
     }
     
     if (sections)
@@ -956,11 +976,27 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setupSearchController
+{
+    if(!searchController)
+    {
+        UISearchBar* search = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 44)];
+        search.delegate = self;
+        searchController = [[UISearchDisplayController alloc] initWithSearchBar:search contentsController:(UIViewController*)self.delegate];
+        searchController.delegate = self;
+        searchController.searchResultsDataSource = self;
+        searchController.searchResultsDelegate = self;
+        [search release];
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
     if(isSearching)
         return nil;
     if(hideSectionTitles)
+        return nil;
+    if(!self.showSearch)
         return nil;
     NSInteger truncate = self.truncateCount;
     if(truncate <= 0)
@@ -982,7 +1018,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addSortedObject:(id)object
 {
-    if([object isKindOfClass:[GPTableTextItem class]])
+    if([object isKindOfClass:[GPTableTextItem class]] && self.showSearch)
     {
         GPTableTextItem* item = (GPTableTextItem*)object;
         NSString* text = [item.text stringByStrippingHTML];
@@ -1008,7 +1044,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
                 NSRange range = [alpha rangeOfString:c];
                 if(range.location != NSNotFound)
                 {
-                    int index = 1;
+                    int index = sections.count;
                     int alphaIndex = range.location; //because we have a search index
                     for(int i = 1; i < sections.count; i++)
                     {
@@ -1016,12 +1052,11 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
                         NSRange range = [alpha rangeOfString:title];
                         if(range.location != NSNotFound)
                         {
-                            if(alphaIndex < range.location)
+                            if(alphaIndex <= range.location)
                             {
                                 index = i;
                                 break;
                             }
-                            index = i+1;
                         }
                         i++;
                     }
@@ -1051,25 +1086,43 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     for(id object in gatherSections)
         [sections removeObject:object];
     if(items.count != sections.count)
-    {
-        for(int i = items.count; i < sections.count; i++)
-            [items addObject:[NSMutableArray array]];
-    }
+        [items insertObject:[NSMutableArray array] atIndex:0];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    isSearching = YES;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+    isSearching = NO;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)runSearch:(NSString*)string
+{
+    if([self.delegate respondsToSelector:@selector(didRunSearch:)])
+        [self.delegate didRunSearch:string];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar
+{
+    [self runSearch:searchBar.text];
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    if(self.isAutoSearch)
+        [self runSearch:searchString];
+    return YES;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setShowSearch:(BOOL)show
 {
     if(show)
     {
-        if(!searchController)
+        if(!_showSearch)
         {
-            UISearchBar* search = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 44)];
-            search.delegate = self;
-            searchController = [[UISearchDisplayController alloc] initWithSearchBar:search contentsController:(UIViewController*)self.delegate];
-            searchController.delegate = self;
-            searchController.searchResultsDataSource = self;
-            searchController.searchResultsDelegate = self;
-            [search release];
             searchItems = [[NSMutableArray alloc] init];
             [self setupSearchSections];
         }
@@ -1079,6 +1132,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
+    [searchController release];
+    [timeScroller release];
     [imageQueue release];
     [imageURLs release];
     [tableView release];

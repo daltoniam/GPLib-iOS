@@ -1,5 +1,5 @@
 //
-//  GPTableSearchController.h
+//  GPOldTableSearchController.h
 //  GPLib
 //
 //  Created by Dalton Cherry on 4/24/12.
@@ -34,14 +34,14 @@
 //  I strongly recommend that you do not use paging in your model with this class. That defaults the whole
 //  purpose of a indexed list and will be annoying to manage. 
 
-#import "GPTableViewController.h"
+#import "GPOldTableViewController.h"
 
-@interface GPTableSearchController : GPTableViewController<UISearchDisplayDelegate,UISearchBarDelegate>
+@interface GPOldTableSearchController : GPOldTableViewController<UISearchDisplayDelegate,UISearchBarDelegate>
 {
     BOOL isSearching;
     NSMutableArray* searchItems;
     NSMutableArray* searchSections;
-    GPModel* searchModel;
+    GPOldModel* searchModel;
     UISearchDisplayController* searchController;
     BOOL hideSectionTitles;
     NSString* searchText;
@@ -50,7 +50,7 @@
 -(NSString*)searchURL:(NSString*)searchString;
 -(BOOL)isNetworkSearch;
 -(BOOL)isAutoSearch;
--(GPModel*)searchModel:(NSString*)url;
+-(GPOldModel*)searchModel:(NSString*)url;
 -(BOOL)truncateIndex;
 -(BOOL)showSearchWhenEmpty;
 -(NSString*)countString:(NSInteger)count;

@@ -2,8 +2,8 @@
 //  GPModel.h
 //  GPLib
 //
-//  Created by Dalton Cherry on 12/22/11.
-//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
+//  Created by Dalton Cherry on 10/18/12.
+//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
  http://github.com/daltoniam/GPLib-iOS
@@ -31,51 +31,87 @@
  */
 //
 
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "GPHTTPRequest.h"
+
+@class GPModel;
 
 @protocol GPModelDelegate <NSObject>
 
 @optional
+//the model finished loading items from either disk or the network
+-(void)modelDidFinish:(GPModel*)model fromDisk:(BOOL)disk;
 
-/**
- * Received when a request is finished. Implmented by GPTableViewController to hide loading label.
- */
-- (void)modelFinished:(GPHTTPRequest *)request;
-- (void)modelFailed:(GPHTTPRequest *)request;
-- (void)noConnection;
+//the model failed to load.
+-(void)modelDidFail:(GPModel*)model;
+
+//the model does not have a network connection to fetch the items.
+-(void)modelnoConnection:(GPModel*)model;
+
+//checks if it should save this item before saving to disk. This is needed to avoid saving duplicates to disk.
+// return YES to save and NO to NOT save. Normally you would 
+-(BOOL)modelShouldSaveObject:(GPModel*)model object:(id)object;
 
 @end
 
-@interface GPModel : NSObject<GPHTTPRequestDelegate>
+@interface GPModel : NSObject
 {
-    NSMutableArray* items;
-    NSMutableArray* sections;
-    id<GPModelDelegate> _delegate;
-    int page;
-    BOOL isLoading;
-    BOOL isFinished;
-    BOOL killBackgroundThread;
-    NSThread* backgroundThread;
+    NSLock* lock;
+    NSManagedObjectContext* objectCtx;
+    NSManagedObjectModel* managedObjectModel;
+    NSPersistentStoreCoordinator* persistentStoreCoordinator;
 }
-@property (nonatomic, retain) NSString* URL;
-@property (nonatomic, assign) id<GPModelDelegate> delegate;
-@property (nonatomic, assign) NSMutableArray* items;
-@property (nonatomic, assign) NSMutableArray* sections;
-@property (nonatomic, assign) BOOL isLoading;
-@property (nonatomic, assign) BOOL isFinished;
 
--(void)loadModel:(BOOL)more;
--(void)quitModel;
--(BOOL)enablePaging;
--(BOOL)autoLoad;
-- (void)requestFinished:(GPHTTPRequest *)request;
-- (void)requestFailed:(GPHTTPRequest *)request;
-- (id)initWithURLString:(NSString*)url;
--(void)setupinit;
--(void)noConnect;
--(NSString*)reachURL;
+//this is the current page you are working with.
+@property(nonatomic,assign)NSInteger page;
+
+//this enables paging on the model.
+@property(nonatomic,assign)BOOL paging;
+
+//can check if the model is loading
+@property(nonatomic,assign,readonly)BOOL isLoading;
+
+//URL to fetch content from the network
+@property(nonatomic,copy)NSString* URL;
+
+//items you that are returned after data is loaded
+@property(nonatomic,retain,readonly)NSMutableArray* items;
+
+//the delegate
+@property (nonatomic, assign) id<GPModelDelegate> delegate;
+
+//set this to the entity name (name of your coreDataModel) of your core Data model. Default is nil, which means saving to disk does nothing
+//if you are using the GPTableItem coreData model, set this to GPTableItem
+@property (nonatomic, assign)NSString* entityName;
+
+-(id)initWithURL:(NSString*)url;
+
+//this will fetch new content off the network from URL property. It increments the page number if paging is enabled
+-(void)fetchFromNetwork;
+
+//fetch all objects stored on disk
+-(void)fetchFromDisk;
+
+//fetch all objects stored on disk, but pass in some sort descriptors
+-(void)fetchFromDisk:(NSArray*)sortDescriptors;
+
+//this adds a new object to disk.
+-(void)saveObject:(id)object;
+
+//this adds a new objects to disk.
+-(void)saveObjects:(NSArray*)array;
+
+//set your cache policy for your network request
 -(void)cachePolicy:(GPHTTPRequest*)request;
--(void)onPost:(NSDictionary*)entries;
+
+//subclass this to create your items
+-(void)networkFinished:(GPHTTPRequest*)request;
+
+//override if you want a different DB name. Default is to use className
+-(NSString*)databaseName;
+
+//use this to style your objects that have come from disk
+-(void)styleRestoredObject:(id)object;
 
 @end
-

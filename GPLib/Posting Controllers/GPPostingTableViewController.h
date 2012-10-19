@@ -31,7 +31,7 @@
  */
 //
 
-#import "GPTableViewController.h"
+#import "GPOldTableViewController.h"
 
 @protocol GPPostTableDelegate <NSObject>
 
@@ -43,7 +43,7 @@
 
 @end
 
-@interface GPPostingTableViewController : GPTableViewController<UITextViewDelegate>
+@interface GPPostingTableViewController : GPOldTableViewController<UITextViewDelegate>
 {
     id<GPPostTableDelegate> delegate;
     UITextView* TextView;

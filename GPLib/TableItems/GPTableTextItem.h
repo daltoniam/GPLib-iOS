@@ -32,6 +32,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//I provide this for the base GPTableItems. There is also a coreData model you can pull into your app that will make this work.
+// it should be under: NetModel/GPTableItem
+@interface GPTableItem : NSManagedObject
+
+@property (nonatomic, retain) NSString * text;
+@property (nonatomic, retain) NSData * imageData;
+@property (nonatomic, retain) NSString * imageURL;
+@property (nonatomic, retain) NSString * navURL;
+@property (nonatomic, retain) NSNumber * rowHeight;
+@property (nonatomic, retain) NSString * restoreClassName;
+
+@end
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @interface GPTableTextItem : NSObject
 
@@ -75,5 +91,10 @@
 + (GPTableTextItem*)itemWithText:(NSString*)string infoText:(NSString*)info url:(NSString*)url;
 
 - (NSComparisonResult)compare:(GPTableTextItem*)otherObject;
+
+-(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName;
++(id)restoreItemFromDisk:(NSManagedObject*)object;
+
+-(NSString*)getClassName;
 
 @end

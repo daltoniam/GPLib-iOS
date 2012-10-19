@@ -1,9 +1,9 @@
 //
-//  GPTableDragRefresh.h
-//  EduTalk
+//  GPTableSearchController.m
+//  GPLib
 //
-//  Created by Dalton Cherry on 10/20/11.
-//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
+//  Created by Dalton Cherry on 10/18/12.
+//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
  http://github.com/daltoniam/GPLib-iOS
@@ -30,24 +30,21 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 //
-#import "GPOldModel.h"
-#import "GPOldTableViewController.h"
-#import "GPDragToRefreshView.h"
 
-@class GPOldTableViewController;
+#import "GPTableSearchController.h"
 
-@interface GPTableDragRefresh : NSObject
+@interface GPTableSearchController ()
+
+@end
+
+@implementation GPTableSearchController
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)viewDidLoad
 {
-    GPDragToRefreshView* headerView;
-    UIColor* Background;
-    GPOldTableViewController* controller;
+    [super viewDidLoad];
+	self.tableView.showSearch = YES;
 }
-@property (nonatomic, retain)GPDragToRefreshView* headerView;
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (id)initWithController:(GPOldTableViewController*)control Background:(UIColor*)color;
-- (id)initWithController:(GPOldTableViewController*)_controller;
-- (void)scrollViewDidScroll:(UIScrollView*)scrollView;
-- (void)scrollViewDidEndDragging:(UIScrollView*)scrollView willDecelerate:(BOOL)decelerate;
-- (void)RequestFinished;
-- (void)RequestFailed;
 @end

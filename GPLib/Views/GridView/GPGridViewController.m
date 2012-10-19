@@ -39,7 +39,7 @@
 #import "GPGridMoreCell.h"
 #import "GPGridMoreItem.h"
 
-#import "GPTableMoreItem.h" //because GPModel returns a tablemoreitem by default
+#import "GPTableMoreItem.h" //because GPOldModel returns a tablemoreitem by default
 
 @interface GPGridViewController ()
 
@@ -366,9 +366,9 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //subclass this to load a different model.
--(GPModel*)model:(NSString*)url
+-(GPOldModel*)model:(NSString*)url
 {
-    return [[[GPModel alloc] initWithURLString:url] autorelease];
+    return [[[GPOldModel alloc] initWithURLString:url] autorelease];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //set loading text.

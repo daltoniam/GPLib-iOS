@@ -48,7 +48,6 @@
 //////posting
 #import "HTMLPostViewController.h"
 #import "GPPostingViewController.h"
-#import "GPTableViewController.h"
 #import "GPMessagePostViewController.h"
 /////html posting
 #import "HTMLSettingsViewController.h"
@@ -103,16 +102,16 @@
 #import "GPEmptyTableView.h"
 #import "GPSegmentControl.h"
 #import "GPAttachmentView.h"
+#import "GPTableView.h"
 /////net model
 #import "GPCenterLabel.h"
 #import "GPDragToRefreshView.h"
-#import "GPTableViewController.h"
-#import "GPModel.h"
-#import "GPTableDragRefresh.h"
-#import "GPTableSearchController.h"
 #import "GPTabBarController.h"
 #import "GPTableAccessory.h"
 #import "GPSideBarViewController.h"
+#import "GPTableViewController.h"
+#import "GPModel.h"
+#import "GPTableSearchController.h"
 ////launcher view
 #import "GPLauncherView.h"
 #import "GPLauncherButton.h"
@@ -129,4 +128,11 @@
 #import "GPRevealViewController.h"
 //addtions
 #import "UIImage+Additions.h"
+
+//old will be removed in the future
+#import "GPOldTableViewController.h"
+#import "GPOldModel.h"
+#import "GPTableDragRefresh.h"
+#import "GPOldTableSearchController.h"
+#import "GPPostingTableViewController.h"
 

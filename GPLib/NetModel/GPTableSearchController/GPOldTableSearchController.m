@@ -1,5 +1,5 @@
 //
-//  GPTableSearchController.m
+//  GPOldTableSearchController.m
 //  GPLib
 //
 //  Created by Dalton Cherry on 4/24/12.
@@ -32,7 +32,7 @@
 //
 
 #import <objc/runtime.h>
-#import "GPTableSearchController.h"
+#import "GPOldTableSearchController.h"
 #import "GPTableTextItem.h"
 #import "GPTableCell.h"
 #import "GPTableMoreItem.h"
@@ -41,14 +41,14 @@
 #import "GPTableImageItem.h"
 #import "GPTableImageCell.h"
 
-@interface GPTableSearchController ()
+@interface GPOldTableSearchController ()
 
 -(void)setupSections;
 -(void)addSectionWithObject:(id)object;
 
 @end
 
-@implementation GPTableSearchController
+@implementation GPOldTableSearchController
  
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -389,7 +389,7 @@
     
     if ([object isKindOfClass:[GPTableMoreItem class]])
     {
-        GPModel* tempmodel = model;
+        GPOldModel* tempmodel = model;
         if(isSearching)
             tempmodel = searchModel;
         if(!tempmodel.isLoading)
@@ -448,7 +448,7 @@
             bgView.backgroundColor = selectColor;
     }
     
-    GPModel* tempmodel = model;
+    GPOldModel* tempmodel = model;
     if(isSearching)
         tempmodel = searchModel;
     if(!tempmodel.isFinished && [tempmodel autoLoad])
@@ -739,9 +739,9 @@
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //override to change to proper search model
--(GPModel*)searchModel:(NSString*)url
+-(GPOldModel*)searchModel:(NSString*)url
 {
-    return [[[GPModel alloc] initWithURLString:url] autorelease];
+    return [[[GPOldModel alloc] initWithURLString:url] autorelease];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //removes the index and search bar if there are 13 items or less.

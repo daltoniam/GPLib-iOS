@@ -32,7 +32,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GPTableViewController.h"
+#import "GPOldTableViewController.h"
 
 @protocol HTMLLinkViewControllerDelegate <NSObject>
 
@@ -44,7 +44,7 @@
 
 @end
 
-@interface HTMLLinkViewController : GPTableViewController<UITextFieldDelegate>
+@interface HTMLLinkViewController : GPOldTableViewController<UITextFieldDelegate>
 {
     UITextField* textfield;
     NSString* textHolder;

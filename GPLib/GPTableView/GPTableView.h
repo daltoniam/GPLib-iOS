@@ -63,6 +63,9 @@
 //return YES if you want the section to be exclude from check mark. Requires that checkMarks be set to YES.
 -(BOOL)checkMarkExpection:(int)section;
 
+//implement this to handle searching
+-(void)didRunSearch:(NSString*)string;
+
 @end
 
 @interface GPTableView : UIView<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
@@ -132,6 +135,9 @@
 //set this to show the searchBar
 @property(nonatomic,assign)BOOL showSearch;
 
+//set this to make get search query from every key and not just the search button
+@property(nonatomic,assign)BOOL isAutoSearch;
+
 -(id)initWithFrame:(CGRect)frame isGrouped:(BOOL)grouped;
 -(id)init:(BOOL)grouped;
 
@@ -144,7 +150,7 @@
 //flash the scrollBars
 -(void)flashScrollIndicators;
 
-//add a search item to the correct A-Z index
+//add a search item to the correct A-Z index. Only recommend to be used for tableviews with a searchBar
 -(void)addSortedObject:(id)object;
 
 //remove unused sections from the tableView

@@ -24,8 +24,8 @@
 		5C1155FB16235E0C00212A4C /* postingArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C1155F616235CAD00212A4C /* postingArrow.png */; };
 		5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */; };
 		5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */; };
-		5C1431181547137200AEE1FA /* GPTableSearchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1431161547137200AEE1FA /* GPTableSearchController.h */; };
-		5C1431191547137200AEE1FA /* GPTableSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1431171547137200AEE1FA /* GPTableSearchController.m */; };
+		5C1431181547137200AEE1FA /* GPOldTableSearchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1431161547137200AEE1FA /* GPOldTableSearchController.h */; };
+		5C1431191547137200AEE1FA /* GPOldTableSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1431171547137200AEE1FA /* GPOldTableSearchController.m */; };
 		5C14312615483D6100AEE1FA /* GPLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14312415483D6100AEE1FA /* GPLabel.h */; };
 		5C14312715483D6100AEE1FA /* GPLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C14312515483D6100AEE1FA /* GPLabel.m */; };
 		5C14312A15485E8100AEE1FA /* GPView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14312815485E8100AEE1FA /* GPView.h */; };
@@ -42,6 +42,12 @@
 		5C27D3091624CBBA00D7F1FF /* removeButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C27D3071624CBBA00D7F1FF /* removeButton@2x.png */; };
 		5C2E88AD151784BE0012CE45 /* HTMLLinkViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C2E88AB151784BE0012CE45 /* HTMLLinkViewController.h */; };
 		5C2E88AE151784BE0012CE45 /* HTMLLinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */; };
+		5C2F1CB516304957001287D4 /* GPTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C2F1CB316304957001287D4 /* GPTableViewController.h */; };
+		5C2F1CB616304957001287D4 /* GPTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F1CB416304957001287D4 /* GPTableViewController.m */; };
+		5C2F1CB9163049FE001287D4 /* GPTableSearchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C2F1CB7163049FE001287D4 /* GPTableSearchController.h */; };
+		5C2F1CBA163049FE001287D4 /* GPTableSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F1CB8163049FE001287D4 /* GPTableSearchController.m */; };
+		5C2F1CBD16304A2E001287D4 /* GPModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C2F1CBB16304A2E001287D4 /* GPModel.h */; };
+		5C2F1CBE16304A2E001287D4 /* GPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F1CBC16304A2E001287D4 /* GPModel.m */; };
 		5C2FFA4C1561A7B100D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
 		5C2FFA561562C00800D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
 		5C38CF151612136D00DB5BDC /* GPSideBarViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C38CF131612136D00DB5BDC /* GPSideBarViewController.h */; };
@@ -198,12 +204,12 @@
 		5CD4F9CD14DC555100F2CBB3 /* GPCenterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */; };
 		5CD4F9CE14DC555100F2CBB3 /* GPDragToRefreshView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */; };
 		5CD4F9CF14DC555100F2CBB3 /* GPDragToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C514DC555100F2CBB3 /* GPDragToRefreshView.m */; };
-		5CD4F9D014DC555100F2CBB3 /* GPModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C614DC555100F2CBB3 /* GPModel.h */; };
-		5CD4F9D114DC555100F2CBB3 /* GPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C714DC555100F2CBB3 /* GPModel.m */; };
+		5CD4F9D014DC555100F2CBB3 /* GPOldModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C614DC555100F2CBB3 /* GPOldModel.h */; };
+		5CD4F9D114DC555100F2CBB3 /* GPOldModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C714DC555100F2CBB3 /* GPOldModel.m */; };
 		5CD4F9D214DC555100F2CBB3 /* GPTableDragRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */; };
 		5CD4F9D314DC555100F2CBB3 /* GPTableDragRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */; };
-		5CD4F9D414DC555100F2CBB3 /* GPTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9CA14DC555100F2CBB3 /* GPTableViewController.h */; };
-		5CD4F9D514DC555100F2CBB3 /* GPTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9CB14DC555100F2CBB3 /* GPTableViewController.m */; };
+		5CD4F9D414DC555100F2CBB3 /* GPOldTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9CA14DC555100F2CBB3 /* GPOldTableViewController.h */; };
+		5CD4F9D514DC555100F2CBB3 /* GPOldTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9CB14DC555100F2CBB3 /* GPOldTableViewController.m */; };
 		5CD4F9EA14DC559A00F2CBB3 /* HTMLColors.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9DB14DC559A00F2CBB3 /* HTMLColors.h */; };
 		5CD4F9EB14DC559A00F2CBB3 /* HTMLColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9DC14DC559A00F2CBB3 /* HTMLColors.m */; };
 		5CD4F9EC14DC559A00F2CBB3 /* HTMLElements.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9DD14DC559A00F2CBB3 /* HTMLElements.h */; };
@@ -319,8 +325,8 @@
 		5C1155F616235CAD00212A4C /* postingArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = postingArrow.png; sourceTree = "<group>"; };
 		5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPRevealViewController.h; path = GPReveal/GPRevealViewController.h; sourceTree = "<group>"; };
 		5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPRevealViewController.m; path = GPReveal/GPRevealViewController.m; sourceTree = "<group>"; };
-		5C1431161547137200AEE1FA /* GPTableSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPTableSearchController.h; path = GPTableSearchController/GPTableSearchController.h; sourceTree = "<group>"; };
-		5C1431171547137200AEE1FA /* GPTableSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPTableSearchController.m; path = GPTableSearchController/GPTableSearchController.m; sourceTree = "<group>"; };
+		5C1431161547137200AEE1FA /* GPOldTableSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPOldTableSearchController.h; path = GPTableSearchController/GPOldTableSearchController.h; sourceTree = "<group>"; };
+		5C1431171547137200AEE1FA /* GPOldTableSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPOldTableSearchController.m; path = GPTableSearchController/GPOldTableSearchController.m; sourceTree = "<group>"; };
 		5C14312415483D6100AEE1FA /* GPLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLabel.h; sourceTree = "<group>"; };
 		5C14312515483D6100AEE1FA /* GPLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPLabel.m; sourceTree = "<group>"; };
 		5C14312815485E8100AEE1FA /* GPView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPView.h; sourceTree = "<group>"; };
@@ -337,6 +343,12 @@
 		5C27D3071624CBBA00D7F1FF /* removeButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "removeButton@2x.png"; sourceTree = "<group>"; };
 		5C2E88AB151784BE0012CE45 /* HTMLLinkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTMLLinkViewController.h; path = ../HTMLKit/HTMLLinkViewController.h; sourceTree = "<group>"; };
 		5C2E88AC151784BE0012CE45 /* HTMLLinkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTMLLinkViewController.m; path = ../HTMLKit/HTMLLinkViewController.m; sourceTree = "<group>"; };
+		5C2F1CB316304957001287D4 /* GPTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableViewController.h; sourceTree = "<group>"; };
+		5C2F1CB416304957001287D4 /* GPTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableViewController.m; sourceTree = "<group>"; };
+		5C2F1CB7163049FE001287D4 /* GPTableSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableSearchController.h; sourceTree = "<group>"; };
+		5C2F1CB8163049FE001287D4 /* GPTableSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableSearchController.m; sourceTree = "<group>"; };
+		5C2F1CBB16304A2E001287D4 /* GPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPModel.h; sourceTree = "<group>"; };
+		5C2F1CBC16304A2E001287D4 /* GPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPModel.m; sourceTree = "<group>"; };
 		5C2FFA4B1561A7B100D87B52 /* italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = italic.png; sourceTree = "<group>"; };
 		5C38CF131612136D00DB5BDC /* GPSideBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSideBarViewController.h; sourceTree = "<group>"; };
 		5C38CF141612136D00DB5BDC /* GPSideBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSideBarViewController.m; sourceTree = "<group>"; };
@@ -500,12 +512,12 @@
 		5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPCenterLabel.m; sourceTree = "<group>"; };
 		5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPDragToRefreshView.h; sourceTree = "<group>"; };
 		5CD4F9C514DC555100F2CBB3 /* GPDragToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPDragToRefreshView.m; sourceTree = "<group>"; };
-		5CD4F9C614DC555100F2CBB3 /* GPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPModel.h; sourceTree = "<group>"; };
-		5CD4F9C714DC555100F2CBB3 /* GPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPModel.m; sourceTree = "<group>"; };
+		5CD4F9C614DC555100F2CBB3 /* GPOldModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPOldModel.h; sourceTree = "<group>"; };
+		5CD4F9C714DC555100F2CBB3 /* GPOldModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPOldModel.m; sourceTree = "<group>"; };
 		5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableDragRefresh.h; sourceTree = "<group>"; };
 		5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableDragRefresh.m; sourceTree = "<group>"; };
-		5CD4F9CA14DC555100F2CBB3 /* GPTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableViewController.h; sourceTree = "<group>"; };
-		5CD4F9CB14DC555100F2CBB3 /* GPTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableViewController.m; sourceTree = "<group>"; };
+		5CD4F9CA14DC555100F2CBB3 /* GPOldTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPOldTableViewController.h; sourceTree = "<group>"; };
+		5CD4F9CB14DC555100F2CBB3 /* GPOldTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPOldTableViewController.m; sourceTree = "<group>"; };
 		5CD4F9DB14DC559A00F2CBB3 /* HTMLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLColors.h; sourceTree = "<group>"; };
 		5CD4F9DC14DC559A00F2CBB3 /* HTMLColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLColors.m; sourceTree = "<group>"; };
 		5CD4F9DD14DC559A00F2CBB3 /* HTMLElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLElements.h; sourceTree = "<group>"; };
@@ -627,8 +639,8 @@
 		5C1431141547132E00AEE1FA /* GPTableSearchController */ = {
 			isa = PBXGroup;
 			children = (
-				5C1431161547137200AEE1FA /* GPTableSearchController.h */,
-				5C1431171547137200AEE1FA /* GPTableSearchController.m */,
+				5C1431161547137200AEE1FA /* GPOldTableSearchController.h */,
+				5C1431171547137200AEE1FA /* GPOldTableSearchController.m */,
 			);
 			name = GPTableSearchController;
 			sourceTree = "<group>";
@@ -688,6 +700,20 @@
 				5C88137F151B6778006BCDC9 /* HTMLListViewController.m */,
 			);
 			name = HTMLPosting;
+			sourceTree = "<group>";
+		};
+		5C2F1CB216304927001287D4 /* old */ = {
+			isa = PBXGroup;
+			children = (
+				5CD4F9C614DC555100F2CBB3 /* GPOldModel.h */,
+				5CD4F9C714DC555100F2CBB3 /* GPOldModel.m */,
+				5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */,
+				5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */,
+				5CD4F9CA14DC555100F2CBB3 /* GPOldTableViewController.h */,
+				5CD4F9CB14DC555100F2CBB3 /* GPOldTableViewController.m */,
+				5C1431141547132E00AEE1FA /* GPTableSearchController */,
+			);
+			name = old;
 			sourceTree = "<group>";
 		};
 		5C38CF121612136D00DB5BDC /* SideNavigation */ = {
@@ -960,22 +986,22 @@
 		5CD4F92214DC54C900F2CBB3 /* NetModel */ = {
 			isa = PBXGroup;
 			children = (
+				5C2F1CB216304927001287D4 /* old */,
 				5C63DECD156AAB5100C3EEC0 /* GPTabBarViewController */,
-				5C1431141547132E00AEE1FA /* GPTableSearchController */,
 				5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */,
 				5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */,
 				5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */,
 				5CD4F9C514DC555100F2CBB3 /* GPDragToRefreshView.m */,
-				5CD4F9C614DC555100F2CBB3 /* GPModel.h */,
-				5CD4F9C714DC555100F2CBB3 /* GPModel.m */,
-				5CD4F9C814DC555100F2CBB3 /* GPTableDragRefresh.h */,
-				5CD4F9C914DC555100F2CBB3 /* GPTableDragRefresh.m */,
-				5CD4F9CA14DC555100F2CBB3 /* GPTableViewController.h */,
-				5CD4F9CB14DC555100F2CBB3 /* GPTableViewController.m */,
 				5C89A18F1551C5D800BF73CE /* GPEmptyTableView.h */,
 				5C89A1901551C5D800BF73CE /* GPEmptyTableView.m */,
 				5C63DF0C156AEB4000C3EEC0 /* GPTableAccessory.h */,
 				5C63DF0D156AEB4000C3EEC0 /* GPTableAccessory.m */,
+				5C2F1CB316304957001287D4 /* GPTableViewController.h */,
+				5C2F1CB416304957001287D4 /* GPTableViewController.m */,
+				5C2F1CB7163049FE001287D4 /* GPTableSearchController.h */,
+				5C2F1CB8163049FE001287D4 /* GPTableSearchController.m */,
+				5C2F1CBB16304A2E001287D4 /* GPModel.h */,
+				5C2F1CBC16304A2E001287D4 /* GPModel.m */,
 			);
 			path = NetModel;
 			sourceTree = "<group>";
@@ -1156,9 +1182,9 @@
 				5CD4F9C014DC550200F2CBB3 /* GPNavigator.h in Headers */,
 				5CD4F9CC14DC555100F2CBB3 /* GPCenterLabel.h in Headers */,
 				5CD4F9CE14DC555100F2CBB3 /* GPDragToRefreshView.h in Headers */,
-				5CD4F9D014DC555100F2CBB3 /* GPModel.h in Headers */,
+				5CD4F9D014DC555100F2CBB3 /* GPOldModel.h in Headers */,
 				5CD4F9D214DC555100F2CBB3 /* GPTableDragRefresh.h in Headers */,
-				5CD4F9D414DC555100F2CBB3 /* GPTableViewController.h in Headers */,
+				5CD4F9D414DC555100F2CBB3 /* GPOldTableViewController.h in Headers */,
 				5CD4F9EA14DC559A00F2CBB3 /* HTMLColors.h in Headers */,
 				5CD4F9EC14DC559A00F2CBB3 /* HTMLElements.h in Headers */,
 				5CD4F9EE14DC559A00F2CBB3 /* HTMLKit.h in Headers */,
@@ -1181,7 +1207,7 @@
 				5C9B7D5515408D9100856C8A /* GPTableTextFieldCell.h in Headers */,
 				5C9B7D5A15408E2100856C8A /* GPTableTextFieldItem.h in Headers */,
 				5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */,
-				5C1431181547137200AEE1FA /* GPTableSearchController.h in Headers */,
+				5C1431181547137200AEE1FA /* GPOldTableSearchController.h in Headers */,
 				5C14312615483D6100AEE1FA /* GPLabel.h in Headers */,
 				5C14312A15485E8100AEE1FA /* GPView.h in Headers */,
 				5C14314215488F3F00AEE1FA /* GPPillLabel.h in Headers */,
@@ -1223,6 +1249,9 @@
 				5C00A974161E1EE20066951F /* GPSideBarView.h in Headers */,
 				5C1155D616233A3200212A4C /* GPPostingViewController.h in Headers */,
 				5CA8D0A2162CB2C3009AC119 /* GPTableView.h in Headers */,
+				5C2F1CB516304957001287D4 /* GPTableViewController.h in Headers */,
+				5C2F1CB9163049FE001287D4 /* GPTableSearchController.h in Headers */,
+				5C2F1CBD16304A2E001287D4 /* GPModel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1463,9 +1492,9 @@
 				5CD4F9C114DC550200F2CBB3 /* GPNavigator.m in Sources */,
 				5CD4F9CD14DC555100F2CBB3 /* GPCenterLabel.m in Sources */,
 				5CD4F9CF14DC555100F2CBB3 /* GPDragToRefreshView.m in Sources */,
-				5CD4F9D114DC555100F2CBB3 /* GPModel.m in Sources */,
+				5CD4F9D114DC555100F2CBB3 /* GPOldModel.m in Sources */,
 				5CD4F9D314DC555100F2CBB3 /* GPTableDragRefresh.m in Sources */,
-				5CD4F9D514DC555100F2CBB3 /* GPTableViewController.m in Sources */,
+				5CD4F9D514DC555100F2CBB3 /* GPOldTableViewController.m in Sources */,
 				5CD4F9EB14DC559A00F2CBB3 /* HTMLColors.m in Sources */,
 				5CD4F9ED14DC559A00F2CBB3 /* HTMLElements.m in Sources */,
 				5CD4F9F014DC559A00F2CBB3 /* HTMLParser.m in Sources */,
@@ -1487,7 +1516,7 @@
 				5C9B7D5615408D9100856C8A /* GPTableTextFieldCell.m in Sources */,
 				5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */,
 				5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */,
-				5C1431191547137200AEE1FA /* GPTableSearchController.m in Sources */,
+				5C1431191547137200AEE1FA /* GPOldTableSearchController.m in Sources */,
 				5C14312715483D6100AEE1FA /* GPLabel.m in Sources */,
 				5C14312B15485E8100AEE1FA /* GPView.m in Sources */,
 				5C14314315488F3F00AEE1FA /* GPPillLabel.m in Sources */,
@@ -1529,6 +1558,9 @@
 				5C00A975161E1EE20066951F /* GPSideBarView.m in Sources */,
 				5C1155D716233A3200212A4C /* GPPostingViewController.m in Sources */,
 				5CA8D0A3162CB2C3009AC119 /* GPTableView.m in Sources */,
+				5C2F1CB616304957001287D4 /* GPTableViewController.m in Sources */,
+				5C2F1CBA163049FE001287D4 /* GPTableSearchController.m in Sources */,
+				5C2F1CBE16304A2E001287D4 /* GPModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

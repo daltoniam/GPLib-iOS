@@ -32,7 +32,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GPTableViewController.h"
+#import "GPOldTableViewController.h"
 #import "HTMLText.h"
 #import "HTMLListViewController.h"
 #import "GPTableTextItem.h"
@@ -93,7 +93,7 @@
 
 @end
 
-@interface HTMLSettingsViewController : GPTableViewController<HTMLListDelegate>
+@interface HTMLSettingsViewController : GPOldTableViewController<HTMLListDelegate>
 {
     NSInteger currentIndex;
     UISegmentedControl* SegControl;

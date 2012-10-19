@@ -34,10 +34,10 @@
 #import "GPGridView.h"
 #import "GPGridViewCell.h"
 #import "GPLoadingLabel.h"
-#import "GPModel.h"
+#import "GPOldModel.h"
 #import "GPHTTPRequest.h"
 
-@interface GPGridViewController : UIViewController<GPGridViewDataSource,GPGridViewDelegate,GPModelDelegate,GPHTTPRequestDelegate>
+@interface GPGridViewController : UIViewController<GPGridViewDataSource,GPGridViewDelegate,GPOldModelDelegate,GPHTTPRequestDelegate>
 {
     GPGridView* gridView;
     NSMutableArray* items;
@@ -46,13 +46,13 @@
     NSMutableArray* imageQueue;
     NSOperationQueue* queue;
     GPLoadingLabel* ActLabel;
-    GPModel* model;
+    GPOldModel* model;
 }
 - (id)initWithURLString:(NSString*)url;
 - (Class)gridView:(GPGridView*)gridview cellClassForObject:(id)object;
 -(void)dismissGridCell:(BOOL)saveImage;
 -(NSString*)loadingText;
--(GPModel*)model:(NSString*)url;
+-(GPOldModel*)model:(NSString*)url;
 -(void)fetchData:(NSString*)url;
 -(GPLoadingLabelStyle)actLabelStyle;
 

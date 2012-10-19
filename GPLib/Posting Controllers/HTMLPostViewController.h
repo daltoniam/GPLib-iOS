@@ -31,7 +31,7 @@
  */
 //
 #import "HTMLKit.h"
-#import "GPTableViewController.h"
+#import "GPOldTableViewController.h"
 #import "GPButton.h"
 #import "HTMLLinkViewController.h"
 #import "HTMLSettingsViewController.h"
@@ -47,7 +47,7 @@
 
 @end
 
-@interface HTMLPostViewController : GPTableViewController<HTMLTextViewDelegate,HTMLSettingsDelegate,HTMLLinkViewControllerDelegate,UIPopoverControllerDelegate>
+@interface HTMLPostViewController : GPOldTableViewController<HTMLTextViewDelegate,HTMLSettingsDelegate,HTMLLinkViewControllerDelegate,UIPopoverControllerDelegate>
 {
     id<HTMLPostDelegate> delegate;
     HTMLTextView* Textview;

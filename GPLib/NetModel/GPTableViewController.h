@@ -2,8 +2,8 @@
 //  GPTableViewController.h
 //  GPLib
 //
-//  Created by Dalton Cherry on 12/22/11.
-//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
+//  Created by Dalton Cherry on 10/18/12.
+//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
  http://github.com/daltoniam/GPLib-iOS
@@ -31,70 +31,32 @@
  */
 //
 
+#import <UIKit/UIKit.h>
+#import "GPTableView.h"
 #import "GPModel.h"
-#import "GPTableDragRefresh.h"
 #import "GPLoadingLabel.h"
-#import "GPTableAccessory.h"
-#import "GPTimeScroller.h"
 
-#define SECTION_HEADER_TAG 125675
-
-@class GPTableDragRefresh;
-
-@interface GPTableViewController : UIViewController<GPModelDelegate,UITableViewDelegate,UITableViewDataSource,GPTimeScrollerDelegate>
+@interface GPTableViewController : UIViewController<GPTableViewDelegate,GPModelDelegate>
 {
-    GPModel* model;
-    GPLoadingLabel* ActLabel;
-    GPTableDragRefresh* refresh;
-    UITableView* _tableView;
-    NSMutableArray* items;
-    NSMutableArray* sections;
-    UIView* emptyView;
-    GPTimeScroller* timeScroller;
-    NSMutableArray* imageURLs;
-    NSOperationQueue* imageQueue;
+    GPLoadingLabel* loadingLabel;
 }
 
-@property(nonatomic,readonly,retain)GPModel* model;
-@property(nonatomic,retain)UITableView* tableView;
+@property(nonatomic,retain)GPTableView* tableView;
+@property(nonatomic,retain)GPModel* model;
 
--(void)processImageURL:(id)object;
--(GPHTTPRequest*)fetchImage:(NSString*)url;
--(void)reloadImageItems:(NSArray*)arrayItems url:(GPHTTPRequest*)request section:(int)section;
-- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object;
-- (id)tableView:(UITableView*)tableView objectForRowAtIndexPath:(NSIndexPath*)indexPath;
-- (void)tableView:(UITableView*)tableView removeObjectAtIndexPath:(NSIndexPath*)indexPath;
-- (NSIndexPath*)tableView:(UITableView*)tableView indexPathOfObject:(id)object;
-- (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
--(NSString*)loadingText;
--(GPModel*)model:(NSString*)url;
--(BOOL)dragToRefresh;
-- (id)initWithURLString:(NSString*)url;
-- (id)initWithOutURL;
+//shows the loading label.
+-(void)showLoadingLabel;
+
+//shows the loading label.
+-(void)showLoadingLabel:(GPLoadingLabelStyle)style;
+
+//return YES if you want the tableView to be grouped. Default is NO.
 -(BOOL)grouped;
--(BOOL)checkMarks;
--(BOOL)isMultiCheckMark:(int)section;
--(BOOL)checkMarksExpection:(int)section;
--(BOOL)autoSizeCells;
--(UIColor*)tableBackground;
--(UIColor*)selectedColor;
--(void)setupModel:(NSString*)url;
 
--(NSString*)emptyTableTitle;
--(NSString*)emptyTableText;
--(UIImage*)emptyTableImage;
--(UIView*)defaultEmptyView;
--(void)showEmptyView;
+//just a simple way to set the model. You can set the property as well.
+-(GPModel*)setupModel;
 
--(BOOL)useTimeScroller;
--(NSDate*)timeScrollerForObject:(id)object cell:(UITableViewCell*)cell;
-
--(GPTableAccessory*)customAccessory:(UITableViewCellAccessoryType)type;
-
--(void)copyRefresh;
-
--(GPLoadingLabelStyle)actLabelStyle;
--(BOOL)isLastObjectInSection:(id)object section:(int)section;
+//change the loading label text. Default is Loading...
+-(NSString*)loadingText;
 
 @end
-

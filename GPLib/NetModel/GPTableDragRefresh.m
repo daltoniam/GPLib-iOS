@@ -53,14 +53,14 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithController:(GPTableViewController*)control Background:(UIColor*)color
+- (id)initWithController:(GPOldTableViewController*)control Background:(UIColor*)color
 {
     Background = [color retain];
     return [self initWithController:control];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithController:(GPTableViewController*)control 
+- (id)initWithController:(GPOldTableViewController*)control 
 {
     if (self = [super init]) 
     {

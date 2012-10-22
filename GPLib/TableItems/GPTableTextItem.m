@@ -148,6 +148,7 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
         GPTableItem* item = (GPTableItem*)[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
         item.text = self.text;
         item.navURL = self.NavURL;
+        item.Properties = [GPTableTextItem encodeObject:self.Properties keyName:@"properties"];
         item.restoreClassName = [self getClassName];
         return item;
     }
@@ -161,10 +162,13 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
         GPTableItem* objectItem = (GPTableItem*)object;
         GPTableTextItem* item = [GPTableTextItem itemWithText:objectItem.text];
         item.NavURL = objectItem.navURL;
+        item.Properties = [GPTableTextItem decodeObject:objectItem.properties keyName:@"properties"];
         return item;
     }
     return nil;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//helper functions for coreData stuff in GPModel
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSString*)getClassName
 {
@@ -174,6 +178,26 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
                                                          encoding:NSASCIIStringEncoding freeWhenDone:NO] autorelease];
     return identifier;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++(NSData*)encodeObject:(id)object keyName:(NSString*)key
+{
+    NSMutableData *data = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:object forKey:key];
+    [archiver finishEncoding];
+    [archiver release];
+    return data;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++(id)decodeObject:(NSData*)data keyName:(NSString*)key
+{
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    id object = [unarchiver decodeObjectForKey:key];
+    [unarchiver finishDecoding];
+    [unarchiver release];
+    return object;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end
 
@@ -186,6 +210,7 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
 @dynamic imageURL;
 @dynamic navURL;
 @dynamic rowHeight;
+@dynamic properties;
 @dynamic restoreClassName;
 
 @end

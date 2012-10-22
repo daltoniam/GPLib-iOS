@@ -44,6 +44,7 @@
 @property (nonatomic, retain) NSString * imageURL;
 @property (nonatomic, retain) NSString * navURL;
 @property (nonatomic, retain) NSNumber * rowHeight;
+@property (nonatomic, retain) NSData * properties;
 @property (nonatomic, retain) NSString * restoreClassName;
 
 @end
@@ -96,5 +97,7 @@
 +(id)restoreItemFromDisk:(NSManagedObject*)object;
 
 -(NSString*)getClassName;
++(NSData*)encodeObject:(id)object keyName:(NSString*)key;
++(id)decodeObject:(NSData*)data keyName:(NSString*)key;
 
 @end

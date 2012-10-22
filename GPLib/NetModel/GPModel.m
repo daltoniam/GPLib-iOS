@@ -100,9 +100,19 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)fetchFromDisk:(NSArray*)sortDescriptors
 {
+    [self fetchFromDisk:sortDescriptors predicate:nil];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)fetchFromDisk:(NSArray*)sortDescriptors predicate:(NSPredicate*)predicate
+{
     if(!lock)
         lock = [[NSLock alloc] init];
-    [self performSelectorInBackground:@selector(fetchDiskContent:) withObject:sortDescriptors];
+    NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithCapacity:2];
+    if(sortDescriptors)
+        [dict setValue:sortDescriptors forKey:@"sort"];
+    if(predicate)
+        [dict setValue:predicate forKey:@"search"];
+    [self performSelectorInBackground:@selector(fetchDiskContent:) withObject:dict];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObject:(id)object
@@ -145,6 +155,16 @@
         }
         [[self objectCtx] save:nil];
         [lock unlock];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)deleteObjects:(NSPredicate*)predicate
+{
+    if(self.entityName)
+    {
+        if(!lock)
+            lock = [[NSLock alloc] init];
+        [self performSelectorInBackground:@selector(deleteDiskThread:) withObject:predicate];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +212,7 @@
     [pool drain];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)fetchDiskContent:(NSArray*)sortDescriptors
+-(void)fetchDiskContent:(NSDictionary*)params
 {
     if(self.entityName)
     {
@@ -204,7 +224,11 @@
         NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
         [request setEntity:entity];
         
+        NSArray* sortDescriptors = [params objectForKey:@"sort"];
+        NSPredicate* predicate = [params objectForKey:@"search"];
+        
         [request setSortDescriptors:sortDescriptors];
+        request.predicate = predicate;
         
         NSArray *managedItems = [[self objectCtx] executeFetchRequest:request error:nil];
         for(NSManagedObject* object in managedItems)
@@ -228,6 +252,28 @@
             }
         }
         [self performSelectorOnMainThread:@selector(finished:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+        [lock unlock];
+        [pool drain];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)deleteDiskThread:(NSPredicate*)predicate
+{
+    if(self.entityName)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        [lock lock];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:self.entityName inManagedObjectContext:[self objectCtx]];
+        
+        // Setup the fetch request
+        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+        [request setEntity:entity];
+        request.predicate = predicate;
+        
+        NSArray *managedItems = [[self objectCtx] executeFetchRequest:request error:nil];
+        for(NSManagedObject* object in managedItems)
+            [[self objectCtx] deleteObject:object];
+        [[self objectCtx] save:nil];
         [lock unlock];
         [pool drain];
     }

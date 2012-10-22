@@ -96,11 +96,17 @@
 //fetch all objects stored on disk, but pass in some sort descriptors
 -(void)fetchFromDisk:(NSArray*)sortDescriptors;
 
+//fetch all objects stored on disk, but pass in some sort descriptors and a search predicate
+-(void)fetchFromDisk:(NSArray*)sortDescriptors predicate:(NSPredicate*)predicate;
+
 //this adds a new object to disk.
 -(void)saveObject:(id)object;
 
 //this adds a new objects to disk.
 -(void)saveObjects:(NSArray*)array;
+
+//find and delete objects from disk.
+-(void)deleteObjects:(NSPredicate*)predicate;
 
 //set your cache policy for your network request
 -(void)cachePolicy:(GPHTTPRequest*)request;

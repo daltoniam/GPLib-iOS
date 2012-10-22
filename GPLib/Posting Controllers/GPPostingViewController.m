@@ -23,11 +23,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.navigationItem.rightBarButtonItem =[[[UIBarButtonItem alloc] initWithTitle: @"Post"
+        self.navigationItem.rightBarButtonItem =[[[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Post", nil)
                                                                                   style: UIBarButtonItemStyleBordered
                                                                                  target: self
                                                                                  action:@selector(post)] autorelease];
-        self.navigationItem.leftBarButtonItem =[[[UIBarButtonItem alloc] initWithTitle: @"Cancel"
+        self.navigationItem.leftBarButtonItem =[[[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Cancel", nil)
                                                                                  style: UIBarButtonItemStyleBordered
                                                                                 target: self
                                                                                 action:@selector(cancel)] autorelease];
@@ -38,7 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Post";
+    self.title = NSLocalizedString(@"Post", nil);
     int top = 0;
     int height = 250;
     if(GPIsPad())

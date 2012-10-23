@@ -120,4 +120,7 @@
 //use this to style your objects that have come from disk
 -(void)styleRestoredObject:(id)object;
 
+//used to access coreData
+- (NSManagedObjectContext*)objectCtx;
+
 @end

@@ -72,6 +72,8 @@
 //when the search controller is dismissed.
 -(void)willStopSearch;
 
+-(void)scrollViewDidScroll:(UIScrollView*)scrollView;
+
 @end
 
 @interface GPTableView : UIView<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
@@ -159,6 +161,12 @@
 //set if you want the ScrollIndicator to show. Default is YES.
 @property(nonatomic,assign)BOOL showsVerticalScrollIndicator;
 
+//the content offset of the tableview
+@property(nonatomic)CGPoint contentOffset;
+
+//check the contentSize
+@property(nonatomic,assign,readonly)CGSize contentSize;
+
 -(id)initWithFrame:(CGRect)frame isGrouped:(BOOL)grouped;
 -(id)init:(BOOL)grouped;
 
@@ -181,6 +189,17 @@
 //I am exposing this for now. I want to think of a better way around not have searchController.
 -(void)setupSearchController;
 
+//this will show the drag to refresh header and put it in a refresh state.
+-(void)showRefreshHeader;
+
+//returns the table item at that point
+-(id)objectAtPoint:(CGPoint)point;
+
+//returns the index of an object
+-(NSIndexPath*)indexPathOfObject:(id)object;
+
+//scroll to a indexPath
+-(void)scrollToIndexPath:(NSIndexPath*)path scrollPostition:(UITableViewScrollPosition)pos animated:(BOOL)animated;
 
 //adding/removing to tableView with animation
 

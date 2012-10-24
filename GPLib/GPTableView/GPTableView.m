@@ -916,10 +916,27 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)showRefreshHeader
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DragRefreshTableReload" object:nil];
+    
+    [refreshHeader setStatus:GPTableHeaderDragRefreshLoading];
+    if([self.delegate respondsToSelector:@selector(modelShouldLoad:)])
+        [self.delegate modelShouldLoad:YES];
+    isRefreshing = YES;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.2];
+    if (tableView.contentOffset.y < 0)
+        tableView.contentInset = UIEdgeInsetsMake(HeaderVisibleHeight, 0.0f, 0.0f, 0.0f);
+    [UIView commitAnimations];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //scrollView delegate
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)scrollViewDidScroll:(UIScrollView*)scrollView
 {
+    if([self.delegate respondsToSelector:@selector(scrollViewDidScroll:)])
+        [self.delegate scrollViewDidScroll:scrollView];
     [timeScroller scrollViewDidScroll];
     if (scrollView.dragging && !isRefreshing && self.dragToRefresh) //&& !controller.model.isLoading
     {
@@ -954,20 +971,69 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     // load as long as we arent loading already
     if (scrollView.contentOffset.y <= RefreshDeltaY && !isRefreshing && self.dragToRefresh) //&& !controller.model.isLoading
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DragRefreshTableReload" object:nil];
-        
-        [refreshHeader setStatus:GPTableHeaderDragRefreshLoading];
-        if([self.delegate respondsToSelector:@selector(modelShouldLoad:)])
-            [self.delegate modelShouldLoad:YES];
-        isRefreshing = YES;
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.2];
-        if (tableView.contentOffset.y < 0)
-            tableView.contentInset = UIEdgeInsetsMake(HeaderVisibleHeight, 0.0f, 0.0f, 0.0f);
-        [UIView commitAnimations];
+        [self showRefreshHeader];
     }
     if(!decelerate)
         [timeScroller scrollViewDidEndDecelerating];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(id)objectAtPoint:(CGPoint)point
+{
+    UIView *view = [tableView hitTest:point withEvent:UIEventTypeTouches];
+    
+    if ([view.superview isKindOfClass:[UITableViewCell class]])
+    {
+        UITableViewCell* cell = (UITableViewCell*)view.superview;
+        NSIndexPath* path = [tableView indexPathForCell:cell];
+        return [self tableView:tableView objectForRowAtIndexPath:path];
+    }
+    return nil;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSIndexPath*)indexPathOfObject:(id)object
+{
+    NSArray* searchArray = items;
+    BOOL hasSections = NO;
+    if(isSearching)
+    {
+        if (searchSections)
+            hasSections = YES;
+        searchArray = searchItems;
+    }
+    else if(sections)
+        hasSections = YES;
+    if(hasSections)
+    {
+        int i = 0; // i is object index
+        int k = 0; //k is section index
+        for(NSArray* array in items)
+        {
+            i = 0;
+            for(id arrayObject in array)
+            {
+                if(arrayObject == object)
+                    return [NSIndexPath indexPathForRow:i inSection:k];
+                i++;
+            }
+            k++;
+        }
+    }
+    else
+    {
+        int i = 0;
+        for(id arrayObject in searchArray)
+        {
+            if(arrayObject == object)
+                return [NSIndexPath indexPathForRow:i inSection:0];
+            i++;
+        }
+    }
+    return nil;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)scrollToIndexPath:(NSIndexPath*)path scrollPostition:(UITableViewScrollPosition)pos animated:(BOOL)animated
+{
+    [tableView scrollToRowAtIndexPath:path atScrollPosition:pos animated:animated];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //methods use for searching
@@ -1182,6 +1248,21 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 -(UIColor*)separatorColor
 {
     return tableView.separatorColor;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setContentOffset:(CGPoint)contentOffset
+{
+    tableView.contentOffset = contentOffset;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(CGPoint)contentOffset
+{
+    return tableView.contentOffset;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(CGSize)contentSize
+{
+    return tableView.contentSize;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

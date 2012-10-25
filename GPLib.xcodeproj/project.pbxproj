@@ -115,6 +115,8 @@
 		5C6907B114E04C8900E44620 /* GPLauncherButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C6907AF14E04C8900E44620 /* GPLauncherButton.h */; };
 		5C6907B214E04C8900E44620 /* GPLauncherButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C6907B014E04C8900E44620 /* GPLauncherButton.m */; };
 		5C6907B914E18A5D00E44620 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C6907B814E18A5D00E44620 /* CoreText.framework */; };
+		5C833E7C1639D6A4006FB3EA /* GPNav.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C833E7A1639D6A4006FB3EA /* GPNav.h */; };
+		5C833E7D1639D6A4006FB3EA /* GPNav.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C833E7B1639D6A4006FB3EA /* GPNav.m */; };
 		5C88137B151A175A006BCDC9 /* HTMLSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */; };
 		5C88137C151A175A006BCDC9 /* HTMLSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */; };
 		5C881380151B6778006BCDC9 /* HTMLListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C88137E151B6778006BCDC9 /* HTMLListViewController.h */; };
@@ -198,7 +200,6 @@
 		5CD4F99C14DC54C900F2CBB3 /* GPImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95914DC54C900F2CBB3 /* GPImageView.m */; };
 		5CD4F99D14DC54C900F2CBB3 /* GPImageViewer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F95A14DC54C900F2CBB3 /* GPImageViewer.h */; };
 		5CD4F99E14DC54C900F2CBB3 /* GPImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F95B14DC54C900F2CBB3 /* GPImageViewer.m */; };
-		5CD4F9C014DC550200F2CBB3 /* GPNavigator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9BE14DC550200F2CBB3 /* GPNavigator.h */; };
 		5CD4F9C114DC550200F2CBB3 /* GPNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9BF14DC550200F2CBB3 /* GPNavigator.m */; };
 		5CD4F9CC14DC555100F2CBB3 /* GPCenterLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */; };
 		5CD4F9CD14DC555100F2CBB3 /* GPCenterLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */; };
@@ -416,6 +417,8 @@
 		5C6907AF14E04C8900E44620 /* GPLauncherButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPLauncherButton.h; path = Launcher/GPLauncherButton.h; sourceTree = "<group>"; };
 		5C6907B014E04C8900E44620 /* GPLauncherButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPLauncherButton.m; path = Launcher/GPLauncherButton.m; sourceTree = "<group>"; };
 		5C6907B814E18A5D00E44620 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		5C833E7A1639D6A4006FB3EA /* GPNav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPNav.h; sourceTree = "<group>"; };
+		5C833E7B1639D6A4006FB3EA /* GPNav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPNav.m; sourceTree = "<group>"; };
 		5C881379151A175A006BCDC9 /* HTMLSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLSettingsViewController.h; sourceTree = "<group>"; };
 		5C88137A151A175A006BCDC9 /* HTMLSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLSettingsViewController.m; sourceTree = "<group>"; };
 		5C88137E151B6778006BCDC9 /* HTMLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLListViewController.h; sourceTree = "<group>"; };
@@ -506,7 +509,6 @@
 		5CD4F95A14DC54C900F2CBB3 /* GPImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPImageViewer.h; sourceTree = "<group>"; };
 		5CD4F95B14DC54C900F2CBB3 /* GPImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPImageViewer.m; sourceTree = "<group>"; };
 		5CD4F9BD14DC54E600F2CBB3 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark.png"; sourceTree = "<group>"; };
-		5CD4F9BE14DC550200F2CBB3 /* GPNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPNavigator.h; sourceTree = "<group>"; };
 		5CD4F9BF14DC550200F2CBB3 /* GPNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPNavigator.m; sourceTree = "<group>"; };
 		5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPCenterLabel.h; sourceTree = "<group>"; };
 		5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPCenterLabel.m; sourceTree = "<group>"; };
@@ -977,7 +979,8 @@
 		5CD4F92114DC54C900F2CBB3 /* Navigator */ = {
 			isa = PBXGroup;
 			children = (
-				5CD4F9BE14DC550200F2CBB3 /* GPNavigator.h */,
+				5C833E7A1639D6A4006FB3EA /* GPNav.h */,
+				5C833E7B1639D6A4006FB3EA /* GPNav.m */,
 				5CD4F9BF14DC550200F2CBB3 /* GPNavigator.m */,
 			);
 			path = Navigator;
@@ -1179,7 +1182,6 @@
 				5CD4F99914DC54C900F2CBB3 /* GPImageScrollView.h in Headers */,
 				5CD4F99B14DC54C900F2CBB3 /* GPImageView.h in Headers */,
 				5CD4F99D14DC54C900F2CBB3 /* GPImageViewer.h in Headers */,
-				5CD4F9C014DC550200F2CBB3 /* GPNavigator.h in Headers */,
 				5CD4F9CC14DC555100F2CBB3 /* GPCenterLabel.h in Headers */,
 				5CD4F9CE14DC555100F2CBB3 /* GPDragToRefreshView.h in Headers */,
 				5CD4F9D014DC555100F2CBB3 /* GPOldModel.h in Headers */,
@@ -1252,6 +1254,7 @@
 				5C2F1CB516304957001287D4 /* GPTableViewController.h in Headers */,
 				5C2F1CB9163049FE001287D4 /* GPTableSearchController.h in Headers */,
 				5C2F1CBD16304A2E001287D4 /* GPModel.h in Headers */,
+				5C833E7C1639D6A4006FB3EA /* GPNav.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1561,6 +1564,7 @@
 				5C2F1CB616304957001287D4 /* GPTableViewController.m in Sources */,
 				5C2F1CBA163049FE001287D4 /* GPTableSearchController.m in Sources */,
 				5C2F1CBE16304A2E001287D4 /* GPModel.m in Sources */,
+				5C833E7D1639D6A4006FB3EA /* GPNav.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

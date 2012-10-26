@@ -73,6 +73,9 @@
 //ignore this, I just use it to figure certain style properties out
 @property(nonatomic,assign)BOOL isGrouped;
 
+//tag to find item in tableview.
+@property(nonatomic, assign)NSInteger tag;
+
 + (GPTableTextItem*)itemWithText:(NSString*)string;
 + (GPTableTextItem*)itemWithText:(NSString*)string url:(NSString*)url;
 +(GPTableTextItem*)itemWithText:(NSString*)string url:(NSString*)url properties:(NSDictionary*)props;

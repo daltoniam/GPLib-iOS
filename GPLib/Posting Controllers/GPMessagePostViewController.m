@@ -55,7 +55,6 @@
                                                                                 action:@selector(cancelText)] autorelease];
         searchItems = [[NSMutableArray alloc] init];
         shouldShowPicker = YES;
-        [model loadModel:NO];
     }
     return self;
 }
@@ -63,47 +62,45 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [ActLabel removeFromSuperview];
     self.view.backgroundColor = [UIColor whiteColor];
     int left = 0;
     int top = 0;
-    ScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    ScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     
     int width = self.view.frame.size.width;
     
-    Field =[[GPReceiptField alloc] initWithFrame:CGRectMake(left, top, width, 40)];
-    Field.shouldShowPicker = shouldShowPicker;
-    Field.delegate = self;
-    Field.numberOfLines = 0;
-    [ScrollView addSubview:Field];
-    top += Field.frame.size.height;
-    LineView = [[UIView alloc] initWithFrame:CGRectMake(left, top, self.view.frame.size.width, 1)];
-    LineView.backgroundColor = [UIColor lightGrayColor];
-    LineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [ScrollView addSubview:LineView];
-    top += LineView.frame.size.height;
+    field =[[GPReceiptField alloc] initWithFrame:CGRectMake(left, top, width, 40)];
+    field.shouldShowPicker = shouldShowPicker;
+    field.delegate = self;
+    field.numberOfLines = 0;
+    [scrollView addSubview:field];
+    top += field.frame.size.height;
+    lineView = [[UIView alloc] initWithFrame:CGRectMake(left, top, self.view.frame.size.width, 1)];
+    lineView.backgroundColor = [UIColor lightGrayColor];
+    lineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [scrollView addSubview:lineView];
+    top += lineView.frame.size.height;
     textView = [[UITextView alloc] initWithFrame:CGRectMake(left, top, self.view.frame.size.width, self.view.frame.size.height-top)];
     textView.delegate = self;
     textView.font = [UIFont systemFontOfSize:14];
     textView.scrollEnabled = NO;
     textView.contentInset = UIEdgeInsetsMake(2, 2, 2, 2);
-    [ScrollView addSubview:textView];
-    [self.view addSubview:ScrollView];
+    [scrollView addSubview:textView];
+    [self.view addSubview:scrollView];
     
-    [_tableView removeFromSuperview];
-    [ScrollView addSubview:_tableView];
-    [ScrollView bringSubviewToFront:_tableView];
-    [ScrollView bringSubviewToFront:Field];
+    [self.tableView removeFromSuperview];
+    [scrollView addSubview:self.tableView];
+    [scrollView bringSubviewToFront:self.tableView];
+    [scrollView bringSubviewToFront:field];
     
-    _tableView.hidden = YES;
-    _tableView.frame = textView.frame;
-    CGRect frame = _tableView.frame;
+    self.tableView.hidden = YES;
+    self.tableView.frame = textView.frame;
+    CGRect frame = self.tableView.frame;
     frame.size.height -= 30;
-    _tableView.frame = frame;
-    Field.layer.shadowOpacity = 0.2;
-    Field.layer.shadowRadius = 1.0;
-    Field.layer.shouldRasterize = YES;
+    self.tableView.frame = frame;
+    field.layer.shadowOpacity = 0.2;
+    field.layer.shadowRadius = 1.0;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardDidShowNotification //UIKeyboardDidShowNotification
@@ -134,13 +131,13 @@
     //[UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
     
-    CGRect newFrame = _tableView.frame;
+    CGRect newFrame = self.tableView.frame;
     CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
     if (up) 
         newFrame.size.height -= keyboardFrame.size.height+10;
     else 
         newFrame.size.height += keyboardFrame.size.height+10;
-    _tableView.frame = newFrame;
+    self.tableView.frame = newFrame;
     
     [UIView commitAnimations];
 }
@@ -159,8 +156,8 @@
 {
     if(!isPosting)
     {
-        if([delegate respondsToSelector:@selector(textDidPost:users:)])
-            [delegate textDidPost:textView.text users:Field.Bubbles];
+        if([self.delegate respondsToSelector:@selector(textDidPost:users:)])
+            [self.delegate textDidPost:textView.text users:field.Bubbles];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,8 +177,8 @@
             [alert release];
         }
         else
-            if([delegate respondsToSelector:@selector(didCancel)])
-                [delegate didCancel];
+            if([self.delegate respondsToSelector:@selector(didCancel)])
+                [self.delegate didCancel];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,8 +186,8 @@
 {
 	if (buttonIndex == 0)
 	{
-        if([delegate respondsToSelector:@selector(didCancel)])
-            [delegate didCancel];
+        if([self.delegate respondsToSelector:@selector(didCancel)])
+            [self.delegate didCancel];
 	}
 	else if (buttonIndex == 1)
 	{
@@ -206,7 +203,7 @@
     if([self shouldAddItemInline:textField CharactersInRange:range replacementString:string])
     {
         //[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        [Field addItem:[textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ];
+        [field addItem:[textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ];
         [self showTableView:NO];
         [searchItems removeAllObjects];
     }
@@ -225,9 +222,9 @@
 //update the lineView that it needs to with the Field view
 - (void)heightDidChange:(int)height
 {
-    CGRect frame = LineView.frame;
+    CGRect frame = lineView.frame;
     frame.origin.y = height;
-    LineView.frame = frame;
+    lineView.frame = frame;
     
     /*int offset = frame.origin.y+1;
     
@@ -242,10 +239,10 @@
     int top = offset - (frame.origin.y);
     frame.origin.y = offset; 
     textView.frame = frame;
-    _tableView.frame = frame;
-    CGSize size = ScrollView.contentSize;
+    self.tableView.frame = frame;
+    CGSize size = scrollView.contentSize;
     size.height += top;
-    ScrollView.contentSize = size;
+    scrollView.contentSize = size;
     
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,16 +260,16 @@
     view.frame = newTextFrame;*/
     CGFloat fontHeight = (view.font.ascender - view.font.descender) + 1;
     int pad = 15;
-    CGSize size = ScrollView.contentSize;
+    CGSize size = scrollView.contentSize;
     size.height = view.contentSize.height+view.frame.origin.y+view.frame.size.height+fontHeight+pad;
-    ScrollView.contentSize = size;
+    scrollView.contentSize = size;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)textFieldWillDismiss:(UITextField*)textField
 {
     if(![textField.text isEqualToString:@" "] && ![textField.text isEqualToString:@""])
     {
-        [Field addItem:[textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ];
+        [field addItem:[textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,23 +285,23 @@
 -(void)showTableView:(BOOL)show
 {
     if(show)
-        Field.layer.shadowOffset = CGSizeMake(0, 5);
+        field.layer.shadowOffset = CGSizeMake(0, 5);
     else
-        Field.layer.shadowOffset = CGSizeMake(0, 0);
+        field.layer.shadowOffset = CGSizeMake(0, 0);
     
-    _tableView.hidden = !show;
-    ScrollView.scrollEnabled = !show;
+    self.tableView.hidden = !show;
+    scrollView.scrollEnabled = !show;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)searchTable:(NSString*)text
 {
     [searchItems removeAllObjects];
-    for(id item in items)
+    for(id item in self.tableView.items)
     {
         if([self filterItems:item text:text])
             [searchItems addObject:item];
     }
-    [_tableView reloadData];
+    [self.tableView reloadData];
     if(searchItems.count == 0)
         [self showTableView:NO];
 }
@@ -367,10 +364,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
-    [Field release];
-    [LineView release];
+    [field release];
+    [lineView release];
     [textView release];
-    [ScrollView release];
+    [scrollView release];
     [searchItems release];
     [super dealloc];
 }

@@ -31,7 +31,7 @@
  */
 //
 #import "HTMLKit.h"
-#import "GPOldTableViewController.h"
+#import "GPTableViewController.h"
 #import "GPButton.h"
 #import "HTMLLinkViewController.h"
 #import "HTMLSettingsViewController.h"
@@ -42,15 +42,15 @@
 @optional
 
 //notify that the post button has been clicked
-- (void)HTMLDidPost:(NSString*)htmltext;
+- (void)HTMLDidPost:(NSString*)htmlText;
 - (void)didCancel;
 
 @end
 
-@interface HTMLPostViewController : GPOldTableViewController<HTMLTextViewDelegate,HTMLSettingsDelegate,HTMLLinkViewControllerDelegate,UIPopoverControllerDelegate>
+@interface HTMLPostViewController : GPTableViewController<HTMLTextViewDelegate,HTMLSettingsDelegate,HTMLLinkViewControllerDelegate,UIPopoverControllerDelegate>
 {
     id<HTMLPostDelegate> delegate;
-    HTMLTextView* Textview;
+    HTMLTextView* textView;
     BOOL isEditing;
     UIBarButtonItem* editButton;
     UINavigationController* navBar;
@@ -67,10 +67,10 @@
 //-(GPButton*)buttonFactory:(CGRect)frame text:(NSString*)text istoggle:(BOOL)persist selector:(SEL)sel font:(UIFont*)font;
 
 @property(nonatomic,assign)id<HTMLPostDelegate> delegate;
-@property(nonatomic,retain)UIPopoverController* Popover;
+@property(nonatomic,retain)UIPopoverController* popover;
 
 -(id)initWithHTML:(NSString*)html;
 
--(void)resizeContentArea:(HTMLTextView *)textView;
+-(void)resizeContentArea:(HTMLTextView *)htmlTextView;
 
 @end

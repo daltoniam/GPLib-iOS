@@ -180,6 +180,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         [self.searchController.searchResultsTableView reloadData];
     else
         [tableView reloadData];
+    [tableViewTags removeAllObjects];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)refreshComplete
@@ -211,6 +212,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     didBeginUpdate = NO;
     [tableView endUpdates];
+    [tableViewTags removeAllObjects];
     [self showEmptyView];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -512,6 +514,17 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     id object = [self tableView:table objectForRowAtIndexPath:indexPath];
     
+    if([object respondsToSelector:@selector(tag)])
+    {
+        int tag = [(GPTableTextItem*)object tag];
+        if(tag > 0)
+        {
+            if(!tableViewTags)
+                tableViewTags = [[NSMutableDictionary alloc] init];
+            [tableViewTags setValue:object forKey:[NSString stringWithFormat:@"%d",tag]];
+        }
+    }
+    
     Class cellClass = [self tableView:table cellClassForObject:object];
     const char* className = class_getName(cellClass);
     NSString* identifier = [[NSString alloc] initWithBytesNoCopy:(char*)className
@@ -748,6 +761,17 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     // This will display an empty white table cell - probably not what you want, but it
     // is better than crashing, which is what happens if you return nil here
     return [GPTableCell class];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)registerNibForClass:(Class)objClass nibName:(NSString*)name
+{
+    UINib *nib = [UINib nibWithNibName:name bundle:nil];
+    const char* className = class_getName(objClass);
+    NSString* identifier = [[NSString alloc] initWithBytesNoCopy:(char*)className
+                                                          length:strlen(className)
+                                                        encoding:NSASCIIStringEncoding freeWhenDone:NO];
+    [tableView registerNib:nib forCellReuseIdentifier:identifier];
+    [identifier release];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //return height
@@ -1031,6 +1055,12 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     return nil;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(id)findItemByTag:(int)tag
+{
+    NSString* key = [NSString stringWithFormat:@"%d",tag];
+    return [tableViewTags objectForKey:key];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)scrollToIndexPath:(NSIndexPath*)path scrollPostition:(UITableViewScrollPosition)pos animated:(BOOL)animated
 {
     [tableView scrollToRowAtIndexPath:path atScrollPosition:pos animated:animated];
@@ -1267,6 +1297,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
+    [tableViewTags release];
     [searchController release];
     [timeScroller release];
     [imageQueue release];

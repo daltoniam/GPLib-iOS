@@ -85,6 +85,7 @@
     BOOL isRefreshing;
     BOOL didBeginUpdate;
     BOOL searchButtonTapped;
+    NSMutableDictionary* tableViewTags;
 }
 //default delegate implementation, nothing special
 @property(nonatomic,assign)id<GPTableViewDelegate>delegate;
@@ -173,6 +174,9 @@
 //works just like UITableview, need to call after changing datasource (items or sections arrays)
 -(void)reloadData;
 
+//register a class to a Nib. 
+-(void)registerNibForClass:(Class)objClass nibName:(NSString*)name;
+
 //run this once a pull to refresh reload is done.
 -(void)refreshComplete;
 
@@ -194,6 +198,9 @@
 
 //returns the table item at that point
 -(id)objectAtPoint:(CGPoint)point;
+
+//returns the item by tag
+-(id)findItemByTag:(int)tag;
 
 //returns the index of an object
 -(NSIndexPath*)indexPathOfObject:(id)object;

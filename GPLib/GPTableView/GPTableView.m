@@ -921,8 +921,6 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DragRefreshTableReload" object:nil];
     
     [refreshHeader setStatus:GPTableHeaderDragRefreshLoading];
-    if([self.delegate respondsToSelector:@selector(modelShouldLoad:)])
-        [self.delegate modelShouldLoad:YES];
     isRefreshing = YES;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.2];
@@ -972,6 +970,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     if (scrollView.contentOffset.y <= RefreshDeltaY && !isRefreshing && self.dragToRefresh) //&& !controller.model.isLoading
     {
         [self showRefreshHeader];
+        if([self.delegate respondsToSelector:@selector(modelShouldLoad:)])
+            [self.delegate modelShouldLoad:YES];
     }
     if(!decelerate)
         [timeScroller scrollViewDidEndDecelerating];

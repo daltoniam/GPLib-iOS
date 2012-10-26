@@ -50,16 +50,16 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) 
     {
-        sections = [[NSMutableArray alloc] initWithCapacity:1];
+        self.tableView.sections = [[NSMutableArray alloc] initWithCapacity:1];
         self.contentSizeForViewInPopover = CGSizeMake(320, 500);
         if(!GPIsPad())
         {
             CGRect frame =  self.view.frame;
             frame.size.height -= 230;
             self.view.frame = frame;
-            frame =  _tableView.frame;
+            frame =  self.tableView.frame;
             frame.size.height -= 190;
-            _tableView.frame = frame;
+            self.tableView.frame = frame;
         }
     }
     return self;
@@ -70,9 +70,9 @@
     if(self = [super init])
     {
         self.title = @"Color";
-        [sections addObject:@"Text Color"];
+        [self.tableView.sections addObject:@"Text Color"];
         NSArray* colors = [self colorChoices];
-        [items addObject:colors];
+        [self.tableView.items addObject:colors];
         int i = 0;
         int index = 0;
         for(GPTableTextItem* item in colors)
@@ -96,9 +96,9 @@
     if(self = [super init])
     {
         self.title = @"Size";
-        [sections addObject:@"Text Size"];
+        [self.tableView.sections addObject:@"Text Size"];
         NSArray* sizeArray = [self sizeChoices];
-        [items addObject:sizeArray];
+        [self.tableView.items addObject:sizeArray];
         int i = 0;
         int index = 2;
         for(GPTableTextItem* item in sizeArray)
@@ -123,7 +123,7 @@
     {
         FontName = [fontName retain];
         self.title = @"Fonts";
-        [sections addObject:@"Fonts"];
+        [self.tableView.sections addObject:@"Fonts"];
     }
     return self;
 }
@@ -140,9 +140,9 @@
     if(FontName)
     {
         NSLog(@"Font Name: %@",FontName);
-        [items removeAllObjects];
+        [self.tableView.items removeAllObjects];
         NSArray* fontArray = [[self fontChoices] retain];
-        [items addObject:fontArray];
+        [self.tableView.items addObject:fontArray];
         int i = 0;
         int index = 2;
         for(GPTableTextItem* item in fontArray)

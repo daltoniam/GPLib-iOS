@@ -32,7 +32,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GPOldTableViewController.h"
+#import "GPTableViewController.h"
 
 #define KEYWORD_HTML_COLOR @"color"
 #define KEYWORD_HTML_FONT @"font"
@@ -49,7 +49,7 @@
 
 @end
 
-@interface HTMLListViewController : GPOldTableViewController
+@interface HTMLListViewController : GPTableViewController
 {
     id<HTMLListDelegate>delegate;
     NSString* FontName;

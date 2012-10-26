@@ -37,7 +37,7 @@
 @implementation GPTableTextItem
 
 @synthesize color,text,TextAlignment,NavURL,font,Properties,backgroundColor,isChecked,infoText;
-@synthesize notificationText,notificationFillColor,notificationTextColor,bevelLineColor,isGrouped;
+@synthesize notificationText,notificationFillColor,notificationTextColor,bevelLineColor,isGrouped,tag;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 +(GPTableTextItem*)itemWithText:(NSString*)string 

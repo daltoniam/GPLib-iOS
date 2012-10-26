@@ -41,7 +41,7 @@
 
 @implementation HTMLPostViewController
 
-@synthesize delegate = delegate, Popover;
+@synthesize delegate = delegate, popover;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -110,30 +110,29 @@
     
     contentView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [self.view addSubview:contentView];
-    Textview = [[HTMLTextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, h)];
-    Textview.scrollEnabled = NO;
-    Textview.contentSize = CGSizeMake(self.view.frame.size.width, h);
+    textView = [[HTMLTextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, h)];
+    textView.scrollEnabled = NO;
+    textView.contentSize = CGSizeMake(self.view.frame.size.width, h);
     if(tempAttribString)
     {
-        [Textview.attribString appendAttributedString:tempAttribString];
-        [Textview reload];
+        [textView.attribString appendAttributedString:tempAttribString];
+        [textView reload];
         [tempAttribString release];
     }
     
-    Textview.contentInset = UIEdgeInsetsMake(2,2,2,2); //25
-    Textview.delegate = self;
-    contentView.contentSize = Textview.contentSize;
+    textView.contentInset = UIEdgeInsetsMake(2,2,2,2); //25
+    textView.delegate = self;
+    contentView.contentSize = textView.contentSize;
     if(GPIsPad())
-        Textview.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     contentView.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
-    [contentView addSubview:Textview];
+    [contentView addSubview:textView];
     
-     ActLabel.hidden = YES;
-    [Textview becomeFirstResponder];
-    sections = [[NSMutableArray alloc] initWithCapacity:3];
+    [textView becomeFirstResponder];
+    self.tableView.sections = [[NSMutableArray alloc] initWithCapacity:3];
     
-    [_tableView removeFromSuperview];
+    [self.tableView removeFromSuperview];
     
     HTMLSettingsViewController* view = [[self settingsMenu] retain];
     view.delegate = self;
@@ -154,7 +153,7 @@
         navBar.view.frame = frame;
     }
         [view release];
-    [self resizeContentArea:Textview];
+    [self resizeContentArea:textView];
     
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,13 +206,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)didCreate:(NSString*)link
 {
-    [Textview.attribString setTextIsHyperLink:link range:Textview.selectedRange];
-    [Textview.attribString setTextColor:[UIColor blueColor] range:Textview.selectedRange];
-    [Textview.attribString setTextIsUnderlined:YES range:Textview.selectedRange];
+    [textView.attribString setTextIsHyperLink:link range:textView.selectedRange];
+    [textView.attribString setTextColor:[UIColor blueColor] range:textView.selectedRange];
+    [textView.attribString setTextIsUnderlined:YES range:textView.selectedRange];
     if(!link || link.length == 0)
     {
-        [Textview.attribString setTextColor:[UIColor blackColor] range:Textview.selectedRange];
-        [Textview.attribString setTextIsUnderlined:NO range:Textview.selectedRange];
+        [textView.attribString setTextColor:[UIColor blackColor] range:textView.selectedRange];
+        [textView.attribString setTextIsUnderlined:NO range:textView.selectedRange];
     }
     if(!GPIsPad())
         [self dismissModalViewControllerAnimated:YES];
@@ -239,60 +238,60 @@
     frame.origin.y += 300;
     navBar.view.frame = frame;
     
-    frame = Textview.frame;
+    frame = textView.frame;
     frame.size.height += 50;
-    Textview.frame = frame;
+    textView.frame = frame;
     
     [UIView commitAnimations];
     [navBar.view removeFromSuperview];
-    Textview.userInteractionEnabled = YES;
-    [Textview becomeFirstResponder];
+    textView.userInteractionEnabled = YES;
+    [textView becomeFirstResponder];
     isEditing = NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(BOOL)isHyperLinkReady
 {
-    if(Textview.selectedRange.length > 0)
+    if(textView.selectedRange.length > 0)
         return YES;
     return NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateBold:(BOOL)bold
 {
-    if(Textview.selectedRange.length > 0)
-        [Textview.attribString setTextBold:bold range:Textview.selectedRange];
+    if(textView.selectedRange.length > 0)
+        [textView.attribString setTextBold:bold range:textView.selectedRange];
     else
-        Textview.boldText = bold;
+        textView.boldText = bold;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateItalic:(BOOL)italic
 {
-    if(Textview.selectedRange.length > 0)
-        [Textview.attribString setTextItalic:italic range:Textview.selectedRange];
+    if(textView.selectedRange.length > 0)
+        [textView.attribString setTextItalic:italic range:textView.selectedRange];
     else
-        Textview.italizeText = italic;
+        textView.italizeText = italic;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateUnderLine:(BOOL)isUnder
 {
-    if(Textview.selectedRange.length > 0)
-        [Textview.attribString setTextIsUnderlined:isUnder range:Textview.selectedRange];
+    if(textView.selectedRange.length > 0)
+        [textView.attribString setTextIsUnderlined:isUnder range:textView.selectedRange];
     else
-        Textview.underlineText = isUnder;
+        textView.underlineText = isUnder;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateStrike:(BOOL)strike
 {
-    if(Textview.selectedRange.length > 0)
-        [Textview.attribString setTextStrikeOut:strike range:Textview.selectedRange];
+    if(textView.selectedRange.length > 0)
+        [textView.attribString setTextStrikeOut:strike range:textView.selectedRange];
     else
-        Textview.strikeText = strike;
+        textView.strikeText = strike;
     
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateAlignment:(NSInteger)align
 {
-    Textview.textAlignment = align;
+    textView.textAlignment = align;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)updateList:(NSInteger)listType
@@ -313,9 +312,9 @@
     GPTableTextItem* item = (GPTableTextItem*)object;
     if([item.NavURL isEqualToString:HYPER_LINK])
     {
-        NSString* text = [Textview.attribString.string substringWithRange:Textview.selectedRange];
+        NSString* text = [textView.attribString.string substringWithRange:textView.selectedRange];
         NSString* link = nil;
-        NSDictionary* attribs = [Textview.attribString attributesAtIndex:Textview.selectedRange.location longestEffectiveRange:NULL inRange:Textview.selectedRange];
+        NSDictionary* attribs = [textView.attribString attributesAtIndex:textView.selectedRange.location longestEffectiveRange:NULL inRange:textView.selectedRange];
         link = [attribs objectForKey:HYPER_LINK];
         HTMLLinkViewController* linkview = [[[HTMLLinkViewController alloc] initWithText:text link:link] autorelease];
         linkview.delegate = self;
@@ -328,27 +327,27 @@
         }
         return;
     }
-    int fontSize = Textview.font.pointSize;
-    NSString* fontName = Textview.font.fontName;
+    int fontSize = textView.font.pointSize;
+    NSString* fontName = textView.font.fontName;
     NSString* type = [item.Properties objectForKey:@"type"];
     if([type isEqualToString:KEYWORD_HTML_COLOR])
-        Textview.textColor = item.color;
+        textView.textColor = item.color;
     else if([type isEqualToString:KEYWORD_HTML_SIZE])
         fontSize = item.font.pointSize;
     else if([type isEqualToString:KEYWORD_HTML_FONT])
         fontName = item.text;
     
-    if(Textview.selectedRange.length > 0)
+    if(textView.selectedRange.length > 0)
     {
         if([type isEqualToString:KEYWORD_HTML_COLOR])
-            [Textview.attribString setTextColor:item.color range:Textview.selectedRange];
+            [textView.attribString setTextColor:item.color range:textView.selectedRange];
         else if([type isEqualToString:KEYWORD_HTML_SIZE])
-            [Textview.attribString setFontName:fontName size:fontSize range:Textview.selectedRange];
+            [textView.attribString setFontName:fontName size:fontSize range:textView.selectedRange];
         else if([type isEqualToString:KEYWORD_HTML_FONT])
-            [Textview.attribString setFontName:fontName size:fontSize range:Textview.selectedRange];
+            [textView.attribString setFontName:fontName size:fontSize range:textView.selectedRange];
     }
     else
-        Textview.font = [UIFont fontWithName:fontName size:fontSize];
+        textView.font = [UIFont fontWithName:fontName size:fontSize];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
@@ -361,7 +360,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)PostText
 {
-    NSString* rawhtml = [Textview.attribString convertToHTML];
+    NSString* rawhtml = [textView.attribString convertToHTML];
     if([delegate respondsToSelector:@selector(HTMLDidPost:)])
         [delegate HTMLDidPost:rawhtml];
 }
@@ -373,11 +372,11 @@
             [(HTMLSettingsViewController*)navBar.topViewController setToDefault:[self createSettingsQuery]];
             isEditing = YES;
             if(GPIsPad())
-                [self.Popover presentPopoverFromBarButtonItem:editButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                [self.popover presentPopoverFromBarButtonItem:editButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             else
             {
-                [Textview resignFirstResponder];
-                Textview.userInteractionEnabled = NO;
+                [textView resignFirstResponder];
+                textView.userInteractionEnabled = NO;
                 [self.view addSubview:navBar.view];
                 [UIView beginAnimations:nil context:nil];
                 [UIView setAnimationDuration:0.2];
@@ -394,7 +393,7 @@
         }
         else if(GPIsPad())
         {
-            [self.Popover dismissPopoverAnimated:YES];
+            [self.popover dismissPopoverAnimated:YES];
             isEditing = NO;
         }
         else
@@ -403,7 +402,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)CancelText
 {
-    if(![Textview.attribString.mutableString isEqualToString:@""])
+    if(![textView.attribString.mutableString isEqualToString:@""])
     {
         UIAlertView *alert = [[UIAlertView alloc] init];
         [alert setTitle:@"Confirm"];
@@ -435,18 +434,18 @@
 //sub class createSettingsQuery if you have your own custom settings
 -(NSDictionary*)createSettingsQuery
 {
-    BOOL isItalic = Textview.italizeText;
-    BOOL isBold = Textview.boldText;
-    BOOL isStrike = Textview.strikeText;
-    BOOL isUnder = Textview.underlineText;
-    CGFloat size = Textview.font.pointSize;
-    NSString* fontName = Textview.font.fontName;
-    UIColor* textcolor = Textview.textColor;
-    CTTextAlignment alignment = Textview.textAlignment;
+    BOOL isItalic = textView.italizeText;
+    BOOL isBold = textView.boldText;
+    BOOL isStrike = textView.strikeText;
+    BOOL isUnder = textView.underlineText;
+    CGFloat size = textView.font.pointSize;
+    NSString* fontName = textView.font.fontName;
+    UIColor* textcolor = textView.textColor;
+    CTTextAlignment alignment = textView.textAlignment;
     
-    if(Textview.selectedRange.location != NSNotFound && Textview.selectedRange.location > 0 && Textview.selectedRange.location < Textview.attribString.length)
+    if(textView.selectedRange.location != NSNotFound && textView.selectedRange.location > 0 && textView.selectedRange.location < textView.attribString.length)
     {
-        NSDictionary* attributes = [Textview.attribString attributesAtIndex:Textview.selectedRange.location effectiveRange:NULL];
+        NSDictionary* attributes = [textView.attribString attributesAtIndex:textView.selectedRange.location effectiveRange:NULL];
         
         CTFontRef font = (CTFontRef)[attributes objectForKey:(NSString*)kCTFontAttributeName];
         CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(font);
@@ -498,9 +497,9 @@
 {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)HTMLTextViewDidUpdateText:(HTMLTextView *)textView text:(NSString*)text
+- (void)HTMLTextViewDidUpdateText:(HTMLTextView *)htmlTextView text:(NSString*)text
 {
-    if([text isEqualToString:@"\n"] && textView.attribString.length > 1 && isspace([textView.attribString.string characterAtIndex:textView.selectedRange.location-2]) )
+    if([text isEqualToString:@"\n"] && htmlTextView.attribString.length > 1 && isspace([htmlTextView.attribString.string characterAtIndex:textView.selectedRange.location-2]) )
     {
         isOrderList = isUnorderList = NO;
     }
@@ -515,35 +514,35 @@
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)HTMLTextView:(HTMLTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+- (BOOL)HTMLTextView:(HTMLTextView *)htmlTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     [self resizeContentArea:textView];
     return YES;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)resizeContentArea:(HTMLTextView *)textView
+-(void)resizeContentArea:(HTMLTextView *)htmlTextView
 {
     int keyboard = keyboardFrame.size.height;
     int check = self.view.frame.size.height - keyboard;
-    int h = textView.contentSize.height + 20;
+    int h = htmlTextView.contentSize.height + 20;
     if(h < self.view.frame.size.height)
         h = self.view.frame.size.height;
-    if((textView.contentSize.height) > check-10)
+    if((htmlTextView.contentSize.height) > check-10)
     {
         h += keyboard + 70;
-        int yoffset = textView.contentSize.height - oldOffset;
+        int yoffset = htmlTextView.contentSize.height - oldOffset;
         
         CGPoint offset = contentView.contentOffset;
         offset.y += yoffset;
         [contentView setContentOffset:offset animated:YES];
     }
-    contentView.contentSize = CGSizeMake(textView.contentSize.width, h);
+    contentView.contentSize = CGSizeMake(htmlTextView.contentSize.width, h);
     
-    CGRect frame = textView.frame;
+    CGRect frame = htmlTextView.frame;
     frame.size.height = h;
-    textView.frame = frame;
+    htmlTextView.frame = frame;
     
-    oldOffset = textView.contentSize.height;
+    oldOffset = htmlTextView.contentSize.height;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -557,7 +556,7 @@
 -(void)dealloc
 {
     [navBar release];
-    [Textview release];
+    [textView release];
     [contentView release];
     [super dealloc];
 }

@@ -49,7 +49,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) 
     {
-        sections = [[NSMutableArray alloc] initWithCapacity:2];
+        self.tableView.sections = [[NSMutableArray alloc] initWithCapacity:2];
         self.contentSizeForViewInPopover = CGSizeMake(320, 500);
 
     }
@@ -76,8 +76,6 @@
         }
         else
             self.navigationItem.titleView = SegControl;
-        
-        [self setoptionsAtIndex:0];
     }
     return self;
 }
@@ -85,14 +83,18 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor underPageBackgroundColor];
+    self.tableView.backgroundColor = self.view.backgroundColor;
+    self.tableView.sections = [NSMutableArray array];
+    [self setoptionsAtIndex:0];
     if(!GPIsPad())
     {
         CGRect frame =  self.view.frame;
         frame.size.height -= 230;
         self.view.frame = frame;
-        frame =  _tableView.frame;
+        frame =  self.tableView.frame;
         frame.size.height -= 190;
-        _tableView.frame = frame;
+        self.tableView.frame = frame;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +120,8 @@
     [Settings release];
     Settings = [query retain];
     [SegControl setSelectedSegmentIndex:0];
-    [self setoptionsAtIndex:0];
+    if(self.tableView)
+        [self setoptionsAtIndex:0];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //sub class these to customize WISWIG edit options
@@ -126,8 +129,8 @@
 -(void)setoptionsAtIndex:(int)index
 {
     currentIndex = index;
-    [sections removeAllObjects];
-    [items removeAllObjects];
+    [self.tableView.sections removeAllObjects];
+    [self.tableView.items removeAllObjects];
     if(index == 0)
         [self setupStyleMenu];
     else if (index == 1)
@@ -140,7 +143,7 @@
     if(![disableSettings objectForKey:HTML_SETTINGS_TEXT_STYLE] || [[disableSettings objectForKey:HTML_SETTINGS_TEXT_STYLE] boolValue])
     {
         NSMutableArray* firstSection = [NSMutableArray array];
-        [sections addObject:@"Text Style"];
+        [self.tableView.sections addObject:@"Text Style"];
         //UIView* buttonview = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)] autorelease];
         
         NSMutableArray* segmentItems = [NSMutableArray arrayWithCapacity:4];
@@ -202,13 +205,13 @@
             [firstSection addObject:fontItem];
         }
         
-        [items addObject:firstSection];
+        [self.tableView.items addObject:firstSection];
     }
     
     if(![disableSettings objectForKey:HTML_SETTINGS_PARA_STYLE] || [[disableSettings objectForKey:HTML_SETTINGS_PARA_STYLE] boolValue])
     {
         NSMutableArray* secondSection = [NSMutableArray array];
-        [sections addObject:@"Paragraph Style"];
+        [self.tableView.sections addObject:@"Paragraph Style"];
         NSMutableArray* segmentItems = [NSMutableArray arrayWithCapacity:4];
         int align = [[Settings objectForKey:@"alignment"] intValue];
         
@@ -278,7 +281,7 @@
             [secondSection addObject:item];
         }
         
-        [items addObject:secondSection];
+        [self.tableView.items addObject:secondSection];
     }
     
     
@@ -303,8 +306,8 @@
             text = @"Create Link";
         }
     }
-    [sections addObject:@"Create Link"];
-    [items addObject:[NSArray arrayWithObject:[GPTableTextItem itemWithText:text font:[UIFont boldSystemFontOfSize:17] color:color alignment:UITextAlignmentLeft url:link]]];
+    [self.tableView.sections addObject:@"Create Link"];
+    [self.tableView.items addObject:[NSArray arrayWithObject:[GPTableTextItem itemWithText:text font:[UIFont boldSystemFontOfSize:17] color:color alignment:UITextAlignmentLeft url:link]]];
     [self.tableView reloadData];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

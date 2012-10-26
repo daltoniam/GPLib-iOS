@@ -78,7 +78,7 @@
         self.view.backgroundColor = [UIColor underPageBackgroundColor]; //scrollViewTexturedBackgroundColor
     else
         self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    sections = [[NSMutableArray alloc] initWithObjects:@"Link", nil];
+    self.tableView.sections = [[NSMutableArray alloc] initWithObjects:@"Link", nil];
     
     UITextField* linkfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 44)];
     linkfield.delegate = self;
@@ -96,7 +96,7 @@
     textfield.enablesReturnKeyAutomatically = YES;
     textfield.clearButtonMode = UITextFieldViewModeWhileEditing;
     [textfield becomeFirstResponder];
-    [items addObject:[NSArray arrayWithObjects:linkfield,textfield, nil]];
+    [self.tableView.items addObject:[NSArray arrayWithObjects:linkfield,textfield, nil]];
     [linkfield release];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

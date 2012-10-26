@@ -100,7 +100,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setBar:YES];
+    //[self setBar:YES];
     ScrollView.contentSize = [self contentSizeForScrollView];
     [self updatePages];
 }
@@ -110,9 +110,10 @@
     [self updatePages];
 }
 /////////////////////////////////////////////////////////////////////////////////////
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    [self setBar:YES];
+    if(decelerate)
+        [self setBar:YES];
 }
 /////////////////////////////////////////////////////////////////////////////////////
 //does the magic.
@@ -187,7 +188,7 @@
     page.index = index;
     page.frame = [self frameForPageAtIndex:index];
     [page displayImage:[PhotoSource objectAtIndex:index]];
-    [self setBar:NO];
+    //[self setBar:NO];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tap.numberOfTapsRequired = 1;
     [page addGestureRecognizer:tap];

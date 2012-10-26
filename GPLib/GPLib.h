@@ -31,11 +31,20 @@
  */
 //
 
+//old will be removed in the future
+#import "GPNavigator.h"
+#import "GPOldTableViewController.h"
+#import "GPOldModel.h"
+#import "GPTableDragRefresh.h"
+#import "GPOldTableSearchController.h"
+#import "GPPostingTableViewController.h"
+
+
 /// GPHTTPRequest
 #import "GPHTTPRequest.h"
 
-//launcher
-#import "GPNavigator.h"
+//navigator
+#import "GPNav.h"
 
 //GPUitls
 #import "GPUtils.h"
@@ -128,11 +137,4 @@
 #import "GPRevealViewController.h"
 //addtions
 #import "UIImage+Additions.h"
-
-//old will be removed in the future
-#import "GPOldTableViewController.h"
-#import "GPOldModel.h"
-#import "GPTableDragRefresh.h"
-#import "GPOldTableSearchController.h"
-#import "GPPostingTableViewController.h"
 

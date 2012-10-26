@@ -110,7 +110,7 @@ NSLocale* CurrentLocale()
 {
     NSTimeInterval elapsed = abs([self timeIntervalSinceNow]);
     if (elapsed <= 1)
-        return @"just a moment ago";
+        return NSLocalizedString(@"just a moment ago", nil);
     
     else if (elapsed < MINUTE) 
     {
@@ -118,21 +118,21 @@ NSLocale* CurrentLocale()
         return [NSString stringWithFormat:@"%d seconds ago", seconds];
     } 
     else if (elapsed < 2*MINUTE)
-        return @"about a minute ago";
+        return NSLocalizedString(@"about a minute ago",nil);
         
     else if (elapsed < HOUR) 
     {
         int mins = (int)(elapsed/MINUTE);
-        return [NSString stringWithFormat:@"%d minutes ago", mins];
+        return [NSString stringWithFormat:@"%d %@", mins,NSLocalizedString(@"minutes ago",nil)];
         
     } 
     else if (elapsed < HOUR*1.5)
-        return @"about an hour ago";
+        return NSLocalizedString(@"about an hour ago",nil);
         
     else if (elapsed < DAY) 
     {
         int hours = (int)((elapsed+HOUR/2)/HOUR);
-        return [NSString stringWithFormat:@"%d hours ago", hours];
+        return [NSString stringWithFormat:@"%d %@", hours,NSLocalizedString(@"hours ago",nil)];
     } else 
         return [self formatDateTime];
 }

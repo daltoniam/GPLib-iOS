@@ -156,6 +156,9 @@
 //this is the searchController used for searching, (the searchBar)
 @property(nonatomic,retain)UISearchDisplayController* searchController;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//forward properties
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //set if you want the ScrollIndicator to show. Default is YES.
 @property(nonatomic,assign)BOOL showsHorizontalScrollIndicator;
 
@@ -167,6 +170,12 @@
 
 //check the contentSize
 @property(nonatomic,assign,readonly)CGSize contentSize;
+
+//set the tableViewHeader
+@property(nonatomic,retain)UIView* tableHeaderView;
+
+//set the tableViewFooter
+@property(nonatomic,retain)UIView* tableFooterView;
 
 -(id)initWithFrame:(CGRect)frame isGrouped:(BOOL)grouped;
 -(id)init:(BOOL)grouped;
@@ -207,6 +216,9 @@
 
 //scroll to a indexPath
 -(void)scrollToIndexPath:(NSIndexPath*)path scrollPostition:(UITableViewScrollPosition)pos animated:(BOOL)animated;
+
+//make a form cell become the first responder
+-(void)setFirstResponder:(id)object;
 
 //adding/removing to tableView with animation
 

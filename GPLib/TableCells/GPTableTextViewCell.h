@@ -51,4 +51,6 @@
 @property(nonatomic,assign)id<GPTableTextViewCellDelegate>delegate;
 @property(nonatomic,retain)UITextView* textView;
 
+-(BOOL)becomeFirstResponder;
+
 @end

@@ -55,4 +55,6 @@
 
 -(void)returnKeyTapped;
 
+-(BOOL)becomeFirstResponder;
+
 @end

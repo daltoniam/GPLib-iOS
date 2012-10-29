@@ -51,10 +51,11 @@
     UIView* lineView;
     UITextView* textView;
     UIScrollView* scrollView;
-    NSMutableArray* searchItems;
+    //NSMutableArray* searchItems;
     BOOL shouldShowPicker;
     BOOL isPosting;
     id<GPMessagePostViewDelegate> delegate;
+    NSMutableArray* allItems;
 }
 -(void)postText;
 -(void)cancelText;

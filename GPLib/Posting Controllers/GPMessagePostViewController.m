@@ -53,7 +53,7 @@
                                                                                  style: UIBarButtonItemStyleBordered
                                                                                 target: self
                                                                                 action:@selector(cancelText)] autorelease];
-        searchItems = [[NSMutableArray alloc] init];
+        allItems = [[NSMutableArray alloc] init];
         shouldShowPicker = YES;
     }
     return self;
@@ -205,7 +205,7 @@
         //[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         [field addItem:[textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] ];
         [self showTableView:NO];
-        [searchItems removeAllObjects];
+        [self.tableView.items removeAllObjects];
     }
     if(textField.text.length > 1)
     {
@@ -215,7 +215,7 @@
     else
     {
         [self showTableView:NO];
-        [searchItems removeAllObjects];
+        [self.tableView.items removeAllObjects];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,14 +295,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)searchTable:(NSString*)text
 {
-    [searchItems removeAllObjects];
-    for(id item in self.tableView.items)
+    [self.tableView.items removeAllObjects];
+    for(id item in allItems)
     {
         if([self filterItems:item text:text])
-            [searchItems addObject:item];
+            [self.tableView.items addObject:item];
     }
     [self.tableView reloadData];
-    if(searchItems.count == 0)
+    if(self.tableView.items.count == 0)
         [self showTableView:NO];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -310,7 +310,8 @@
 -(void)didSelectObject:(id)object atIndexPath:(NSIndexPath *)indexPath
 {
     [self showTableView:NO];
-    [searchItems removeAllObjects];
+    [self.tableView.items removeAllObjects];
+    [self.tableView reloadData];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 -(UIColor*)tableBackground
@@ -318,7 +319,7 @@
     return [UIColor colorWithWhite:0.95 alpha:0.7];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+/*- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [searchItems count];
     //return [super tableView:tableView numberOfRowsInSection:section];
@@ -330,7 +331,7 @@
         return [searchItems objectAtIndex:indexPath.row];
     return nil;
     //return [super tableView:tableView objectForRowAtIndexPath:indexPath];
-}
+}*/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //sub class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -368,7 +369,7 @@
     [lineView release];
     [textView release];
     [scrollView release];
-    [searchItems release];
+    [allItems release];
     [super dealloc];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////

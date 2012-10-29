@@ -68,7 +68,7 @@
         [items removeAllObjects];
         isLoading = YES;
         NSString* hostName = [[NSURL URLWithString:self.URL] host];
-        if(![GPReachability isHostReachable:hostName])
+        if(hostName && ![GPReachability isHostReachable:hostName])
         {
             page = 1;
             [self noConnect];

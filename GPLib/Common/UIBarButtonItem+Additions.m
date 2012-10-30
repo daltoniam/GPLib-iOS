@@ -35,7 +35,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImage+Additions.h"
 #import "GPButton.h"
-#import "GPBackArrowButton.h"
 #import "GPBarButtonItem.h"
 
 @implementation UIBarButtonItem (Additions)

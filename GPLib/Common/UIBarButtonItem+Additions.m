@@ -40,8 +40,10 @@
 
 @implementation UIBarButtonItem (Additions)
 
+static UIImage* backArrowImage;
+static UIImage* backgroundImage;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+ (id) customButtonWithBack:(BOOL)isBack image:(UIImage*)image edgeInsets:(UIEdgeInsets)edgeInsets 
+/*+ (id) customButtonWithBack:(BOOL)isBack image:(UIImage*)image edgeInsets:(UIEdgeInsets)edgeInsets
                       title:(NSString *)title target:(id)target selector:(SEL)selector color:(UIColor*)color
 {
     GPButton* customButton = nil;
@@ -107,74 +109,80 @@
     GPBarButtonItem* item = [[[GPBarButtonItem alloc] initWithCustomView:customButton] autorelease];
     item.enabled = YES;
     return item;
-}
+}*/
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBarButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector color:(UIColor*)color
++(void)setSharedBackgroundImage:(UIImage*)image
 {
-    return [self customButtonWithBack:NO
-                                image:image
-                           edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f) 
-                                title:nil 
-                               target:target 
-                             selector:selector
-                                color:color];
+    [backgroundImage release];
+    backgroundImage = [image retain];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBarImage:(UIImage*)image target:(id)target selector:(SEL)selector
++(void)setSharedBackArrowBackgroundImage:(UIImage*)image
 {
-    return [self customButtonWithBack:NO
-                                image:image
-                           edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f) 
-                                title:nil 
-                               target:target 
-                             selector:selector
-                                color:[UIColor clearColor]];
+    [backArrowImage release];
+    backArrowImage = [image retain];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBarButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector color:(UIColor*)color
++ (GPBarButtonItem*)customButtonWithBack:(BOOL)isBack image:(UIImage*)image edgeInsets:(UIEdgeInsets)edgeInsets
+title:(NSString *)title target:(id)target selector:(SEL)selector noBG:(BOOL)noBG
 {
-    return [self customButtonWithBack:NO
-                                image:nil
-                           edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f) 
-                                title:title 
-                               target:target 
-                             selector:selector
-                                color:color];
+    UIButton* customButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [customButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    customButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+    customButton.titleLabel.shadowColor = [UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.25f];
+    customButton.titleLabel.shadowOffset = CGSizeMake(0.0f, -1.0f);
+    customButton.titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+    customButton.titleEdgeInsets = edgeInsets;
+    [customButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [customButton setTitleColor:[UIColor colorWithWhite:1 alpha:0.3] forState:UIControlStateDisabled];
+    [customButton setTitle:title forState:UIControlStateNormal];
+    
+    if(isBack)
+        [customButton setBackgroundImage:backArrowImage forState:UIControlStateNormal];
+    else if(!noBG)
+        [customButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+
+    
+    if(image)
+    {
+        [customButton setImage:image forState:UIControlStateNormal];
+        [customButton setImage:image forState:UIControlStateSelected];
+    }
+    
+    CGSize size = CGSizeMake(30.0f, 30.0f);
+    if (title != nil)
+        size = [[NSString stringWithString:title] sizeWithFont:customButton.titleLabel.font];
+    
+    //might need to caculate and scale image here
+    float pad = 20.0f;
+    if(image)
+        pad = 10.0f;
+    customButton.frame = CGRectMake(0.0f, 0.0f, size.width + pad, 30.0f);
+    //customButton.layer.shouldRasterize = YES;
+    //customButton.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    GPBarButtonItem* item = [[[GPBarButtonItem alloc] initWithCustomView:customButton] autorelease];
+    item.enabled = YES;
+    return item;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBackButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector color:(UIColor*)color
-{    
-    return [self customButtonWithBack:YES 
-                                image:nil
-                           edgeInsets:UIEdgeInsetsMake(0.0f, 11.0f, 0.0f, 5.0f) 
-                                title:title 
-                               target:target 
-                             selector:selector
-                                color:color];
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBarButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector
++(id)customButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector
 {
-    UIColor* color = nil;
-    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
-        color = [GPBarButtonItem darkenColor:[[UINavigationBar appearance] tintColor] point:0.1];
-    return [UIBarButtonItem customBarButtonWithImage:image target:target selector:selector color:color];
+    return [self customButtonWithBack:NO image:image edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:nil target:target selector:selector noBG:NO];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBackButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector
++(id)customButtonWithTitle:(NSString*)title target:(id)target selector:(SEL)selector
 {
-    UIColor* color = nil;
-    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
-        color = [GPBarButtonItem darkenColor:[[UINavigationBar appearance] tintColor] point:0.1];
-    return [UIBarButtonItem customBackButtonWithTitle:title target:target selector:selector color:color];
+    return [self customButtonWithBack:NO image:nil edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:title target:target selector:selector noBG:NO];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)customBarButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector
++(id)customImage:(UIImage*)image target:(id)target selector:(SEL)selector
 {
-    UIColor* color = nil;
-    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
-        color = [GPBarButtonItem darkenColor:[[UINavigationBar appearance] tintColor] point:0.1];
-    return [UIBarButtonItem customBarButtonWithTitle:title target:target selector:selector color:color];
+    return [self customButtonWithBack:NO image:image edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:nil target:target selector:selector noBG:YES];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(id)customButtonWithBack:(NSString*)title target:(id)target selector:(SEL)selector
+{
+    return [self customButtonWithBack:YES image:nil edgeInsets:UIEdgeInsetsMake(0.0f, 11.0f, 0.0f, 5.0f)  title:title target:target selector:selector noBG:NO];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @end

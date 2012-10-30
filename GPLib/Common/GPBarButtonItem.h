@@ -37,4 +37,8 @@
 
 
 +(UIColor*)darkenColor:(UIColor*)color point:(CGFloat)val;
+
+-(void)setBackgroundImage:(UIImage *)backgroundImage;
+
+
 @end

@@ -549,7 +549,7 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         {
             UIViewController* backViewController = [navigationController.viewControllers objectAtIndex:(navigationController.viewControllers.count - 2)];
             NSString* backText = backViewController.title;
-            UIBarButtonItem* newBackButton = [UIBarButtonItem customBackButtonWithTitle:backText target:navigationController selector:@selector(popViewControllerAnimated:)];
+            UIBarButtonItem* newBackButton = [UIBarButtonItem customButtonWithBack:backText target:navigationController selector:@selector(popViewControllerAnimated:)];
             viewController.navigationItem.leftBarButtonItem = newBackButton;
             viewController.navigationItem.hidesBackButton = YES;
         }

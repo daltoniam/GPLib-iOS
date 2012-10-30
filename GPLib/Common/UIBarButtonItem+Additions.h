@@ -35,15 +35,12 @@
 
 @interface UIBarButtonItem (Additions)
 
-+(id)customBarButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector color:(UIColor*)color;
-+(id)customBackButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector color:(UIColor*)color;
-+(id)customBarButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector color:(UIColor*)color;
++(id)customButtonWithTitle:(NSString*)title target:(id)target selector:(SEL)selector;
++(id)customButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector;
++(id)customImage:(UIImage*)image target:(id)target selector:(SEL)selector;
++(id)customButtonWithBack:(NSString*)title target:(id)target selector:(SEL)selector;
 
-//using iOS 5 apperance APIs to set color
-+(id) customBarButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector;
-+(id) customBackButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector;
-+(id)customBarButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector;
-
-+(id)customBarImage:(UIImage*)image target:(id)target selector:(SEL)selector;
++(void)setSharedBackgroundImage:(UIImage*)image;
++(void)setSharedBackArrowBackgroundImage:(UIImage*)image;
 
 @end

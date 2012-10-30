@@ -49,21 +49,19 @@
     {
         NSBundle* bundle = [NSBundle bundleWithURL:url];
         NSString* path =  [bundle resourcePath];
-        image = [UIImage imageWithContentsOfFile:[path stringByAppendingPathComponent:name]];
-        if(!image || GPIsPad())
+        NSString* sizeD = name;
+        NSRange range = [sizeD rangeOfString:@"." options:NSBackwardsSearch];
+        if(range.location != NSNotFound)
         {
-            NSString* sizeD = name;
-            NSRange range = [sizeD rangeOfString:@"." options:NSBackwardsSearch];
-            if(range.location != NSNotFound)
-            {
-                NSString* ext = [sizeD substringFromIndex:range.location];
-                sizeD = [sizeD substringToIndex:range.location];
-                sizeD = [NSString stringWithFormat:@"%@@2x%@",sizeD,ext];
-            }
-            UIImage* temp = [UIImage imageWithContentsOfFile:[path stringByAppendingPathComponent:sizeD ]];
-            if(temp)
-                image = temp;
+            NSString* ext = [sizeD substringFromIndex:range.location];
+            sizeD = [sizeD substringToIndex:range.location];
+            sizeD = [NSString stringWithFormat:@"%@@2x%@",sizeD,ext];
         }
+        UIImage* temp = [UIImage imageWithContentsOfFile:[path stringByAppendingPathComponent:sizeD ]];
+        if(temp)
+            image = temp;
+        else
+            image = [UIImage imageWithContentsOfFile:[path stringByAppendingPathComponent:name]];
     }
     return image;
 }

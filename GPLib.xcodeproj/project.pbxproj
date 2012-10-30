@@ -80,8 +80,6 @@
 		5C3D90EC1577CA4A0052179A /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90E01577CA4A0052179A /* UIImage+Additions.m */; };
 		5C3D90ED1577CA4A0052179A /* UIViewController+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90E11577CA4A0052179A /* UIViewController+Additions.h */; };
 		5C3D90EE1577CA4A0052179A /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90E21577CA4A0052179A /* UIViewController+Additions.m */; };
-		5C3D90F51577F3880052179A /* GPBackArrowButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C3D90F31577F3870052179A /* GPBackArrowButton.h */; };
-		5C3D90F61577F3880052179A /* GPBackArrowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3D90F41577F3880052179A /* GPBackArrowButton.m */; };
 		5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */; };
 		5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */; };
 		5C5069A915C2D8F0007AD647 /* GPTableTextViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C5069A715C2D8F0007AD647 /* GPTableTextViewItem.h */; };
@@ -384,8 +382,6 @@
 		5C3D90E01577CA4A0052179A /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Additions.m"; path = "Common/UIImage+Additions.m"; sourceTree = "<group>"; };
 		5C3D90E11577CA4A0052179A /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Additions.h"; path = "Common/UIViewController+Additions.h"; sourceTree = "<group>"; };
 		5C3D90E21577CA4A0052179A /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Additions.m"; path = "Common/UIViewController+Additions.m"; sourceTree = "<group>"; };
-		5C3D90F31577F3870052179A /* GPBackArrowButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPBackArrowButton.h; sourceTree = "<group>"; };
-		5C3D90F41577F3880052179A /* GPBackArrowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBackArrowButton.m; sourceTree = "<group>"; };
 		5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPBarButtonItem.h; path = Common/GPBarButtonItem.h; sourceTree = "<group>"; };
 		5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPBarButtonItem.m; path = Common/GPBarButtonItem.m; sourceTree = "<group>"; };
 		5C5069A715C2D8F0007AD647 /* GPTableTextViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextViewItem.h; sourceTree = "<group>"; };
@@ -668,8 +664,6 @@
 				5C14314115488F3F00AEE1FA /* GPPillLabel.m */,
 				5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */,
 				5C63DEC9156A8BDD00C3EEC0 /* GPTabBarItem.m */,
-				5C3D90F31577F3870052179A /* GPBackArrowButton.h */,
-				5C3D90F41577F3880052179A /* GPBackArrowButton.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -1252,7 +1246,6 @@
 				5C3D90E91577CA4A0052179A /* UIBarButtonItem+Additions.h in Headers */,
 				5C3D90EB1577CA4A0052179A /* UIImage+Additions.h in Headers */,
 				5C3D90ED1577CA4A0052179A /* UIViewController+Additions.h in Headers */,
-				5C3D90F51577F3880052179A /* GPBackArrowButton.h in Headers */,
 				5C4D73CD15864F7900BD4C8D /* GPBarButtonItem.h in Headers */,
 				5C5F7D1D159CCB5100F42061 /* GPTableMailItem.h in Headers */,
 				5C5F7D22159CCB7100F42061 /* GPTableMailCell.h in Headers */,
@@ -1564,7 +1557,6 @@
 				5C3D90EA1577CA4A0052179A /* UIBarButtonItem+Additions.m in Sources */,
 				5C3D90EC1577CA4A0052179A /* UIImage+Additions.m in Sources */,
 				5C3D90EE1577CA4A0052179A /* UIViewController+Additions.m in Sources */,
-				5C3D90F61577F3880052179A /* GPBackArrowButton.m in Sources */,
 				5C4D73CE15864F7900BD4C8D /* GPBarButtonItem.m in Sources */,
 				5C5F7D1E159CCB5100F42061 /* GPTableMailItem.m in Sources */,
 				5C5F7D23159CCB7100F42061 /* GPTableMailCell.m in Sources */,

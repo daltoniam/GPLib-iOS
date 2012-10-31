@@ -84,4 +84,6 @@
 
 -(void)isSelected:(BOOL)selected;
 
+-(void)setImage:(UIImage*)image;
+
 @end

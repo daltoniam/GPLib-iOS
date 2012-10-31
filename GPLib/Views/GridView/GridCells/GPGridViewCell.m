@@ -58,19 +58,22 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setupImageView
 {
-    imageView = [[UIImageView alloc] init];
-    //imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-    //imageView.layer.shadowOffset = CGSizeMake(1, 2);
-    //imageView.layer.shadowOpacity = 0.5;
-    //imageView.layer.shadowRadius = 1.0;
-    //imageView.layer.shouldRasterize = YES;
-    //imageView.contentMode = UIViewContentModeScaleAspectFill;
-    //imageView.contentMode =  UIViewContentModeScaleToFill; 
-    //imageView.clipsToBounds = YES;
-    [containerView addSubview:imageView];
-    [blankView removeFromSuperview];
-    if(loadingLabel)
-        [imageView addSubview:loadingLabel];
+    if(!imageView)
+    {
+        imageView = [[UIImageView alloc] init];
+        //imageView.layer.shadowColor = [UIColor blackColor].CGColor;
+        //imageView.layer.shadowOffset = CGSizeMake(1, 2);
+        //imageView.layer.shadowOpacity = 0.5;
+        //imageView.layer.shadowRadius = 1.0;
+        //imageView.layer.shouldRasterize = YES;
+        //imageView.contentMode = UIViewContentModeScaleAspectFill;
+        //imageView.contentMode =  UIViewContentModeScaleToFill;
+        //imageView.clipsToBounds = YES;
+        [containerView addSubview:imageView];
+        [blankView removeFromSuperview];
+        if(loadingLabel)
+            [imageView addSubview:loadingLabel];
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setupTextLabel
@@ -314,12 +317,10 @@
         else
             isLowerText = NO;
         
-        if(item.image && !imageView)
+        if(item.image || item.imageURL)
             [self setupImageView];
         
         imageView.image = item.image;
-        if(!imageView.image)
-            imageView.image = item.image;
         [self isSelected:item.isSelected];
         drawShadow = item.drawDropShadow;
         isLoading = item.isLoading;
@@ -363,6 +364,11 @@
     if(sx < sy)
         limit = sx;
     return CGSizeMake(imageSize.width*limit, imageSize.height*limit);
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setImage:(UIImage*)image
+{
+    imageView.image = image;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

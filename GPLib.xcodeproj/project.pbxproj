@@ -134,8 +134,8 @@
 		5C8813E2151CF3F1006BCDC9 /* underline.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D6151CF3DD006BCDC9 /* underline.png */; };
 		5C8813E3151CF3F1006BCDC9 /* unorderlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C8813D7151CF3DD006BCDC9 /* unorderlist.png */; };
 		5C884029152B6957007AEE7D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C884028152B6957007AEE7D /* libxml2.dylib */; };
-		5C8840FC152E39FB007AEE7D /* GPGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8840FA152E39FB007AEE7D /* GPGridView.h */; };
-		5C8840FD152E39FB007AEE7D /* GPGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C8840FB152E39FB007AEE7D /* GPGridView.m */; };
+		5C8840FC152E39FB007AEE7D /* GPOldGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8840FA152E39FB007AEE7D /* GPOldGridView.h */; };
+		5C8840FD152E39FB007AEE7D /* GPOldGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C8840FB152E39FB007AEE7D /* GPOldGridView.m */; };
 		5C89A1911551C5D800BF73CE /* GPEmptyTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C89A18F1551C5D800BF73CE /* GPEmptyTableView.h */; };
 		5C89A1921551C5D800BF73CE /* GPEmptyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C89A1901551C5D800BF73CE /* GPEmptyTableView.m */; };
 		5C8E87A81639E3F9007B8F71 /* GPNavigator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C8E87A71639E3F9007B8F71 /* GPNavigator.h */; };
@@ -145,8 +145,12 @@
 		5C9B7D5615408D9100856C8A /* GPTableTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C9B7D5415408D9100856C8A /* GPTableTextFieldCell.m */; };
 		5C9B7D5A15408E2100856C8A /* GPTableTextFieldItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C9B7D5815408E2100856C8A /* GPTableTextFieldItem.h */; };
 		5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */; };
-		5CA6800015361109001719DC /* GPGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA67FFE15361109001719DC /* GPGridViewController.h */; };
-		5CA6800115361109001719DC /* GPGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA67FFF15361109001719DC /* GPGridViewController.m */; };
+		5CA6800015361109001719DC /* GPOldGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA67FFE15361109001719DC /* GPOldGridViewController.h */; };
+		5CA6800115361109001719DC /* GPOldGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA67FFF15361109001719DC /* GPOldGridViewController.m */; };
+		5CA883DB1641BEBD0060BCD1 /* GPGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA883D91641BEBD0060BCD1 /* GPGridView.h */; };
+		5CA883DC1641BEBD0060BCD1 /* GPGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA883DA1641BEBD0060BCD1 /* GPGridView.m */; };
+		5CA883E31641C0CB0060BCD1 /* GPGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA883E11641C0CB0060BCD1 /* GPGridViewController.h */; };
+		5CA883E41641C0CB0060BCD1 /* GPGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA883E21641C0CB0060BCD1 /* GPGridViewController.m */; };
 		5CA8D0A2162CB2C3009AC119 /* GPTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA8D0A0162CB2C3009AC119 /* GPTableView.h */; };
 		5CA8D0A3162CB2C3009AC119 /* GPTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA8D0A1162CB2C3009AC119 /* GPTableView.m */; };
 		5CD4F8B814DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
@@ -439,8 +443,8 @@
 		5C8813D6151CF3DD006BCDC9 /* underline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = underline.png; sourceTree = "<group>"; };
 		5C8813D7151CF3DD006BCDC9 /* unorderlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unorderlist.png; sourceTree = "<group>"; };
 		5C884028152B6957007AEE7D /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		5C8840FA152E39FB007AEE7D /* GPGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridView.h; path = GridView/GPGridView.h; sourceTree = "<group>"; };
-		5C8840FB152E39FB007AEE7D /* GPGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridView.m; path = GridView/GPGridView.m; sourceTree = "<group>"; };
+		5C8840FA152E39FB007AEE7D /* GPOldGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPOldGridView.h; path = GridView/GPOldGridView.h; sourceTree = "<group>"; };
+		5C8840FB152E39FB007AEE7D /* GPOldGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPOldGridView.m; path = GridView/GPOldGridView.m; sourceTree = "<group>"; };
 		5C89A18F1551C5D800BF73CE /* GPEmptyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPEmptyTableView.h; sourceTree = "<group>"; };
 		5C89A1901551C5D800BF73CE /* GPEmptyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPEmptyTableView.m; sourceTree = "<group>"; };
 		5C8E87A71639E3F9007B8F71 /* GPNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPNavigator.h; sourceTree = "<group>"; };
@@ -450,8 +454,12 @@
 		5C9B7D5415408D9100856C8A /* GPTableTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextFieldCell.m; sourceTree = "<group>"; };
 		5C9B7D5815408E2100856C8A /* GPTableTextFieldItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableTextFieldItem.h; sourceTree = "<group>"; };
 		5C9B7D5915408E2100856C8A /* GPTableTextFieldItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableTextFieldItem.m; sourceTree = "<group>"; };
-		5CA67FFE15361109001719DC /* GPGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridViewController.h; path = GridView/GPGridViewController.h; sourceTree = "<group>"; };
-		5CA67FFF15361109001719DC /* GPGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridViewController.m; path = GridView/GPGridViewController.m; sourceTree = "<group>"; };
+		5CA67FFE15361109001719DC /* GPOldGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPOldGridViewController.h; path = GridView/GPOldGridViewController.h; sourceTree = "<group>"; };
+		5CA67FFF15361109001719DC /* GPOldGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPOldGridViewController.m; path = GridView/GPOldGridViewController.m; sourceTree = "<group>"; };
+		5CA883D91641BEBD0060BCD1 /* GPGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridView.h; path = GridView/GPGridView.h; sourceTree = "<group>"; };
+		5CA883DA1641BEBD0060BCD1 /* GPGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridView.m; path = GridView/GPGridView.m; sourceTree = "<group>"; };
+		5CA883E11641C0CB0060BCD1 /* GPGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPGridViewController.h; path = GridView/GPGridViewController.h; sourceTree = "<group>"; };
+		5CA883E21641C0CB0060BCD1 /* GPGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridViewController.m; path = GridView/GPGridViewController.m; sourceTree = "<group>"; };
 		5CA8D0A0162CB2C3009AC119 /* GPTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPTableView.h; path = GPTableView/GPTableView.h; sourceTree = "<group>"; };
 		5CA8D0A1162CB2C3009AC119 /* GPTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPTableView.m; path = GPTableView/GPTableView.m; sourceTree = "<group>"; };
 		5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGPLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -810,12 +818,16 @@
 		5C8840F8152E39CC007AEE7D /* gridView */ = {
 			isa = PBXGroup;
 			children = (
+				5CA883D91641BEBD0060BCD1 /* GPGridView.h */,
+				5CA883DA1641BEBD0060BCD1 /* GPGridView.m */,
+				5CA883E11641C0CB0060BCD1 /* GPGridViewController.h */,
+				5CA883E21641C0CB0060BCD1 /* GPGridViewController.m */,
 				5C0F3598156D2CD30027A4BB /* GridCells */,
 				5C0F359D156D2CD30027A4BB /* GridItems */,
-				5CA67FFE15361109001719DC /* GPGridViewController.h */,
-				5CA67FFF15361109001719DC /* GPGridViewController.m */,
-				5C8840FA152E39FB007AEE7D /* GPGridView.h */,
-				5C8840FB152E39FB007AEE7D /* GPGridView.m */,
+				5CA67FFE15361109001719DC /* GPOldGridViewController.h */,
+				5CA67FFF15361109001719DC /* GPOldGridViewController.m */,
+				5C8840FA152E39FB007AEE7D /* GPOldGridView.h */,
+				5C8840FB152E39FB007AEE7D /* GPOldGridView.m */,
 			);
 			name = gridView;
 			path = Views;
@@ -1215,8 +1227,8 @@
 				5C88137B151A175A006BCDC9 /* HTMLSettingsViewController.h in Headers */,
 				5C881380151B6778006BCDC9 /* HTMLListViewController.h in Headers */,
 				5CE2636F1522106B0022ACA2 /* GPDrawExtras.h in Headers */,
-				5C8840FC152E39FB007AEE7D /* GPGridView.h in Headers */,
-				5CA6800015361109001719DC /* GPGridViewController.h in Headers */,
+				5C8840FC152E39FB007AEE7D /* GPOldGridView.h in Headers */,
+				5CA6800015361109001719DC /* GPOldGridViewController.h in Headers */,
 				5C9B7D5515408D9100856C8A /* GPTableTextFieldCell.h in Headers */,
 				5C9B7D5A15408E2100856C8A /* GPTableTextFieldItem.h in Headers */,
 				5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */,
@@ -1267,6 +1279,8 @@
 				5C833E7C1639D6A4006FB3EA /* GPNav.h in Headers */,
 				5C8E87A81639E3F9007B8F71 /* GPNavigator.h in Headers */,
 				5C8E87E6163B299C007B8F71 /* GPSlideOutViewController.h in Headers */,
+				5CA883DB1641BEBD0060BCD1 /* GPGridView.h in Headers */,
+				5CA883E31641C0CB0060BCD1 /* GPGridViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1526,8 +1540,8 @@
 				5C88137C151A175A006BCDC9 /* HTMLSettingsViewController.m in Sources */,
 				5C881381151B6778006BCDC9 /* HTMLListViewController.m in Sources */,
 				5CE263701522106B0022ACA2 /* GPDrawExtras.m in Sources */,
-				5C8840FD152E39FB007AEE7D /* GPGridView.m in Sources */,
-				5CA6800115361109001719DC /* GPGridViewController.m in Sources */,
+				5C8840FD152E39FB007AEE7D /* GPOldGridView.m in Sources */,
+				5CA6800115361109001719DC /* GPOldGridViewController.m in Sources */,
 				5C9B7D5615408D9100856C8A /* GPTableTextFieldCell.m in Sources */,
 				5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */,
 				5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */,
@@ -1577,6 +1591,8 @@
 				5C2F1CBE16304A2E001287D4 /* GPModel.m in Sources */,
 				5C833E7D1639D6A4006FB3EA /* GPNav.m in Sources */,
 				5C8E87E7163B299C007B8F71 /* GPSlideOutViewController.m in Sources */,
+				5CA883DC1641BEBD0060BCD1 /* GPGridView.m in Sources */,
+				5CA883E41641C0CB0060BCD1 /* GPGridViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

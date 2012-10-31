@@ -1,145 +1,96 @@
 //
-//  GPGridView.m
-//  GPLib
+//  GridView.m
+//  TestApp
 //
-//  Created by Dalton Cherry on 4/5/12.
-//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
-//
-/*
- http://github.com/daltoniam/GPLib-iOS
- 
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
- 
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
- */
+//  Created by Dalton Cherry on 10/30/12.
+//  Copyright (c) 2012 Basement Krew. All rights reserved.
 //
 
 #import "GPGridView.h"
-
-#define RADIANS(degrees) ((degrees * M_PI) / 180.0)
-
-@interface GPGridView()
-
--(void)updateGrid:(BOOL)rotate;
--(BOOL)isDisplayColumnForIndex:(NSInteger)index forRow:(NSInteger)row;
--(void)configureCell:(GPGridViewCell*)cell column:(NSInteger)col row:(NSInteger)row isRotate:(BOOL)rotate;
--(CGRect)cellFrameFor:(NSInteger)col atRow:(NSInteger)row isRotate:(BOOL)rotate;
--(NSInteger)getIndex:(NSInteger)col forRow:(NSInteger)row;
--(GPGridViewCell*)findCell:(NSInteger)column row:(NSInteger)row;
-
--(void)convertIndexToGrid:(NSInteger)index col:(NSInteger*)col row:(NSInteger*)row;
-
-@end
+#import <objc/runtime.h>
+#import "GPTableMoreItem.h"
+#import "GPGridMoreItem.h"
+#import "GPGridMoreCell.h"
+#import "GPHTTPRequest.h"
 
 @implementation GPGridView
 
-@synthesize dataSource;
-@dynamic delegate;
-@synthesize rowCount = rowCount,columnCount = columnCount, isEditing,visibleItems = visibleGridItems,gridViewHeader = gridViewHeader;
+@synthesize delegate,rowCount,rowSpacing,columnCount,columnSpacing,gridViewHeader,editing,items,rowHeight;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)commonInit
+{
+    visibleGridItems = [[NSMutableSet alloc] init];
+    recycledGridItems = [[NSMutableSet alloc] init];
+    columnCount = 3;
+    rowSpacing = columnSpacing = 10;
+    rowHeight = 100;
+    self.items = [[NSMutableArray alloc] init];
+    self.backgroundColor = [UIColor clearColor];
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)init
 {
     if(self = [super init])
     {
-        visibleGridItems = [[NSMutableSet alloc] init];
-        recycledGridItems = [[NSMutableSet alloc] init];
-        rowCount = 0;
-        columnCount = 0;
-        self.backgroundColor = [UIColor clearColor];
+        [self commonInit];
     }
     return self;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reloadData
+{
+    [self updateGrid];
+    [self recycleGrid];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//private stuff
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-    if(CGRectIsEmpty(originalFrame))
-        originalFrame = frame;
-    [self reloadData];
+    if(items)
+        [self reloadData];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setContentOffset:(CGPoint)contentOffset
 {
     [super setContentOffset:contentOffset];
-    [self updateGrid:NO];
+    if(items)
+        [self recycleGrid];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)reloadData
+-(void)updateGrid
 {
-    //for(GPGridViewCell* cell in visibleGridItems)
-    //    [cell removeFromSuperview];
-    for(UIView* view in self.subviews)
-        if([view isKindOfClass:[GPGridViewCell class]])
-            [view removeFromSuperview];
-    //[recycledGridItems removeAllObjects];
-    [visibleGridItems removeAllObjects];
-    UIInterfaceOrientation o = (UIInterfaceOrientation)[[UIApplication sharedApplication] statusBarOrientation];
-    columnCount = [self.dataSource numberOfColumnsInGridView:self orientation:o];
-    rowCount = [self.dataSource numberOfRowsInGridView:self];
-    rowHeight = [self.dataSource heightForRows:self];
-    topPadding = 20;
-    if([self.dataSource respondsToSelector:@selector(spacingBetweenRowsInGridView:)])
-        topPadding = [self.dataSource spacingBetweenRowsInGridView:self];
-    //self.contentSize = CGSizeMake(self.frame.size.width, (rowHeight*(rowCount+1))+(rowCount+topPadding) + topPadding*2 );
-    self.contentSize = CGSizeMake(self.frame.size.width, (rowHeight*rowCount)+(rowCount*topPadding) + topPadding + self.gridViewHeader.frame.size.height);
+    rowCount = items.count/columnCount;
+    if(items.count % columnCount)
+        rowCount++;
+    self.contentSize = CGSizeMake(self.frame.size.width, (rowHeight*rowCount)+((rowCount+1)*(rowSpacing+4)) + self.gridViewHeader.frame.size.height);
     if(self.contentSize.height < self.frame.size.height && self.gridViewHeader)
         self.contentSize = CGSizeMake(self.frame.size.width,self.frame.size.height+self.gridViewHeader.frame.size.height+10);
-
-    [self updateGrid:NO];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)didRotate:(UIInterfaceOrientation)toInterfaceOrientation
+-(void)recycleGrid
 {
-    for(UIView* view in self.subviews)
-        if([view isKindOfClass:[GPGridViewCell class]])
-            [view removeFromSuperview];
-    //[recycledGridItems removeAllObjects];
-    [visibleGridItems removeAllObjects];
-    columnCount = [self.dataSource numberOfColumnsInGridView:self orientation:toInterfaceOrientation];
-    rowCount = [self.dataSource numberOfRowsInGridView:self];
-    rowHeight = [self.dataSource heightForRows:self];
-    topPadding = 20;
-    if([self.dataSource respondsToSelector:@selector(spacingBetweenRowsInGridView:)])
-        topPadding = [self.dataSource spacingBetweenRowsInGridView:self];
-    [self updateGrid:YES];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)updateGrid:(BOOL)rotate
-{
-    [recycledGridItems minusSet:visibleGridItems];
-    //self.contentSize = CGSizeMake(self.frame.size.width, (rowHeight*rowCount) + ((rowCount+1)*topPadding));
-    // Calculate which rows and columns are visible
-    CGRect visibleBounds = self.bounds;
-    visibleBounds.origin.y -= rowHeight/2;
-    visibleBounds.size.height += rowHeight/2;
-    int firstRow = floorf(CGRectGetMinY(visibleBounds) / rowHeight);
-    int lastRow = floorf((CGRectGetMaxY(visibleBounds)) / rowHeight); //-1
-    firstRow = MAX(firstRow, 0);
-    lastRow  = MIN(lastRow, rowCount); //- 1
-    
-    if(firstRow > 0)
-    firstRow--;
-    //remove no longer visable pages
+    CGPoint point = self.contentOffset;
+    int firstNeededRow = point.y/rowHeight;
+    int lastNeededRow  = (point.y+self.bounds.size.height)/rowHeight;
+    firstNeededRow = MAX(firstNeededRow, 0);
+    lastNeededRow  = MIN(lastNeededRow, rowCount);
+    if(firstNeededRow > 0)
+        firstNeededRow--;
     for(GPGridViewCell* cell in visibleGridItems)
     {
-        if (cell.rowIndex < firstRow || cell.rowIndex > lastRow || cell.columnIndex > columnCount) 
+        if (cell.rowIndex < firstNeededRow || cell.rowIndex > lastNeededRow || cell.columnIndex > columnCount)
         {
             [recycledGridItems addObject:cell];
             [cell.layer removeAnimationForKey:@"wobble"];
@@ -148,8 +99,7 @@
     }
     [visibleGridItems minusSet:recycledGridItems];
     
-    // add missing pages
-    for (int i = firstRow; i <= lastRow; i++) 
+    for (int i = firstNeededRow; i <= lastNeededRow; i++)
     {
         for(int k = 0; k < columnCount; k++)
         {
@@ -157,19 +107,19 @@
             if(![self isDisplayColumnForIndex:k forRow:i])
             {
                 int index = [self getIndex:k forRow:i];
-                if(index < columnCount*rowCount)
+                if(index < items.count)
                 {
-                    GPGridViewCell* cell = [self.dataSource gridView:self viewAtIndex:index];
+                    GPGridViewCell* cell = [self cellForIndex:index];
                     if(cell)
                     {
-                        [self configureCell:cell column:k row:i isRotate:rotate];
+                        [self configureCell:cell column:k row:i];
                         [self addSubview:cell];
                         [visibleGridItems addObject:cell];
                     }
                 }
             }
         }
-    }   
+    }
     
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +127,7 @@
 {
     for(GPGridViewCell* cell in recycledGridItems)
     {
-        if ([cell.identifier isEqualToString:identifier] && ![self isDisplayColumnForIndex:cell.columnIndex forRow:cell.rowIndex]) 
+        if ([cell.identifier isEqualToString:identifier])
         {
             [cell retain];
             [recycledGridItems removeObject:cell];
@@ -190,9 +140,9 @@
 -(BOOL)isDisplayColumnForIndex:(NSInteger)index forRow:(NSInteger)row
 {
     BOOL foundPage = NO;
-    for (GPGridViewCell *cell in visibleGridItems) 
+    for (GPGridViewCell *cell in visibleGridItems)
     {
-        if (cell.columnIndex == index && cell.rowIndex == row) 
+        if (cell.columnIndex == index && cell.rowIndex == row)
         {
             foundPage = YES;
             break;
@@ -201,77 +151,22 @@
     return foundPage;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)configureCell:(GPGridViewCell*)cell column:(NSInteger)col row:(NSInteger)row isRotate:(BOOL)rotate
+-(void)configureCell:(GPGridViewCell*)cell column:(NSInteger)col row:(NSInteger)row
 {
     cell.rowIndex = row;
     cell.columnIndex = col;
     cell.delegate = self;
     cell.backgroundColor = [UIColor clearColor]; //grayColor
-    cell.frame = [self cellFrameFor:col atRow:row isRotate:rotate];
-    if(isEditing)
+    int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
+    int left = columnSpacing*(col+1) + (width*col);
+    int top = (rowSpacing*(row+1)) + (rowHeight*row);
+    if(top == 0)
+        top = rowSpacing;
+    if(left == 0)
+        left = columnSpacing;
+    cell.frame = CGRectMake(left, top, width, rowHeight);
+    if(editing)
         [self wiggleAnimation:cell];
-    //else
-    //    [cell.layer removeAnimationForKey:@"wobble"];
-    //cell.imageView.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
-    //[cell setNeedsLayout];
-
-    
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(GPGridViewCell*)findCell:(NSInteger)column row:(NSInteger)row
-{
-    for(GPGridViewCell* cell in visibleGridItems)
-    {
-        if(column == cell.columnIndex && row == cell.rowIndex)
-            return cell;
-    }
-    return nil;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(GPGridViewCell*)findCellAtIndex:(NSInteger)index
-{
-    for(GPGridViewCell* cell in visibleGridItems)
-    {
-        int i = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
-        if(i == index)
-            return cell;
-    }
-    return nil;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(CGRect)cellFrameFor:(NSInteger)col atRow:(NSInteger)row isRotate:(BOOL)rotate
-{
-    int width = 0;
-    if(rotate)
-    {
-        UIInterfaceOrientation o = (UIInterfaceOrientation)[[UIApplication sharedApplication] statusBarOrientation];
-        if(o == UIInterfaceOrientationLandscapeLeft || o == UIInterfaceOrientationLandscapeRight)
-            width = originalFrame.size.width/columnCount;
-        else
-        {
-            width = originalFrame.size.height/columnCount;
-            width+= 5;
-        }
-    }
-    else
-        width = self.frame.size.width/columnCount;
-    int leftpad = 30;
-    int toppad = 20;
-    if([self.dataSource respondsToSelector:@selector(spacingBetweenColumnsInGridView:)])
-        leftpad = [self.dataSource spacingBetweenColumnsInGridView:self];
-    if([self.dataSource respondsToSelector:@selector(spacingBetweenRowsInGridView:)])
-        toppad = [self.dataSource spacingBetweenRowsInGridView:self];
-
-    width -= leftpad + (leftpad/columnCount);
-    int left = col*width;
-    int top = row*rowHeight;
-    left += leftpad*(col+1);
-    top += toppad*(row+1);
-
-    if(self.gridViewHeader)
-        top += self.gridViewHeader.frame.size.height + 5;
-    
-    return CGRectMake(left, top, width, rowHeight);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSInteger)getIndex:(NSInteger)col forRow:(NSInteger)row
@@ -287,6 +182,71 @@
         }
     }
     return index;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(Class)classForObject:(id)object gridView:(GPGridView*)gridView
+{
+    if([self.delegate respondsToSelector:@selector(classForObject:tableView:)])
+    {
+        Class class = [self.delegate classForObject:object gridView:gridView];
+        if(class)
+            return class;
+    }
+    if([object isKindOfClass:[GPGridMoreItem class]])
+        return [GPGridMoreCell class];
+    else if([object isKindOfClass:[GPGridViewItem class]])
+        return [GPGridViewCell class];
+    return [GPGridViewCell class];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPGridViewCell*)cellForIndex:(int)index
+{
+    id object = [self.items objectAtIndex:index];
+    
+    if([object isKindOfClass:[GPTableMoreItem class]])
+    {
+        GPTableMoreItem* moreItem = (GPTableMoreItem*)object;
+        GPGridMoreItem* item = [GPGridMoreItem itemWithLoading:moreItem.text isAutoLoad:moreItem.isAutoLoad];
+        [self.items replaceObjectAtIndex:index withObject:item];
+        object = item;
+    }
+    Class cellClass = [self classForObject:object gridView:self];
+    const char* className = class_getName(cellClass);
+    NSString* identifier = [[NSString alloc] initWithBytesNoCopy:(char*)className
+                                                          length:strlen(className)
+                                                        encoding:NSASCIIStringEncoding freeWhenDone:NO];
+    GPGridViewCell* cell = [self dequeueGrid:identifier];
+    if(!cell)
+        cell = [[[cellClass alloc] initWithIdentifer:identifier] autorelease];
+    [identifier release];
+    
+    [cell setObject:object];
+    if(![object isKindOfClass:[GPGridMoreItem class]])
+        [self processImageURL:object];
+    
+    if ([object isKindOfClass:[GPGridMoreItem class]])
+    {
+        GPGridMoreItem* item = (GPGridMoreItem*)object;
+        if(item.isAutoLoad)
+        {
+            item.isLoading = YES;
+            [(GPGridMoreCell*)cell setAnimating:YES];
+            if([self.delegate respondsToSelector:@selector(modelShouldLoad)])
+                [self.delegate modelShouldLoad];
+        }
+    }
+    return cell;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPGridViewCell*)findCellAtIndex:(NSInteger)index
+{
+    for(GPGridViewCell* cell in visibleGridItems)
+    {
+        int i = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+        if(i == index)
+            return cell;
+    }
+    return nil;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)convertIndexToGrid:(NSInteger)index col:(NSInteger*)col row:(NSInteger*)row
@@ -307,52 +267,137 @@
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)gridCellWasSelected:(GPGridViewCell*)gridCell
+-(void)insertObject:(id)object index:(int)index
 {
-    if([self.delegate respondsToSelector:@selector(gridViewDidSelectItem:item:index:)])
-        [self.delegate gridViewDidSelectItem:self item:gridCell index:[self getIndex:gridCell.columnIndex forRow:gridCell.rowIndex]];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)gridTextLabelWasSelected:(UIButton*)button cell:(GPGridViewCell*)cell
-{
-    if([self.delegate respondsToSelector:@selector(gridViewDidSelectLabel:item:index:)])
-        [self.delegate gridViewDidSelectLabel:self item:cell index:[self getIndex:cell.columnIndex forRow:cell.rowIndex]];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)reloadCellsAtIndexes:(NSArray*)array
-{
-    for(NSNumber* index in array)
+    for(GPGridViewCell* cell in visibleGridItems)
     {
-        GPGridViewCell* cell = [self findCellAtIndex:index.intValue];
-        if(cell)
+        int i = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+        if(i >= index)
         {
-            [cell removeFromSuperview];
-            [visibleGridItems removeObject:cell];
-            GPGridViewCell* newcell = [self.dataSource gridView:self viewAtIndex:index.intValue];
             int col = 0;
             int row = 0;
-            [self convertIndexToGrid:index.integerValue col:&col row:&row];
-            [self configureCell:newcell column:col row:row isRotate:NO];
-            [self addSubview:newcell];
-            [visibleGridItems addObject:newcell];
+            [self convertIndexToGrid:i+1 col:&col row:&row];
+            [UIView animateWithDuration:0.25 animations:^{
+                [self configureCell:cell column:col row:row];
+            }];
         }
-        
     }
-
+    [self.items insertObject:object atIndex:index];
+    
+    GPGridViewCell* newCell = [self cellForIndex:index];
+    newCell.alpha = 0;
+    int col = 0;
+    int row = 0;
+    [self convertIndexToGrid:index col:&col row:&row];
+    [self configureCell:newCell column:col row:row];
+    
+    [UIView animateWithDuration:0.25 delay:0.15 options:0 animations:^{
+        [self addSubview:newCell];
+        [visibleGridItems addObject:newCell];
+        newCell.alpha = 1;
+    } completion:^(BOOL finished){
+        [self updateGrid];
+    }];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)editMode:(BOOL)state
+-(void)addObject:(id)object
 {
-    isEditing = state;
-    if(state)
+    [self insertObject:object index:items.count];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeObjectsAtIndexes:(NSArray*)indexes
+{
+    for(NSNumber* number in indexes)
+        [self removeObjectAtIndex:number.intValue multi:YES];
+    int i = 0;
+    for(NSNumber* number in indexes)
     {
-        for(GPGridViewCell* cell in visibleGridItems)
-            [self wiggleAnimation:cell];
+        [self.items removeObjectAtIndex:number.intValue-i];
+        i++;
     }
-    else
-    {
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeObjectAtIndex:(int)index
+{
+    [self removeObjectAtIndex:index multi:NO];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeObjectAtIndex:(int)index multi:(BOOL)multi
+{
+    if(!multi)
+        [self.items removeObjectAtIndex:index];
+    GPGridViewCell* findCell = [self findCellAtIndex:index];
+    [UIView animateWithDuration:0.25 animations:^{
+        findCell.alpha = 0;
+    } completion:^(BOOL finished){
+        [visibleGridItems removeObject:findCell];
+        [findCell removeFromSuperview];
         for(GPGridViewCell* cell in visibleGridItems)
-            [cell.layer removeAnimationForKey:@"wobble"];//cell.transform = CGAffineTransformIdentity;
+        {
+            int i = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+            if(i > index)
+            {
+                int col = 0;
+                int row = 0;
+                [self convertIndexToGrid:i-1 col:&col row:&row];
+                [UIView animateWithDuration:0.25 animations:^{
+                    [self configureCell:cell column:col row:row];
+                }];
+            }
+        }
+        [self updateGrid];
+    }];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//image queue processing
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPHTTPRequest*)imageRequest:(NSString*)URL
+{
+    __block GPHTTPRequest* request = [GPHTTPRequest requestWithURL:[NSURL URLWithString:URL]];
+    [request setCacheModel:GPHTTPCacheCustomTime];
+    [request setTimeout:60*60*1]; // Cache for 1 hour
+    [request setFinishBlock:^{
+        
+        int i = 0;
+        for(id object in items)
+        {
+            if([object isKindOfClass:[GPGridViewItem class]] && ![object isKindOfClass:[GPGridMoreItem class]])
+            {
+                GPGridViewItem* item = (GPGridViewItem*)object;
+                if([item.imageURL isEqualToString:request.URL.absoluteString])
+                {
+                    item.image = [UIImage imageWithData:[request responseData]];
+                    GPGridViewCell* cell = [self findCellAtIndex:i];
+                    [cell setImage:item.image];
+                }
+            }
+            i++;
+        }
+        [imageQueue removeObject:request.URL.absoluteString];
+        
+    }];
+    return request;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)processImageURL:(id)object
+{
+    if([object isKindOfClass:[GPGridViewItem class]])
+    {
+        if(!imageQueue)
+            imageQueue = [[NSMutableArray alloc] initWithCapacity:items.count];
+        if(!queue)
+        {
+            queue = [[NSOperationQueue alloc] init];
+            queue.maxConcurrentOperationCount = 4;
+        }
+        GPGridViewItem* item = (GPGridViewItem*)object;
+        if(!item.image && item.imageURL && ![imageQueue containsObject:item.imageURL])
+        {
+            [imageQueue addObject:item.imageURL];
+            [queue addOperation:[self imageRequest:item.imageURL]];
+        }
+        
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,104 +412,66 @@
     NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
     animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
     
-    animation.autoreverses = YES;  
+    animation.autoreverses = YES;
     animation.duration = 0.15;
     animation.repeatCount = HUGE_VALF;
     
     [view.layer addAnimation:animation forKey:@"wobble"];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//helper function for adding and deleting grid items
--(void)rowModify:(NSInteger)check new:(NSInteger)nIndex frame:(BOOL)f
+-(void)setEditing:(BOOL)edit
 {
-    GPGridViewCell* cell = [self findCellAtIndex:check];
-    int col = 0;
-    int row = 0;
-    [self convertIndexToGrid:nIndex col:&col row:&row];
-    if(f)
-        cell.frame = [self cellFrameFor:col atRow:row isRotate:NO];
+    editing = edit;
+    if(edit)
+        for(GPGridViewCell* cell in visibleGridItems)
+            [self wiggleAnimation:cell];
     else
+        for(GPGridViewCell* cell in visibleGridItems)
+            [cell.layer removeAnimationForKey:@"wobble"];
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//cell delegates
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)gridCellWasSelected:(GPGridViewCell*)cell
+{
+    if ([cell isKindOfClass:[GPGridMoreCell class]])
     {
-        cell.rowIndex = row;
-        cell.columnIndex = col;
-        cell.delegate = self;
-        cell.backgroundColor = [UIColor clearColor];
+        int index = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+        GPGridMoreItem* item = [self.items objectAtIndex:index];
+        item.isLoading = YES;
+        [(GPGridMoreCell*)cell setAnimating:YES];
+        if([self.delegate respondsToSelector:@selector(modelShouldLoad)])
+            [self.delegate modelShouldLoad];
+        return;
+    }
+    if([self.delegate respondsToSelector:@selector(gridViewDidSelectObject:object:index:)])
+    {
+        int index = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+        id object = [self.items objectAtIndex:index];
+        [self.delegate gridViewDidSelectObject:self object:object index:index];
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//animated add to grid view, make sure you datasource stays inline as well
--(void)addItemAtIndex:(NSInteger)index
+-(void)gridTextLabelWasSelected:(UIButton*)textLabel cell:(GPGridViewCell*)cell
 {
-    int total = rowCount*columnCount;
-    [UIView animateWithDuration:0.2 animations:^{
-        for(int i = index; i <= total; i++)
-            [self rowModify:i new:i+1 frame:YES];
-        
-        GPGridViewCell* cell = [self.dataSource gridView:self viewAtIndex:index];
-        if(cell)
-        {
-            int col = 0;
-            int row = 0;
-            [self convertIndexToGrid:index col:&col row:&row];
-            [self configureCell:cell column:col row:row isRotate:NO];
-            [self addSubview:cell];
-            [visibleGridItems addObject:cell];
-            
-        }
-    }completion:^(BOOL finished){
-        
-        for(int i = index-1; i <= total; i++)
-            [self rowModify:i new:i+1 frame:NO];
-    }];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//remove an item from the grid view. make sure you datasource stays inline as well
--(void)removeItemAtIndex:(NSInteger)index
-{
-    int total = rowCount*columnCount;
-    [UIView animateWithDuration:0.2 animations:^{
-        
-        GPGridViewCell* cell = [self findCellAtIndex:index];
-        if(cell)
-        {
-            [cell removeFromSuperview];
-            [visibleGridItems removeObject:cell];
-        }
-        for(int i = index; i <= total; i++)
-            [self rowModify:i+1 new:i frame:YES];
-    }completion:^(BOOL finished){
-        
-        for(int i = index; i <= total; i++)
-            [self rowModify:i+1 new:i frame:NO];
-        rowCount = [self.dataSource numberOfRowsInGridView:self];
-    }];
-    NSLog(@"subviews: %@",self.subviews);
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(GPGridViewCell*)cellAtIndex:(NSInteger)index
-{
-    return [self.dataSource gridView:self viewAtIndex:index];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)setGridViewHeader:(UIView *)header
-{
-    [gridViewHeader removeFromSuperview];
-    [gridViewHeader release];
-    gridViewHeader = [header retain];
-    CGRect frame = gridViewHeader.frame;
-    frame.origin.y = 10;
-    gridViewHeader.frame = frame;
-    [self addSubview:gridViewHeader];
+    if([self.delegate respondsToSelector:@selector(gridViewDidSelectLabel:object:index:)])
+    {
+        int index = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+        id object = [self.items objectAtIndex:index];
+        [self.delegate gridViewDidSelectLabel:self object:object index:index];
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
-    self.delegate = nil;
-    self.dataSource = nil;
-    [gridViewHeader release];
-    [recycledGridItems release];
     [visibleGridItems release];
+    [recycledGridItems release];
+    [imageQueue release];
+    [queue release];
     [super dealloc];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 @end

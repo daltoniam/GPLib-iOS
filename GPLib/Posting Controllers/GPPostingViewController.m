@@ -52,7 +52,7 @@
     textView = [[UITextView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, height)];
     textView.delegate = self;
     //textView.returnKeyType = UIReturnKeyDone;
-    textView.contentInset = UIEdgeInsetsMake(2, 0, 2, 2);
+    textView.contentInset = UIEdgeInsetsMake(2, 5, 5, 5);
     [textView becomeFirstResponder];
     textView.contentSize = CGSizeMake(textView.frame.size.height,textView.contentSize.height);
     textView.showsHorizontalScrollIndicator = NO;
@@ -134,9 +134,9 @@
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:containerView.bounds];
     containerView.layer.masksToBounds = NO;
     containerView.layer.shadowColor = [UIColor blackColor].CGColor;
-    containerView.layer.shadowOffset = CGSizeMake(0.0f, 4.0f);
+    containerView.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);
     containerView.layer.shadowOpacity = 0.5;
-    containerView.layer.shadowRadius = 4;
+    containerView.layer.shadowRadius = 2;
     containerView.layer.shadowPath = shadowPath.CGPath;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

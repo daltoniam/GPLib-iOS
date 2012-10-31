@@ -1,36 +1,12 @@
 //
-//  GPGridView.h
-//  GPLib
+//  GridView.h
+//  TestApp
 //
-//  Created by Dalton Cherry on 4/5/12.
-//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
-//
-/*
- http://github.com/daltoniam/GPLib-iOS
- 
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
- 
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
- */
+//  Created by Dalton Cherry on 10/30/12.
+//  Copyright (c) 2012 Basement Krew. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "GPGridViewCell.h"
 
 @class GPGridView;
@@ -41,23 +17,18 @@
 /*!
  Called when the grid view loads.
  */
--(void)gridViewDidSelectItem:(GPGridView*)gridView item:(GPGridViewCell*)cell index:(NSInteger)index;
--(void)gridViewDidSelectLabel:(GPGridView*)gridView item:(GPGridViewCell*)cell index:(NSInteger)index;
-@end
+-(void)gridViewDidSelectObject:(GPGridView*)gridView object:(id)object index:(NSInteger)index;
+-(void)gridViewDidSelectLabel:(GPGridView*)gridView object:(id)object index:(NSInteger)index;
 
-#pragma mark -
-@protocol GPGridViewDataSource<NSObject>
+//this is called with a GPMoreItem is show (if auto load) or tapped.
+//Note that this may be called many times(if auto or tapped by user more than once) and you to make sure your model is done, before loading again
+-(void)modelShouldLoad;
 
-- (NSInteger)numberOfRowsInGridView:(GPGridView*)gridView;
-- (NSInteger)numberOfColumnsInGridView:(GPGridView*)gridView orientation:(UIInterfaceOrientation)toInterfaceOrientation;
-- (CGFloat)heightForRows:(GPGridView *)gridView;
-- (GPGridViewCell*)gridView:(GPGridView *)gridView viewAtIndex:(NSInteger)index;
-
-@optional
-- (NSInteger)spacingBetweenRowsInGridView:(GPGridView*)gridView;
-- (NSInteger)spacingBetweenColumnsInGridView:(GPGridView*)gridView;
+//implement this to use custom cells for custom GPTableItem objects. return nil to use default
+-(Class)classForObject:(id)object gridView:(GPGridView*)gridView;
 
 @end
+
 
 @interface GPGridView : UIScrollView<GPGridCellDelegate>
 {
@@ -66,33 +37,44 @@
     int rowCount;
     int columnCount;
     CGFloat rowHeight;
-    CGRect originalFrame;
-    int topPadding;
-    UIView* gridViewHeader;
+    NSMutableArray* imageQueue;
+    NSOperationQueue* queue;
 }
-@property(nonatomic,assign)id<GPGridViewDataSource>dataSource;
-@property(nonatomic,assign)id<GPGridViewDelegate> delegate;
-@property(nonatomic,assign,readonly)int rowCount;
-@property(nonatomic,assign,readonly)int columnCount;
-@property(nonatomic,assign,readonly)BOOL isEditing;
-@property(nonatomic,retain,readonly)NSSet* visibleItems;
 
+//this array is already setup and ready to go. You will add GPGridItems to it
+@property(nonatomic,retain)NSMutableArray* items;
+
+//standard delegate implmention
+@property(nonatomic,assign)id<GPGridViewDelegate> delegate;
+
+//see how many rows you have
+@property(nonatomic,assign,readonly)int rowCount;
+
+//set how many columns you want. Default is 3. Based on the row and column count the size of the grid Items will be determined.
+@property(nonatomic,assign)int columnCount;
+
+//set the space in between each row. Defalult is 10.
+@property(nonatomic,assign)CGFloat rowSpacing;
+
+//set the space between each column. Default is 10.
+@property(nonatomic,assign)CGFloat columnSpacing;
+
+//set the height of each row. Default is 100.
+@property(nonatomic,assign)CGFloat rowHeight;
+
+//set if in editing mode or not
+@property(nonatomic,assign)BOOL editing;
+
+//set a gridView header.
 @property(nonatomic,retain)UIView* gridViewHeader;
 
--(GPGridViewCell*)dequeueGrid:(NSString*)identifier;
+//reload the gridview items
 -(void)reloadData;
--(void)didRotate:(UIInterfaceOrientation)toInterfaceOrientation;
--(void)reloadCellsAtIndexes:(NSArray*)array;
 
--(void)editMode:(BOOL)state; //make the cells wiggle or not
-//editing gridview
--(void)addItemAtIndex:(NSInteger)index;
--(void)removeItemAtIndex:(NSInteger)index;
-
-//convience at grabbing a cell. Just queries datasource for the cell
--(GPGridViewCell*)cellAtIndex:(NSInteger)index;
-
-//checks the visable items and returns cell if found
--(GPGridViewCell*)findCellAtIndex:(NSInteger)index;
+//animation adding/deleting
+-(void)removeObjectAtIndex:(int)index;
+-(void)removeObjectsAtIndexes:(NSArray*)indexes;
+-(void)insertObject:(id)object index:(int)index;
+-(void)addObject:(id)object;
 
 @end

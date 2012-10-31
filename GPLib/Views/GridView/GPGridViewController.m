@@ -2,228 +2,73 @@
 //  GPGridViewController.m
 //  GPLib
 //
-//  Created by Dalton Cherry on 4/11/12.
-//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
-//
-/*
- http://github.com/daltoniam/GPLib-iOS
- 
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
- 
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
- */
+//  Created by Dalton Cherry on 10/31/12.
+//  Copyright (c) 2012 Lightspeed Systems. All rights reserved.
 //
 
 #import "GPGridViewController.h"
-#import "GPGridViewItem.h"
-#import <objc/runtime.h>
 #import "GPNavigator.h"
-#import "GPCenterLabel.h"
-#import "GPGridMoreCell.h"
-#import "GPGridMoreItem.h"
-
-#import "GPTableMoreItem.h" //because GPOldModel returns a tablemoreitem by default
+#import "GPGridViewItem.h"
 
 @interface GPGridViewController ()
-
--(void)processImageURL:(id)object;
 
 @end
 
 @implementation GPGridViewController
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@synthesize gridView,model;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) 
+    if (self)
     {
-        items = [[NSMutableArray alloc] init];
-        gridView = [[GPGridView alloc] init];
-        gridView.delegate = self;
-        gridView.dataSource = self;
+        model = [[self setupModel] retain];
+        model.delegate = self;
     }
     return self;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithURLString:(NSString*)url 
-{
-    if ((self = [super init])) 
-    {
-        [self fetchData:url];
-    }
-    return self;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)fetchData:(NSString*)url
-{
-    [model release];
-    model = [[self model:url] retain];
-    model.delegate = self;
-    [model loadModel:NO];
-    ActLabel.hidden = NO;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    gridView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+	gridView = [[GPGridView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     gridView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    gridView.delegate = self;
     [self.view addSubview:gridView];
-    self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
-    
-    ActLabel = [[GPLoadingLabel alloc] initWithStyle:[self actLabelStyle]];
-    ActLabel.frame = gridView.frame;
-    ActLabel.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    ActLabel.text = [self loadingText];
-    [self.view addSubview:ActLabel];
-    
-    if(!model.URL || !model.isLoading)
-        ActLabel.hidden = YES;
-
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)viewWillAppear:(BOOL)animated
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)showLoadingLabel
 {
-    [super viewWillAppear:animated];
-    if(!model.delegate)
-        model.delegate = self;
-    if(!gridView.delegate)
-        gridView.delegate = self;
-    if(!gridView.dataSource)
-        gridView.dataSource = self;
-    [gridView reloadData];
+    [self showLoadingLabel:GPLoadingLabelWhiteStyle];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)viewWillDisappear:(BOOL)animated
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)showLoadingLabel:(GPLoadingLabelStyle)style
 {
-    model.delegate = nil;
-    for(GPHTTPRequest* request in queue.operations)
+    if(!loadingLabel)
     {
-        request.delegate = nil;
-        [request cancel];
+        loadingLabel = [[GPLoadingLabel alloc] initWithStyle:style];
+        loadingLabel.frame = gridView.frame;
+        [self.view addSubview:loadingLabel];
     }
-    [queue cancelAllOperations];
-    gridView.delegate = nil;
-    gridView.dataSource = nil;
-    [super viewWillDisappear:animated];
+    loadingLabel.text = [self loadingText];
+    loadingLabel.hidden = NO;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)numberOfRowsInGridView:(GPGridView*)gridview
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)modelShouldLoad
 {
-    float rows = [items count]/(float)gridview.columnCount;
-    int rowCal = rows;
-    if(rows > rowCal && rows < rowCal+1)
-        rowCal += 1;
-    return rowCal;//[items count]/gridview.columnCount;
+    if(!self.model.isLoading)
+        [self.model fetchFromNetwork];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)numberOfColumnsInGridView:(GPGridView*)gridview orientation:(UIInterfaceOrientation)toInterfaceOrientation
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//subclass stuff
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//using gpnavigator to navigate. Does nothing if GPNavigator is not used and will have to override
+//to provide navigation
+- (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath
 {
-    if(GPIsPad() && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
-            return 4;
-    return 3;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(CGFloat)heightForRows:(GPGridView *)gridView;
-{
-    if(GPIsPad())
-        return 240;
-    return 120;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//where the gridview magic happens. return the cell class for the object class that comes through
-- (Class)gridView:(GPGridView*)gridview cellClassForObject:(id)object
-{
-    if([object isKindOfClass:[GPGridMoreItem class]])
-        return [GPGridMoreCell class];
-    else if([object isKindOfClass:[GPGridViewItem class]])
-        return [GPGridViewCell class];
-    return [GPGridViewCell class];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (GPGridViewCell*)gridView:(GPGridView *)gridview viewAtIndex:(NSInteger)index
-{
-    if(index < items.count)
-    {
-        id object = [items objectAtIndex:index];
-        if([object isKindOfClass:[GPTableMoreItem class]])
-        {
-            GPTableMoreItem* moreItem = (GPTableMoreItem*)object;
-            GPGridMoreItem* item = [GPGridMoreItem itemWithLoading:moreItem.text isAutoLoad:moreItem.isAutoLoad];
-            [items replaceObjectAtIndex:index withObject:item];
-            object = item;
-        }
-        Class cellClass = [self gridView:gridView cellClassForObject:object];
-        const char* className = class_getName(cellClass);
-        NSString* identifier = [[NSString alloc] initWithBytesNoCopy:(char*)className
-                                                              length:strlen(className)
-                                                            encoding:NSASCIIStringEncoding freeWhenDone:NO];
-        GPGridViewCell* cell = [gridView dequeueGrid:identifier];
-        if(!cell)
-            cell = [[[cellClass alloc] initWithIdentifer:identifier] autorelease];
-        [identifier release];
-        
-        [cell setObject:object];
-        if(![object isKindOfClass:[GPGridMoreItem class]])
-            [self processImageURL:object];
-        
-        if(!model.isFinished && [model autoLoad])
-        {
-            if ([object isKindOfClass:[GPGridMoreItem class]])
-            {
-                GPGridMoreItem* item = (GPGridMoreItem*)object;
-                item.isLoading = YES;
-                [(GPGridMoreCell *)cell setAnimating:YES];
-                if(!model.isLoading)
-                    [model loadModel:YES];
-            }
-        }
-        
-        return cell;
-    }
-    return nil;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//using gpnavigator to navigate. Does nothing if GPNavigator is not used and will have to subclass to provide navigation
--(void)gridViewDidSelectItem:(GPGridView*)gridview item:(GPGridViewCell*)cell index:(NSInteger)index
-{
-    id object = [items objectAtIndex:index];
-    
-    if ([object isKindOfClass:[GPGridMoreItem class]])
-    {
-        if(!model.isLoading)
-        {
-            GPGridMoreItem* item = (GPGridMoreItem*)object;
-            item.isLoading = YES;
-            [(GPGridMoreCell*)cell setAnimating:YES];
-            [model loadModel:YES];
-        }
-        return;
-    }
-    [self didSelectObject:object gridview:gridview item:cell index:index];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)didSelectObject:(id)object gridview:(GPGridView*)gridview item:(GPGridViewCell*)cell index:(NSInteger)index
-{
-    if ([object respondsToSelector:@selector(NavURL)]) 
+    if ([object respondsToSelector:@selector(NavURL)])
     {
         NSString* URL = [object NavURL];
         if([object isKindOfClass:[GPGridViewItem class]])
@@ -232,169 +77,41 @@
             NSString* theURL = item.NavURL;
             if (theURL)
             {
-                dismissView = [[cell expandView] retain];
-                dismissIndex = index;
-                for(UIView* subview in gridview.subviews)
-                    if(subview != cell)
-                        subview.hidden = YES;
-                [[GPNavigator navigator] openURL:theURL view:[cell expandView] query:item.Properties];
+                if(item.Properties)
+                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.Properties];
+                else
+                    [[GPNavigator navigator] openURL:URL];
             }
         }
         else if (URL)
             [[GPNavigator navigator] openURL:URL];
     }
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)dismissGridCell:(BOOL)saveImage
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(GPModel*)setupModel
 {
-    id object = [items objectAtIndex:dismissIndex];
-    if(saveImage && [object isKindOfClass:[GPGridViewItem class]])
-    {
-        UIGraphicsBeginImageContext(self.navigationController.visibleViewController.view.frame.size);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        [self.navigationController.visibleViewController.view.layer renderInContext:context];
-        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        GPGridViewItem* item = (GPGridViewItem*)object;
-        item.image = viewImage;
-        
-        if([dismissView isKindOfClass:[UIImageView class]])
-        {
-            UIImageView* view = (UIImageView*)dismissView;
-            view.image = viewImage;
-        }
-        else
-        {
-            GPGridViewCell* cell = [gridView findCellAtIndex:dismissIndex];
-            [cell setObject:item];
-            [dismissView release];
-            dismissView = [cell.imageView retain];
-        }
-    }
-    [[GPNavigator navigator] dismissGridView:dismissView];
-    [self performSelector:@selector(showSubs) withObject:nil afterDelay:0.3];
+    return nil;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)showSubs
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)grouped
 {
-    for(UIView* subview in gridView.subviews)
-        subview.hidden = NO;
+    return NO;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(GPHTTPRequest*)imageRequest:(NSString*)URL
-{
-    __block GPHTTPRequest* request = [GPHTTPRequest requestWithURL:[NSURL URLWithString:URL]];
-    [request setCacheModel:GPHTTPCacheCustomTime];
-    [request setTimeout:60*60*1]; // Cache for 1 hour
-    [request setFinishBlock:^{
-        
-        int i = 0;
-        NSMutableArray* indexes = [NSMutableArray array];
-        for(id object in items)
-        {
-            if([object isKindOfClass:[GPGridViewItem class]] && ![object isKindOfClass:[GPGridMoreItem class]])
-            {
-                GPGridViewItem* item = (GPGridViewItem*)object;
-                if([item.imageURL isEqualToString:request.URL.absoluteString])
-                {
-                    item.image = [UIImage imageWithData:[request responseData]];
-                    [indexes addObject:[NSNumber numberWithInt:i]];
-                }
-            }
-            i++;
-        }
-        [imageQueue removeObject:request.URL.absoluteString];
-        [gridView reloadCellsAtIndexes:indexes];
-        
-    }];
-    return request;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)processImageURL:(id)object
-{
-    if([object isKindOfClass:[GPGridViewItem class]])
-    {
-        if(!imageQueue)
-            imageQueue = [[NSMutableArray alloc] initWithCapacity:items.count];
-        if(!queue)
-        {
-            queue = [[NSOperationQueue alloc] init];
-            queue.maxConcurrentOperationCount = 4;
-        }
-        GPGridViewItem* item = (GPGridViewItem*)object;
-        if(!item.image && item.imageURL && ![imageQueue containsObject:item.imageURL])
-        {
-            [imageQueue addObject:item.imageURL];
-            [queue addOperation:[self imageRequest:item.imageURL]];
-        }
-            
-    }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)modelFinished:(GPHTTPRequest *)request
-{
-    ActLabel.hidden = YES;
-    if(!items)
-        items = [[NSMutableArray alloc] initWithCapacity:model.items.count];
-    [items removeAllObjects];
-    [items addObjectsFromArray:model.items];
-    [gridView reloadData];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)modelFailed:(GPHTTPRequest *)request
-{
-    ActLabel.hidden = YES;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)noConnection
-{
-    ActLabel.hidden = YES;
-    GPCenterLabel* label = [[GPCenterLabel alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:label];
-    [label release];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    //handle rotation
-    [gridView didRotate:toInterfaceOrientation];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Sub Class section!!!!
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//subclass this to load a different model.
--(GPOldModel*)model:(NSString*)url
-{
-    return [[[GPOldModel alloc] initWithURLString:url] autorelease];
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//set loading text.
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSString*)loadingText
 {
-    return @"Loading...";
+    return NSLocalizedString(@"Loading...", nil);
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//set the ActLabel style
--(GPLoadingLabelStyle)actLabelStyle
-{
-    return GPLoadingLabelWhiteStyle;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
+    [loadingLabel release];
+    model.delegate = nil;
     [model release];
-    [ActLabel release];
-    [imageQueue release];
-    [queue release];
-    [dismissView release];
     gridView.delegate = nil;
-    gridView.dataSource = nil;
     [gridView release];
-    [items release];
     [super dealloc];
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 @end

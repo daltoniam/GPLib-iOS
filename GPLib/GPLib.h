@@ -38,7 +38,8 @@
 #import "GPTableDragRefresh.h"
 #import "GPOldTableSearchController.h"
 #import "GPPostingTableViewController.h"
-
+#import "GPOldGridViewController.h"
+#import "GPOldGridView.h"
 
 /// GPHTTPRequest
 #import "GPHTTPRequest.h"

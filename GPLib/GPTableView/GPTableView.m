@@ -635,18 +635,19 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIView *)tableView:(UITableView *)table viewForHeaderInSection:(NSInteger)section
 {
-    id object = nil;
+    NSMutableArray* useSection = nil;
     if(isSearching)
-        object = [searchSections objectAtIndex:section];
+        useSection = searchSections;
     else
-        object = [sections objectAtIndex:section];
+        useSection = sections;
     
+    id object = [useSection objectAtIndex:section];
     if([object isKindOfClass:[NSString class]] && [object isEqualToString:UITableViewIndexSearch])
         return searchController.searchBar;
     
     if([object isKindOfClass:[UIView class]])
     {
-        UIView* view = (UIView*)[sections objectAtIndex:section];
+        UIView* view = (UIView*)[useSection objectAtIndex:section];
         if(self.isGrouped && view.tag != SECTION_HEADER_TAG)
         {
             //because tableview is not a team player and does not respect the frame
@@ -658,10 +659,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             temp.tag = SECTION_HEADER_TAG;
             [temp addSubview:view];
             view.frame = CGRectMake(left, 0, tableView.frame.size.width-(left*2), view.frame.size.height);
-            if(isSearching)
-                [searchSections replaceObjectAtIndex:section withObject:temp];
-            else
-                [sections replaceObjectAtIndex:section withObject:temp];
+            [useSection replaceObjectAtIndex:section withObject:temp];
             return temp;
         }
         return view;
@@ -705,9 +703,11 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         if (searchSections)
         {
             NSArray* itemArray = [searchItems objectAtIndex:indexPath.section];
-            return [itemArray objectAtIndex:indexPath.row];
+            if(indexPath.row < itemArray.count)
+                return [itemArray objectAtIndex:indexPath.row];
         }
-        return [searchItems objectAtIndex:indexPath.row];
+        if(indexPath.row < searchItems.count)
+            return [searchItems objectAtIndex:indexPath.row];
     }
     
     if (sections)

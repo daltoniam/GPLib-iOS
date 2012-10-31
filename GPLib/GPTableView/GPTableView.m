@@ -212,7 +212,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     didBeginUpdate = NO;
     [tableView endUpdates];
-    [tableViewTags removeAllObjects];
+    //[tableViewTags removeAllObjects];
     [self showEmptyView];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,6 +401,15 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         if(!didBeginUpdate)
             [self endUpdate];
     }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)reloadRowsAtIndexPaths:(NSArray *)indexPathArray withRowAnimation:(UITableViewRowAnimation)animation
+{
+    if(!didBeginUpdate)
+        [tableView beginUpdates];
+    [tableView reloadRowsAtIndexPaths:indexPathArray withRowAnimation:animation];
+    if(!didBeginUpdate)
+        [self endUpdate];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeSection:(int)section
@@ -1076,6 +1085,15 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             [cell becomeFirstResponder];
     }
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)dismissKeyboard
+{
+    for(GPTableCell* cell in tableView.visibleCells)
+        if([cell isKindOfClass:[GPTableTextFieldCell class]])
+            [[(GPTableTextFieldCell*)cell textField] resignFirstResponder];
+        else if([cell isKindOfClass:[GPTableTextViewCell class]])
+            [[(GPTableTextViewCell*)cell textView] resignFirstResponder];
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //methods use for searching
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1279,6 +1297,16 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 -(BOOL)showsVerticalScrollIndicator
 {
     return tableView.showsVerticalScrollIndicator;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setScrollEnabled:(BOOL)scroll
+{
+    tableView.scrollEnabled = scroll;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)scrollEnabled
+{
+    return tableView.scrollEnabled;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setSeparatorColor:(UIColor *)color

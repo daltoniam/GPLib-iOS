@@ -165,6 +165,9 @@
 //set if you want the ScrollIndicator to show. Default is YES.
 @property(nonatomic,assign)BOOL showsVerticalScrollIndicator;
 
+//set if you want the ScrollIndicator to show. Default is YES.
+@property(nonatomic,assign)BOOL scrollEnabled;
+
 //the content offset of the tableview
 @property(nonatomic)CGPoint contentOffset;
 
@@ -220,6 +223,9 @@
 //make a form cell become the first responder
 -(void)setFirstResponder:(id)object;
 
+//dismiss any forms cells
+-(void)dismissKeyboard;
+
 //adding/removing to tableView with animation
 
 //these start are useful if you want to chain multiple animations together
@@ -248,6 +254,9 @@
 -(void)removeObjectAtIndex:(NSIndexPath*)indexPath;
 -(void)removeObjectAtIndex:(NSIndexPath*)indexPath animation:(UITableViewRowAnimation)animation;
 
+//reload at a row index path
+-(void)reloadRowsAtIndexPaths:(NSArray *)indexPathArray withRowAnimation:(UITableViewRowAnimation)animation;
+
 //reload a section
 -(void)reloadSection:(int)section animation:(UITableViewRowAnimation)animation;
 
@@ -262,5 +271,6 @@
 //insert a section
 -(void)insertSection:(int)section objects:(NSArray*)objects;
 -(void)insertSection:(int)section objects:(NSArray*)objects animation:(UITableViewRowAnimation)animation;
+
 
 @end

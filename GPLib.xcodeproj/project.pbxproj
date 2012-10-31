@@ -22,8 +22,6 @@
 		5C1155D616233A3200212A4C /* GPPostingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1155D416233A3200212A4C /* GPPostingViewController.h */; };
 		5C1155D716233A3200212A4C /* GPPostingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1155D516233A3200212A4C /* GPPostingViewController.m */; };
 		5C1155FB16235E0C00212A4C /* postingArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C1155F616235CAD00212A4C /* postingArrow.png */; };
-		5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */; };
-		5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */; };
 		5C1431181547137200AEE1FA /* GPOldTableSearchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C1431161547137200AEE1FA /* GPOldTableSearchController.h */; };
 		5C1431191547137200AEE1FA /* GPOldTableSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1431171547137200AEE1FA /* GPOldTableSearchController.m */; };
 		5C14312615483D6100AEE1FA /* GPLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C14312415483D6100AEE1FA /* GPLabel.h */; };
@@ -329,8 +327,6 @@
 		5C1155D416233A3200212A4C /* GPPostingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPPostingViewController.h; sourceTree = "<group>"; };
 		5C1155D516233A3200212A4C /* GPPostingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPPostingViewController.m; sourceTree = "<group>"; };
 		5C1155F616235CAD00212A4C /* postingArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = postingArrow.png; sourceTree = "<group>"; };
-		5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPRevealViewController.h; path = GPReveal/GPRevealViewController.h; sourceTree = "<group>"; };
-		5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPRevealViewController.m; path = GPReveal/GPRevealViewController.m; sourceTree = "<group>"; };
 		5C1431161547137200AEE1FA /* GPOldTableSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPOldTableSearchController.h; path = GPTableSearchController/GPOldTableSearchController.h; sourceTree = "<group>"; };
 		5C1431171547137200AEE1FA /* GPOldTableSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPOldTableSearchController.m; path = GPTableSearchController/GPOldTableSearchController.m; sourceTree = "<group>"; };
 		5C14312415483D6100AEE1FA /* GPLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLabel.h; sourceTree = "<group>"; };
@@ -642,8 +638,6 @@
 		5C1430B41545A5AC00AEE1FA /* GPReveal */ = {
 			isa = PBXGroup;
 			children = (
-				5C1430B61545A5C800AEE1FA /* GPRevealViewController.h */,
-				5C1430B71545A5C800AEE1FA /* GPRevealViewController.m */,
 			);
 			name = GPReveal;
 			sourceTree = "<group>";
@@ -1231,7 +1225,6 @@
 				5CA6800015361109001719DC /* GPOldGridViewController.h in Headers */,
 				5C9B7D5515408D9100856C8A /* GPTableTextFieldCell.h in Headers */,
 				5C9B7D5A15408E2100856C8A /* GPTableTextFieldItem.h in Headers */,
-				5C1430B81545A5C800AEE1FA /* GPRevealViewController.h in Headers */,
 				5C1431181547137200AEE1FA /* GPOldTableSearchController.h in Headers */,
 				5C14312615483D6100AEE1FA /* GPLabel.h in Headers */,
 				5C14312A15485E8100AEE1FA /* GPView.h in Headers */,
@@ -1544,7 +1537,6 @@
 				5CA6800115361109001719DC /* GPOldGridViewController.m in Sources */,
 				5C9B7D5615408D9100856C8A /* GPTableTextFieldCell.m in Sources */,
 				5C9B7D5B15408E2100856C8A /* GPTableTextFieldItem.m in Sources */,
-				5C1430B91545A5C800AEE1FA /* GPRevealViewController.m in Sources */,
 				5C1431191547137200AEE1FA /* GPOldTableSearchController.m in Sources */,
 				5C14312715483D6100AEE1FA /* GPLabel.m in Sources */,
 				5C14312B15485E8100AEE1FA /* GPView.m in Sources */,

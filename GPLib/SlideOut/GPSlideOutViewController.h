@@ -74,6 +74,9 @@
 //make the center view a new controller.
 -(void)restoreWithNewCenterView:(UINavigationController*)navigationController;
 
+//show the full left side for searching.
+-(void)showFully:(BOOL)fully;
+
 //factory to create slide out controller
 +(GPSlideOutViewController*)slideOutController:(UINavigationController*)navBar left:(UIViewController*)left right:(UIViewController*)right;
 

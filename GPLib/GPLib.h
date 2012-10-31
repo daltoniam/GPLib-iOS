@@ -134,8 +134,8 @@
 #import "GPGridViewItem.h"
 #import "GPGridMoreItem.h"
 #import "GPGridMoreCell.h"
-//GPRevealViewController
-#import "GPRevealViewController.h"
+//GPSlideOut
+#import "GPSlideOutViewController.h"
 //addtions
 #import "UIImage+Additions.h"
 

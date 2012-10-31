@@ -158,6 +158,28 @@
     }];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)showFully:(BOOL)fully
+{
+    if(fully)
+    {
+        [UIView animateWithDuration:0.25 animations:^{
+            centerView.frame = CGRectMake(centerView.frame.size.width, 0.0f, centerView.frame.size.width, centerView.frame.size.height);
+            leftView.frame = CGRectMake(0, 0, self.view.frame.size.width, leftView.frame.size.height);
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:0.25 animations:^{
+            int width = self.view.frame.size.width;
+            if(self.leftViewIsSlideLength)
+                width = self.slideOffset;
+            leftView.frame = CGRectMake(0, 0, width, self.view.frame.size.height);
+            centerView.frame = CGRectMake(self.slideOffset, 0.0f, centerView.frame.size.width, centerView.frame.size.height);
+        }];
+
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)swipeGesture:(UIPanGestureRecognizer*)sender
 {
     CGPoint location = [sender locationInView:self.view];
@@ -206,6 +228,15 @@
         else
             [self restoreCenterView];
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setCenterController:(UINavigationController *)center
+{
+    [centerController.view removeFromSuperview];
+    centerController = center;
+    centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    centerController.view.frame = centerView.bounds;
+    [centerView addSubview:centerController.view];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

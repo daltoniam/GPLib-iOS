@@ -123,4 +123,7 @@
 //used to access coreData
 - (NSManagedObjectContext*)objectCtx;
 
+//use to clear a all contents of a DB from disk.
++(void)clearDiskStorage;
+
 @end

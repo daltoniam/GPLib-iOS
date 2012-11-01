@@ -12,10 +12,13 @@
 #import "GPGridMoreItem.h"
 #import "GPGridMoreCell.h"
 #import "GPHTTPRequest.h"
+#import "UIImage+Additions.h"
+
+#define REMOVE_BTN_TAG 12345
 
 @implementation GPGridView
 
-@synthesize delegate,rowCount,rowSpacing,columnCount,columnSpacing,gridViewHeader,editing,items,rowHeight;
+@synthesize delegate,rowCount,rowSpacing,columnCount,columnSpacing,gridViewHeader,editing,items,rowHeight,shouldWiggle;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)commonInit
 {
@@ -26,6 +29,7 @@
     rowHeight = 100;
     self.items = [[NSMutableArray alloc] init];
     self.backgroundColor = [UIColor clearColor];
+    self.shouldWiggle = YES;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -93,7 +97,7 @@
         if (cell.rowIndex < firstNeededRow || cell.rowIndex > lastNeededRow || cell.columnIndex > columnCount)
         {
             [recycledGridItems addObject:cell];
-            [cell.layer removeAnimationForKey:@"wobble"];
+            [self editMode:cell edit:NO];
             [cell removeFromSuperview];
         }
     }
@@ -166,7 +170,7 @@
         left = columnSpacing;
     cell.frame = CGRectMake(left, top, width, rowHeight);
     if(editing)
-        [self wiggleAnimation:cell];
+        [self editMode:cell edit:YES];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSInteger)getIndex:(NSInteger)col forRow:(NSInteger)row
@@ -322,6 +326,13 @@
     [self removeObjectAtIndex:index multi:NO];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeObject:(id)object
+{
+    int index = [self.items indexOfObject:object];
+    if(index != NSNotFound)
+        [self removeObjectAtIndex:index];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeObjectAtIndex:(int)index multi:(BOOL)multi
 {
     if(!multi)
@@ -401,34 +412,73 @@
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)editMode:(UIView*)view edit:(BOOL)edit
+{
+    if(edit)
+    {
+        [self wiggleAnimation:view];
+        [self addRemoveButton:view];
+    }
+    else
+    {
+        UIView* btnView = [view viewWithTag:REMOVE_BTN_TAG];
+        [btnView removeFromSuperview];
+        [view.layer removeAnimationForKey:@"wobble"];
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)addRemoveButton:(UIView*)view
+{
+    UIView* btnView = [view viewWithTag:REMOVE_BTN_TAG];
+    if(!btnView)
+    {
+        UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.tag = REMOVE_BTN_TAG;
+        btn.frame = CGRectMake(-3, -3, 15, 15);
+        [btn setImage:[UIImage libraryImageNamed:@"removeButton.png"] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(removeCell:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:btn];
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)wiggleAnimation:(UIView*)view
 {
-    view.layer.shouldRasterize = YES;
-    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    
-    CGFloat wobbleAngle = 0.02f;
-    
-    NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
-    NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
-    animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
-    
-    animation.autoreverses = YES;
-    animation.duration = 0.15;
-    animation.repeatCount = HUGE_VALF;
-    
-    [view.layer addAnimation:animation forKey:@"wobble"];
+    if(self.shouldWiggle)
+    {
+        view.layer.shouldRasterize = YES;
+        CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        
+        CGFloat wobbleAngle = 0.02f;
+        
+        NSValue* valLeft = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wobbleAngle, 0.0f, 0.0f, 1.0f)];
+        NSValue* valRight = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wobbleAngle, 0.0f, 0.0f, 1.0f)];
+        animation.values = [NSArray arrayWithObjects:valLeft, valRight, nil];
+        
+        animation.autoreverses = YES;
+        animation.duration = 0.15;
+        animation.repeatCount = HUGE_VALF;
+        
+        [view.layer addAnimation:animation forKey:@"wobble"];
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeCell:(UIButton*)btn
+{
+    GPGridViewCell* cell = (GPGridViewCell*)btn.superview;
+    int index = [self getIndex:cell.columnIndex forRow:cell.rowIndex];
+    if(index != NSNotFound)
+    {
+        [self removeObjectAtIndex:index];
+        if([self.delegate respondsToSelector:@selector(didRemoveItemAtIndex:)])
+            [self.delegate didRemoveItemAtIndex:index];
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setEditing:(BOOL)edit
 {
     editing = edit;
-    if(edit)
-        for(GPGridViewCell* cell in visibleGridItems)
-            [self wiggleAnimation:cell];
-    else
-        for(GPGridViewCell* cell in visibleGridItems)
-            [cell.layer removeAnimationForKey:@"wobble"];
-    
+    for(GPGridViewCell* cell in visibleGridItems)
+        [self editMode:cell edit:edit];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //cell delegates

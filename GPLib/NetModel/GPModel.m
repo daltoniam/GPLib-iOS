@@ -354,6 +354,23 @@
 {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)clearDisk
+{
+    NSString* dbName = [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
+    NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:dbName]];
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    NSPersistentStore* store = [coordinator persistentStoreForURL:storeUrl];
+    [coordinator removePersistentStore:store error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:storeUrl.path error:nil];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//public
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-
++(void)clearDiskStorage
+{
+    GPModel* model = [[GPModel alloc] init];
+    [model clearDisk];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 @end

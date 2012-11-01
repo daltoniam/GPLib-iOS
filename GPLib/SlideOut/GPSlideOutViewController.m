@@ -60,6 +60,7 @@
     if(self.centerController)
     {
         centerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        centerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.centerController.view.frame = centerView.bounds;
         [centerView addSubview:centerController.view];
@@ -79,6 +80,7 @@
         if(self.leftViewIsSlideLength)
             width = self.slideOffset;
         leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, self.view.frame.size.height)];
+        leftView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.leftController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.leftController.view.frame = leftView.bounds;
         [leftView addSubview:leftController.view];
@@ -88,6 +90,7 @@
     {
         int left = self.view.frame.size.width - self.slideOffset;
         rightView = [[UIView alloc] initWithFrame:CGRectMake(left, 0, self.slideOffset, self.view.frame.size.height)];
+        rightView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.rightController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.rightController.view.frame = rightView.bounds;
         [rightView addSubview:rightController.view];
@@ -237,6 +240,60 @@
     centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     centerController.view.frame = centerView.bounds;
     [centerView addSubview:centerController.view];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//forward this on
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [centerController viewWillAppear:animated];
+    [leftController viewWillAppear:animated];
+    [rightController viewWillAppear:animated];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [centerController viewDidAppear:animated];
+    [leftController viewDidAppear:animated];
+    [rightController viewDidAppear:animated];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [centerController viewWillDisappear:animated];
+    [leftController viewWillDisappear:animated];
+    [rightController viewWillDisappear:animated];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    [leftController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+    [rightController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+    return [centerController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [centerController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [leftController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [rightController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [centerController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [leftController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [rightController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [centerController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [leftController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [rightController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

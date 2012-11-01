@@ -27,6 +27,9 @@
 //implement this to use custom cells for custom GPTableItem objects. return nil to use default
 -(Class)classForObject:(id)object gridView:(GPGridView*)gridView;
 
+//a item was remove from the grid while editing
+-(void)didRemoveItemAtIndex:(int)index;
+
 @end
 
 
@@ -65,6 +68,9 @@
 //set if in editing mode or not
 @property(nonatomic,assign)BOOL editing;
 
+//set if in editing mode the views should wiggle. Default is YES
+@property(nonatomic,assign)BOOL shouldWiggle;
+
 //set a gridView header.
 @property(nonatomic,retain)UIView* gridViewHeader;
 
@@ -74,6 +80,7 @@
 //animation adding/deleting
 -(void)removeObjectAtIndex:(int)index;
 -(void)removeObjectsAtIndexes:(NSArray*)indexes;
+-(void)removeObject:(id)object;
 -(void)insertObject:(id)object index:(int)index;
 -(void)addObject:(id)object;
 

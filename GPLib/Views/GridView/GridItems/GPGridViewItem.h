@@ -43,6 +43,7 @@
 @property(nonatomic,assign)BOOL isSelected;
 @property(nonatomic,assign)BOOL drawDropShadow;
 @property(nonatomic,assign)BOOL isLoading;
+@property(nonatomic,assign)NSInteger rowHeight;
 //for things that are not going to be displayed but are needed in the tablecell
 @property(nonatomic,retain)NSDictionary* Properties;
 

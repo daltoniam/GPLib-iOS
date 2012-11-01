@@ -116,7 +116,6 @@
 /////net model
 #import "GPCenterLabel.h"
 #import "GPDragToRefreshView.h"
-#import "GPTabBarController.h"
 #import "GPTableAccessory.h"
 #import "GPSideBarViewController.h"
 #import "GPTableViewController.h"

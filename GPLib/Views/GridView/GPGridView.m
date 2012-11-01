@@ -30,6 +30,7 @@
     self.items = [[NSMutableArray alloc] init];
     self.backgroundColor = [UIColor clearColor];
     self.shouldWiggle = YES;
+    highestRow = shortestRow = rowHeight;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -53,8 +54,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)reloadData
 {
-    [self updateGrid];
     [self recycleGrid];
+    [self updateGrid];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //private stuff
@@ -78,7 +79,21 @@
     rowCount = items.count/columnCount;
     if(items.count % columnCount)
         rowCount++;
-    self.contentSize = CGSizeMake(self.frame.size.width, (rowHeight*rowCount)+((rowCount+1)*(rowSpacing+4)) + self.gridViewHeader.frame.size.height);
+    int count = self.items.count-1;
+    int total = 0;
+    for(int i = count; count-columnCount < i; i--)
+    {
+        int height = 0;
+        int col = 0;
+        int row = 0;
+        [self convertIndexToGrid:i col:&col row:&row];
+        int offset = [self getTotalHeight:col row:row cellHeight:&height];
+        int overall = offset + height;
+        if(overall > total)
+            total = overall;
+    }
+    //(highestRow*rowCount)
+    self.contentSize = CGSizeMake(self.frame.size.width, total+((rowCount+1)*(rowSpacing+3)) + self.gridViewHeader.frame.size.height);
     if(self.contentSize.height < self.frame.size.height && self.gridViewHeader)
         self.contentSize = CGSizeMake(self.frame.size.width,self.frame.size.height+self.gridViewHeader.frame.size.height+10);
 }
@@ -86,8 +101,8 @@
 -(void)recycleGrid
 {
     CGPoint point = self.contentOffset;
-    int firstNeededRow = point.y/rowHeight;
-    int lastNeededRow  = (point.y+self.bounds.size.height)/rowHeight;
+    int firstNeededRow = point.y/highestRow;
+    int lastNeededRow  = (point.y+self.bounds.size.height)/shortestRow;
     firstNeededRow = MAX(firstNeededRow, 0);
     lastNeededRow  = MIN(lastNeededRow, rowCount);
     if(firstNeededRow > 0)
@@ -160,17 +175,43 @@
     cell.rowIndex = row;
     cell.columnIndex = col;
     cell.delegate = self;
-    cell.backgroundColor = [UIColor clearColor]; //grayColor
+    cell.backgroundColor = [UIColor clearColor];
+    int height = 0;
+    int offset = [self getTotalHeight:cell.columnIndex row:cell.rowIndex cellHeight:&height];
     int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
     int left = columnSpacing*(col+1) + (width*col);
-    int top = (rowSpacing*(row+1)) + (rowHeight*row);
+    int top = (rowSpacing*(row+1)) + offset;//(rowHeight*row);
     if(top == 0)
         top = rowSpacing;
     if(left == 0)
         left = columnSpacing;
-    cell.frame = CGRectMake(left, top, width, rowHeight);
+    cell.frame = CGRectMake(left, top, width, height); //rowHeight
     if(editing)
         [self editMode:cell edit:YES];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(int)getTotalHeight:(int)columnIndex row:(int)rowIndex cellHeight:(int*)height
+{
+    int index = [self getIndex:columnIndex forRow:rowIndex];
+    int i = columnIndex;
+    int total = 0;
+    while(i < index)
+    {
+        GPGridViewItem* item = [self.items objectAtIndex:i];
+        if(item.rowHeight <= 0)
+            item.rowHeight = rowHeight;
+        total += item.rowHeight;
+        i += columnCount;
+    }
+    GPGridViewItem* currentItem = [self.items objectAtIndex:index];
+    if(currentItem.rowHeight <= 0)
+        currentItem.rowHeight = rowHeight;
+    *height = currentItem.rowHeight;
+    if(currentItem.rowHeight > highestRow)
+        highestRow = currentItem.rowHeight;
+    if(currentItem.rowHeight < shortestRow)
+        shortestRow = currentItem.rowHeight;
+    return total;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSInteger)getIndex:(NSInteger)col forRow:(NSInteger)row

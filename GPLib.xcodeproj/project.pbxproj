@@ -96,8 +96,6 @@
 		5C5F7D23159CCB7100F42061 /* GPTableMailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */; };
 		5C63DECA156A8BDD00C3EEC0 /* GPTabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */; };
 		5C63DECB156A8BDD00C3EEC0 /* GPTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C63DEC9156A8BDD00C3EEC0 /* GPTabBarItem.m */; };
-		5C63DED0156AAB5100C3EEC0 /* GPTabBarController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C63DECE156AAB5100C3EEC0 /* GPTabBarController.h */; };
-		5C63DED1156AAB5100C3EEC0 /* GPTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C63DECF156AAB5100C3EEC0 /* GPTabBarController.m */; };
 		5C63DEE0156AD1BA00C3EEC0 /* TabBarGlow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDA156AD1BA00C3EEC0 /* TabBarGlow.png */; };
 		5C63DEE1156AD1BA00C3EEC0 /* TabBarGlow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDB156AD1BA00C3EEC0 /* TabBarGlow@2x.png */; };
 		5C63DEE2156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C63DEDC156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png */; };
@@ -401,8 +399,6 @@
 		5C5F7D21159CCB7100F42061 /* GPTableMailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableMailCell.m; sourceTree = "<group>"; };
 		5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTabBarItem.h; sourceTree = "<group>"; };
 		5C63DEC9156A8BDD00C3EEC0 /* GPTabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTabBarItem.m; sourceTree = "<group>"; };
-		5C63DECE156AAB5100C3EEC0 /* GPTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTabBarController.h; sourceTree = "<group>"; };
-		5C63DECF156AAB5100C3EEC0 /* GPTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTabBarController.m; sourceTree = "<group>"; };
 		5C63DEDA156AD1BA00C3EEC0 /* TabBarGlow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarGlow.png; sourceTree = "<group>"; };
 		5C63DEDB156AD1BA00C3EEC0 /* TabBarGlow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarGlow@2x.png"; sourceTree = "<group>"; };
 		5C63DEDC156AD1BA00C3EEC0 /* TabBarItemSelectedBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabBarItemSelectedBackground.png; sourceTree = "<group>"; };
@@ -635,13 +631,6 @@
 			path = GridView/GridItems;
 			sourceTree = "<group>";
 		};
-		5C1430B41545A5AC00AEE1FA /* GPReveal */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = GPReveal;
-			sourceTree = "<group>";
-		};
 		5C1431141547132E00AEE1FA /* GPTableSearchController */ = {
 			isa = PBXGroup;
 			children = (
@@ -742,15 +731,6 @@
 				5C5C0A9115B8DE97005A2F2D /* GPHTTPRequestLibraryTests.octest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		5C63DECD156AAB5100C3EEC0 /* GPTabBarViewController */ = {
-			isa = PBXGroup;
-			children = (
-				5C63DECE156AAB5100C3EEC0 /* GPTabBarController.h */,
-				5C63DECF156AAB5100C3EEC0 /* GPTabBarController.m */,
-			);
-			path = GPTabBarViewController;
 			sourceTree = "<group>";
 		};
 		5C69073714E02BD900E44620 /* Launcher */ = {
@@ -892,7 +872,6 @@
 				5CA8D09B162CB29F009AC119 /* GPTableView */,
 				5C38CF121612136D00DB5BDC /* SideNavigation */,
 				5C8E87E3163B299C007B8F71 /* SlideOut */,
-				5C1430B41545A5AC00AEE1FA /* GPReveal */,
 				5C8840F8152E39CC007AEE7D /* gridView */,
 				5C69073714E02BD900E44620 /* Launcher */,
 				5CD4F90F14DC54C900F2CBB3 /* HTMLKit */,
@@ -1007,7 +986,6 @@
 			isa = PBXGroup;
 			children = (
 				5C2F1CB216304927001287D4 /* old */,
-				5C63DECD156AAB5100C3EEC0 /* GPTabBarViewController */,
 				5CD4F9C214DC555100F2CBB3 /* GPCenterLabel.h */,
 				5CD4F9C314DC555100F2CBB3 /* GPCenterLabel.m */,
 				5CD4F9C414DC555100F2CBB3 /* GPDragToRefreshView.h */,
@@ -1235,7 +1213,6 @@
 				5C3BD0C81565717200E615D6 /* GPTableFloatingItem.h in Headers */,
 				5C3BD0CD156572A000E615D6 /* GPTableFloatingCell.h in Headers */,
 				5C63DECA156A8BDD00C3EEC0 /* GPTabBarItem.h in Headers */,
-				5C63DED0156AAB5100C3EEC0 /* GPTabBarController.h in Headers */,
 				5C63DF0E156AEB4000C3EEC0 /* GPTableAccessory.h in Headers */,
 				5C0F35A0156D2CD40027A4BB /* GPGridMoreCell.h in Headers */,
 				5C0F35A2156D2CD40027A4BB /* GPGridViewCell.h in Headers */,
@@ -1547,7 +1524,6 @@
 				5C3BD0C91565717200E615D6 /* GPTableFloatingItem.m in Sources */,
 				5C3BD0CE156572A000E615D6 /* GPTableFloatingCell.m in Sources */,
 				5C63DECB156A8BDD00C3EEC0 /* GPTabBarItem.m in Sources */,
-				5C63DED1156AAB5100C3EEC0 /* GPTabBarController.m in Sources */,
 				5C63DF0F156AEB4000C3EEC0 /* GPTableAccessory.m in Sources */,
 				5C0F35A1156D2CD40027A4BB /* GPGridMoreCell.m in Sources */,
 				5C0F35A3156D2CD40027A4BB /* GPGridViewCell.m in Sources */,

@@ -132,12 +132,10 @@ static GPNavigator* GlobalNavigator; //store this here, so we can call the publi
         if(!Navigation)
         {
             if(temp.navigationController)
-            {
                 Navigation = [temp.navigationController retain];
-                Navigation.delegate = self;
-            }
             else
                 Navigation = [[UINavigationController alloc] initWithRootViewController:temp];
+            Navigation.delegate = self;
         }
         else
         {

@@ -42,6 +42,8 @@
     CGFloat rowHeight;
     NSMutableArray* imageQueue;
     NSOperationQueue* queue;
+    int highestRow; //used for recycling
+    int shortestRow; //used for recycling
 }
 
 //this array is already setup and ready to go. You will add GPGridItems to it

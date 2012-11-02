@@ -18,7 +18,7 @@
 
 @implementation GPGridView
 
-@synthesize delegate,rowCount,rowSpacing,columnCount,columnSpacing,gridViewHeader,editing,items,rowHeight,shouldWiggle;
+@synthesize delegate,rowCount,rowSpacing,columnCount,columnSpacing,gridViewHeader,editing,items,rowHeight,shouldWiggle,tileLayout;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)commonInit
 {
@@ -81,6 +81,11 @@
         rowCount++;
     int count = self.items.count-1;
     int total = 0;
+    if(self.tileLayout)
+    {
+        CGRect frame = [self frameForTile:0 row:rowCount];
+        total = frame.origin.y + frame.size.height + rowSpacing*2;
+    }
     for(int i = count; count-columnCount < i; i--)
     {
         int height = 0;
@@ -176,16 +181,22 @@
     cell.columnIndex = col;
     cell.delegate = self;
     cell.backgroundColor = [UIColor clearColor];
-    int height = 0;
-    int offset = [self getTotalHeight:cell.columnIndex row:cell.rowIndex cellHeight:&height];
-    int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
-    int left = columnSpacing*(col+1) + (width*col);
-    int top = (rowSpacing*(row+1)) + offset;//(rowHeight*row);
-    if(top == 0)
-        top = rowSpacing;
-    if(left == 0)
-        left = columnSpacing;
-    cell.frame = CGRectMake(left, top, width, height); //rowHeight
+    if(self.tileLayout)
+        cell.frame = [self frameForTile:col row:row];
+    else
+    {
+        int height = 0;
+        int offset = [self getTotalHeight:cell.columnIndex row:cell.rowIndex cellHeight:&height];
+        int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
+        int left = columnSpacing*(col+1) + (width*col);
+        int top = (rowSpacing*(row+1)) + offset;//(rowHeight*row);
+        if(top == 0)
+            top = rowSpacing;
+        if(left == 0)
+            left = columnSpacing;
+        cell.frame = CGRectMake(left, top, width, height);
+    }
+    
     if(editing)
         [self editMode:cell edit:YES];
 }
@@ -214,19 +225,67 @@
     return total;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(NSInteger)getIndex:(NSInteger)col forRow:(NSInteger)row
+-(CGRect)frameForTile:(int)columnIndex row:(int)rowIndex
 {
-    int index = 0;
-    for(int i = 0; i <= rowCount; i++)
+    int index = [self getIndex:columnIndex forRow:rowIndex];
+    int i = 0;
+    int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
+    //int top = rowSpacing;
+    int left = columnSpacing;
+    int height = 0;
+    int lastHeight = 0;
+    int currentColumn = 0;
+    int* topOffsets = malloc(columnCount*sizeof(int));
+    for(int i = 0; i < columnCount; i++)
+        topOffsets[i] = rowSpacing;
+    while(i < index)
     {
-        for(int k =0; k < columnCount; k++)
+        GPGridViewItem* item = [self.items objectAtIndex:i];
+        if(item.rowHeight <= 0)
+            item.rowHeight = rowHeight;
+        if(item.columnCount <= 1)
+            item.columnCount = 1;
+        int itemWidth = width*item.columnCount;
+        if(item.columnCount > 1)
+            itemWidth += columnSpacing*(item.columnCount-1);
+        if(left+itemWidth+(columnSpacing*item.columnCount) >= self.frame.size.width)
         {
-            if(i == row && k == col)
-                return index;
-            index++;
+            topOffsets[columnIndex] += item.rowHeight + rowSpacing;
+            if(currentColumn+1 >= columnCount)
+            {
+                currentColumn = 0;
+                left = columnSpacing;
+            }
+            else
+                currentColumn++;
         }
+        else
+        {
+            left += itemWidth + columnSpacing;
+            currentColumn++;
+        }
+        lastHeight = item.rowHeight;
+        i++;
     }
-    return index;
+    GPGridViewItem* currentItem = [self.items objectAtIndex:index];
+    if(currentItem.rowHeight <= 0)
+        currentItem.rowHeight = rowHeight;
+    if(currentItem.columnCount <= 1)
+        currentItem.columnCount = 1;
+    
+    height = currentItem.rowHeight;
+    int itemWidth = width*currentItem.columnCount;
+    if(currentItem.columnCount > 1)
+        itemWidth += columnSpacing*(currentItem.columnCount-1);
+    
+    if(currentItem.rowHeight > highestRow)
+        highestRow = currentItem.rowHeight;
+    if(currentItem.rowHeight < shortestRow)
+        shortestRow = currentItem.rowHeight;
+    
+    int top = topOffsets[columnIndex];
+    free(topOffsets);
+    return CGRectMake(left, top, itemWidth, height);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(Class)classForObject:(id)object gridView:(GPGridView*)gridView
@@ -292,6 +351,37 @@
             return cell;
     }
     return nil;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSInteger)getIndex:(NSInteger)col forRow:(NSInteger)row
+{
+    int index = 0;
+    int skip = 0;
+    int lastIndex = 0;
+    for(int i = 0; i <= rowCount; i++)
+    {
+        for(int k =0; k < columnCount; k++)
+        {
+            if(i == row && k == col)
+                return index;
+            if(index < self.items.count && self.tileLayout)
+            {
+                GPGridViewItem* currentItem = [self.items objectAtIndex:index];
+                if(currentItem.columnCount > 1 && lastIndex != index)
+                {
+                    lastIndex = index;
+                    skip += currentItem.columnCount-1;
+                }
+                if(skip <= 0)
+                    index++;
+                else
+                    skip--;
+            }
+            else
+                index++;
+        }
+    }
+    return index;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)convertIndexToGrid:(NSInteger)index col:(NSInteger*)col row:(NSInteger*)row
@@ -517,9 +607,18 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setEditing:(BOOL)edit
 {
+    if(self.tileLayout) //edit is not avalible in tile mode.
+        return;
     editing = edit;
     for(GPGridViewCell* cell in visibleGridItems)
         [self editMode:cell edit:edit];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setTileLayout:(BOOL)tile
+{
+    tileLayout = tile;
+    if(editing)
+        editing = NO;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //cell delegates

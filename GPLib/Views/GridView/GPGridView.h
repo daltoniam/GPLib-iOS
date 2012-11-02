@@ -73,6 +73,9 @@
 //set if in editing mode the views should wiggle. Default is YES
 @property(nonatomic,assign)BOOL shouldWiggle;
 
+//set if you want to layout to be tile. Default is NO. Please note editing is not avalible in tile mode
+@property(nonatomic,assign)BOOL tileLayout; //still an experimental feature
+
 //set a gridView header.
 @property(nonatomic,retain)UIView* gridViewHeader;
 

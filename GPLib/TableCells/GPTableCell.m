@@ -191,6 +191,7 @@ const CGFloat TableCellSmallMargin = 6;
     if(item.backgroundColor)
     {
         self.backgroundColor = item.backgroundColor;
+        self.accessoryView.backgroundColor = item.backgroundColor;
         if(!item.isGrouped)
             self.contentView.backgroundColor = item.backgroundColor;
     }

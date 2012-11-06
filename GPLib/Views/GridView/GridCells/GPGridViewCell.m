@@ -50,7 +50,9 @@
     if(self = [super init])
     {
         self.identifier = indent;
-        containerView = [[UIView alloc] init];
+        containerView = [[UIImageView alloc] init];
+        //containerView.backgroundColor = [UIColor redColor];
+        //containerView.layer.masksToBounds = NO;
         [self addSubview:containerView];
     }
     return self;
@@ -83,10 +85,10 @@
     textLabel.titleLabel.textAlignment = UITextAlignmentCenter;
     [textLabel setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     textLabel.backgroundColor = [UIColor clearColor];
-    textLabel.layer.shadowColor = [UIColor blackColor].CGColor;
-    textLabel.layer.shadowOffset = CGSizeMake(1, 1);
-    textLabel.layer.shadowOpacity = 0.8;
-    textLabel.layer.shadowRadius = 1.0;
+    //textLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+    //textLabel.layer.shadowOffset = CGSizeMake(1, 1);
+    //textLabel.layer.shadowOpacity = 0.8;
+    //textLabel.layer.shadowRadius = 1.0;
     //textLabel.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, textLabel.frame.size.width+1, textLabel.frame.size.height+1)].CGPath;
     [textLabel addTarget:self action:@selector(labelTapped) forControlEvents:UIControlEventTouchUpInside];
     [containerView addSubview:textLabel];
@@ -140,22 +142,30 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
+    int offset = 0;
     containerView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    if(containerView.image)
+    {
+        int pad = 3;
+        offset = pad;
+        containerView.frame = CGRectMake(-pad, -pad, self.frame.size.width+(pad*2), self.frame.size.height+(pad*2));
+    }
     if(textLabel && imageView)
     {
         int height = self.frame.size.height-30;
         if(!isLowerText)
             height += 12;
         int top = 0;
-        imageView.frame = CGRectMake(1, 1, self.frame.size.width, height);
+        int pad = 1;
+        imageView.frame = CGRectMake(pad+offset, pad+(offset-0.5), self.frame.size.width-(pad*2), height-(pad*2));
     //CGSize imageSize = [self imageScale:self.frame.size.height];
         //imageView.frame = CGRectMake(0, top, imageSize.width, imageSize.height);
         //NSLog(@"self.frame.size.width: %f",self.frame.size.width);
         //NSLog(@"height: %f",height);
-        top += imageView.frame.size.height+5;
-        if(!isLowerText)
-            top += 5;
-        self.textLabel.frame = CGRectMake(0, top, self.frame.size.width, 20);
+        top += imageView.frame.size.height;
+        //if(!isLowerText)
+        //    top += 5;
+        self.textLabel.frame = CGRectMake(offset, top+offset, self.frame.size.width, 20);
     }
     else if(textLabel)
     {
@@ -171,7 +181,10 @@
         self.textLabel.frame = CGRectMake(0, top, self.frame.size.width, 20);
     }
     else
-        imageView.frame = CGRectMake(1, 1, self.frame.size.width-1, self.frame.size.height-1);
+    {
+        int pad = 1;
+        imageView.frame = CGRectMake(pad+offset, pad+(offset-0.5), self.frame.size.width-(pad*2), self.frame.size.height-(pad*2));
+    }
 
     if(textLabel && isLowerText)
     {
@@ -321,6 +334,7 @@
             [self setupImageView];
         
         imageView.image = item.image;
+        containerView.image = item.backgroundImage;
         [self isSelected:item.isSelected];
         drawShadow = item.drawDropShadow;
         isLoading = item.isLoading;

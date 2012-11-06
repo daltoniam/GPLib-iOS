@@ -61,7 +61,7 @@
     UIView* blankView;
     GPLoadingLabel* loadingLabel;
     BOOL drawShadow;
-    UIView* containerView;
+    UIImageView* containerView;
     UILabel* lowerTextLabel;
     BOOL isLowerText;
     BOOL isLoading;

@@ -44,6 +44,7 @@
     NSOperationQueue* queue;
     int highestRow; //used for recycling
     int shortestRow; //used for recycling
+    int totalTileHeight;
 }
 
 //this array is already setup and ready to go. You will add GPGridItems to it

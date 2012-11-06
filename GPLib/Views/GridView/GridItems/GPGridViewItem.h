@@ -43,8 +43,11 @@
 @property(nonatomic,assign)BOOL isSelected;
 @property(nonatomic,assign)BOOL drawDropShadow;
 @property(nonatomic,assign)BOOL isLoading;
+@property(nonatomic,retain)UIImage* backgroundImage;
 @property(nonatomic,assign)NSInteger rowHeight;
 @property(nonatomic,assign)NSInteger columnCount; //just testing this
+@property(nonatomic,assign)NSInteger rowCount; //just testing this
+@property(nonatomic,assign)CGRect frame; //just testing this
 //for things that are not going to be displayed but are needed in the tablecell
 @property(nonatomic,retain)NSDictionary* Properties;
 

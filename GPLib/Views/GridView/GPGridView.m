@@ -54,6 +54,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)reloadData
 {
+    if(self.tileLayout)
+        [self shuffleDataSource];
     [self recycleGrid];
     [self updateGrid];
 }
@@ -82,10 +84,8 @@
     int count = self.items.count-1;
     int total = 0;
     if(self.tileLayout)
-    {
-        CGRect frame = [self frameForTile:0 row:rowCount];
-        total = frame.origin.y + frame.size.height + rowSpacing*2;
-    }
+        total = totalTileHeight;
+
     for(int i = count; count-columnCount < i; i--)
     {
         int height = 0;
@@ -206,86 +206,135 @@
     int index = [self getIndex:columnIndex forRow:rowIndex];
     int i = columnIndex;
     int total = 0;
-    while(i < index)
+    if(self.items.count > 0)
     {
-        GPGridViewItem* item = [self.items objectAtIndex:i];
-        if(item.rowHeight <= 0)
-            item.rowHeight = rowHeight;
-        total += item.rowHeight;
-        i += columnCount;
+        while(i < index)
+        {
+            GPGridViewItem* item = [self.items objectAtIndex:i];
+            if(item.rowHeight <= 0)
+                item.rowHeight = rowHeight;
+            total += item.rowHeight;
+            i += columnCount;
+        }
+        GPGridViewItem* currentItem = [self.items objectAtIndex:index];
+        if(currentItem.rowHeight <= 0)
+            currentItem.rowHeight = rowHeight;
+        *height = currentItem.rowHeight;
+        if(currentItem.rowHeight > highestRow)
+            highestRow = currentItem.rowHeight;
+        if(currentItem.rowHeight < shortestRow)
+            shortestRow = currentItem.rowHeight;
     }
-    GPGridViewItem* currentItem = [self.items objectAtIndex:index];
-    if(currentItem.rowHeight <= 0)
-        currentItem.rowHeight = rowHeight;
-    *height = currentItem.rowHeight;
-    if(currentItem.rowHeight > highestRow)
-        highestRow = currentItem.rowHeight;
-    if(currentItem.rowHeight < shortestRow)
-        shortestRow = currentItem.rowHeight;
     return total;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)shuffleDataSource
+{
+    for(GPGridViewItem* item in self.items)
+    {
+        if(item.columnCount <= 1)
+            item.columnCount = 1;
+        if(item.rowCount <= 1)
+            item.rowCount = 1;
+    }
+    int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
+    NSMutableArray* layoutArray = [NSMutableArray arrayWithCapacity:self.items.count];
+    NSMutableArray* dataSource = [self.items mutableCopy];
+    int top = rowSpacing;
+    while(dataSource.count > 0)
+    {
+        NSMutableArray* rowArray = [NSMutableArray arrayWithCapacity:rowCount*columnCount];
+        int columnLeft = columnCount;
+        GPGridViewItem* mainItem = [dataSource objectAtIndex:0];
+        [rowArray addObject:mainItem];
+        [dataSource removeObject:mainItem];
+        columnLeft -= mainItem.columnCount;
+        if(columnLeft > 0)
+        {
+            int rowLeft = mainItem.rowCount;
+            NSMutableArray* findArray = [NSMutableArray arrayWithCapacity:rowLeft*columnLeft];
+            for(GPGridViewItem* item in dataSource)
+            {
+                if(item.columnCount <= columnLeft && item.rowCount <= rowLeft)
+                {
+                    [findArray addObject:item];
+                    rowLeft -= item.rowCount;
+                    if(rowLeft <= 0)
+                    {
+                        columnLeft -= item.columnCount;
+                        if(columnLeft > 0)
+                            rowLeft = mainItem.rowCount;
+                        else
+                            break;
+                    }
+                }
+            }
+            for(GPGridViewItem* item in findArray)
+            {
+                [dataSource removeObject:item];
+                [rowArray addObject:item];
+            }
+        }
+        int left = columnSpacing;
+        int offset = 0;
+        for(GPGridViewItem* item in rowArray)
+        {
+            int itemWidth = width*item.columnCount;
+            int height = rowHeight*item.rowCount;
+            if(item.columnCount > 1)
+                itemWidth += columnSpacing*(item.columnCount-1);
+            if(item.rowCount > 1)
+                height += rowSpacing*(item.rowCount-1);
+            item.frame = CGRectMake(left, top+offset, itemWidth, height);
+            left += itemWidth+columnSpacing;
+            if(left+columnSpacing >= self.frame.size.width)
+            {
+                offset += rowHeight + rowSpacing;
+                left =  columnSpacing;
+                for(GPGridViewItem* checkItem in rowArray)
+                {
+                    if(checkItem.rowCount > item.rowCount)
+                    {
+                        int itemWidth = (width*checkItem.columnCount);
+                        if(checkItem.columnCount > 1)
+                            itemWidth += columnSpacing*(checkItem.columnCount);
+                        else
+                            itemWidth += (columnSpacing);
+                        left += itemWidth;
+                    }
+                    else if(checkItem.rowCount == item.rowCount)
+                    {
+                        itemWidth += (columnSpacing);
+                        break;
+                    }
+                }
+                itemWidth += (columnSpacing);
+            }
+        }
+        int height = rowHeight*mainItem.rowCount;
+        if(mainItem.rowCount > 1)
+            height += rowSpacing*(mainItem.rowCount-1);
+        top += height+rowSpacing;
+        [layoutArray addObjectsFromArray:rowArray];
+    }
+    totalTileHeight = top/1.5;
+    self.items = layoutArray;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(CGRect)frameForTile:(int)columnIndex row:(int)rowIndex
 {
     int index = [self getIndex:columnIndex forRow:rowIndex];
-    int i = 0;
-    int width = (self.bounds.size.width/columnCount) - (columnSpacing+(columnSpacing/columnCount));
-    //int top = rowSpacing;
-    int left = columnSpacing;
-    int height = 0;
-    int lastHeight = 0;
-    int currentColumn = 0;
-    int* topOffsets = malloc(columnCount*sizeof(int));
-    for(int i = 0; i < columnCount; i++)
-        topOffsets[i] = rowSpacing;
-    while(i < index)
+    if(index < self.items.count)
     {
-        GPGridViewItem* item = [self.items objectAtIndex:i];
-        if(item.rowHeight <= 0)
-            item.rowHeight = rowHeight;
-        if(item.columnCount <= 1)
-            item.columnCount = 1;
-        int itemWidth = width*item.columnCount;
-        if(item.columnCount > 1)
-            itemWidth += columnSpacing*(item.columnCount-1);
-        if(left+itemWidth+(columnSpacing*item.columnCount) >= self.frame.size.width)
-        {
-            topOffsets[columnIndex] += item.rowHeight + rowSpacing;
-            if(currentColumn+1 >= columnCount)
-            {
-                currentColumn = 0;
-                left = columnSpacing;
-            }
-            else
-                currentColumn++;
-        }
-        else
-        {
-            left += itemWidth + columnSpacing;
-            currentColumn++;
-        }
-        lastHeight = item.rowHeight;
-        i++;
+        GPGridViewItem* item = [self.items objectAtIndex:index];
+        int height = item.frame.size.height;
+        if(height > highestRow)
+            highestRow = height;
+        if(height < shortestRow)
+            shortestRow = height;
+        return item.frame;
     }
-    GPGridViewItem* currentItem = [self.items objectAtIndex:index];
-    if(currentItem.rowHeight <= 0)
-        currentItem.rowHeight = rowHeight;
-    if(currentItem.columnCount <= 1)
-        currentItem.columnCount = 1;
-    
-    height = currentItem.rowHeight;
-    int itemWidth = width*currentItem.columnCount;
-    if(currentItem.columnCount > 1)
-        itemWidth += columnSpacing*(currentItem.columnCount-1);
-    
-    if(currentItem.rowHeight > highestRow)
-        highestRow = currentItem.rowHeight;
-    if(currentItem.rowHeight < shortestRow)
-        shortestRow = currentItem.rowHeight;
-    
-    int top = topOffsets[columnIndex];
-    free(topOffsets);
-    return CGRectMake(left, top, itemWidth, height);
+    return CGRectZero;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(Class)classForObject:(id)object gridView:(GPGridView*)gridView

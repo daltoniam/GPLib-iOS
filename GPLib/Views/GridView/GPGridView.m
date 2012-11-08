@@ -56,6 +56,12 @@
 {
     if(self.tileLayout)
         [self shuffleDataSource];
+    for(GPGridViewCell* cell in visibleGridItems)
+    {
+        [recycledGridItems addObject:cell];
+        [self editMode:cell edit:NO];
+        [cell removeFromSuperview];
+    }
     [self recycleGrid];
     [self updateGrid];
 }
@@ -110,7 +116,9 @@
     int lastNeededRow  = (point.y+self.bounds.size.height)/shortestRow;
     firstNeededRow = MAX(firstNeededRow, 0);
     lastNeededRow  = MIN(lastNeededRow, rowCount);
-    if(firstNeededRow > 0)
+    if(firstNeededRow > 2)
+        firstNeededRow -= 2;
+    else if(firstNeededRow > 0)
         firstNeededRow--;
     for(GPGridViewCell* cell in visibleGridItems)
     {
@@ -614,8 +622,8 @@
     {
         UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = REMOVE_BTN_TAG;
-        btn.frame = CGRectMake(-3, -3, 15, 15);
-        [btn setImage:[UIImage libraryImageNamed:@"removeButton.png"] forState:UIControlStateNormal];
+        btn.frame = CGRectMake(-5, -5, 20, 20);
+        [btn setImage:[UIImage libraryImageNamed:@"close-small.png"] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(removeCell:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:btn];
     }
@@ -649,8 +657,8 @@
     if(index != NSNotFound)
     {
         [self removeObjectAtIndex:index];
-        if([self.delegate respondsToSelector:@selector(didRemoveItemAtIndex:)])
-            [self.delegate didRemoveItemAtIndex:index];
+        if([self.delegate respondsToSelector:@selector(gridViewDidRemoveItem:index:)])
+            [self.delegate gridViewDidRemoveItem:self index:index];
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

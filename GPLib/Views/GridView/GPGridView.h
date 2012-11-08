@@ -28,7 +28,7 @@
 -(Class)classForObject:(id)object gridView:(GPGridView*)gridView;
 
 //a item was remove from the grid while editing
--(void)didRemoveItemAtIndex:(int)index;
+-(void)gridViewDidRemoveItem:(GPGridView*)gridView index:(int)index;
 
 @end
 

@@ -163,8 +163,8 @@
         //NSLog(@"self.frame.size.width: %f",self.frame.size.width);
         //NSLog(@"height: %f",height);
         top += imageView.frame.size.height;
-        //if(!isLowerText)
-        //    top += 5;
+        if(!isLowerText)
+            top += 1;
         self.textLabel.frame = CGRectMake(offset, top+offset, self.frame.size.width, 20);
     }
     else if(textLabel)

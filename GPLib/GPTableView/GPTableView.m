@@ -63,6 +63,8 @@
 #import "GPTableSegmentCell.h"
 #import "GPTableButtonItem.h"
 #import "GPTableButtonCell.h"
+#import "GPTablePadCell.h"
+#import "GPTablePadItem.h"
 
 
 @implementation GPTableView
@@ -764,6 +766,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         return [GPTableSwitchCell class];
     else if ([object isKindOfClass:[GPTableButtonItem class]])
         return [GPTableButtonCell class];
+    else if ([object isKindOfClass:[GPTablePadItem class]])
+        return [GPTablePadCell class];
     else if ([object isKindOfClass:[GPTableTextItem class]])
         return [GPTableCell class];
     

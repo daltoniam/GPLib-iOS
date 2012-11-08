@@ -188,7 +188,7 @@
 {
     UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.tag = view.tag;
-    [btn setImage:[UIImage libraryImageNamed:@"removeButton.png"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage libraryImageNamed:@"close-small.png"] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(removeView:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:btn];
 }

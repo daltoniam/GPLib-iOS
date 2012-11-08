@@ -350,7 +350,11 @@ GPArgType argTypeAsChar(char argType);
         [invocation setArgument:&val atIndex:index];
     }
     else
+    {
+        if([text isKindOfClass:[NSString class]])
+            text = [text decodeURL];
         [invocation setArgument:&text atIndex:index];
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setArgumentsFromValues:(NSArray *)values forInvocation:(NSInvocation *)invocation {

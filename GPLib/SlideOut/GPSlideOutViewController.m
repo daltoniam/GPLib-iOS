@@ -236,7 +236,8 @@
 -(void)setCenterController:(UINavigationController *)center
 {
     [centerController.view removeFromSuperview];
-    centerController = center;
+    [centerController release];
+    centerController = [center retain];
     centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     centerController.view.frame = centerView.bounds;
     [centerView addSubview:centerController.view];

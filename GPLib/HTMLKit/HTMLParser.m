@@ -385,6 +385,12 @@ void error( void * ctx, const char * msg, ... )
         {
             int pos = find.location+find.length;
             NSRange end = [style rangeOfString:@";" options:0 range:NSMakeRange(pos, [style length]-pos)];
+            if(end.location == NSNotFound)
+                end = [style rangeOfString:@"'" options:0 range:NSMakeRange(pos, [style length]-pos)];
+            if(end.location == NSNotFound)
+                end = [style rangeOfString:@"\"" options:0 range:NSMakeRange(pos, [style length]-pos)];
+            if(end.location == NSNotFound)
+                end = NSMakeRange([style length],0);
             NSString* size = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
             FontSize = [self GetSize:size];
             //NSLog(@"FontSize: %d",FontSize);

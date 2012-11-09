@@ -39,7 +39,7 @@ const CGFloat SmallMargin = 6;
 
 @implementation GPLoadingLabel
 
-@synthesize text;
+@synthesize text,customBackgroundColor;
 ////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame style:(GPLoadingLabelStyle)style text:(NSString *)loadingtext
 {
@@ -154,10 +154,13 @@ const CGFloat SmallMargin = 6;
     }
     else if(SelectedStyle == GPLoadingLabelWhiteStyle)
     {
-        self.backgroundColor = [UIColor whiteColor];
-        ContentView.backgroundColor = [UIColor whiteColor];
+        if(!self.customBackgroundColor)
+            self.customBackgroundColor = [UIColor whiteColor];
+        self.backgroundColor = self.customBackgroundColor;
+        ContentView.backgroundColor = self.customBackgroundColor;
         ContentView.frame = self.frame;
         
+        TextLabel.backgroundColor = [UIColor clearColor];
         TextLabel.text = text;
         TextLabel.numberOfLines = 1;
         TextLabel.font = [UIFont systemFontOfSize:17];

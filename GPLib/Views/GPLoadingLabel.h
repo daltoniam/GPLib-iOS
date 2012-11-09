@@ -46,6 +46,7 @@ typedef enum {
 }
 @property(nonatomic,copy)NSString* text;
 @property(assign, readonly)BOOL isAnimating;
+@property(nonatomic,retain)UIColor* customBackgroundColor;
 
 - (id)initWithFrame:(CGRect)frame style:(GPLoadingLabelStyle)style;
 - (id)initWithFrame:(CGRect)frame style:(GPLoadingLabelStyle)style text:(NSString *)text;

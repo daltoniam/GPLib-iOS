@@ -80,7 +80,7 @@
         if(self.leftViewIsSlideLength)
             width = self.slideOffset;
         leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, self.view.frame.size.height)];
-        leftView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        leftView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
         self.leftController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.leftController.view.frame = leftView.bounds;
         [leftView addSubview:leftController.view];
@@ -90,7 +90,7 @@
     {
         int left = self.view.frame.size.width - self.slideOffset;
         rightView = [[UIView alloc] initWithFrame:CGRectMake(left, 0, self.slideOffset, self.view.frame.size.height)];
-        rightView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        rightView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
         self.rightController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.rightController.view.frame = rightView.bounds;
         [rightView addSubview:rightController.view];

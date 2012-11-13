@@ -1014,6 +1014,26 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         [timeScroller scrollViewDidEndDecelerating];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//deleting rows
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)tableView:(UITableView *)table canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BOOL canEdit = NO;
+    if([self.delegate respondsToSelector:@selector(canDeleteObject:atIndexPath:)])
+        canEdit = [self.delegate canDeleteObject:[self tableView:table objectForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+    return canEdit;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)tableView:(UITableView *)table commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        if([self.delegate respondsToSelector:@selector(didDeleteObject:atIndexPath:)])
+            [self.delegate didDeleteObject:[self tableView:table objectForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)objectAtPoint:(CGPoint)point
 {
     UIView *view = [tableView hitTest:point withEvent:UIEventTypeTouches];

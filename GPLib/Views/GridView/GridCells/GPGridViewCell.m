@@ -99,12 +99,12 @@
 {
     lowerTextLabel = [[UILabel alloc] init];
     lowerTextLabel.textAlignment = UITextAlignmentCenter;
-    lowerTextLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1];
+    lowerTextLabel.textColor = [UIColor colorWithWhite:0.3 alpha:1];
     lowerTextLabel.backgroundColor = [UIColor clearColor];
-    lowerTextLabel.layer.shadowColor = [UIColor blackColor].CGColor;
-    lowerTextLabel.layer.shadowOffset = CGSizeMake(1, 1);
-    lowerTextLabel.layer.shadowOpacity = 0.8;
-    lowerTextLabel.layer.shadowRadius = 1.0;
+    //lowerTextLabel.layer.shadowColor = [UIColor blackColor].CGColor;
+    //lowerTextLabel.layer.shadowOffset = CGSizeMake(1, 1);
+    //lowerTextLabel.layer.shadowOpacity = 0.8;
+    //lowerTextLabel.layer.shadowRadius = 1.0;
     lowerTextLabel.font = [UIFont systemFontOfSize:12];
     [containerView addSubview:lowerTextLabel];
     

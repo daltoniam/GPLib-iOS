@@ -72,7 +72,14 @@
 //when the search controller is dismissed.
 -(void)willStopSearch;
 
+//when the tableview is scrolled.
 -(void)scrollViewDidScroll:(UIScrollView*)scrollView;
+
+//return True or false if a item can be deleted (swipe to delete).
+-(BOOL)canDeleteObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
+//when the tableview delete button is pressed.
+-(void)didDeleteObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
 

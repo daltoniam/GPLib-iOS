@@ -33,12 +33,23 @@
 {
     [super layoutSubviews];
     self.textLabel.frame = CGRectZero;
+    bevelLine.frame = CGRectMake(0, 0.2, self.contentView.frame.size.width, 1);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setObject:(id)object
 {
+    GPTablePadItem* item = (GPTablePadItem*)object;
     self.accessoryType = UITableViewCellAccessoryNone;
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    if(item.bevelLineColor)
+    {
+        if(!bevelLine)
+            bevelLine = [[UIView alloc] init];
+        bevelLine.backgroundColor = item.bevelLineColor;
+        [self.contentView addSubview:bevelLine];
+    }
+    else
+        [bevelLine removeFromSuperview];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

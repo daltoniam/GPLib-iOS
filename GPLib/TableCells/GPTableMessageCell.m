@@ -43,8 +43,8 @@
     GPTableMessageItem* item = (GPTableMessageItem*)object;
     CGFloat maxWidth = tableView.frame.size.width - 100;
     //CGFloat ImageSize = [super tableView:tableView rowHeightForObject:object];
-    if(item.rowHeight) //we cache rowHeight for preformance reasons
-        return item.rowHeight;
+    //if(item.rowHeight) //we cache rowHeight for preformance reasons
+    //    return item.rowHeight;
     HTMLTextLabel* view = [[[HTMLTextLabel alloc] initWithHTML:item.text embed:YES frame:CGRectMake(0, 0, maxWidth, 0)] autorelease];
     view.ExtendHeightToFit = YES;
     view.ignoreXAttachment = YES;

@@ -42,8 +42,8 @@
 {
     CGFloat maxWidth = tableView.frame.size.width - 80;
     GPTableMailItem* item = (GPTableMailItem*)object;
-    if(item.rowHeight)
-        return item.rowHeight;
+    //if(item.rowHeight)
+    //    return item.rowHeight;
     CGFloat height = [super tableView:tableView rowHeightForObject:object];
 
     HTMLTextLabel* view = [[[HTMLTextLabel alloc] initWithHTML:item.title embed:YES frame:CGRectMake(0, 0, maxWidth, 0)] autorelease];

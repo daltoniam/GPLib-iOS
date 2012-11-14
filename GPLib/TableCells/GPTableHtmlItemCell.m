@@ -41,8 +41,8 @@
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object 
 {
     GPTableHTMLItem* item = (GPTableHTMLItem*)object;
-    if(item.rowHeight) //we cache rowHeight for preformance reasons
-        return item.rowHeight;
+    //if(item.rowHeight) //we cache rowHeight for preformance reasons
+    //    return item.rowHeight;
     CGFloat maxWidth = tableView.frame.size.width - 20;
     //CGFloat size = [super tableView:tableView rowHeightForObject:object];
     HTMLTextLabel* view = [[[HTMLTextLabel alloc] initWithHTML:item.text embed:YES frame:CGRectMake(0, 0, maxWidth, 0)] autorelease];

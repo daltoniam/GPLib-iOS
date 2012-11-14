@@ -180,6 +180,13 @@
                 return NO;
         }
     }
+    else
+    {
+        if(txtView.text.length > 0)
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+        else
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
     return YES;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

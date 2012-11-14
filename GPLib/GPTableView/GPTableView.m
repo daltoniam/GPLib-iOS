@@ -795,8 +795,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         id object = [self tableView:table objectForRowAtIndexPath:indexPath];
         Class cls = [self tableView:table cellClassForObject:object];
         CGFloat height = [cls tableView:table rowHeightForObject:object];
-        //if([object respondsToSelector:@selector(rowHeight)])
-        //    [object setRowHeight:height];
+        if([object respondsToSelector:@selector(rowHeight)])
+            [object setRowHeight:height];
         return height;
     }
     return 44;

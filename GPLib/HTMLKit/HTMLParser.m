@@ -143,7 +143,11 @@ void elementDidStart(void *ctx,const xmlChar *name,const xmlChar **atts)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void foundChars(void *ctx,const xmlChar *ch,int len)
 {
-    NSString* string = [NSString stringWithCString:(const char*)ch encoding:NSUTF8StringEncoding];
+    char* data = malloc(sizeof(char)*(len+1));
+    memset(data, 0, len+1);
+    strncpy(data, (const char*)ch, len);
+    NSString* string = [NSString stringWithCString:data encoding:NSUTF8StringEncoding];
+    free(data);
     HTMLParser* parser = (HTMLParser*)ctx;
     [parser foundCharacters:string];
 }

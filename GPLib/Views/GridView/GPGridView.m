@@ -112,7 +112,7 @@
 -(void)recycleGrid
 {
     CGPoint point = self.contentOffset;
-    int firstNeededRow = point.y/highestRow;
+    int firstNeededRow = (point.y-self.bounds.size.height)/highestRow;
     int lastNeededRow  = (point.y+self.bounds.size.height)/shortestRow;
     firstNeededRow = MAX(firstNeededRow, 0);
     lastNeededRow  = MIN(lastNeededRow, rowCount);

@@ -246,6 +246,7 @@ static CGFloat getWidthCallback( void* refCon );
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)linebreakmode range:(NSRange)range 
 {
     
+    //{.spec = kCTParagraphStyleSpecifierParagraphSpacing, .valueSize = sizeof(CGFloat), .value = (const void*)12},
 	CTParagraphStyleSetting parastyles[2] = {
 		{.spec = kCTParagraphStyleSpecifierAlignment, .valueSize = sizeof(CTTextAlignment), .value = (const void*)&alignment},
 		{.spec = kCTParagraphStyleSpecifierLineBreakMode, .valueSize = sizeof(CTLineBreakMode), .value = (const void*)&linebreakmode},};

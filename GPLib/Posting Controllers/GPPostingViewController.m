@@ -52,11 +52,13 @@
     textView = [[UITextView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, height)];
     textView.delegate = self;
     //textView.returnKeyType = UIReturnKeyDone;
-    textView.contentInset = UIEdgeInsetsMake(2, 5, 5, 5);
+    //textView.contentInset = UIEdgeInsetsMake(2, 5, 5, 5);
     [textView becomeFirstResponder];
-    textView.contentSize = CGSizeMake(textView.frame.size.height,textView.contentSize.height);
+    textView.contentSize = CGSizeMake(self.view.frame.size.width,textView.contentSize.height);
     textView.showsHorizontalScrollIndicator = NO;
     textView.bounces = NO;
+    textView.directionalLockEnabled = YES;
+    textView.font = [UIFont systemFontOfSize:17];
     textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     top += textView.frame.size.height;    
     buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, top, self.view.frame.size.width, 35)];

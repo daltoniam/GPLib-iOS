@@ -346,15 +346,15 @@ static CGFloat getWidthCallback( void* refCon );
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)setViewSpaceTag:(int)height width:(int)width top:(int)top index:(int)index
+-(void)setViewSpaceTag:(float)height width:(float)width top:(float)top index:(int)index
 {
     [self setViewSpaceTag:height width:width range:NSMakeRange(0,[self length]) top:top index:index];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)setViewSpaceTag:(int)height width:(int)width range:(NSRange)range top:(int)top index:(int)index
+-(void)setViewSpaceTag:(float)height width:(float)width range:(NSRange)range top:(float)top index:(int)index
 {
-    NSDictionary* attribs = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:height],@"height",
-                             [NSNumber numberWithInt:width],@"width",[NSNumber numberWithInt:top],@"top",[NSNumber numberWithInt:index],@"index",nil];
+    NSDictionary* attribs = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:height],@"height",
+                             [NSNumber numberWithFloat:width],@"width",[NSNumber numberWithFloat:top],@"top",[NSNumber numberWithInt:index],@"index",nil];
     [self addRunDelegate:range attribs:attribs];
     [self removeAttribute:VIEW_SPACE range:range];
 	[self addAttribute:VIEW_SPACE value:[NSNumber numberWithInt:index] range:range];

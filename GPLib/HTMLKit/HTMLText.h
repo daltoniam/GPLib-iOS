@@ -95,7 +95,7 @@
 
 +(NSMutableAttributedString*)spaceString:(NSString*)attrName value:(id)value height:(float)h width:(float)w;
 
--(void)setViewSpaceTag:(int)height width:(int)width top:(int)top index:(int)index;
--(void)setViewSpaceTag:(int)height width:(int)width range:(NSRange)range top:(int)top index:(int)index;
+-(void)setViewSpaceTag:(float)height width:(float)width top:(float)top index:(int)index;
+-(void)setViewSpaceTag:(float)height width:(float)width range:(NSRange)range top:(float)top index:(int)index;
 
 @end

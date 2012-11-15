@@ -266,11 +266,11 @@ static CGFloat getWidthCallback( void* refCon );
 {
     if(!fontFamily)
         fontFamily = DEFAULT_FONT;
-    CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
-    NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait] forKey:(NSString*)kCTFontSymbolicTrait];
+    //CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
+    //NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait] forKey:(NSString*)kCTFontSymbolicTrait];
     NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
-                          fontFamily,kCTFontFamilyNameAttribute,
-                          trait,kCTFontTraitsAttribute,nil];
+                          fontFamily,kCTFontFamilyNameAttribute,nil];
+    //                          trait,kCTFontTraitsAttribute,
     
     CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)attr);
     if (!desc) return;
@@ -281,6 +281,9 @@ static CGFloat getWidthCallback( void* refCon );
     [self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // remove then add for apple leak.
     [self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
     CFRelease(aFont);
+    
+    [self setTextBold:isBold range:range];
+    [self setTextItalic:isItalic range:range];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addRunDelegate:(NSRange)range attribs:(NSDictionary*)attribs

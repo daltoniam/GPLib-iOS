@@ -502,7 +502,12 @@ void error( void * ctx, const char * msg, ... )
 //create font type
 -(void)FontType:(NSMutableAttributedString*)string Size:(int)size
 {
-    if(isItalic && isBold)
+    NSString* fontName = defaultFontName;
+    if(!fontName)
+        fontName = @"Helvetica";
+    [string setFontFamily:fontName size:size bold:isBold italic:isItalic];
+    
+    /*if(isItalic && isBold)
         [string setFontName:@"Trebuchet-BoldItalic" size:size];
      else if(isItalic)
          [string setFontName:@"TrebuchetMS-Italic" size:size];
@@ -511,7 +516,7 @@ void error( void * ctx, const char * msg, ... )
      else if(size != 12 && !defaultFontName)
         [string setFont:[UIFont systemFontOfSize:size]];
     else if(defaultFontName)
-        [string setFont:[UIFont fontWithName:defaultFontName size:size]];
+        [string setFont:[UIFont fontWithName:defaultFontName size:size]];*/
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //create font type

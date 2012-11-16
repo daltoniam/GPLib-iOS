@@ -107,7 +107,7 @@
         for(UIView* subview in imgView.subviews)
         {
             if([subview isKindOfClass:[UILabel class]])
-                subview.frame = CGRectMake(0, 0, view.frame.size.width-10, 20);
+                subview.frame = CGRectMake(-20, view.frame.size.height-30, view.frame.size.width-40, 20);
             else if([subview isKindOfClass:[UIButton class]])
                 subview.frame = CGRectMake(-6, -6, 25, 25);
         }
@@ -139,11 +139,12 @@
     {
         GPLabel* label = [[[GPLabel alloc] init] autorelease];
         label.text = title;
-        label.textColor = [UIColor colorWithWhite:0.95 alpha:1];
+        label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
-        label.textShadowBlur = 1;
-        label.textShadowColor = [UIColor blackColor];
-        label.textShadowOffset = CGSizeMake(0, 1);
+        label.textAlignment = NSTextAlignmentCenter;
+        //label.textShadowBlur = 1;
+        //label.textShadowColor = [UIColor blackColor];
+        //label.textShadowOffset = CGSizeMake(0, 1);
         [imgView addSubview:label];
     }
     

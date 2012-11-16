@@ -76,7 +76,7 @@ static const CGFloat RefreshDeltaY = -65.0f;
 // The height of the refresh header when it is in its "loading" state.
 static const CGFloat HeaderVisibleHeight = 60.0f;
 
-@synthesize items,sections,isGrouped,selectedColor,variableHeight,emptyView,dragToRefresh,refreshHeader,hideSeparator;
+@synthesize items,sections,isGrouped,selectedColor,variableHeight,emptyView,dragToRefresh,refreshHeader,hideSeparator,stayActive;
 @synthesize checkMarks,numberIndex,truncateCount,searchItems,searchSections,isSearching,hideSectionTitles,isAutoSearch,searchController;
 @synthesize hideAccessoryViews;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +116,10 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     self = [super initWithFrame:frame];
     if (self)
+    {
         [self commonInit:NO];
+        tableView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    }
     return self;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +127,10 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     self = [super initWithFrame:frame];
     if (self)
+    {
         [self commonInit:grouped];
+        tableView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    }
     return self;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,6 +146,12 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     if(self = [super init])
         [self commonInit:NO];
     return self;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    tableView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews
@@ -870,7 +882,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             [self.delegate modelShouldLoad:NO];
         return;
     }
-    [table deselectRowAtIndexPath:indexPath animated:YES];
+    if(!self.stayActive)
+        [table deselectRowAtIndexPath:indexPath animated:YES];
     
     if([self.delegate respondsToSelector:@selector(didSelectObject:atIndexPath:)])
         [self.delegate didSelectObject:object atIndexPath:indexPath];
@@ -1117,6 +1130,18 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             [[(GPTableTextFieldCell*)cell textField] resignFirstResponder];
         else if([cell isKindOfClass:[GPTableTextViewCell class]])
             [[(GPTableTextViewCell*)cell textView] resignFirstResponder];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(CGFloat)heightForObject:(id)object
+{
+    Class cls = [self tableView:tableView cellClassForObject:object];
+    CGFloat height = [cls tableView:tableView rowHeightForObject:object];
+    return height;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setSelectedRow:(NSIndexPath*)indexPath
+{
+    [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //methods use for searching

@@ -100,6 +100,10 @@
         textFieldHeight = bubble.frame.size.height;
         self.shouldDismiss = YES;
         self.heightLimit = 120;
+        
+        UIView* lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 1)] autorelease];
+        lineView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        [self addSubview:lineView];
     }
     return self;
 }

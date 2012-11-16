@@ -175,6 +175,9 @@
 //set if you want the ScrollIndicator to show. Default is YES.
 @property(nonatomic,assign)BOOL scrollEnabled;
 
+//set that the active row is highlighted
+@property(nonatomic,assign)BOOL stayActive;
+
 //the content offset of the tableview
 @property(nonatomic)CGPoint contentOffset;
 
@@ -232,6 +235,12 @@
 
 //dismiss any forms cells
 -(void)dismissKeyboard;
+
+//gets the height of an object
+-(CGFloat)heightForObject:(id)object;
+
+//set a row as active
+-(void)setSelectedRow:(NSIndexPath*)indexPath;
 
 //adding/removing to tableView with animation
 

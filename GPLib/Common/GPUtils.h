@@ -32,3 +32,4 @@
 //
 
 BOOL GPIsPad(void);
+BOOL GPIsLandscape(void);

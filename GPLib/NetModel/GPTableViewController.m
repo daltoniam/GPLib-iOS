@@ -74,6 +74,7 @@
     {
         loadingLabel = [[GPLoadingLabel alloc] initWithStyle:style];
         loadingLabel.frame = tableView.frame;
+        loadingLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:loadingLabel];
     }
     loadingLabel.text = [self loadingText];

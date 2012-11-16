@@ -107,7 +107,7 @@
         for(UIView* subview in imgView.subviews)
         {
             if([subview isKindOfClass:[UILabel class]])
-                subview.frame = CGRectMake(-20, view.frame.size.height-30, view.frame.size.width-40, 20);
+                subview.frame = CGRectMake(-40, view.frame.size.height-30, view.frame.size.width-80, 20);
             else if([subview isKindOfClass:[UIButton class]])
                 subview.frame = CGRectMake(-6, -6, 25, 25);
         }

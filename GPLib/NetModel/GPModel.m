@@ -185,11 +185,12 @@
 //override if you want a different DB name
 -(NSString*)databaseName
 {
-    const char* className = class_getName([self class]);
+    /*const char* className = class_getName([self class]);
     NSString* identifier = [[[NSString alloc] initWithBytesNoCopy:(char*)className
                                                            length:strlen(className)
                                                          encoding:NSASCIIStringEncoding freeWhenDone:NO] autorelease];
-    return [identifier lowercaseString];
+    return [identifier lowercaseString];*/
+    return @"gpmodel";
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)styleRestoredObject:(id)object

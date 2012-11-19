@@ -38,7 +38,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Post", nil);
+    if(!self.title)
+        self.title = NSLocalizedString(@"Post", nil);
     int top = 0;
     int height = 250;
     if(GPIsPad())

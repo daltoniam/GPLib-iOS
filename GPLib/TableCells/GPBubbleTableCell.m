@@ -44,7 +44,7 @@
     GPTableBubbleItem* item = (GPTableBubbleItem*)object;
     //if(item.rowHeight) //we cache rowHeight for preformance reasons
     //    return item.rowHeight;
-    CGFloat maxWidth = tableView.frame.size.width - 80;
+    CGFloat maxWidth = tableView.frame.size.width - 90;
     //CGFloat ImageSize = [super tableView:tableView rowHeightForObject:object];
     HTMLTextLabel* view = [[[HTMLTextLabel alloc] initWithHTML:item.text embed:YES frame:CGRectMake(0, 0, maxWidth, 0)] autorelease];
     view.ExtendHeightToFit = YES;

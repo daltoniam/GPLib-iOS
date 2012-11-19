@@ -107,11 +107,13 @@
 -(void)showLeftView
 {
     [self slideView:NO];
+    [self.leftController viewWillAppear:YES];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)showRightView
 {
     [self slideView:YES];
+    [self.rightController viewWillAppear:YES];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)slideView:(BOOL)right
@@ -241,6 +243,7 @@
     centerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     centerController.view.frame = centerView.bounds;
     [centerView addSubview:centerController.view];
+    [self addChildViewController:centerController];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //forward this on

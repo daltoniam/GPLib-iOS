@@ -817,7 +817,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //just allows the cell to turn blue when we are using checkmarks
 - (NSIndexPath *)tableView:(UITableView *)table willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL exclude = YES;
+    BOOL exclude = NO;
     if([self.delegate respondsToSelector:@selector(checkMarkExpection:)])
         exclude = [self.delegate checkMarkExpection:indexPath.section];
     if(self.checkMarks && !exclude)
@@ -832,7 +832,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 - (void)tableView:(UITableView *)table didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-    BOOL exclude = YES;
+    BOOL exclude = NO;
     if([self.delegate respondsToSelector:@selector(checkMarkExpection:)])
         exclude = [self.delegate checkMarkExpection:indexPath.section];
     if(self.checkMarks && !exclude)

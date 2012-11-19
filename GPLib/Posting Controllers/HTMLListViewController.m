@@ -70,23 +70,7 @@
     if(self = [super init])
     {
         self.title = @"Color";
-        [self.tableView.sections addObject:@"Text Color"];
-        NSArray* colors = [self colorChoices];
-        [self.tableView.items addObject:colors];
-        int i = 0;
-        int index = 0;
-        for(GPTableTextItem* item in colors)
-        {
-            if([item.color isEqual:color])
-            {
-                index = i;
-                break;
-            }
-            i++;
-        }
-        
-        GPTableTextItem* item = (GPTableTextItem*)[colors objectAtIndex:index];
-        item.isChecked = YES;
+        fontColor = [color retain];
     }
     return self;
 }
@@ -96,23 +80,7 @@
     if(self = [super init])
     {
         self.title = @"Size";
-        [self.tableView.sections addObject:@"Text Size"];
-        NSArray* sizeArray = [self sizeChoices];
-        [self.tableView.items addObject:sizeArray];
-        int i = 0;
-        int index = 2;
-        for(GPTableTextItem* item in sizeArray)
-        {
-            if(item.font.pointSize == size)
-            {
-                index = i;
-                break;
-            }
-            i++;
-        }
-        
-        GPTableTextItem* item = (GPTableTextItem*)[sizeArray objectAtIndex:index];
-        item.isChecked = YES;
+        fontSize = size;
     }
     return self;
 }
@@ -123,7 +91,6 @@
     {
         FontName = [fontName retain];
         self.title = @"Fonts";
-        [self.tableView.sections addObject:@"Fonts"];
     }
     return self;
 }
@@ -131,7 +98,55 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self loadFonts];
+    if(fontColor)
+    {
+        [self.tableView.sections addObject:@"Text Color"];
+        NSArray* colors = [self colorChoices];
+        [self.tableView.items addObject:colors];
+        int i = 0;
+        int index = 0;
+        for(GPTableTextItem* item in colors)
+        {
+            if([item.color isEqual:fontColor])
+            {
+                index = i;
+                break;
+            }
+            i++;
+        }
+        
+        GPTableTextItem* item = (GPTableTextItem*)[colors objectAtIndex:index];
+        item.isChecked = YES;
+    }
+    if(fontSize > 0)
+    {
+        self.tableView.sections = [NSMutableArray arrayWithObject:@"Text Size"];
+        NSArray* sizeArray = [self sizeChoices];
+        [self.tableView.items addObject:sizeArray];
+        int i = 0;
+        int index = 2;
+        for(GPTableTextItem* item in sizeArray)
+        {
+            if(item.font.pointSize == fontSize)
+            {
+                index = i;
+                break;
+            }
+            i++;
+        }
+        
+        GPTableTextItem* item = (GPTableTextItem*)[sizeArray objectAtIndex:index];
+        item.isChecked = YES;
+    }
+    else
+    {
+        self.tableView.sections = [NSMutableArray arrayWithObject:@"Fonts"];
+        [self loadFonts];
+    }
+    self.tableView.checkMarks = YES;
+    [self.tableView reloadData];
+    self.tableView.emptyView.hidden = YES;
+    self.tableView.backgroundColor = [UIColor underPageBackgroundColor];
 	// Do any additional setup after loading the view.
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,6 +259,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
+    [fontColor release];
     [FontName release];
     [super dealloc];
 }

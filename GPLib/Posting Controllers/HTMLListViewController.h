@@ -53,6 +53,8 @@
 {
     id<HTMLListDelegate>delegate;
     NSString* FontName;
+    int fontSize;
+    UIColor* fontColor;
 }
 @property(nonatomic,assign)id<HTMLListDelegate>delegate;
 

@@ -55,5 +55,6 @@
 - (void)configurePage:(GPImageScrollView *)page forIndex:(NSUInteger)index;
 -(void)titleIndex:(int)index;
 -(void)setBar:(BOOL)hide;
+-(void)setCurrentPhotoIndex:(int)index;
 
 @end

@@ -317,6 +317,18 @@
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////
+-(void)setCurrentPhotoIndex:(int)index
+{
+    if(index < PhotoSource.count && index > 0)
+    {
+        CGFloat pageWidth = ScrollView.bounds.size.width;
+        CGPoint point = ScrollView.contentOffset;
+        point.x = index*pageWidth;
+        ScrollView.contentOffset = point;
+        [self updatePages];
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////////
 -(void)setPhotoSource:(NSArray*)items
 {
     if(!items || items.count == 0)

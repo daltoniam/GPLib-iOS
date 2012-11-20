@@ -178,6 +178,9 @@
 //set that the active row is highlighted
 @property(nonatomic,assign)BOOL stayActive;
 
+//returns the selected Row
+@property(nonatomic,retain)NSIndexPath* selectedRow;
+
 //the content offset of the tableview
 @property(nonatomic)CGPoint contentOffset;
 

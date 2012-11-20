@@ -525,22 +525,25 @@
     CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [self.attributedText length]), path, NULL);
     CFArrayRef lines = CTFrameGetLines(frame);
     NSUInteger numberOfLines = CFArrayGetCount(lines);
-    CGPoint lineOrigins[numberOfLines];
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
-    NSUInteger lineIndex;
-    
-    for (lineIndex = 0; lineIndex < (numberOfLines - 1); lineIndex++) 
+    if(numberOfLines > 0)
     {
+        CGPoint lineOrigins[numberOfLines];
+        CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
+        NSUInteger lineIndex;
+        
+        for (lineIndex = 0; lineIndex < (numberOfLines - 1); lineIndex++)
+        {
+            CGPoint lineOrigin = lineOrigins[lineIndex];
+            if (lineOrigin.y < p.y)
+                break;
+        }
+        
         CGPoint lineOrigin = lineOrigins[lineIndex];
-        if (lineOrigin.y < p.y)
-            break;
+        CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
+        // Convert CT coordinates to line-relative coordinates
+        CGPoint relativePoint = CGPointMake(p.x - lineOrigin.x, p.y - lineOrigin.y);
+        idx = CTLineGetStringIndexForPosition(line, relativePoint);
     }
-    
-    CGPoint lineOrigin = lineOrigins[lineIndex];
-    CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
-    // Convert CT coordinates to line-relative coordinates
-    CGPoint relativePoint = CGPointMake(p.x - lineOrigin.x, p.y - lineOrigin.y);
-    idx = CTLineGetStringIndexForPosition(line, relativePoint);
     
     CFRelease(frame);
     CFRelease(path);

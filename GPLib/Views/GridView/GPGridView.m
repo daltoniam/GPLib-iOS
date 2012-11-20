@@ -347,7 +347,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(Class)classForObject:(id)object gridView:(GPGridView*)gridView
 {
-    if([self.delegate respondsToSelector:@selector(classForObject:tableView:)])
+    if([self.delegate respondsToSelector:@selector(classForObject:gridView:)])
     {
         Class class = [self.delegate classForObject:object gridView:gridView];
         if(class)

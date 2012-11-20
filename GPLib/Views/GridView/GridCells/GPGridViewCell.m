@@ -150,41 +150,20 @@
         offset = pad;
         containerView.frame = CGRectMake(-pad, -pad, self.frame.size.width+(pad*2), self.frame.size.height+(pad*2));
     }
-    if(textLabel && imageView)
-    {
-        int height = self.frame.size.height-30;
-        if(!isLowerText)
-            height += 12;
-        int top = 0;
-        int pad = 1;
-        imageView.frame = CGRectMake(pad+offset, pad+(offset-0.5), self.frame.size.width-(pad*2), height-(pad*2));
-    //CGSize imageSize = [self imageScale:self.frame.size.height];
-        //imageView.frame = CGRectMake(0, top, imageSize.width, imageSize.height);
-        //NSLog(@"self.frame.size.width: %f",self.frame.size.width);
-        //NSLog(@"height: %f",height);
-        top += imageView.frame.size.height;
-        if(!isLowerText)
-            top += 1;
+    
+    int height = self.frame.size.height;
+    if(textLabel.titleLabel.text.length > 0)
+        height -= 30;
+    int top = 0;
+    int pad = 1;
+    imageView.frame = CGRectMake(pad+offset, pad+(offset-0.5), self.frame.size.width-(pad*2), height-(pad*2));
+    top += imageView.frame.size.height;
+    if(!isLowerText)
+        top += 1;
+    if(textLabel.titleLabel.text.length > 0)
         self.textLabel.frame = CGRectMake(offset, top+offset, self.frame.size.width, 20);
-    }
-    else if(textLabel)
-    {
-        int height = self.frame.size.height-30;
-        if(!isLowerText)
-            height += 12;
-        if(!blankView)
-            [self setupBlankView];
-        blankView.frame = CGRectMake(0, 0, self.frame.size.width, height);
-        int top = blankView.frame.size.height+5;
-        if(!isLowerText)
-            top += 5;
-        self.textLabel.frame = CGRectMake(0, top, self.frame.size.width, 20);
-    }
     else
-    {
-        int pad = 1;
-        imageView.frame = CGRectMake(pad+offset, pad+(offset-0.5), self.frame.size.width-(pad*2), self.frame.size.height-(pad*2));
-    }
+        self.textLabel.frame = CGRectZero;
 
     if(textLabel && isLowerText)
     {
@@ -315,8 +294,8 @@
         {
             if(!textLabel)
                 [self setupTextLabel];
-            [textLabel setTitle:item.text forState:UIControlStateNormal];
         }
+        [textLabel setTitle:item.text forState:UIControlStateNormal];
         textLabel.titleLabel.font = item.font;
         if(item.color)
             [textLabel setTitleColor:item.color forState:UIControlStateNormal];

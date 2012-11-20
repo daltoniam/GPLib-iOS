@@ -107,7 +107,7 @@
         for(UIView* subview in imgView.subviews)
         {
             if([subview isKindOfClass:[UILabel class]])
-                subview.frame = CGRectMake(-40, view.frame.size.height-30, view.frame.size.width-80, 20);
+                subview.frame = CGRectMake(0, view.frame.size.height-30, view.frame.size.width, 20);
             else if([subview isKindOfClass:[UIButton class]])
                 subview.frame = CGRectMake(-6, -6, 25, 25);
         }
@@ -141,7 +141,7 @@
         label.text = title;
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = NSTextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentLeft;
         //label.textShadowBlur = 1;
         //label.textShadowColor = [UIColor blackColor];
         //label.textShadowOffset = CGSizeMake(0, 1);

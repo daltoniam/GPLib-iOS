@@ -492,7 +492,7 @@
         {
             CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedText);
             //NSLog(@"frame.size.width: %f",frame.size.width);
-            CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width,CGFLOAT_MAX),NULL);
+            CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(frame.size.width-10,10000.0f),NULL);
             //NSLog(@"size: %f",size.height);
             CGFloat delta = MAX(0.f , ceilf(size.height - frame.size.height)) + 10;
             frame.origin.y -= delta;

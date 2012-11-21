@@ -75,7 +75,7 @@
 {
     [super layoutSubviews];
     scrollView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    pageControl.frame = CGRectMake(scrollView.frame.size.width/2-20, scrollView.frame.size.height-40, 40, 40);
+    pageControl.frame = CGRectMake(scrollView.frame.size.width/2-20, scrollView.frame.size.height-50, 40, 40);
     [self layoutFrames];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,20 +97,25 @@
             if([subview isKindOfClass:[GPImageView class]])
                 imgView = (GPImageView*)subview;
         }
-        imgView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+        int size = 0;
+        for(UIView* subview in imgView.subviews)
+        {
+            if([subview isKindOfClass:[UILabel class]])
+            {
+                subview.frame = CGRectMake(0, view.frame.size.height-20, view.frame.size.width, 20);
+                size = subview.frame.size.height;
+            }
+            else if([subview isKindOfClass:[UIButton class]])
+                subview.frame = CGRectMake(-6, -6, 25, 25);
+        }
+        
+        imgView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height-size);
         //if(imgView.image)
         //    [self addViewShadow:view];
         if(isSideScroll)
             left += scrollView.frame.size.width;
         else
             top += scrollView.frame.size.height;
-        for(UIView* subview in imgView.subviews)
-        {
-            if([subview isKindOfClass:[UILabel class]])
-                subview.frame = CGRectMake(0, view.frame.size.height-30, view.frame.size.width, 20);
-            else if([subview isKindOfClass:[UIButton class]])
-                subview.frame = CGRectMake(-6, -6, 25, 25);
-        }
     }
     pageControl.numberOfPages = attachmentViews.count;
     if(attachmentViews.count < 2)

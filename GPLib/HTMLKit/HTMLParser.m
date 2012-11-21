@@ -415,9 +415,16 @@ void error( void * ctx, const char * msg, ... )
         {
             int pos = find.location+find.length;
             NSRange end = [style rangeOfString:@";" options:0 range:NSMakeRange(pos, [style length]-pos)];
-            NSString* cssstring = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
-            //NSLog(@"cssstring: %@",cssstring);
-            [string setTextColor:[UIColor colorWithCSS:cssstring]];
+            if(end.location == NSNotFound)
+                end = [style rangeOfString:@" " options:0 range:NSMakeRange(pos, [style length]-pos)];
+            if(end.location == NSNotFound)
+                end = [style rangeOfString:@"\n" options:0 range:NSMakeRange(pos, [style length]-pos)];
+            if(end.location != NSNotFound)
+            {
+                NSString* cssstring = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
+                //NSLog(@"cssstring: %@",cssstring);
+                [string setTextColor:[UIColor colorWithCSS:cssstring]];
+            }
         }
         find = [style rangeOfString:@"text-align:"];
         if(find.location != NSNotFound)

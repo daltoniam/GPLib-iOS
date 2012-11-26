@@ -91,6 +91,7 @@
     {
         [self commonInit];
         self.attributedText = string;
+        //self.cachedFramesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedText);
     }
     return self;
 }
@@ -106,6 +107,7 @@
         HTMLParser* parser = [[[HTMLParser alloc] initWithHTML:html] autorelease];
         parser.Embed = embed;
         self.attributedText = [parser ParseHTML];
+        //self.cachedFramesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedText);
     }
     return self;
 }
@@ -120,6 +122,7 @@
     //if(self.cachedFramesetter)
     //    CFRelease(self.cachedFramesetter);
     //self.cachedFramesetter = NULL;
+   // self.cachedFramesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self.attributedText);
     [self setNeedsDisplay];
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +134,23 @@
     frame.size.height = height;
     self.frame = frame;
     self.attributedText = string;
-    //self.cachedFramesetter = framesetter;
+    
+    if(framesetter)
+    {
+        //if(self.cachedFramesetter)
+        //    CFRelease(self.cachedFramesetter);
+        //self.cachedFramesetter = NULL;
+        //self.cachedFramesetter = framesetter;
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+-(void)setAttributedString:(NSAttributedString *)string height:(CGFloat)height
+{
+    [self commonClean];
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+    self.attributedText = string;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //draw non text content
@@ -660,11 +679,11 @@
 		CFRelease(textFrame);
 		textFrame = NULL;
     }
-    /*if(self.cachedFramesetter)
-    {
-        CFRelease(self.cachedFramesetter);
-        self.cachedFramesetter = NULL;
-    }*/
+    //if(self.cachedFramesetter)
+    //{
+    //    CFRelease(self.cachedFramesetter);
+    //    self.cachedFramesetter = NULL;
+    //}
 	[super setNeedsDisplay];
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -675,11 +694,11 @@
 		CFRelease(textFrame);
 		textFrame = NULL;
     }
-    /*if(self.cachedFramesetter)
-    {
-        CFRelease(self.cachedFramesetter);
-        self.cachedFramesetter = NULL;
-    }*/
+    //if(self.cachedFramesetter)
+    //{
+    //    CFRelease(self.cachedFramesetter);
+    //    self.cachedFramesetter = NULL;
+    //}
     self.delegate = nil;
     for(GPHTTPRequest* request in requestArray)
     {

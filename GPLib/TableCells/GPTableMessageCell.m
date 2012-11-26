@@ -94,6 +94,8 @@
     self.textLabel.text = nil;
     if(item.cachedAttribString && item.cachedFramesetter) //if you are smart, you will calculate and cache this in your model.
         [HTMLText setAttributedString:item.cachedAttribString height:item.rowHeight frame:item.cachedFramesetter];
+    else if(item.cachedAttribString)
+        [HTMLText setAttributedString:item.cachedAttribString height:item.rowHeight];
     else if(item.text)
         [HTMLText setHTML:item.text embed:YES];
     

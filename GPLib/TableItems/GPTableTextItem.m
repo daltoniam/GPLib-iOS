@@ -32,7 +32,8 @@
 //
 
 #import "GPTableTextItem.h"
-#import <objc/runtime.h>
+//#import <objc/runtime.h>
+#import "GPObjectSaver.h"
 
 @implementation GPTableTextItem
 
@@ -145,12 +146,13 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
 {
     if(entityName && ctx)
     {
-        GPTableItem* item = (GPTableItem*)[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
-        item.text = self.text;
-        item.navURL = self.NavURL;
-        item.Properties = [GPTableTextItem encodeObject:self.Properties keyName:@"properties"];
-        item.restoreClassName = [self getClassName];
-        return item;
+        //GPTableItem* item = (GPTableItem*)[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
+        //item.text = self.text;
+        //item.navURL = self.NavURL;
+        //item.Properties = [GPTableTextItem encodeObject:self.Properties keyName:@"properties"];
+        //item.restoreClassName = [self getClassName];
+        //return item;
+        return [GPObjectSaver saveItemToDisk:ctx entityName:entityName object:self];
     }
     return nil;
 }
@@ -159,18 +161,19 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
 {
     if([object isKindOfClass:[NSManagedObject class]])
     {
-        GPTableItem* objectItem = (GPTableItem*)object;
-        GPTableTextItem* item = [GPTableTextItem itemWithText:objectItem.text];
-        item.NavURL = objectItem.navURL;
-        item.Properties = [GPTableTextItem decodeObject:objectItem.properties keyName:@"properties"];
-        return item;
+        //GPTableItem* objectItem = (GPTableItem*)object;
+        //GPTableTextItem* item = [GPTableTextItem itemWithText:objectItem.text];
+        //item.NavURL = objectItem.navURL;
+        //item.Properties = [GPTableTextItem decodeObject:objectItem.properties keyName:@"properties"];
+        //return item;
+        return [GPObjectSaver restoreItemFromDisk:object objectClass:[self class]];
     }
     return nil;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //helper functions for coreData stuff in GPModel
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(NSString*)getClassName
+/*-(NSString*)getClassName
 {
     const char* className = class_getName([self class]);
     NSString* identifier = [[[NSString alloc] initWithBytesNoCopy:(char*)className
@@ -196,7 +199,7 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     [unarchiver finishDecoding];
     [unarchiver release];
     return object;
-}
+}*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end

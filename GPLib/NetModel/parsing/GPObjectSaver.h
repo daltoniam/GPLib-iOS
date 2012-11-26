@@ -1,9 +1,9 @@
 //
-//  GPParserModel.h
-//  GPLib
+//  GPObjectSaver.h
+//  TestApp
 //
 //  Created by Dalton Cherry on 11/26/12.
-//  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
+//  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
  http://github.com/daltoniam/GPLib-iOS
@@ -31,8 +31,14 @@
  */
 //
 
-#import "GPModel.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface GPParserModel : GPModel
+@interface GPObjectSaver : NSObject
+
+
++(NSArray*)getPropertiesOfClass:(Class)objectClass;
++(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName object:(id)object;
++(id)restoreItemFromDisk:(NSManagedObject*)managedObject objectClass:(Class)objectClass;
 
 @end

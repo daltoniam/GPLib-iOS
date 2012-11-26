@@ -126,7 +126,7 @@
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString *)entityName
+/*-(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString *)entityName
 {
     GPTableItem* item = (GPTableItem*)[super saveItemToDisk:ctx entityName:entityName];
     item.imageData = UIImagePNGRepresentation(self.imageData);
@@ -145,7 +145,7 @@
         return item;
     }
     return nil;
-}
+}*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end

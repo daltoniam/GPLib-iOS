@@ -310,7 +310,7 @@
 -(void)didSelectItem:(id)object path:(NSIndexPath*)indexPath
 {
     GPTableTextItem* item = (GPTableTextItem*)object;
-    if([item.NavURL isEqualToString:HYPER_LINK])
+    if([item.navURL isEqualToString:HYPER_LINK])
     {
         NSString* text = [textView.attribString.string substringWithRange:textView.selectedRange];
         NSString* link = nil;
@@ -329,7 +329,7 @@
     }
     int fontSize = textView.font.pointSize;
     NSString* fontName = textView.font.fontName;
-    NSString* type = [item.Properties objectForKey:@"type"];
+    NSString* type = [item.properties objectForKey:@"type"];
     if([type isEqualToString:KEYWORD_HTML_COLOR])
         textView.textColor = item.color;
     else if([type isEqualToString:KEYWORD_HTML_SIZE])

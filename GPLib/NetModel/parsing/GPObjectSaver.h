@@ -41,4 +41,8 @@
 +(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName object:(id)object;
 +(id)restoreItemFromDisk:(NSManagedObject*)managedObject objectClass:(Class)objectClass;
 
++(NSString*)getClassName:(Class)objectClass;
++(NSData*)encodeObject:(id)object keyName:(NSString*)key;
++(id)decodeObject:(NSData*)data keyName:(NSString*)key;
+
 @end

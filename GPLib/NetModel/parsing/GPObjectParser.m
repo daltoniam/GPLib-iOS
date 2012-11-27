@@ -59,9 +59,24 @@ static GPObjectParser* sharedParser;
         compareURL = [compareURL substringToIndex:range.location];
     id response = [jsonString objectFromJSONString];
     GPObjectMapping* mapping = nil;
-    for(id key in mappingDict)
+    for(NSString* key in mappingDict)
     {
-        if([compareURL hasSuffix:key])
+        NSString* checkKey = key;
+        NSRange range = [key rangeOfString:@":resource"];
+        if(range.location != NSNotFound)
+        {
+            NSString* prefix = [checkKey substringToIndex:range.location];
+            if([url rangeOfString:prefix].location == NSNotFound)
+                continue;
+            NSString* startString = [key substringWithRange:NSMakeRange(range.location-1, 1)];
+            NSString* endString = [key substringWithRange:NSMakeRange(range.location+range.length, 1)];
+            NSRange start = [compareURL rangeOfString:startString options:NSBackwardsSearch];
+            NSRange end = [compareURL rangeOfString:endString options:NSBackwardsSearch];
+            start.location += 1;
+            NSString* find = [compareURL substringWithRange:NSMakeRange(start.location, end.location-start.location)];
+            checkKey = [key stringByReplacingOccurrencesOfString:@":resource" withString:find];
+        }
+        if([compareURL hasSuffix:checkKey])
         {
             mapping = [mappingDict objectForKey:key];
             break;

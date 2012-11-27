@@ -170,7 +170,7 @@ const CGFloat TableCellSmallMargin = 6;
         [infoLabel removeFromSuperview];
     if(item.color)
         self.textLabel.textColor = item.color;
-    self.textLabel.textAlignment = item.TextAlignment;
+    self.textLabel.textAlignment = item.textAlignment;
     if(item.font)
         self.textLabel.font = item.font;
     else
@@ -179,15 +179,15 @@ const CGFloat TableCellSmallMargin = 6;
         self.accessoryType = UITableViewCellAccessoryCheckmark;
     else
         self.accessoryType = UITableViewCellAccessoryNone;
-    if(item.NavURL)
+    if(item.navURL)
     {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
     }
     else
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if(item.Properties)
-        Properties = [item.Properties retain];
+    if(item.properties)
+        Properties = [item.properties retain];
     if(item.backgroundColor)
     {
         self.backgroundColor = item.backgroundColor;

@@ -125,6 +125,7 @@
 #import "GPTableSearchController.h"
 #import "GPObjectParser.h"
 #import "JSONKit.h"
+#import "GPParserModel.h"
 ////launcher view
 #import "GPLauncherView.h"
 #import "GPLauncherButton.h"

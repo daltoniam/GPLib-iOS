@@ -933,7 +933,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         if([object isKindOfClass:[GPTableImageItem class]])
         {
             GPTableImageItem* item = (GPTableImageItem*)object;
-            if([item.ImageURL isEqualToString:request.URL.absoluteString])
+            if([item.imageURL isEqualToString:request.URL.absoluteString])
             {
                 item.imageData = [UIImage imageWithData:[request responseData]];
                 UITableViewCell* cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
@@ -958,10 +958,10 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             imageQueue.maxConcurrentOperationCount = 4;
         }
         GPTableImageItem* item = (GPTableImageItem*)object;
-        if(!item.imageData && item.ImageURL && ![imageURLs containsObject:item.ImageURL])
+        if(!item.imageData && item.imageURL && ![imageURLs containsObject:item.imageURL])
         {
-            [imageURLs addObject:item.ImageURL];
-            [imageQueue addOperation:[self fetchImage:item.ImageURL]];
+            [imageURLs addObject:item.imageURL];
+            [imageQueue addOperation:[self fetchImage:item.imageURL]];
         }
         
     }

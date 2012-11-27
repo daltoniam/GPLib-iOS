@@ -68,17 +68,17 @@
 //to provide navigation
 - (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath
 {
-    if ([object respondsToSelector:@selector(NavURL)])
+    if ([object respondsToSelector:@selector(navURL)])
     {
-        NSString* URL = [object NavURL];
+        NSString* URL = [object navURL];
         if([object isKindOfClass:[GPGridViewItem class]])
         {
             GPGridViewItem* item = (GPGridViewItem*)object;
-            NSString* theURL = item.NavURL;
+            NSString* theURL = item.navURL;
             if (theURL)
             {
-                if(item.Properties)
-                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.Properties];
+                if(item.properties)
+                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.properties];
                 else
                     [[GPNavigator navigator] openURL:URL];
             }

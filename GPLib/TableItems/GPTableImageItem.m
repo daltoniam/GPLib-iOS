@@ -35,14 +35,14 @@
 
 @implementation GPTableImageItem
 
-@synthesize ImageURL,DefaultImage,imageData,imageSize,imageRounding,contentMode,topJustifyImage,imageBorderColor,imageBorderWidth;
+@synthesize imageURL,defaultImage,imageData,imageSize,imageRounding,contentMode,topJustifyImage,imageBorderColor,imageBorderWidth;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableImageItem*)itemWithText:(NSString*)text url:(NSString*)url
 {
     GPTableImageItem* item = [[[GPTableImageItem alloc] init] autorelease];
     item.text = text;
-    item.NavURL = url;
+    item.navURL = url;
     return item;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,11 +104,11 @@
     item.text = string;
     item.font = font;
     item.color = textcolor;
-    item.ImageURL = imageurl;
+    item.imageURL = imageurl;
     item.TextAlignment = UITextAlignmentLeft;
-    item.NavURL = url;
-    item.DefaultImage = image;
-    item.Properties = props;
+    item.navURL = url;
+    item.defaultImage = image;
+    item.properties = props;
     //NSLog(@"url: %@",url);
     return item;
 }
@@ -119,7 +119,7 @@
     item.text = string;
     item.imageData = imageData;
     item.TextAlignment = UITextAlignmentLeft;
-    item.NavURL = url;
+    item.navURL = url;
     item.imageSize = size;
     item.imageRounding = rounding;
     return item;
@@ -130,7 +130,7 @@
 {
     GPTableItem* item = (GPTableItem*)[super saveItemToDisk:ctx entityName:entityName];
     item.imageData = UIImagePNGRepresentation(self.imageData);
-    item.imageURL = self.ImageURL;
+    item.imageURL = self.imageURL;
     return item;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@
     {
         GPTableItem* objectItem = (GPTableItem*)object;
         GPTableImageItem* item = [GPTableImageItem itemWithImage:objectItem.imageURL text:objectItem.text];
-        item.NavURL = objectItem.navURL;
+        item.navURL = objectItem.navURL;
         item.imageData = [UIImage imageWithData:objectItem.imageData];
         return item;
     }

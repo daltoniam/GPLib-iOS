@@ -41,7 +41,7 @@
 {
     GPTableMessageItem* item = [[[GPTableMessageItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
+    item.imageURL = imageurl;
     item.topJustifyImage = YES;
     return item;
 }
@@ -50,8 +50,8 @@
 {
     GPTableMessageItem* item = [[[GPTableMessageItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
-    item.NavURL = url;
+    item.imageURL = imageurl;
+    item.navURL = url;
     item.topJustifyImage = YES;
     return item;
 }
@@ -61,9 +61,9 @@
 {
     GPTableMessageItem* item = [[[GPTableMessageItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.NavURL = url;
-    item.ImageURL = imageurl;
-    item.Properties = data;
+    item.navURL = url;
+    item.imageURL = imageurl;
+    item.properties = data;
     item.topJustifyImage = YES;
     return item;
 }

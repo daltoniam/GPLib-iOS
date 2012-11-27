@@ -223,13 +223,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)didSelectObject:(id)object gridview:(GPOldGridView*)gridview item:(GPGridViewCell*)cell index:(NSInteger)index
 {
-    if ([object respondsToSelector:@selector(NavURL)]) 
+    if ([object respondsToSelector:@selector(navURL)]) 
     {
-        NSString* URL = [object NavURL];
+        NSString* URL = [object navURL];
         if([object isKindOfClass:[GPGridViewItem class]])
         {
             GPGridViewItem* item = (GPGridViewItem*)object;
-            NSString* theURL = item.NavURL;
+            NSString* theURL = item.navURL;
             if (theURL)
             {
                 dismissView = [[cell expandView] retain];
@@ -237,7 +237,7 @@
                 for(UIView* subview in gridview.subviews)
                     if(subview != cell)
                         subview.hidden = YES;
-                [[GPNavigator navigator] openURL:theURL view:[cell expandView] query:item.Properties];
+                [[GPNavigator navigator] openURL:theURL view:[cell expandView] query:item.properties];
             }
         }
         else if (URL)

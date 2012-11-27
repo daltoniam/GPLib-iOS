@@ -147,11 +147,11 @@ CGFloat TableCellDefaultImageSize = 50;
     [currentObject release];
     currentObject = [object retain];
     
-    imageView.URL = item.ImageURL;
+    imageView.URL = item.imageURL;
     if(item.imageData)
         imageView.image = item.imageData;
     else
-        imageView.image = item.DefaultImage;
+        imageView.image = item.defaultImage;
     /*if(!item.imageData)
     {
         [imageView stopImage];
@@ -188,7 +188,7 @@ CGFloat TableCellDefaultImageSize = 50;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /*-(void)imageDidFinish:(GPImageView*)view
 {
-    if([view.URL isEqualToString:currentObject.ImageURL])
+    if([view.URL isEqualToString:currentObject.imageURL])
         currentObject.imageData = [view.image retain];
         
 }*/

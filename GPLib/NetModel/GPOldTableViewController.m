@@ -463,17 +463,17 @@
 //to provide navigation
 - (void)didSelectObject:(id)object atIndexPath:(NSIndexPath*)indexPath 
 {
-    if ([object respondsToSelector:@selector(NavURL)]) 
+    if ([object respondsToSelector:@selector(navURL)])
     {
-        NSString* URL = [object NavURL];
+        NSString* URL = [object navURL];
         if([object isKindOfClass:[GPTableTextItem class]])
         {
             GPTableTextItem* item = (GPTableTextItem*)object;
-            NSString* theURL = item.NavURL;
+            NSString* theURL = item.navURL;
             if (theURL)
             {
-                if(item.Properties)
-                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.Properties];
+                if(item.properties)
+                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.properties];
                 else
                     [[GPNavigator navigator] openURL:URL];
             }
@@ -607,7 +607,7 @@
         if([object isKindOfClass:[GPTableImageItem class]])
         {
             GPTableImageItem* item = (GPTableImageItem*)object;
-            if([item.ImageURL isEqualToString:request.URL.absoluteString])
+            if([item.imageURL isEqualToString:request.URL.absoluteString])
             {
                 item.imageData = [UIImage imageWithData:[request responseData]];
                 UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
@@ -632,10 +632,10 @@
             imageQueue.maxConcurrentOperationCount = 4;
         }
         GPTableImageItem* item = (GPTableImageItem*)object;
-        if(!item.imageData && item.ImageURL && ![imageURLs containsObject:item.ImageURL])
+        if(!item.imageData && item.imageURL && ![imageURLs containsObject:item.imageURL])
         {
-            [imageURLs addObject:item.ImageURL];
-            [imageQueue addOperation:[self fetchImage:item.ImageURL]];
+            [imageURLs addObject:item.imageURL];
+            [imageQueue addOperation:[self fetchImage:item.imageURL]];
         }
         
     }

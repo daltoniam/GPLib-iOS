@@ -35,8 +35,8 @@
 
 @interface GPTableImageItem : GPTableTextItem
 
-@property(nonatomic,copy)NSString* ImageURL;
-@property(nonatomic,retain)UIImage* DefaultImage;
+@property(nonatomic,copy)NSString* imageURL;
+@property(nonatomic,retain)UIImage* defaultImage;
 @property(nonatomic,retain)UIImage* imageData;
 @property(nonatomic,assign)CGSize imageSize;
 @property(nonatomic,assign)NSInteger imageRounding;

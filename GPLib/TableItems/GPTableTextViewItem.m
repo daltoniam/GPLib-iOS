@@ -48,7 +48,7 @@
     GPTableTextViewItem* item = [[[GPTableTextViewItem alloc] init] autorelease];
     item.text = string;
     item.height = height;
-    item.Properties = props;
+    item.properties = props;
     item.AutoCap = UITextAutocapitalizationTypeSentences;
     return item;
 }

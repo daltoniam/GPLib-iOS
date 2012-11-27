@@ -58,8 +58,8 @@
 @property(nonatomic,retain)UIColor* color;
 @property(nonatomic,retain)UIColor* bevelLineColor; //adds a custom bevel line to the tablecells. I recommend: [UIColor colorWithWhite:0.7 alpha:0.15];
 @property(nonatomic,retain)UIColor* backgroundColor;
-@property(nonatomic,assign)UITextAlignment TextAlignment;
-@property(nonatomic,copy)NSString* NavURL;
+@property(nonatomic,assign)UITextAlignment textAlignment;
+@property(nonatomic,copy)NSString* navURL;
 @property(nonatomic,assign)BOOL isChecked;
 
 //notification badge
@@ -68,7 +68,7 @@
 @property(nonatomic,retain)UIColor* notificationFillColor;
 
 //for things that are not going to be displayed but are needed in the tablecell
-@property(nonatomic,retain)NSDictionary* Properties;
+@property(nonatomic,retain)NSDictionary* properties;
 
 //ignore this, I just use it to figure certain style properties out
 @property(nonatomic,assign)BOOL isGrouped;

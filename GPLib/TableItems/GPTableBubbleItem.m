@@ -41,7 +41,7 @@
 {
     GPTableBubbleItem* item = [[[GPTableBubbleItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
+    item.imageURL = imageurl;
     item.topJustifyImage = YES;
     return item;
 }
@@ -50,8 +50,8 @@
 {
     GPTableBubbleItem* item = [[[GPTableBubbleItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
-    item.NavURL = url;
+    item.imageURL = imageurl;
+    item.navURL = url;
     item.topJustifyImage = YES;
     return item;
 }
@@ -61,9 +61,9 @@
 {
     GPTableBubbleItem* item = [[[GPTableBubbleItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
-    item.NavURL = url;
-    item.Properties = data;
+    item.imageURL = imageurl;
+    item.navURL = url;
+    item.properties = data;
     item.topJustifyImage = YES;
     return item;
 }

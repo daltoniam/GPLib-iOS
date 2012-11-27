@@ -37,7 +37,7 @@
 @property(nonatomic,copy)NSString* infoText;
 @property(nonatomic,retain)UIImage* image;
 @property(nonatomic,retain)NSString* imageURL;
-@property(nonatomic,copy)NSString* NavURL;
+@property(nonatomic,copy)NSString* navURL;
 @property(nonatomic,retain)UIFont* font;
 @property(nonatomic,retain)UIColor* color;
 @property(nonatomic,assign)BOOL isSelected;
@@ -49,7 +49,7 @@
 @property(nonatomic,assign)NSInteger rowCount; //just testing this
 @property(nonatomic,assign)CGRect frame; //just testing this
 //for things that are not going to be displayed but are needed in the tablecell
-@property(nonatomic,retain)NSDictionary* Properties;
+@property(nonatomic,retain)NSDictionary* properties;
 
 +(GPGridViewItem*)itemWithImage:(UIImage*)image text:(NSString*)text;
 +(GPGridViewItem*)itemWithImage:(UIImage*)image text:(NSString*)text url:(NSString*)url;

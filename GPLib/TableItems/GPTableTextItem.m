@@ -37,7 +37,7 @@
 
 @implementation GPTableTextItem
 
-@synthesize color,text,TextAlignment,NavURL,font,Properties,backgroundColor,isChecked,infoText;
+@synthesize color,text,textAlignment,navURL,font,properties,backgroundColor,isChecked,infoText;
 @synthesize notificationText,notificationFillColor,notificationTextColor,bevelLineColor,isGrouped,tag;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,8 +122,8 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     item.font = font;
     item.color = textcolor;
     item.TextAlignment = align;
-    item.NavURL = url;
-    item.Properties = props;
+    item.navURL = url;
+    item.properties = props;
     item.backgroundColor = color;
     return item;
 }
@@ -133,7 +133,7 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     GPTableTextItem* item = [[[GPTableTextItem alloc] init] autorelease];
     item.text = string;
     item.infoText = info;
-    item.NavURL = url;
+    item.navURL = url;
     return item;
 }
 
@@ -148,8 +148,8 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     {
         //GPTableItem* item = (GPTableItem*)[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
         //item.text = self.text;
-        //item.navURL = self.NavURL;
-        //item.Properties = [GPTableTextItem encodeObject:self.Properties keyName:@"properties"];
+        //item.navURL = self.navURL;
+        //item.properties = [GPTableTextItem encodeObject:self.properties keyName:@"properties"];
         //item.restoreClassName = [self getClassName];
         //return item;
         return [GPObjectSaver saveItemToDisk:ctx entityName:entityName object:self];
@@ -163,8 +163,8 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     {
         //GPTableItem* objectItem = (GPTableItem*)object;
         //GPTableTextItem* item = [GPTableTextItem itemWithText:objectItem.text];
-        //item.NavURL = objectItem.navURL;
-        //item.Properties = [GPTableTextItem decodeObject:objectItem.properties keyName:@"properties"];
+        //item.navURL = objectItem.navURL;
+        //item.properties = [GPTableTextItem decodeObject:objectItem.properties keyName:@"properties"];
         //return item;
         return [GPObjectSaver restoreItemFromDisk:object objectClass:[self class]];
     }

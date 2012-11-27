@@ -575,7 +575,7 @@
             if([object isKindOfClass:[GPTableImageItem class]])
             {
                 GPTableImageItem* item = (GPTableImageItem*)object;
-                if([item.ImageURL isEqualToString:request.URL.absoluteString])
+                if([item.imageURL isEqualToString:request.URL.absoluteString])
                 {
                     item.imageData = [UIImage imageWithData:[request responseData]];
                     UITableViewCell* cell = [searchController.searchResultsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];

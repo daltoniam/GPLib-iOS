@@ -41,7 +41,7 @@
 {
     GPTableHTMLItem* item = [[[GPTableHTMLItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.NavURL = url;
+    item.navURL = url;
     return item;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,8 +49,8 @@
 {
     GPTableHTMLItem* item = [[[GPTableHTMLItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.NavURL = url;
-    item.Properties = data;
+    item.navURL = url;
+    item.properties = data;
     return item;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

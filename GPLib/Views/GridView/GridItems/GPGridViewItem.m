@@ -35,7 +35,7 @@
 
 @implementation GPGridViewItem
 
-@synthesize text, image,NavURL,Properties,imageURL,color,font,isSelected,drawDropShadow,infoText,isLoading,rowHeight,columnCount,backgroundImage,rowCount,frame;
+@synthesize text, image,navURL,properties,imageURL,color,font,isSelected,drawDropShadow,infoText,isLoading,rowHeight,columnCount,backgroundImage,rowCount,frame;
 /////////////////////////////////////////////////////////////////////////////////////////
 +(GPGridViewItem*)itemWithImage:(UIImage*)image text:(NSString*)text
 {
@@ -52,8 +52,8 @@
     GPGridViewItem* item = [[[GPGridViewItem alloc] init] autorelease];
     item.text = text;
     item.image = image;
-    item.NavURL = url;
-    item.Properties = props;
+    item.navURL = url;
+    item.properties = props;
     return item;
 }
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -72,8 +72,8 @@
     GPGridViewItem* item = [[[GPGridViewItem alloc] init] autorelease];
     item.text = text;
     item.imageURL = imageURL;
-    item.NavURL = url;
-    item.Properties = props;
+    item.navURL = url;
+    item.properties = props;
     return item;
 }
 /////////////////////////////////////////////////////////////////////////////////////////

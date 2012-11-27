@@ -41,7 +41,7 @@
 {
     GPTableMailItem* item = [[[GPTableMailItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
+    item.imageURL = imageurl;
     item.title = titleHTML;
     return item;
 }

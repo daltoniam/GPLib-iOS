@@ -316,14 +316,14 @@
     if([object isKindOfClass:[GPTableTextItem class]])
     {
         GPTableTextItem* item = (GPTableTextItem*)object;
-        if([item.NavURL isEqualToString:@"color"])
+        if([item.navURL isEqualToString:@"color"])
         {
             HTMLListViewController* view = [[[HTMLListViewController alloc] initWithColor:ColorItem.color] autorelease];
             view.delegate = self;
             [self.navigationController pushViewController:view animated:YES];
             return;
         }
-        else if([item.NavURL isEqualToString:@"size"])
+        else if([item.navURL isEqualToString:@"size"])
         {
             int temp = 12;
             NSRange loc = [textSizeItem.text rangeOfString:@" "];
@@ -334,7 +334,7 @@
             [self.navigationController pushViewController:view animated:YES];
             return;
         }
-        else if([item.NavURL isEqualToString:@"font"])
+        else if([item.navURL isEqualToString:@"font"])
         {
             HTMLListViewController* view = [[[HTMLListViewController alloc] initWithFont:item.font.fontName] autorelease];
             view.delegate = self;
@@ -350,7 +350,7 @@
 -(void)didSelectItem:(id)object path:(NSIndexPath*)indexPath
 {
     GPTableTextItem* item = (GPTableTextItem*)object;
-    NSString* type = [item.Properties objectForKey:@"type"];
+    NSString* type = [item.properties objectForKey:@"type"];
     if([type isEqualToString:KEYWORD_HTML_COLOR])
         ColorItem.color = item.color;
     else if([type isEqualToString:KEYWORD_HTML_SIZE])

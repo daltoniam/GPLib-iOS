@@ -41,7 +41,7 @@
 {
     GPTableFloatingItem* item = [[[GPTableFloatingItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
+    item.imageURL = imageurl;
     item.title = title;
     return item;
 }
@@ -50,8 +50,8 @@
 {
     GPTableFloatingItem* item = [[[GPTableFloatingItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
-    item.NavURL = url;
+    item.imageURL = imageurl;
+    item.navURL = url;
     item.title = title;
     return item;
 }
@@ -61,8 +61,8 @@
 {
     GPTableFloatingItem* item = [[[GPTableFloatingItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.ImageURL = imageurl;
-    item.NavURL = url;
+    item.imageURL = imageurl;
+    item.navURL = url;
     item.attachmentsURLs = imageURLs;
     item.title = title;
     return item;
@@ -72,10 +72,10 @@
 {
     GPTableFloatingItem* item = [[[GPTableFloatingItem alloc] init] autorelease];
     item.text = htmlstring;
-    item.NavURL = url;
-    item.ImageURL = imageurl;
+    item.navURL = url;
+    item.imageURL = imageurl;
     item.attachmentsURLs = imageURLs;
-    item.Properties = data;
+    item.properties = data;
     item.title = title;
     return item;
 }

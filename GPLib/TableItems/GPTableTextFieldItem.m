@@ -49,7 +49,7 @@
     item.text = string;
     item.placeHolder = holder;
     item.height = height;
-    item.Properties = props;
+    item.properties = props;
     item.AutoCap = UITextAutocapitalizationTypeSentences;
     return item;
 }

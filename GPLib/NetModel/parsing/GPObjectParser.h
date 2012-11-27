@@ -53,6 +53,8 @@
     NSMutableDictionary* mappingDict;
 }
 
+@property(nonatomic,copy)NSString* parseKey;
+
 //create a new mapping object with a class
 -(id)initWithClass:(Class)objectClass;
 

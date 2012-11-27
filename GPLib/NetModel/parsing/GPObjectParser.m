@@ -83,17 +83,29 @@ static GPObjectParser* sharedParser;
         }
     }
     if(mapping)
+        return [self parseResponse:response mapping:mapping];
+    return nil;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(id)parseResponse:(id)response mapping:(GPObjectMapping*)mapping
+{
+    if([response isKindOfClass:[NSArray class]])
     {
-        if([response isKindOfClass:[NSArray class]])
+        NSArray* entries = response;
+        NSMutableArray* gather = [NSMutableArray arrayWithCapacity:entries.count];
+        for(NSDictionary* entry in entries)
+            [gather addObject:[mapping objectFromDict:entry]];
+        return gather;
+    }
+    else if([response isKindOfClass:[NSDictionary class]])
+    {
+        if(mapping.parseKey)
         {
-            NSArray* entries = response;
-            NSMutableArray* gather = [NSMutableArray arrayWithCapacity:entries.count];
-            for(NSDictionary* entry in entries)
-                [gather addObject:[mapping objectFromDict:entry]];
-            return gather;
+            id findResponse = [response objectForKey:mapping.parseKey];
+            if(findResponse)
+                response = findResponse;
         }
-        else if([response isKindOfClass:[NSDictionary class]])
-            return [mapping objectFromDict:response];
+        return [self parseResponse:response mapping:mapping];
     }
     return nil;
 }
@@ -102,6 +114,7 @@ static GPObjectParser* sharedParser;
 
 @implementation GPObjectMapping
 
+@synthesize parseKey;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(GPObjectMapping*)mappingWithClass:(Class)objectClass
 {

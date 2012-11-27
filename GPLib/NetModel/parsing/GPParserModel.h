@@ -29,7 +29,7 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  */
-//
+// this model subclasses GPModel and runs it through GPObjectParser so you don't need extra models.
 
 #import "GPModel.h"
 

@@ -29,20 +29,30 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  */
-//
+// this class is amazing, it convert any objects properties to a coreData object and saves it. It can also restore the objects.
+//made to work with GPModel needs for saving objects.
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
 @interface GPObjectSaver : NSObject
 
-
+//gets all the property names of a class and its super class(es).
 +(NSArray*)getPropertiesOfClass:(Class)objectClass;
+
+//saves the object to disk.
 +(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName object:(id)object;
+
+//restores the object from the disk and configures all the properties off the coreData property that name matches
 +(id)restoreItemFromDisk:(NSManagedObject*)managedObject objectClass:(Class)objectClass;
 
+//gets the class name.
 +(NSString*)getClassName:(Class)objectClass;
+
+//encodes a object to NSData (using NSArchiver) so it can be saved to disk.
 +(NSData*)encodeObject:(id)object keyName:(NSString*)key;
+
+//decodes a object from NSData to a object.
 +(id)decodeObject:(NSData*)data keyName:(NSString*)key;
 
 @end

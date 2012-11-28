@@ -72,6 +72,9 @@
 //when the search controller is dismissed.
 -(void)willStopSearch;
 
+//when the search controller is dismissed.
+-(void)willHideSearchKeyboard:(UISearchBar*)searchBar;
+
 //when the tableview is scrolled.
 -(void)scrollViewDidScroll:(UIScrollView*)scrollView;
 

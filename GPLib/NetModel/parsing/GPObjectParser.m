@@ -191,7 +191,7 @@ static GPObjectParser* sharedParser;
                 id args[mapKey.keys.count];
                 NSUInteger index = 0;
                 for ( id item in mapKey.keys )
-                    args[ index++ ] = item;
+                    args[ index++ ] = [entry valueForKeyPath:item];
                 value = [[[NSString alloc] initWithFormat:mapKey.url arguments:(va_list)args] autorelease];
             }
             keyName = key;

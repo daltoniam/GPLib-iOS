@@ -178,11 +178,22 @@ static GPObjectParser* sharedParser;
         else if([keyName isKindOfClass:[GPObjectMapKey class]])
         {
             GPObjectMapKey* mapKey = (GPObjectMapKey*)keyName;
-            id sufKey = [entry valueForKeyPath:mapKey.key];
-            if([sufKey isKindOfClass:[NSNull class]])
-                value = nil;
+            if(mapKey.prefix)
+            {
+                id sufKey = [entry valueForKeyPath:mapKey.key];
+                if([sufKey isKindOfClass:[NSNull class]])
+                    value = nil;
+                else
+                    value = [NSString stringWithFormat:@"%@%@",mapKey.prefix,sufKey];
+            }
             else
-                value = [NSString stringWithFormat:@"%@%@",mapKey.prefix,sufKey];
+            {
+                id args[mapKey.keys.count];
+                NSUInteger index = 0;
+                for ( id item in mapKey.keys )
+                    args[ index++ ] = item;
+                value = [[[NSString alloc] initWithFormat:mapKey.url arguments:(va_list)args] autorelease];
+            }
             keyName = key;
         }
         else
@@ -207,6 +218,14 @@ static GPObjectParser* sharedParser;
     GPObjectMapKey* mapKey = [[[GPObjectMapKey alloc] init] autorelease];
     mapKey.key = key;
     mapKey.prefix = pre;
+    return mapKey;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(GPObjectMapKey*)mapFormatKey:(NSString*)format keys:(NSArray*)keys
+{
+    GPObjectMapKey* mapKey = [[[GPObjectMapKey alloc] init] autorelease];
+    mapKey.url = format;
+    mapKey.keys = keys;
     return mapKey;
 }
 

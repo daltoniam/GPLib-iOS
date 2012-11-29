@@ -42,7 +42,14 @@
 @property(nonatomic,retain)NSString* prefix;
 @property(nonatomic,retain)NSString* key;
 
+@property(nonatomic,retain)NSArray* keys;
+@property(nonatomic,retain)NSString* url;
+
+//map a key with a prefix
 +(GPObjectMapKey*)mapKey:(NSString*)key prefix:(NSString*)pre;
+
+//map a key with format. example: [GPObjectMapKey mapFormatKey:gp://comments/%@ keys:[NSArray arrayWithObject:@"item.show"]]
++(GPObjectMapKey*)mapFormatKey:(NSString*)format keys:(NSArray*)keys;
 
 @end
 

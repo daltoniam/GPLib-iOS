@@ -210,6 +210,7 @@ const CGFloat SmallMargin = 6;
     [LoadingView stopAnimating];
     [LoadingView removeFromSuperview];
     UIImageView* imageview = [[UIImageView alloc] initWithImage:[UIImage libraryImageNamed:@"37x-Checkmark.png"]];
+    imageview.tag = 123;
     imageview.frame = LoadingView.frame;
     [ContentView addSubview:imageview];
     [imageview release];
@@ -239,6 +240,10 @@ const CGFloat SmallMargin = 6;
 ////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setText:(NSString *)textdata
 {
+    [[ContentView viewWithTag:123] removeFromSuperview];
+    [LoadingView startAnimating];
+    if(![LoadingView superview])
+        [ContentView addSubview:LoadingView];
     text = textdata;
     TextLabel.text = textdata;
 }

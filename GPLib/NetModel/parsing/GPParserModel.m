@@ -42,7 +42,11 @@
 {
     GPObjectParser* parser = [GPObjectParser sharedParser];
     id response = [parser parseJSON:[request responseString] url:request.URL.absoluteString];
-    if([response isKindOfClass:[NSArray class]])
+    if([response isKindOfClass:[NSNull class]] || !response)
+    {
+        
+    }
+    else if([response isKindOfClass:[NSArray class]])
     {
         [self.items addObjectsFromArray:response];
         if([response count] > 0 && self.paging)

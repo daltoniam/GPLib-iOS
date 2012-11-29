@@ -55,12 +55,15 @@
 
 @end
 
+typedef void (^GPModelBlock)(GPModel*,BOOL);
+
 @interface GPModel : NSObject
 {
     NSLock* lock;
     NSManagedObjectContext* objectCtx;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
+    GPModelBlock finishedBlock;
 }
 
 //this is the current page you are working with.
@@ -122,6 +125,9 @@
 
 //used to access coreData
 - (NSManagedObjectContext*)objectCtx;
+
+//use this to set a block based finish
+-(void)setFinishBlock:(GPModelBlock)completeBlock;
 
 //use to clear a all contents of a DB from disk.
 +(void)clearDiskStorage;

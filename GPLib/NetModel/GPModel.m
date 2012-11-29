@@ -179,6 +179,8 @@
 //override to make this do stuff!!!
 -(void)networkFinished:(GPHTTPRequest*)request
 {
+    if(finishedBlock)
+        finishedBlock(self,NO);
     [self performSelectorOnMainThread:@selector(finished:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:YES];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,6 +198,12 @@
 -(void)styleRestoredObject:(id)object
 {
     
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setFinishBlock:(GPModelBlock)completeBlock
+{
+    [finishedBlock release];
+	finishedBlock = [completeBlock copy];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //private stuff
@@ -252,6 +260,8 @@
                 }
             }
         }
+        if(finishedBlock)
+            finishedBlock(self,YES);
         [self performSelectorOnMainThread:@selector(finished:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
         [lock unlock];
         [pool drain];
@@ -308,6 +318,11 @@
     [managedObjectModel release];
     [objectCtx release];
     [lock release];
+    if (finishedBlock)
+    {
+		[finishedBlock release];
+		finishedBlock = nil;
+	}
     [super dealloc];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

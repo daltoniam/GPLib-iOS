@@ -171,12 +171,18 @@ static GPObjectParser* sharedParser;
         if([keyName isKindOfClass:[NSString class]])
         {
             value = [entry valueForKeyPath:keyName];
+            if([value isKindOfClass:[NSNull class]])
+                value = nil;
             keyName = key;
         }
         else if([keyName isKindOfClass:[GPObjectMapKey class]])
         {
             GPObjectMapKey* mapKey = (GPObjectMapKey*)keyName;
-            value = [NSString stringWithFormat:@"%@%@",mapKey.prefix,[entry valueForKeyPath:mapKey.key]];
+            id sufKey = [entry valueForKeyPath:mapKey.key];
+            if([sufKey isKindOfClass:[NSNull class]])
+                value = nil;
+            else
+                value = [NSString stringWithFormat:@"%@%@",mapKey.prefix,sufKey];
             keyName = key;
         }
         else

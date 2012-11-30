@@ -96,7 +96,7 @@
 
 - (NSComparisonResult)compare:(GPTableTextItem*)otherObject;
 
--(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName;
+-(void)saveItemToDisk:(NSManagedObject*)object;
 +(id)restoreItemFromDisk:(NSManagedObject*)object;
 
 //-(NSString*)getClassName;

@@ -8,6 +8,7 @@
 
 #import "GPSideBarViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GPNav.h"
 
 #define SIDE_MENU_WIDTH 66//49
 
@@ -156,7 +157,6 @@
     if(menuDoesHide && ![vc isKindOfClass:[UINavigationController class]])
     {
         UINavigationController* controller = [[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
-        [[GPNavigator navigator] navigationControllerChange:controller];
         
         controller.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height);
         int index = [viewControllers indexOfObject:vc];
@@ -178,7 +178,6 @@
         navController.view.frame = CGRectMake(0, 0, containerView.frame.size.width, containerView.frame.size.height);
     else
         navController.view.frame = CGRectMake(0, 0, containerView.frame.size.width-SIDE_MENU_WIDTH, containerView.frame.size.height);
-    [[GPNavigator navigator] navigationControllerChange:navController];
     [containerView addSubview:vc.view];
     if(menuDoesHide)
     {
@@ -253,7 +252,7 @@
     for(NSString* url in urls)
     {
         
-        UIViewController* vc = [[GPNavigator navigator] viewControllerFromURL:url];
+        UIViewController* vc = [[GPNav sharedNav] viewControllerFromURL:url];
         UINavigationController* controller = [[UINavigationController alloc] initWithRootViewController:vc];
         [array addObject:controller];
         [controller release];

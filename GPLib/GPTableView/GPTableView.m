@@ -37,8 +37,6 @@
 #import "GPTableCell.h"
 #import "GPTableImageItem.h"
 #import "GPTableImageCell.h"
-#import "GPTableBubbleItem.h"
-#import "GPBubbleTableCell.h"
 #import "GPTableMessageItem.h"
 #import "GPTableMessageCell.h"
 #import "GPTableViewItem.h"
@@ -51,16 +49,10 @@
 #import "GPTableTextFieldCell.h"
 #import "GPTableDeleteItem.h"
 #import "GPTableDeleteCell.h"
-#import "GPTableFloatingItem.h"
-#import "GPTableFloatingCell.h"
 #import "GPTableSwitchItem.h"
 #import "GPTableSwitchCell.h"
-#import "GPTableMailItem.h"
-#import "GPTableMailCell.h"
 #import "GPTableTextViewItem.h"
 #import "GPTableTextViewCell.h"
-#import "GPTableSegmentItem.h"
-#import "GPTableSegmentCell.h"
 #import "GPTableButtonItem.h"
 #import "GPTableButtonCell.h"
 #import "GPTablePadCell.h"
@@ -751,13 +743,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         if(class)
             return class;
     }
-    if ([object isKindOfClass:[GPTableBubbleItem class]])
-        return [GPBubbleTableCell class];
-    else if ([object isKindOfClass:[GPTableFloatingItem class]])
-        return [GPTableFloatingCell class];
-    else if ([object isKindOfClass:[GPTableMailItem class]])
-        return [GPTableMailCell class];
-    else if ([object isKindOfClass:[GPTableMessageItem class]])
+    if ([object isKindOfClass:[GPTableMessageItem class]])
         return [GPTableMessageCell class];
     else if ([object isKindOfClass:[GPTableHTMLItem class]])
         return [GPTableHtmlItemCell class];
@@ -771,8 +757,6 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         return [GPTableTextFieldCell class];
     else if ([object isKindOfClass:[GPTableTextViewItem class]])
         return [GPTableTextViewCell class];
-    else if ([object isKindOfClass:[GPTableSegmentItem class]])
-        return [GPTableSegmentCell class];
     else if ([object isKindOfClass:[GPTableDeleteItem class]])
         return [GPTableDeleteCell class];
     else if ([object isKindOfClass:[GPTableSwitchItem class]])

@@ -86,7 +86,14 @@ typedef void (^GPModelBlock)(GPModel*,BOOL);
 
 //set this to the entity name (name of your coreDataModel) of your core Data model. Default is nil, which means saving to disk does nothing
 //if you are using the GPTableItem coreData model, set this to GPTableItem
-@property (nonatomic, assign)NSString* entityName;
+@property (nonatomic, retain)NSString* entityName;
+
+//set the key to search by if you want to avoid duplicate objects in your coredata model. Usually this will be like user_id or groupID or something like that.
+//make sure your keyName makes what you have in coreData model name.
+@property (nonatomic, retain)NSString* primaryKey;
+
+//set this to the class you want to restore from disk. (Or you can use a string value of restoreClassName in your coredata model)
+@property (nonatomic, assign)Class restoreClass;
 
 -(id)initWithURL:(NSString*)url;
 

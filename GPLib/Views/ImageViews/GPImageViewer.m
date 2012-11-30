@@ -32,7 +32,6 @@
 //
 
 #import "GPImageViewer.h"
-#import "GPNavigator.h"
 
 #define PADDING  10
 

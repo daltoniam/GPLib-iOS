@@ -37,7 +37,7 @@
 
 @implementation GPModel
 
-@synthesize paging,page,isLoading,items,URL,delegate;
+@synthesize paging,page,isLoading,items,URL,delegate,primaryKey,entityName;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -115,6 +115,46 @@
     [self performSelectorInBackground:@selector(fetchDiskContent:) withObject:dict];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSArray*)findObjects:(NSPredicate*)predicate
+{
+    NSEntityDescription *entity = [NSEntityDescription entityForName:self.entityName inManagedObjectContext:[self objectCtx]];
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entity];
+    request.predicate = predicate;
+    return [[self objectCtx] executeFetchRequest:request error:nil];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)processSaveObject:(id)object
+{
+    if([object respondsToSelector:@selector(saveItemToDisk:)])
+    {
+        BOOL save = YES;
+        if([self.delegate respondsToSelector:@selector(modelShouldSaveObject:object:)])
+            save = [self.delegate modelShouldSaveObject:self object:object];
+        if(save)
+        {
+            BOOL create = YES;
+            if(self.primaryKey)
+            {
+                if([object respondsToSelector:NSSelectorFromString(self.primaryKey)])
+                {
+                    NSString* objectKey = [object performSelector:NSSelectorFromString(self.primaryKey)];
+                    NSArray* array = [self findObjects:[NSPredicate predicateWithFormat:@"%@ == %@",self.primaryKey,objectKey]];
+                    if(array.count > 0)
+                        create = NO;
+                    for(NSManagedObject* managedObject in array)
+                        [object performSelector:@selector(saveItemToDisk:) withObject:managedObject];
+                }
+            }
+            if(create)
+            {
+                NSManagedObject* managedObject = [NSEntityDescription insertNewObjectForEntityForName:self.entityName inManagedObjectContext:[self objectCtx]];
+                [object performSelector:@selector(saveItemToDisk:) withObject:managedObject];
+            }
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObject:(id)object
 {
     if(self.entityName)
@@ -122,14 +162,7 @@
         if(!lock)
             lock = [[NSLock alloc] init];
         [lock lock];
-        if([object respondsToSelector:@selector(saveItemToDisk:entityName:)])
-        {
-            BOOL save = YES;
-            if([self.delegate respondsToSelector:@selector(modelShouldSaveObject:object:)])
-                save = [self.delegate modelShouldSaveObject:self object:object];
-            if(save)
-                [object performSelector:@selector(saveItemToDisk:entityName:) withObject:[self objectCtx] withObject:self.entityName];
-        }
+        [self processSaveObject:object];
         [[self objectCtx] save:nil];
         [lock unlock];
     }
@@ -143,16 +176,7 @@
             lock = [[NSLock alloc] init];
         [lock lock];
         for(id object in array)
-        {
-            if([object respondsToSelector:@selector(saveItemToDisk:entityName:)])
-            {
-                BOOL save = YES;
-                if([self.delegate respondsToSelector:@selector(modelShouldSaveObject:object:)])
-                    save = [self.delegate modelShouldSaveObject:self object:object];
-                if(save)
-                    [object performSelector:@selector(saveItemToDisk:entityName:) withObject:[self objectCtx] withObject:self.entityName];
-            }
-        }
+            [self processSaveObject:object];
         [[self objectCtx] save:nil];
         [lock unlock];
     }
@@ -242,20 +266,18 @@
         NSArray *managedItems = [[self objectCtx] executeFetchRequest:request error:nil];
         for(NSManagedObject* object in managedItems)
         {
-            if([object respondsToSelector:@selector(restoreClassName)])
+            Class class = [self getRestoreClass:object];
+            if(!class)
+                class = self.restoreClass;
+            if(class)
             {
-                NSString* className = [object performSelector:@selector(restoreClassName)];
-                if(className)
+                if([class respondsToSelector:@selector(restoreItemFromDisk:)])
                 {
-                    Class class = NSClassFromString(className);
-                    if([class respondsToSelector:@selector(restoreItemFromDisk:)])
+                    id item = [class performSelector:@selector(restoreItemFromDisk:) withObject:object];
+                    if(item)
                     {
-                        id item = [class performSelector:@selector(restoreItemFromDisk:) withObject:object];
-                        if(item)
-                        {
-                            [self styleRestoredObject:item];
-                            [items addObject:item];
-                        }
+                        [self styleRestoredObject:item];
+                        [items addObject:item];
                     }
                 }
             }
@@ -266,6 +288,17 @@
         [lock unlock];
         [pool drain];
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(Class)getRestoreClass:(id)object
+{
+    if([object respondsToSelector:@selector(restoreClassName)])
+    {
+        NSString* className = [object performSelector:@selector(restoreClassName)];
+        if(className)
+            return NSClassFromString(className);
+    }
+    return nil;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)deleteDiskThread:(NSPredicate*)predicate

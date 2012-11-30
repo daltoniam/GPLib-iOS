@@ -7,8 +7,8 @@
 //
 
 #import "GPGridViewController.h"
-#import "GPNavigator.h"
 #import "GPGridViewItem.h"
+#import "GPNav.h"
 
 @interface GPGridViewController ()
 
@@ -78,13 +78,13 @@
             if (theURL)
             {
                 if(item.properties)
-                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.properties];
+                    [[GPNav sharedNav] openURL:theURL navController:self.navigationController query:item.properties];
                 else
-                    [[GPNavigator navigator] openURL:URL];
+                    [[GPNav sharedNav] openURL:URL navController:self.navigationController];
             }
         }
         else if (URL)
-            [[GPNavigator navigator] openURL:URL];
+            [[GPNav sharedNav] openURL:URL navController:self.navigationController];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

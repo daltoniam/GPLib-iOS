@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "GPTabBarItem.h"
-#import "GPNavigator.h"
 
 @interface GPSideBarViewController : UIViewController<GPTabBarItemDelegate>
 {

@@ -1,8 +1,8 @@
 //
-//  GPTableDragRefresh.h
-//  EduTalk
+//  GPObjectSaver.h
+//  TestApp
 //
-//  Created by Dalton Cherry on 10/20/11.
+//  Created by Dalton Cherry on 11/26/12.
 //  Copyright (c) 2011 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
@@ -29,25 +29,30 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  */
-//
-#import "GPOldModel.h"
-#import "GPOldTableViewController.h"
-#import "GPDragToRefreshView.h"
+// this class is amazing, it convert any objects properties to a coreData object and saves it. It can also restore the objects.
+//made to work with GPModel needs for saving objects.
 
-@class GPOldTableViewController;
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface GPTableDragRefresh : NSObject
-{
-    GPDragToRefreshView* headerView;
-    UIColor* Background;
-    GPOldTableViewController* controller;
-}
-@property (nonatomic, retain)GPDragToRefreshView* headerView;
+@interface GPObjectSaver : NSObject
 
-- (id)initWithController:(GPOldTableViewController*)control Background:(UIColor*)color;
-- (id)initWithController:(GPOldTableViewController*)_controller;
-- (void)scrollViewDidScroll:(UIScrollView*)scrollView;
-- (void)scrollViewDidEndDragging:(UIScrollView*)scrollView willDecelerate:(BOOL)decelerate;
-- (void)RequestFinished;
-- (void)RequestFailed;
+//gets all the property names of a class and its super class(es).
++(NSArray*)getPropertiesOfClass:(Class)objectClass;
+
+//saves the object to disk.
++(void)saveItemToDisk:(NSManagedObject*)managedObject object:(id)object;
+
+//restores the object from the disk and configures all the properties off the coreData property that name matches
++(id)restoreItemFromDisk:(NSManagedObject*)managedObject objectClass:(Class)objectClass;
+
+//gets the class name.
++(NSString*)getClassName:(Class)objectClass;
+
+//encodes a object to NSData (using NSArchiver) so it can be saved to disk.
++(NSData*)encodeObject:(id)object keyName:(NSString*)key;
+
+//decodes a object from NSData to a object.
++(id)decodeObject:(NSData*)data keyName:(NSString*)key;
+
 @end

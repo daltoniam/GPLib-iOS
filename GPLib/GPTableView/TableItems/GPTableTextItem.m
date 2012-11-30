@@ -142,32 +142,16 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     return [self.text compare:otherObject.text];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName
+-(void)saveItemToDisk:(NSManagedObject*)object
 {
-    if(entityName && ctx)
-    {
-        //GPTableItem* item = (GPTableItem*)[NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
-        //item.text = self.text;
-        //item.navURL = self.navURL;
-        //item.properties = [GPTableTextItem encodeObject:self.properties keyName:@"properties"];
-        //item.restoreClassName = [self getClassName];
-        //return item;
-        return [GPObjectSaver saveItemToDisk:ctx entityName:entityName object:self];
-    }
-    return nil;
+    if(object)
+        return [GPObjectSaver saveItemToDisk:object object:self];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 +(GPTableTextItem*)restoreItemFromDisk:(NSManagedObject*)object
 {
     if([object isKindOfClass:[NSManagedObject class]])
-    {
-        //GPTableItem* objectItem = (GPTableItem*)object;
-        //GPTableTextItem* item = [GPTableTextItem itemWithText:objectItem.text];
-        //item.navURL = objectItem.navURL;
-        //item.properties = [GPTableTextItem decodeObject:objectItem.properties keyName:@"properties"];
-        //return item;
         return [GPObjectSaver restoreItemFromDisk:object objectClass:[self class]];
-    }
     return nil;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,7 @@
 
 #import "GPTableViewController.h"
 #import "GPTableTextItem.h"
-#import "GPNavigator.h"
+#import "GPNav.h"
 
 @interface GPTableViewController ()
 
@@ -107,13 +107,13 @@
             if (theURL)
             {
                 if(item.properties)
-                    [[GPNavigator navigator] openURL:theURL NavType:GPNavTypeNormal query:item.properties];
+                    [[GPNav sharedNav] openURL:theURL navController:self.navigationController query:item.properties];
                 else
-                    [[GPNavigator navigator] openURL:URL];
+                    [[GPNav sharedNav] openURL:URL navController:self.navigationController];
             }
         }
         else if (URL)
-            [[GPNavigator navigator] openURL:URL];
+            [[GPNav sharedNav] openURL:URL navController:self.navigationController];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////

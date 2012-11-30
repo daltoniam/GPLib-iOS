@@ -39,11 +39,10 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+(NSManagedObject*)saveItemToDisk:(NSManagedObjectContext*)ctx entityName:(NSString*)entityName object:(id)object
++(void)saveItemToDisk:(NSManagedObject*)managedObject object:(id)object
 {
-    if(entityName && ctx)
+    if(object && managedObject)
     {
-        NSManagedObject* managedObject = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
         NSArray* propArray = [self getPropertiesOfClass:[object class]];
         for(NSString* propName in propArray)
         {
@@ -60,9 +59,7 @@
         }
         if([managedObject respondsToSelector:@selector(restoreClassName)])
             [managedObject setValue:[GPObjectSaver getClassName:[object class]] forKeyPath:@"restoreClassName"];
-        return managedObject;
     }
-    return nil;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)restoreItemFromDisk:(NSManagedObject*)managedObject objectClass:(Class)objectClass

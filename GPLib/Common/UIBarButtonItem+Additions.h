@@ -43,4 +43,6 @@
 +(void)setSharedBackgroundImage:(UIImage*)image;
 +(void)setSharedBackArrowBackgroundImage:(UIImage*)image;
 
++(BOOL)customBackButtonEnabled;
+
 @end

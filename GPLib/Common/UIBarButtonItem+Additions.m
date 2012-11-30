@@ -122,6 +122,13 @@ static UIImage* backgroundImage;
     backArrowImage = [image retain];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
++(BOOL)customBackButtonEnabled
+{
+    if(backArrowImage)
+        return YES;
+    return NO;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPBarButtonItem*)customButtonWithBack:(BOOL)isBack image:(UIImage*)image edgeInsets:(UIEdgeInsets)edgeInsets
 title:(NSString *)title target:(id)target selector:(SEL)selector noBG:(BOOL)noBG
 {

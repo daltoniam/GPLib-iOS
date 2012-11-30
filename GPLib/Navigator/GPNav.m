@@ -33,6 +33,7 @@
 
 #import "GPNav.h"
 #import <objc/runtime.h>
+#import "UIBarButtonItem+Additions.h"
 
 typedef enum {
     GPArgTypeNone,
@@ -101,6 +102,7 @@ GPArgType argTypeAsChar(char argType);
     UIViewController* vc = [self viewControllerFromURL:url query:query];
     if(vc)
     {
+        navBar.delegate = self;
         [navBar pushViewController:vc animated:YES];
         self.currentNavController = [navBar retain];
     }
@@ -387,6 +389,23 @@ GPArgType argTypeAsChar(char argType)
         return GPArgTypeBool;
     else
         return GPArgTypePointer;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if([UIBarButtonItem customBackButtonEnabled])
+    {
+        if([navigationController.viewControllers count ] > 1)
+        {
+            UIViewController* backViewController = [navigationController.viewControllers objectAtIndex:(navigationController.viewControllers.count - 2)];
+            NSString* backText = backViewController.title;
+            if(!backText)
+                backText = NSLocalizedString(@"Back", nil);
+            UIBarButtonItem* newBackButton = [UIBarButtonItem customButtonWithBack:backText target:navigationController selector:@selector(popViewControllerAnimated:)];
+            viewController.navigationItem.leftBarButtonItem = newBackButton;
+            viewController.navigationItem.hidesBackButton = YES;
+        }
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(UIViewController*)visibleViewController

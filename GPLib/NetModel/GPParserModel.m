@@ -49,7 +49,7 @@
     else if([response isKindOfClass:[NSArray class]])
     {
         [self.items addObjectsFromArray:response];
-        if([response count] > 0 && self.paging)
+        if(self.items.count > 0 && self.paging)
             [self.items addObject:[GPTableMoreItem itemWithLoading:@"" isAutoLoad:YES]];
     }
     else

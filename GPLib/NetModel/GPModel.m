@@ -177,7 +177,9 @@
         [lock lock];
         for(id object in array)
             [self processSaveObject:object];
-        [[self objectCtx] save:nil];
+        NSError* error = nil;
+        if(![[self objectCtx] save:&error])
+            NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error localizedDescription]);
         [lock unlock];
     }
 }

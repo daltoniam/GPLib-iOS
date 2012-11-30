@@ -46,14 +46,8 @@
 
 #import "HTMLKit.h"
 //////posting
-#import "HTMLPostViewController.h"
 #import "GPPostingViewController.h"
 #import "GPMessagePostViewController.h"
-/////html posting
-#import "HTMLSettingsViewController.h"
-#import "HTMLLinkViewController.h"
-#import "HTMLListViewController.h"
-#import "HTMLPostViewController.h"
 /////table cells
 #import "GPTableTextItem.h"
 #import "GPTableCell.h"
@@ -98,7 +92,6 @@
 #import "GPAttachmentView.h"
 #import "GPTableView.h"
 /////net model
-#import "GPCenterLabel.h"
 #import "GPDragToRefreshView.h"
 #import "GPTableAccessory.h"
 #import "GPSideBarViewController.h"

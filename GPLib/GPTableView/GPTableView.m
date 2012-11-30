@@ -554,25 +554,6 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     }
     [identifier release];
     
-    /*if([object isKindOfClass:[GPTableSegmentItem class]])
-    {
-        GPTableSegmentItem* item = (GPTableSegmentItem*)object;
-        if(item.segType == GPTableSegmentAuto)
-        {
-            BOOL isLast = [self isLastObjectInSection:object section:indexPath.section];
-            if(indexPath.row == 0)
-            {
-                item.segType = GPTableSegmentTop;
-                if(isLast)
-                    item.segType = GPTableSegmentOnly;
-            }
-            else if(isLast)
-                item.segType = GPTableSegmentBottom;
-            else
-                item.segType = GPTableSegmentMiddle;
-        }
-    }*/
-    
     if ([cell isKindOfClass:[GPTableCell class]])
         [(GPTableCell*)cell setAutoSize:self.variableHeight];
     
@@ -1172,7 +1153,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     NSInteger truncate = self.truncateCount;
     if(truncate <= 0)
         truncate = items.count + 1;
-    if(items.count > 0 && items.count <= truncate && ![[items objectAtIndex:0] isKindOfClass:[NSArray class]] )
+    if(items.count == 1 && items.count <= truncate )
         return nil;
     NSMutableArray* array = [NSMutableArray arrayWithCapacity:27];
     
@@ -1252,12 +1233,28 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             [gatherItems addObject:array];
         }
     }
-    for(id object in gatherItems)
-        [items removeObject:object];
-    for(id object in gatherSections)
-        [sections removeObject:object];
-    if(items.count != sections.count)
-        [items insertObject:[NSMutableArray array] atIndex:0];
+    int total = 0;
+    for(NSArray* array in gatherItems)
+        total += array.count;
+    if(total < self.truncateCount)
+    {
+        [sections removeAllObjects];
+        [sections addObject:@""];
+        NSMutableArray* gatherItems = [NSMutableArray arrayWithCapacity:total];
+        for(NSArray* array in items)
+            [gatherItems addObjectsFromArray:array];
+        [items removeAllObjects];
+        [items addObject:gatherItems];
+    }
+    else
+    {
+        for(id object in gatherItems)
+            [items removeObject:object];
+        for(id object in gatherSections)
+            [sections removeObject:object];
+        if(items.count != sections.count)
+            [items insertObject:[NSMutableArray array] atIndex:0];
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller

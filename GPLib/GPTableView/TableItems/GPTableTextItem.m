@@ -155,36 +155,6 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     return nil;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//helper functions for coreData stuff in GPModel
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*-(NSString*)getClassName
-{
-    const char* className = class_getName([self class]);
-    NSString* identifier = [[[NSString alloc] initWithBytesNoCopy:(char*)className
-                                                           length:strlen(className)
-                                                         encoding:NSASCIIStringEncoding freeWhenDone:NO] autorelease];
-    return identifier;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+(NSData*)encodeObject:(id)object keyName:(NSString*)key
-{
-    NSMutableData *data = [NSMutableData data];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:object forKey:key];
-    [archiver finishEncoding];
-    [archiver release];
-    return data;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+(id)decodeObject:(NSData*)data keyName:(NSString*)key
-{
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-    id object = [unarchiver decodeObjectForKey:key];
-    [unarchiver finishDecoding];
-    [unarchiver release];
-    return object;
-}*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @end
 

@@ -32,6 +32,7 @@
 //
 
 #import "GPGridViewItem.h"
+#import "GPObjectSaver.h"
 
 @implementation GPGridViewItem
 
@@ -75,6 +76,20 @@
     item.navURL = url;
     item.properties = props;
     return item;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)saveItemToDisk:(NSManagedObject*)object
+{
+    if(object)
+        return [GPObjectSaver saveItemToDisk:object object:self];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++(GPGridViewItem*)restoreItemFromDisk:(NSManagedObject*)object
+{
+    if([object isKindOfClass:[NSManagedObject class]])
+        return [GPObjectSaver restoreItemFromDisk:object objectClass:[self class]];
+    return nil;
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 

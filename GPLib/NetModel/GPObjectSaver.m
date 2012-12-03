@@ -75,9 +75,9 @@
                 id value = [managedObject valueForKey:propName];
                 if([value isKindOfClass:[NSData class]])
                 {
-                    id decodeObject = [GPObjectSaver decodeObject:value keyName:propName];
+                    id decodeObject = [UIImage imageWithData:value];
                     if(!decodeObject)
-                        decodeObject = [UIImage imageWithData:value];
+                        decodeObject = [GPObjectSaver decodeObject:value keyName:propName];
                     if(!decodeObject)
                         decodeObject = value;
                     [object setValue:decodeObject forKeyPath:propName];

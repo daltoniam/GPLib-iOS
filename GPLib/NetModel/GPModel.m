@@ -37,7 +37,7 @@
 
 @implementation GPModel
 
-@synthesize paging,page,isLoading,items,URL,delegate,primaryKey,entityName;
+@synthesize paging,page,isLoading,items,URL,delegate,primaryKey,entityName,migrationModelName;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -403,7 +403,14 @@
 {
     if (managedObjectModel)
         return managedObjectModel;
-    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    if(self.migrationModelName)
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:self.migrationModelName ofType:@"momd"];
+        NSURL *momURL = [NSURL fileURLWithPath:path];
+        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+    }
+    else
+        managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
     return managedObjectModel;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,9 +422,17 @@
     NSString* dbName = [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
     NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:dbName]];
     
+    NSDictionary *options = nil;
+    if(self.migrationModelName)
+    {
+        options = [NSDictionary dictionaryWithObjectsAndKeys:
+                   [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                   [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+    }
+    
     NSError *error = nil;
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error])
         NSLog(@"error: %@",error);
     
     return persistentStoreCoordinator;

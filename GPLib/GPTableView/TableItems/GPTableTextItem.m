@@ -38,7 +38,7 @@
 @implementation GPTableTextItem
 
 @synthesize color,text,textAlignment,navURL,font,properties,backgroundColor,isChecked,infoText;
-@synthesize notificationText,notificationFillColor,notificationTextColor,bevelLineColor,isGrouped,tag;
+@synthesize notificationText,notificationFillColor,notificationTextColor,bevelLineColor,isGrouped,tag,itemID;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 +(GPTableTextItem*)itemWithText:(NSString*)string 
@@ -199,6 +199,7 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
 @dynamic rowHeight;
 @dynamic properties;
 @dynamic restoreClassName;
+@dynamic itemID;
 
 @end
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

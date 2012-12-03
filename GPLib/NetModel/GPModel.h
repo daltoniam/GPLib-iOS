@@ -115,6 +115,10 @@ typedef void (^GPModelBlock)(GPModel*,BOOL);
 //this adds a new objects to disk.
 -(void)saveObjects:(NSArray*)array;
 
+//this adds new objects to disk and will clear any object in the array if it is already saved to coreData.
+//You need to have the primaryKey variable set for this to work.
+-(void)saveObjects:(NSArray*)array clearDups:(BOOL)clear;
+
 //find and delete objects from disk.
 -(void)deleteObjects:(NSPredicate*)predicate;
 

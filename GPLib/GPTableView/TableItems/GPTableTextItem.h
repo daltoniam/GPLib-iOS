@@ -46,6 +46,7 @@
 @property (nonatomic, retain) NSNumber * rowHeight;
 @property (nonatomic, retain) NSData * properties;
 @property (nonatomic, retain) NSString * restoreClassName;
+@property (nonatomic, retain) NSNumber * itemID;
 
 @end
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +62,7 @@
 @property(nonatomic,assign)UITextAlignment textAlignment;
 @property(nonatomic,copy)NSString* navURL;
 @property(nonatomic,assign)BOOL isChecked;
+@property(nonatomic,retain)NSNumber* itemID;
 
 //notification badge
 @property(nonatomic,copy)NSString* notificationText;

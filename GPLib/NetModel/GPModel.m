@@ -124,7 +124,8 @@
     return [[self objectCtx] executeFetchRequest:request error:nil];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)processSaveObject:(id)object
+//returns true if object already exist in coreData
+-(BOOL)processSaveObject:(id)object
 {
     if([object respondsToSelector:@selector(saveItemToDisk:)])
     {
@@ -139,7 +140,7 @@
                 if([object respondsToSelector:NSSelectorFromString(self.primaryKey)])
                 {
                     NSString* objectKey = [object performSelector:NSSelectorFromString(self.primaryKey)];
-                    NSArray* array = [self findObjects:[NSPredicate predicateWithFormat:@"%@ == %@",self.primaryKey,objectKey]];
+                    NSArray* array = [self findObjects:[NSPredicate predicateWithFormat:@"%K == %@",self.primaryKey,objectKey]];
                     if(array.count > 0)
                         create = NO;
                     for(NSManagedObject* managedObject in array)
@@ -151,8 +152,10 @@
                 NSManagedObject* managedObject = [NSEntityDescription insertNewObjectForEntityForName:self.entityName inManagedObjectContext:[self objectCtx]];
                 [object performSelector:@selector(saveItemToDisk:) withObject:managedObject];
             }
+            return !create;
         }
     }
+    return NO;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObject:(id)object
@@ -168,20 +171,39 @@
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)saveObjects:(NSArray*)array
+-(void)saveObjects:(NSArray*)array clearDups:(BOOL)clear
 {
     if(self.entityName)
     {
         if(!lock)
             lock = [[NSLock alloc] init];
         [lock lock];
+        NSMutableArray* mutArray = nil;
+        if(clear)
+            mutArray = [NSMutableArray array];
         for(id object in array)
-            [self processSaveObject:object];
+        {
+            if([self processSaveObject:object] && clear)
+                [mutArray addObject:object];
+        }
+        if(clear)
+        {
+            if([array isKindOfClass:[NSMutableArray class]])
+                [(NSMutableArray*)array removeObjectsInArray:mutArray];
+        }
         NSError* error = nil;
         if(![[self objectCtx] save:&error])
             NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error localizedDescription]);
         [lock unlock];
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)saveObjects:(NSArray*)array
+{
+    if(self.primaryKey)
+        [self saveObjects:array clearDups:YES];
+    else
+        [self saveObjects:array clearDups:NO];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)deleteObjects:(NSPredicate*)predicate

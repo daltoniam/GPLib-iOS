@@ -60,7 +60,7 @@
 +(GPGridViewItem*)itemWithImageURL:(NSString*)imageURL text:(NSString*)text url:(NSString *)url;
 +(GPGridViewItem*)itemWithImageURL:(NSString*)imageURL text:(NSString*)text url:(NSString*)url properties:(NSDictionary*)props;
 
--(void)saveItemToDisk:(NSManagedObject*)object;
+-(void)saveItemToDisk:(NSManagedObject*)object ctx:(NSManagedObjectContext*)ctx;
 +(GPGridViewItem*)restoreItemFromDisk:(NSManagedObject*)object;
 
 @end

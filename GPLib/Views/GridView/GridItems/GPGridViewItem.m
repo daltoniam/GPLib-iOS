@@ -79,10 +79,10 @@
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)saveItemToDisk:(NSManagedObject*)object
+-(void)saveItemToDisk:(NSManagedObject*)object ctx:(NSManagedObjectContext*)ctx
 {
     if(object)
-        return [GPObjectSaver saveItemToDisk:object object:self];
+        return [GPObjectSaver saveItemToDisk:object object:self ctx:ctx];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 +(GPGridViewItem*)restoreItemFromDisk:(NSManagedObject*)object

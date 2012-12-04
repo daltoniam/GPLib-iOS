@@ -72,7 +72,7 @@
 -(void)mapKey:(NSString*)key toAttribute:(NSString*)attrib;
 
 //map a key to a class (basically another object within this object)
--(void)mapInverseKey:(NSString*)key toClass:(Class)childClass;
+-(void)mapInverseKey:(NSString*)key toMapping:(GPObjectMapping*)mapping;
 
 //used interally. Create objects from JSON data
 -(id)objectFromClass:(Class)objectClass;

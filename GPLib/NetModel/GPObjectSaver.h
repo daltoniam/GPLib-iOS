@@ -41,7 +41,7 @@
 +(NSArray*)getPropertiesOfClass:(Class)objectClass;
 
 //saves the object to disk.
-+(void)saveItemToDisk:(NSManagedObject*)managedObject object:(id)object;
++(void)saveItemToDisk:(NSManagedObject*)managedObject object:(id)object ctx:(NSManagedObjectContext*)ctx;
 
 //restores the object from the disk and configures all the properties off the coreData property that name matches
 +(id)restoreItemFromDisk:(NSManagedObject*)managedObject objectClass:(Class)objectClass;

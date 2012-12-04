@@ -142,10 +142,10 @@ return [self itemWithText:string font:nil color:[UIColor blackColor] alignment:U
     return [self.text compare:otherObject.text];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)saveItemToDisk:(NSManagedObject*)object
+-(void)saveItemToDisk:(NSManagedObject*)object ctx:(NSManagedObjectContext*)ctx
 {
     if(object)
-        return [GPObjectSaver saveItemToDisk:object object:self];
+        return [GPObjectSaver saveItemToDisk:object object:self ctx:ctx];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 +(GPTableTextItem*)restoreItemFromDisk:(NSManagedObject*)object

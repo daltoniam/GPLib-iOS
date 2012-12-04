@@ -39,7 +39,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+(void)saveItemToDisk:(NSManagedObject*)managedObject object:(id)object
++(void)saveItemToDisk:(NSManagedObject*)managedObject object:(id)object ctx:(NSManagedObjectContext*)ctx
 {
     if(object && managedObject)
     {
@@ -53,6 +53,18 @@
                     [managedObject setValue:[GPObjectSaver encodeObject:value keyName:propName] forKeyPath:propName];
                 else if([value isKindOfClass:[UIImage class]])
                     [managedObject setValue:UIImagePNGRepresentation(value) forKeyPath:propName];
+                else if([value respondsToSelector:@selector(saveItemToDisk:ctx:)] && [value respondsToSelector:@selector(entityName)])
+                {
+                    NSManagedObject* childObject = [managedObject performSelector:NSSelectorFromString(propName)];
+                    if(!childObject)
+                    {
+                        NSString* entityName = [value performSelector:@selector(entityName)];
+                        childObject = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:ctx];
+                    }
+                    [value performSelector:@selector(saveItemToDisk:ctx:) withObject:childObject withObject:ctx];
+                    [managedObject setValue:childObject forKeyPath:propName];
+                    
+                }
                 else if(value)
                     [managedObject setValue:value forKeyPath:propName];
             }
@@ -81,6 +93,18 @@
                     if(!decodeObject)
                         decodeObject = value;
                     [object setValue:decodeObject forKeyPath:propName];
+                }
+                else if([value isKindOfClass:[NSManagedObject class]])
+                {
+                    if([value respondsToSelector:@selector(restoreClassName)])
+                    {
+                        Class childClass = NSClassFromString([value performSelector:@selector(restoreClassName)]);
+                        if(childClass && [childClass respondsToSelector:@selector(restoreItemFromDisk:)])
+                        {
+                            id restoreItem = [childClass performSelector:@selector(restoreItemFromDisk:) withObject:value];
+                            [object setValue:restoreItem forKeyPath:propName];
+                        }
+                    }
                 }
                 else
                     [object setValue:value forKeyPath:propName];

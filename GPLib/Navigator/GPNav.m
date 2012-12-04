@@ -399,6 +399,8 @@ GPArgType argTypeAsChar(char argType)
         {
             UIViewController* backViewController = [navigationController.viewControllers objectAtIndex:(navigationController.viewControllers.count - 2)];
             NSString* backText = backViewController.title;
+            if(!backText && [backViewController.navigationItem.titleView respondsToSelector:@selector(text)])
+                backText = [backViewController.navigationItem.titleView performSelector:@selector(text)];
             if(!backText)
                 backText = NSLocalizedString(@"Back", nil);
             UIBarButtonItem* newBackButton = [UIBarButtonItem customButtonWithBack:backText target:navigationController selector:@selector(popViewControllerAnimated:)];

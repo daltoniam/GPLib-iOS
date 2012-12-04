@@ -134,7 +134,8 @@ static GPObjectParser* sharedParser;
 {
     if(!mappingDict)
         mappingDict = [[NSMutableDictionary alloc] init];
-    [mappingDict setValue:key forKey:attrib];
+    //[mappingDict setValue:key forKey:attrib];
+    [mappingDict setValue:attrib forKey:key];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)mapObjectKey:(GPObjectMapKey*)key toAttribute:(NSString*)attrib
@@ -170,10 +171,10 @@ static GPObjectParser* sharedParser;
         NSString* keyName = [mappingDict objectForKey:key];
         if([keyName isKindOfClass:[NSString class]])
         {
-            value = [entry valueForKeyPath:keyName];
+            value = [entry valueForKeyPath:key];
             if([value isKindOfClass:[NSNull class]])
                 value = nil;
-            keyName = key;
+            //keyName = key;
         }
         else if([keyName isKindOfClass:[GPObjectMapKey class]])
         {

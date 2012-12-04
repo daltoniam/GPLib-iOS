@@ -95,6 +95,9 @@ typedef void (^GPModelBlock)(GPModel*,BOOL);
 //set this to the class you want to restore from disk. (Or you can use a string value of restoreClassName in your coredata model)
 @property (nonatomic, assign)Class restoreClass;
 
+//if you need to preform a migration. This is the name of the xcdatamodeld
+@property (nonatomic, retain)NSString* migrationModelName;
+
 -(id)initWithURL:(NSString*)url;
 
 //this will fetch new content off the network from URL property. It increments the page number if paging is enabled

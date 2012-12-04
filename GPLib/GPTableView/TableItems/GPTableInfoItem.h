@@ -1,8 +1,8 @@
 //
-//  GPGridMoreItem.m
+//  GPTableInfoItem.h
 //  GPLib
 //
-//  Created by Dalton Cherry on 5/23/12.
+//  Created by Dalton Cherry on 12/4/12.
 //  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
@@ -31,29 +31,10 @@
  */
 //
 
-#import "GPGridMoreItem.h"
+#import "GPTableTextItem.h"
 
-@implementation GPGridMoreItem
+@interface GPTableInfoItem : GPTableTextItem
 
-@synthesize isLoading,isAutoLoad,backgroundColor;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+ (GPGridMoreItem*)itemWithLoading:(NSString*)text isAutoLoad:(BOOL)autoload
-{
-    GPGridMoreItem* item = [[[GPGridMoreItem alloc] init] autorelease];
-    item.text = text;
-    item.font = [UIFont systemFontOfSize:14];
-    item.isAutoLoad = autoload;
-    return item;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--(void)saveItemToDisk:(NSManagedObject*)object ctx:(NSManagedObjectContext*)ctx
-{
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-+(GPGridViewItem*)restoreItemFromDisk:(NSManagedObject*)object
-{
-    return nil;
-}
++(GPTableInfoItem*)itemWithText:(NSString*)text infoText:(NSString *)info;
 
 @end

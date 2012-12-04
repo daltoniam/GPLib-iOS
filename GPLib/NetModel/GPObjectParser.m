@@ -103,9 +103,9 @@ static GPObjectParser* sharedParser;
         {
             id findResponse = [response objectForKey:mapping.parseKey];
             if(findResponse)
-                response = findResponse;
+                return [self parseResponse:findResponse mapping:mapping];
         }
-        return [self parseResponse:response mapping:mapping];
+        return [mapping objectFromDict:response];
     }
     return nil;
 }
@@ -145,11 +145,11 @@ static GPObjectParser* sharedParser;
     [mappingDict setValue:key forKey:attrib];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)mapInverseKey:(NSString*)key toClass:(Class)childClass
+-(void)mapInverseKey:(NSString*)key toMapping:(GPObjectMapping*)mapping
 {
     if(!mappingDict)
         mappingDict = [[NSMutableDictionary alloc] init];
-    [mappingDict setValue:childClass forKey:key];
+    [mappingDict setValue:mapping forKey:key];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)objectFromClass:(Class)objectClass
@@ -197,11 +197,14 @@ static GPObjectParser* sharedParser;
             }
             keyName = key;
         }
-        else
+        else if(entry)
         {
-            Class childClass = [mappingDict objectForKey:key];
-            value = [self objectFromDict:[entry valueForKeyPath:key] objectClass:childClass];
+            GPObjectMapping* mapping = [mappingDict objectForKey:key];
+            value = [[GPObjectParser sharedParser] parseResponse:[entry valueForKeyPath:key] mapping:mapping];
             keyName = key;
+            NSRange range = [keyName rangeOfString:@"." options:NSBackwardsSearch];
+            if(range.location != NSNotFound)
+                keyName = [keyName substringFromIndex:range.location+1];
         }
         if(value)
             [object setValue:value forKey:keyName];

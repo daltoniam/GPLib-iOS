@@ -37,7 +37,7 @@
 
 @implementation GPModel
 
-@synthesize paging,page,isLoading,items,URL,delegate,primaryKey,entityName;
+@synthesize paging,page,isLoading,items,URL,delegate,primaryKey,entityName,migrationModelName;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -127,7 +127,10 @@
 //returns true if object already exist in coreData
 -(BOOL)processSaveObject:(id)object
 {
-    if([object respondsToSelector:@selector(saveItemToDisk:)])
+    NSString* entity = self.entityName;
+    if([object respondsToSelector:@selector(entityName)])
+        entity = [object performSelector:@selector(entityName)];
+    if([object respondsToSelector:@selector(saveItemToDisk:ctx:)] && entity)
     {
         BOOL save = YES;
         if([self.delegate respondsToSelector:@selector(modelShouldSaveObject:object:)])
@@ -144,13 +147,13 @@
                     if(array.count > 0)
                         create = NO;
                     for(NSManagedObject* managedObject in array)
-                        [object performSelector:@selector(saveItemToDisk:) withObject:managedObject];
+                        [object performSelector:@selector(saveItemToDisk:ctx:) withObject:managedObject withObject:[self objectCtx]];
                 }
             }
             if(create)
             {
-                NSManagedObject* managedObject = [NSEntityDescription insertNewObjectForEntityForName:self.entityName inManagedObjectContext:[self objectCtx]];
-                [object performSelector:@selector(saveItemToDisk:) withObject:managedObject];
+                NSManagedObject* managedObject = [NSEntityDescription insertNewObjectForEntityForName:entity inManagedObjectContext:[self objectCtx]];
+                [object performSelector:@selector(saveItemToDisk:ctx:) withObject:managedObject withObject:[self objectCtx]];
             }
             return !create;
         }
@@ -160,42 +163,36 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObject:(id)object
 {
-    if(self.entityName)
-    {
-        if(!lock)
-            lock = [[NSLock alloc] init];
-        [lock lock];
-        [self processSaveObject:object];
-        [[self objectCtx] save:nil];
-        [lock unlock];
-    }
+    if(!lock)
+        lock = [[NSLock alloc] init];
+    [lock lock];
+    [self processSaveObject:object];
+    [[self objectCtx] save:nil];
+    [lock unlock];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObjects:(NSArray*)array clearDups:(BOOL)clear
 {
-    if(self.entityName)
+    if(!lock)
+        lock = [[NSLock alloc] init];
+    [lock lock];
+    NSMutableArray* mutArray = nil;
+    if(clear)
+        mutArray = [NSMutableArray array];
+    for(id object in array)
     {
-        if(!lock)
-            lock = [[NSLock alloc] init];
-        [lock lock];
-        NSMutableArray* mutArray = nil;
-        if(clear)
-            mutArray = [NSMutableArray array];
-        for(id object in array)
-        {
-            if([self processSaveObject:object] && clear)
-                [mutArray addObject:object];
-        }
-        if(clear)
-        {
-            if([array isKindOfClass:[NSMutableArray class]])
-                [(NSMutableArray*)array removeObjectsInArray:mutArray];
-        }
-        NSError* error = nil;
-        if(![[self objectCtx] save:&error])
-            NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error localizedDescription]);
-        [lock unlock];
+        if([self processSaveObject:object] && clear)
+            [mutArray addObject:object];
     }
+    if(clear)
+    {
+        if([array isKindOfClass:[NSMutableArray class]])
+            [(NSMutableArray*)array removeObjectsInArray:mutArray];
+    }
+    NSError* error = nil;
+    if(![[self objectCtx] save:&error])
+        NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error userInfo]);
+    [lock unlock];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObjects:(NSArray*)array
@@ -403,7 +400,14 @@
 {
     if (managedObjectModel)
         return managedObjectModel;
-    managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    if(self.migrationModelName)
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:self.migrationModelName ofType:@"momd"];
+        NSURL *momURL = [NSURL fileURLWithPath:path];
+        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+    }
+    else
+        managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
     return managedObjectModel;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,10 +419,33 @@
     NSString* dbName = [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
     NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:dbName]];
     
+    NSDictionary *options = nil;
+    if(self.migrationModelName)
+    {
+        options = [NSDictionary dictionaryWithObjectsAndKeys:
+                   [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                   [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+    }
+    
     NSError *error = nil;
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:nil error:&error])
-        NSLog(@"error: %@",error);
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error])
+    {
+        NSLog(@"error: %@ userInfo: %@",error,[error userInfo]);
+        static BOOL didReload;
+        if(!didReload)
+        {
+            NSString* dbName = [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
+            NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:dbName]];
+            [[NSFileManager defaultManager] removeItemAtPath:storeUrl.path error:nil];
+            [persistentStoreCoordinator release];
+            persistentStoreCoordinator = nil;
+            [managedObjectModel release];
+            managedObjectModel = nil;
+            [self persistentStoreCoordinator];
+            didReload = YES;
+        }
+    }
     
     return persistentStoreCoordinator;
 }

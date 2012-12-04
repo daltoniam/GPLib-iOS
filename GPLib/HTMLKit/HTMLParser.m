@@ -395,20 +395,26 @@ void error( void * ctx, const char * msg, ... )
                 end = [style rangeOfString:@"\"" options:0 range:NSMakeRange(pos, [style length]-pos)];
             if(end.location == NSNotFound)
                 end = NSMakeRange([style length],0);
-            NSString* size = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
-            FontSize = [self GetSize:size];
-            //NSLog(@"FontSize: %d",FontSize);
+            if(pos != NSNotFound && end.location != NSNotFound)
+            {
+                NSString* size = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
+                FontSize = [self GetSize:size];
+                //NSLog(@"FontSize: %d",FontSize);
+            }
         }
         find = [style rangeOfString:@"text-decoration:"];
         if(find.location != NSNotFound)
         {
             int pos = find.location+find.length;
             //NSRange end = [style rangeOfString:@";" options:0 range:NSMakeRange(pos, [style length]-pos)];
-            NSString* decorations = [style substringWithRange:NSMakeRange(pos, [style length]-pos)];
-            if([decorations rangeOfString:@"line-through"].location != NSNotFound)
-                [string setTextStrikeOut:YES];
-            if([decorations rangeOfString:@"underline"].location != NSNotFound)
-                [string setTextIsUnderlined:YES];
+            if(pos != NSNotFound && style.length > pos)
+            {
+                NSString* decorations = [style substringWithRange:NSMakeRange(pos, [style length]-pos)];
+                if([decorations rangeOfString:@"line-through"].location != NSNotFound)
+                    [string setTextStrikeOut:YES];
+                if([decorations rangeOfString:@"underline"].location != NSNotFound)
+                    [string setTextIsUnderlined:YES];
+            }
         }
         find = [style rangeOfString:@"color:"];
         if(find.location != NSNotFound)
@@ -431,15 +437,18 @@ void error( void * ctx, const char * msg, ... )
         {
             int pos = find.location+find.length;
             NSRange end = [style rangeOfString:@";" options:0 range:NSMakeRange(pos, [style length]-pos)];
-            NSString* align = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
-            if([align rangeOfString:@"right"].location != NSNotFound)
-                Alignment = kCTRightTextAlignment;
-            else if([align rangeOfString:@"center"].location != NSNotFound)
-                Alignment = kCTCenterTextAlignment;
-            else if([align rangeOfString:@"justify"].location != NSNotFound)
-                Alignment = kCTJustifiedTextAlignment;
-            else
-                Alignment = kCTLeftTextAlignment;
+            if(pos != NSNotFound && end.location != NSNotFound)
+            {
+                NSString* align = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
+                if([align rangeOfString:@"right"].location != NSNotFound)
+                    Alignment = kCTRightTextAlignment;
+                else if([align rangeOfString:@"center"].location != NSNotFound)
+                    Alignment = kCTCenterTextAlignment;
+                else if([align rangeOfString:@"justify"].location != NSNotFound)
+                    Alignment = kCTJustifiedTextAlignment;
+                else
+                    Alignment = kCTLeftTextAlignment;
+            }
             
             [string setTextAlignment:Alignment lineBreakMode:kCTLineBreakByWordWrapping];
         }
@@ -450,7 +459,7 @@ void error( void * ctx, const char * msg, ... )
             NSRange end = [style rangeOfString:@";" options:0 range:NSMakeRange(pos, [style length]-pos)];
             if(end.location == NSNotFound)
                 end = [style rangeOfString:@"'" options:0 range:NSMakeRange(pos, [style length]-pos)];
-            if(end.location == NSNotFound)
+            if(end.location != NSNotFound)
             {
                 NSString* font = [style substringWithRange:NSMakeRange(pos, end.location-pos)];
                 find = [font rangeOfString:@","];

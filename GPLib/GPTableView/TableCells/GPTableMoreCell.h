@@ -37,6 +37,7 @@
 {
     UIActivityIndicatorView* ActivityView;
     BOOL isAuto;
+    BOOL isGrouped;
 }
 
 -(void)setAnimating:(BOOL)swap;

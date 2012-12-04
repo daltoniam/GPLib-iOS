@@ -54,7 +54,10 @@
     {
          CGRect frame = self.bounds;
         //ActivityView.frame = CGRectMake(TableCellSmallMargin, TableCellSmallMargin, 24, 24);
-        ActivityView.frame = CGRectMake(frame.size.width/2 - 24, TableCellSmallMargin, 24, 24);
+        int pad = 0;
+        if(isGrouped)
+            pad = -12;
+        ActivityView.frame = CGRectMake((frame.size.width/2) - (24+pad), (frame.size.height/2) - 12, 24, 24);
         //ActivityView.frame = CGRectMake(0, 0, 24, 24);
         //ActivityView.center = self.contentView.center;
     }
@@ -75,6 +78,7 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
     GPTableMoreItem* item = object;
     isAuto = item.isAutoLoad;
+    isGrouped = item.isGrouped;
     [self setAnimating:item.isLoading];
         
 }

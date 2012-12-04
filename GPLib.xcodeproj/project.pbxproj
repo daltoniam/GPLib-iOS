@@ -168,6 +168,10 @@
 		5CA883E41641C0CB0060BCD1 /* GPGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA883E21641C0CB0060BCD1 /* GPGridViewController.m */; };
 		5CA8D0A2162CB2C3009AC119 /* GPTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CA8D0A0162CB2C3009AC119 /* GPTableView.h */; };
 		5CA8D0A3162CB2C3009AC119 /* GPTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA8D0A1162CB2C3009AC119 /* GPTableView.m */; };
+		5CB67310166EA8240075DFD0 /* GPTableInfoCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CB6730E166EA8230075DFD0 /* GPTableInfoCell.h */; };
+		5CB67311166EA8240075DFD0 /* GPTableInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB6730F166EA8230075DFD0 /* GPTableInfoCell.m */; };
+		5CB67318166EA9960075DFD0 /* GPTableInfoItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CB67316166EA9960075DFD0 /* GPTableInfoItem.h */; };
+		5CB67319166EA9960075DFD0 /* GPTableInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB67317166EA9960075DFD0 /* GPTableInfoItem.m */; };
 		5CD4F8B814DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
 		5CD4F8C614DC521A00F2CBB3 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8C514DC521A00F2CBB3 /* SenTestingKit.framework */; };
 		5CD4F8C914DC521A00F2CBB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */; };
@@ -441,6 +445,10 @@
 		5CA883E21641C0CB0060BCD1 /* GPGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPGridViewController.m; path = GridView/GPGridViewController.m; sourceTree = "<group>"; };
 		5CA8D0A0162CB2C3009AC119 /* GPTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPTableView.h; path = GPTableView/GPTableView.h; sourceTree = "<group>"; };
 		5CA8D0A1162CB2C3009AC119 /* GPTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPTableView.m; path = GPTableView/GPTableView.m; sourceTree = "<group>"; };
+		5CB6730E166EA8230075DFD0 /* GPTableInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableInfoCell.h; sourceTree = "<group>"; };
+		5CB6730F166EA8230075DFD0 /* GPTableInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableInfoCell.m; sourceTree = "<group>"; };
+		5CB67316166EA9960075DFD0 /* GPTableInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableInfoItem.h; sourceTree = "<group>"; };
+		5CB67317166EA9960075DFD0 /* GPTableInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableInfoItem.m; sourceTree = "<group>"; };
 		5CD4F8B414DC521A00F2CBB3 /* libGPLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGPLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD4F8B714DC521A00F2CBB3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5CD4F8BB14DC521A00F2CBB3 /* GPLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPLib-Prefix.pch"; sourceTree = "<group>"; };
@@ -739,6 +747,8 @@
 				5C9BCF3616690449003C70E5 /* GPTableTextViewCell.m */,
 				5C9BCF3716690449003C70E5 /* GPTableViewCell.h */,
 				5C9BCF3816690449003C70E5 /* GPTableViewCell.m */,
+				5CB6730E166EA8230075DFD0 /* GPTableInfoCell.h */,
+				5CB6730F166EA8230075DFD0 /* GPTableInfoCell.m */,
 			);
 			name = TableCells;
 			path = GPTableView/TableCells;
@@ -771,6 +781,8 @@
 				5C9BCF4F16690449003C70E5 /* GPTableTextViewItem.m */,
 				5C9BCF5016690449003C70E5 /* GPTableViewItem.h */,
 				5C9BCF5116690449003C70E5 /* GPTableViewItem.m */,
+				5CB67316166EA9960075DFD0 /* GPTableInfoItem.h */,
+				5CB67317166EA9960075DFD0 /* GPTableInfoItem.m */,
 			);
 			name = TableItems;
 			path = GPTableView/TableItems;
@@ -1122,6 +1134,8 @@
 				5C9BCF8616690449003C70E5 /* GPTableTextItem.h in Headers */,
 				5C9BCF8816690449003C70E5 /* GPTableTextViewItem.h in Headers */,
 				5C9BCF8A16690449003C70E5 /* GPTableViewItem.h in Headers */,
+				5CB67310166EA8240075DFD0 /* GPTableInfoCell.h in Headers */,
+				5CB67318166EA9960075DFD0 /* GPTableInfoItem.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,6 +1429,8 @@
 				5C9BCF8716690449003C70E5 /* GPTableTextItem.m in Sources */,
 				5C9BCF8916690449003C70E5 /* GPTableTextViewItem.m in Sources */,
 				5C9BCF8B16690449003C70E5 /* GPTableViewItem.m in Sources */,
+				5CB67311166EA8240075DFD0 /* GPTableInfoCell.m in Sources */,
+				5CB67319166EA9960075DFD0 /* GPTableInfoItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,8 +1,8 @@
 //
-//  GPTableMoreCell.h
+//  GPTableInfoItem.h
 //  GPLib
 //
-//  Created by Dalton Cherry on 2/3/12.
+//  Created by Dalton Cherry on 12/4/12.
 //  Copyright (c) 2012 Basement Crew/180 Dev Designs. All rights reserved.
 //
 /*
@@ -31,14 +31,10 @@
  */
 //
 
-#import "GPTableCell.h"
+#import "GPTableTextItem.h"
 
-@interface GPTableMoreCell : GPTableCell
-{
-    UIActivityIndicatorView* ActivityView;
-    BOOL isAuto;
-    BOOL isGrouped;
-}
+@interface GPTableInfoItem : GPTableTextItem
 
--(void)setAnimating:(BOOL)swap;
++(GPTableInfoItem*)itemWithText:(NSString*)text infoText:(NSString *)info;
+
 @end

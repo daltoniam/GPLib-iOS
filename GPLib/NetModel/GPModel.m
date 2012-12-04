@@ -193,7 +193,7 @@
         }
         NSError* error = nil;
         if(![[self objectCtx] save:&error])
-            NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error localizedDescription]);
+            NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error userInfo]);
         [lock unlock];
     }
 }
@@ -433,7 +433,22 @@
     NSError *error = nil;
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error])
-        NSLog(@"error: %@",error);
+    {
+        NSLog(@"error: %@ userInfo: %@",error,[error userInfo]);
+        static BOOL didReload;
+        if(!didReload)
+        {
+            NSString* dbName = [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
+            NSURL *storeUrl = [NSURL fileURLWithPath: [[self applicationDocumentsDirectory] stringByAppendingPathComponent:dbName]];
+            [[NSFileManager defaultManager] removeItemAtPath:storeUrl.path error:nil];
+            [persistentStoreCoordinator release];
+            persistentStoreCoordinator = nil;
+            [managedObjectModel release];
+            managedObjectModel = nil;
+            [self persistentStoreCoordinator];
+            didReload = YES;
+        }
+    }
     
     return persistentStoreCoordinator;
 }

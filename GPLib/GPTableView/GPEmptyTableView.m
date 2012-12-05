@@ -43,7 +43,7 @@
     if (self) 
     {
         self.backgroundColor = [UIColor whiteColor];
-        mainTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (frame.size.height/2)-80, frame.size.width, 20)];
+        mainTextLabel = [[UILabel alloc] init];
         mainTextLabel.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
         mainTextLabel.textAlignment = UITextAlignmentCenter;
         mainTextLabel.text = @"";
@@ -61,7 +61,6 @@
 -(void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-    mainTextLabel.frame = CGRectMake(0, (frame.size.height/2)-80, frame.size.width, 20);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setMainText:(NSString*)text
@@ -75,12 +74,7 @@
     {
         if(!subTextLabel)
         {
-            CGRect frame = mainTextLabel.frame;
-            frame.origin.y += frame.size.height;
-            frame.size.height += 20;
-            frame.origin.x += 20;
-            frame.size.width -= 40;
-            subTextLabel = [[UILabel alloc] initWithFrame:frame];
+            subTextLabel = [[UILabel alloc] init];
             subTextLabel.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
             subTextLabel.textAlignment = UITextAlignmentCenter;
             subTextLabel.textColor = [UIColor lightGrayColor];
@@ -101,30 +95,29 @@
     {
         if(!imageView)
         {
-            int top = 44;
-            int offset = mainTextLabel.frame.size.width/4;
-            CGRect frame = mainTextLabel.frame;
-            frame.size.height = 100;
-            frame.origin.y = top;
-            frame.origin.x += offset/2;
-            frame.size.width -= offset;
-            imageView = [[UIImageView alloc] initWithFrame:frame];
+            imageView = [[UIImageView alloc] init];
             imageView.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
-            
-            top += imageView.frame.size.height + 30;
-            frame = mainTextLabel.frame;
-            frame.origin.y = top;
-            mainTextLabel.frame = frame;
-            top += mainTextLabel.frame.size.height;
-            
-            frame = subTextLabel.frame;
-            frame.origin.y = top-10;
-            subTextLabel.frame = frame;
             imageView.contentMode = UIViewContentModeCenter;
             [self addSubview:imageView];
         }
         imageView.image = img;
     }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    int top = self.frame.size.height/4;
+    if(imageView)
+    {
+        imageView.frame = CGRectMake(0, top, self.frame.size.width, 100);
+        top += imageView.frame.size.height;
+    }
+    mainTextLabel.frame = CGRectMake(0, top, self.frame.size.width, 25);
+    top += mainTextLabel.frame.size.height;
+    if(subTextLabel)
+        subTextLabel.frame = CGRectMake(0, top, self.frame.size.width, 20);
+    
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

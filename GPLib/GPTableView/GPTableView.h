@@ -136,6 +136,9 @@
 //hide all accessoryViews. Default is NO, but showSearch, set this to YES.
 @property(nonatomic,assign)BOOL hideAccessoryViews;
 
+//set the tableView in editing mode or not
+@property(nonatomic,assign)BOOL editing;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //search properties
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,6 +278,9 @@
 -(void)removeObject:(id)object animation:(UITableViewRowAnimation)animation;
 -(void)removeObjectAtIndex:(NSIndexPath*)indexPath;
 -(void)removeObjectAtIndex:(NSIndexPath*)indexPath animation:(UITableViewRowAnimation)animation;
+
+-(void)removeObjects:(NSArray*)objects;
+-(void)removeObjects:(NSArray*)objects animation:(UITableViewRowAnimation)animation;
 
 //reload at a row index path
 -(void)reloadRowsAtIndexPaths:(NSArray *)indexPathArray withRowAnimation:(UITableViewRowAnimation)animation;

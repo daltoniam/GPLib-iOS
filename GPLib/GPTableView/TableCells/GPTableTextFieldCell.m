@@ -75,6 +75,7 @@
         GPTableTextFieldItem* item = object;
         currentObject = item;
         textField.text = item.text;
+        textField.font = item.font;
         textField.placeholder = item.placeHolder;
         textField.secureTextEntry = item.isSecure;
         if(item.keyboardType)
@@ -82,6 +83,9 @@
         textField.autocapitalizationType = item.autoCap;
         textField.returnKeyType = item.returnKey;
         textField.enabled = !item.disabled;
+        if(item.infoText.length > 0 && !infoLabel)
+            [self setupInfoLabel];
+        infoLabel.text = item.infoText;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,13 +123,36 @@
     if([self.delegate respondsToSelector:@selector(returnKeyWasTapped:object:cell:)])
         [self.delegate returnKeyWasTapped:textField object:currentObject cell:self];
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setupInfoLabel
+{
+    infoLabel = [[UILabel alloc] init];
+    infoLabel.textColor = [UIColor colorWithRed:56/255.0 green:84/255.0 blue:135/255.0 alpha:1];
+    infoLabel.font = [UIFont boldSystemFontOfSize:14];
+    infoLabel.textAlignment = UITextAlignmentRight;
+    infoLabel.backgroundColor = [UIColor clearColor];
+    infoLabel.numberOfLines = 1;
+    infoLabel.adjustsFontSizeToFitWidth = YES;
+    infoLabel.minimumFontSize = 10.0;
+    [self.contentView addSubview:infoLabel];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setupBadgeLabel
+{
+    //left blank to disable badges
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-
-    textField.frame = CGRectMake(TableCellSmallMargin, TableCellSmallMargin, 
-                                self.contentView.bounds.size.width-TableCellSmallMargin*2, self.contentView.bounds.size.height-TableCellSmallMargin*2);
+    int left = TableCellSmallMargin;
+    if(infoLabel.text.length > 0)
+    {
+        infoLabel.frame = CGRectMake(left, TableCellSmallMargin, 60, self.contentView.frame.size.height-(TableCellSmallMargin*2));
+        left += infoLabel.frame.size.width+5;
+    }
+    textField.frame = CGRectMake(left, TableCellSmallMargin,
+                                self.contentView.bounds.size.width-left, self.contentView.bounds.size.height-TableCellSmallMargin*2);
     textField.backgroundColor = [UIColor clearColor];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////

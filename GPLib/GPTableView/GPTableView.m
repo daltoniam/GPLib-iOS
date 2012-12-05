@@ -411,6 +411,40 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeObjects:(NSArray*)objects
+{
+    [self removeObjects:objects animation:UITableViewRowAnimationNone];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)removeObjects:(NSArray*)objects animation:(UITableViewRowAnimation)animation
+{
+    if(objects)
+    {
+        if(!didBeginUpdate)
+            [tableView beginUpdates];
+        NSMutableArray* indexes = [NSMutableArray arrayWithCapacity:objects.count];
+        for(id object in objects)
+        {
+            NSIndexPath* path = [self indexPathOfObject:object];
+            [indexes addObject:path];
+        }
+        for(NSIndexPath* path in indexes)
+        {
+            if(sections)
+            {
+                for(NSMutableArray* array in items)
+                    [array removeObjectsInArray:objects];
+            }
+            else
+                [items removeObjectsInArray:objects];
+        }
+        [tableView deleteRowsAtIndexPaths:indexes withRowAnimation:animation];
+        if(!didBeginUpdate)
+            [self endUpdate];
+    }
+    
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)reloadRowsAtIndexPaths:(NSArray *)indexPathArray withRowAnimation:(UITableViewRowAnimation)animation
 {
     if(!didBeginUpdate)
@@ -1011,8 +1045,11 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 {
     if(editingStyle == UITableViewCellEditingStyleDelete)
     {
+        id object = [[self tableView:table objectForRowAtIndexPath:indexPath] retain];
+        [self removeObject:object animation:UITableViewRowAnimationFade];
         if([self.delegate respondsToSelector:@selector(didDeleteObject:atIndexPath:)])
-            [self.delegate didDeleteObject:[self tableView:table objectForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [self.delegate didDeleteObject:object atIndexPath:indexPath];
+        [object release];
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1398,6 +1435,16 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 -(NSIndexPath*)selectedRow
 {
     return [tableView.indexPathsForSelectedRows lastObject];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setEditing:(BOOL)editing
+{
+    tableView.editing = editing;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)editing
+{
+    return tableView.editing;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

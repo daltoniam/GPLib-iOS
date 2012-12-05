@@ -19,6 +19,8 @@
     infoLabel.textAlignment = UITextAlignmentRight;
     infoLabel.backgroundColor = [UIColor clearColor];
     infoLabel.numberOfLines = 1;
+    infoLabel.adjustsFontSizeToFitWidth = YES;
+    infoLabel.minimumFontSize = 10.0;
     //[self.contentView addSubview:infoLabel];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +48,6 @@
     [super setObject:object];
     if(!infoLabel)
         [self setupInfoLabel];
-    //GPTableTextItem* item = object;
 }
 
 

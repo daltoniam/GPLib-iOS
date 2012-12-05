@@ -404,7 +404,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
         else
             array = items;
         
-        [array objectAtIndex:indexPath.row];
+        [array removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:animation];
         if(!didBeginUpdate)
             [self endUpdate];

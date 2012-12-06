@@ -643,20 +643,26 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     return cell;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)table
 {
     if(isSearching)
         return searchSections ? searchSections.count : 1;
     return sections ? sections.count : 1;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)table titleForHeaderInSection:(NSInteger)section
 {
     id object = nil;
     if(isSearching)
-        object = [searchSections objectAtIndex:section];
+    {
+        if(searchSections.count > section)
+            object = [searchSections objectAtIndex:section];
+    }
     else
-        object = [sections objectAtIndex:section];
+    {
+        if(sections.count > section)
+            object = [sections objectAtIndex:section];
+    }
     if([object isKindOfClass:[NSString class]])
     {
         if([object isEqualToString:UITableViewIndexSearch])
@@ -674,28 +680,31 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     else
         useSection = sections;
     
-    id object = [useSection objectAtIndex:section];
-    if([object isKindOfClass:[NSString class]] && [object isEqualToString:UITableViewIndexSearch])
-        return searchController.searchBar;
-    
-    if([object isKindOfClass:[UIView class]])
+    if(useSection.count > section)
     {
-        UIView* view = (UIView*)[useSection objectAtIndex:section];
-        if(self.isGrouped && view.tag != SECTION_HEADER_TAG)
+        id object = [useSection objectAtIndex:section];
+        if([object isKindOfClass:[NSString class]] && [object isEqualToString:UITableViewIndexSearch])
+            return searchController.searchBar;
+        
+        if([object isKindOfClass:[UIView class]])
         {
-            //because tableview is not a team player and does not respect the frame
-            int left = table.frame.size.width/14;//15;
-            if(table.frame.size.width > 480) //must not be an iphone or a popover view
-                left = 48;
-            UIView* temp = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, table.frame.size.width, view.frame.size.height)] autorelease];
-            temp.userInteractionEnabled = YES;
-            temp.tag = SECTION_HEADER_TAG;
-            [temp addSubview:view];
-            view.frame = CGRectMake(left, 0, tableView.frame.size.width-(left*2), view.frame.size.height);
-            [useSection replaceObjectAtIndex:section withObject:temp];
-            return temp;
+            UIView* view = (UIView*)[useSection objectAtIndex:section];
+            if(self.isGrouped && view.tag != SECTION_HEADER_TAG)
+            {
+                //because tableview is not a team player and does not respect the frame
+                int left = table.frame.size.width/14;//15;
+                if(table.frame.size.width > 480) //must not be an iphone or a popover view
+                    left = 48;
+                UIView* temp = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, table.frame.size.width, view.frame.size.height)] autorelease];
+                temp.userInteractionEnabled = YES;
+                temp.tag = SECTION_HEADER_TAG;
+                [temp addSubview:view];
+                view.frame = CGRectMake(left, 0, tableView.frame.size.width-(left*2), view.frame.size.height);
+                [useSection replaceObjectAtIndex:section withObject:temp];
+                return temp;
+            }
+            return view;
         }
-        return view;
     }
     return nil;
 }
@@ -1223,7 +1232,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             for(int i = 1; i < sections.count; i++)
             {
                 NSString* title = [sections objectAtIndex:i];
-                if([title isEqualToString:c])
+                if([title isEqualToString:c] || ([title isEqualToString:@"#"] && isnumber(character)) )
                 {
                     NSMutableArray* array = [items objectAtIndex:i];
                     [array addObject:item];
@@ -1439,7 +1448,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setEditing:(BOOL)editing
 {
-    tableView.editing = editing;
+    [tableView setEditing:editing animated:YES];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(BOOL)editing

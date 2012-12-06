@@ -107,6 +107,7 @@
 {
     if(!lock)
         lock = [[NSLock alloc] init];
+    [items removeAllObjects];
     NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithCapacity:2];
     if(sortDescriptors)
         [dict setValue:sortDescriptors forKey:@"sort"];

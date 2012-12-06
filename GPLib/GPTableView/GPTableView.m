@@ -164,7 +164,11 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     if(items.count == 0)
         show = YES;
     else if(self.showSearch && items.count == 1)
-        show = YES;
+    {
+        NSArray* array = [items objectAtIndex:0];
+        if(array.count == 0)
+            show = YES;
+    }
     if(show)
     {
         emptyView.hidden = NO;

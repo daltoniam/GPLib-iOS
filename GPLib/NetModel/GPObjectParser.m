@@ -189,11 +189,23 @@ static GPObjectParser* sharedParser;
             }
             else
             {
+                BOOL isGood = YES;
                 id args[mapKey.keys.count];
                 NSUInteger index = 0;
                 for ( id item in mapKey.keys )
-                    args[ index++ ] = [entry valueForKeyPath:item];
-                value = [[[NSString alloc] initWithFormat:mapKey.url arguments:(va_list)args] autorelease];
+                {
+                    id check = [entry valueForKeyPath:item];
+                    if(!check)
+                    {
+                        isGood = NO;
+                        break;
+                    }
+                    args[ index++ ] = check;
+                }
+                if(isGood)
+                    value = [[[NSString alloc] initWithFormat:mapKey.url arguments:(va_list)args] autorelease];
+                else
+                    value = nil;
             }
             keyName = key;
         }

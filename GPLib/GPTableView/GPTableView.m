@@ -478,6 +478,11 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     else
         array = items;
     [array removeAllObjects];
+    if(sections.count > section)
+    {
+        [sections removeObjectAtIndex:section];
+        [items removeObjectAtIndex:section];
+    }
     [tableView deleteSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:animation];
     if(!didBeginUpdate)
         [self endUpdate];
@@ -1463,6 +1468,15 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 -(BOOL)editing
 {
     return tableView.editing;
+}//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setAllowsSelectionDuringEditing:(BOOL)allow
+{
+    tableView.allowsSelectionDuringEditing = allow;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)allowsSelectionDuringEditing
+{
+    return tableView.allowsSelectionDuringEditing;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc

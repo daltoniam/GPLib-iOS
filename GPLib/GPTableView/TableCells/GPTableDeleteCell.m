@@ -52,6 +52,8 @@
         deleteLabel.drawGloss = YES;
         deleteLabel.fillColor = [UIColor redColor];
         deleteLabel.highlightColor = [UIColor colorWithRed:170/255.0f green:0/255.0f blue:3/255.0f alpha:1];
+        deleteLabel.borderColor = [UIColor blackColor];
+        deleteLabel.borderWidth = 0.6;
         deleteLabel.font = [UIFont boldSystemFontOfSize:24];
         [self.contentView addSubview:deleteLabel];
         self.contentView.backgroundColor = [UIColor clearColor];

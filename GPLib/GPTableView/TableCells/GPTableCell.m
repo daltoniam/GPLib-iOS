@@ -171,10 +171,7 @@ const CGFloat TableCellSmallMargin = 6;
     if(item.color)
         self.textLabel.textColor = item.color;
     self.textLabel.textAlignment = item.textAlignment;
-    if(item.font)
-        self.textLabel.font = item.font;
-    else
-        self.textLabel.font = [UIFont boldSystemFontOfSize:17];
+    self.textLabel.font = item.font;
     if(item.isChecked)
         self.accessoryType = UITableViewCellAccessoryCheckmark;
     else

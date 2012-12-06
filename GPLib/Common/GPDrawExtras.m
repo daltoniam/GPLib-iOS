@@ -131,7 +131,7 @@
 {
     CGRect temp = frame;
     temp.size.height = temp.size.height/2;
-    [GPDrawExtras drawLinearGradient:ctx start:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.35] end:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1] rect:temp endLoc:1];
+    [GPDrawExtras drawLinearGradient:ctx start:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.45] end:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.25] rect:temp endLoc:1];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(CGFloat)roundRectCornerRounding:(UIRectCorner)corners check:(UIRectCorner)desired rounding:(CGFloat)rounding

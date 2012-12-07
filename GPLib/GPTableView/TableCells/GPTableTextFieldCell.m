@@ -86,6 +86,7 @@
         if(item.infoText.length > 0 && !infoLabel)
             [self setupInfoLabel];
         infoLabel.text = item.infoText;
+        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////

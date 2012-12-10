@@ -30,6 +30,10 @@
 		5C14314315488F3F00AEE1FA /* GPPillLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C14314115488F3F00AEE1FA /* GPPillLabel.m */; };
 		5C14C62A15ED74D400D5FC58 /* icon-caret-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C14C62815ED74D400D5FC58 /* icon-caret-down.png */; };
 		5C14C62B15ED74D400D5FC58 /* icon-caret-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C14C62915ED74D400D5FC58 /* icon-caret-down@2x.png */; };
+		5C29A042167640BC00D1F24C /* GPTableGroupButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C29A040167640BC00D1F24C /* GPTableGroupButtonItem.h */; };
+		5C29A043167640BC00D1F24C /* GPTableGroupButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C29A041167640BC00D1F24C /* GPTableGroupButtonItem.m */; };
+		5C29A04A1676445500D1F24C /* GPTableGroupButtonCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C29A0481676445500D1F24C /* GPTableGroupButtonCell.h */; };
+		5C29A04B1676445500D1F24C /* GPTableGroupButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C29A0491676445500D1F24C /* GPTableGroupButtonCell.m */; };
 		5C2F1CBD16304A2E001287D4 /* GPModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C2F1CBB16304A2E001287D4 /* GPModel.h */; };
 		5C2F1CBE16304A2E001287D4 /* GPModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F1CBC16304A2E001287D4 /* GPModel.m */; };
 		5C2FFA4C1561A7B100D87B52 /* italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C2FFA4B1561A7B100D87B52 /* italic.png */; };
@@ -305,6 +309,10 @@
 		5C14314115488F3F00AEE1FA /* GPPillLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPPillLabel.m; sourceTree = "<group>"; };
 		5C14C62815ED74D400D5FC58 /* icon-caret-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-caret-down.png"; sourceTree = "<group>"; };
 		5C14C62915ED74D400D5FC58 /* icon-caret-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-caret-down@2x.png"; sourceTree = "<group>"; };
+		5C29A040167640BC00D1F24C /* GPTableGroupButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableGroupButtonItem.h; sourceTree = "<group>"; };
+		5C29A041167640BC00D1F24C /* GPTableGroupButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableGroupButtonItem.m; sourceTree = "<group>"; };
+		5C29A0481676445500D1F24C /* GPTableGroupButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTableGroupButtonCell.h; sourceTree = "<group>"; };
+		5C29A0491676445500D1F24C /* GPTableGroupButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPTableGroupButtonCell.m; sourceTree = "<group>"; };
 		5C2F1CBB16304A2E001287D4 /* GPModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPModel.h; sourceTree = "<group>"; };
 		5C2F1CBC16304A2E001287D4 /* GPModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPModel.m; sourceTree = "<group>"; };
 		5C2FFA4B1561A7B100D87B52 /* italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = italic.png; sourceTree = "<group>"; };
@@ -749,6 +757,8 @@
 				5C9BCF3816690449003C70E5 /* GPTableViewCell.m */,
 				5CB6730E166EA8230075DFD0 /* GPTableInfoCell.h */,
 				5CB6730F166EA8230075DFD0 /* GPTableInfoCell.m */,
+				5C29A0481676445500D1F24C /* GPTableGroupButtonCell.h */,
+				5C29A0491676445500D1F24C /* GPTableGroupButtonCell.m */,
 			);
 			name = TableCells;
 			path = GPTableView/TableCells;
@@ -783,6 +793,8 @@
 				5C9BCF5116690449003C70E5 /* GPTableViewItem.m */,
 				5CB67316166EA9960075DFD0 /* GPTableInfoItem.h */,
 				5CB67317166EA9960075DFD0 /* GPTableInfoItem.m */,
+				5C29A040167640BC00D1F24C /* GPTableGroupButtonItem.h */,
+				5C29A041167640BC00D1F24C /* GPTableGroupButtonItem.m */,
 			);
 			name = TableItems;
 			path = GPTableView/TableItems;
@@ -1136,6 +1148,8 @@
 				5C9BCF8A16690449003C70E5 /* GPTableViewItem.h in Headers */,
 				5CB67310166EA8240075DFD0 /* GPTableInfoCell.h in Headers */,
 				5CB67318166EA9960075DFD0 /* GPTableInfoItem.h in Headers */,
+				5C29A042167640BC00D1F24C /* GPTableGroupButtonItem.h in Headers */,
+				5C29A04A1676445500D1F24C /* GPTableGroupButtonCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1431,6 +1445,8 @@
 				5C9BCF8B16690449003C70E5 /* GPTableViewItem.m in Sources */,
 				5CB67311166EA8240075DFD0 /* GPTableInfoCell.m in Sources */,
 				5CB67319166EA9960075DFD0 /* GPTableInfoItem.m in Sources */,
+				5C29A043167640BC00D1F24C /* GPTableGroupButtonItem.m in Sources */,
+				5C29A04B1676445500D1F24C /* GPTableGroupButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

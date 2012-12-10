@@ -75,6 +75,8 @@
 #import "GPTablePadItem.h"
 #import "GPTableInfoCell.h"
 #import "GPTableInfoItem.h"
+#import "GPTableGroupButtonItem.h"
+#import "GPTableGroupButtonCell.h"
 /////views
 #import "GPImageView.h"
 #import "GPBubbleView.h"

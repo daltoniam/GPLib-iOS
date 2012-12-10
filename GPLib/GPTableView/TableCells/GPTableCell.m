@@ -172,17 +172,19 @@ const CGFloat TableCellSmallMargin = 6;
         self.textLabel.textColor = item.color;
     self.textLabel.textAlignment = item.textAlignment;
     self.textLabel.font = item.font;
-    if(item.isChecked)
-        self.accessoryType = UITableViewCellAccessoryCheckmark;
-    else
-        self.accessoryType = UITableViewCellAccessoryNone;
     if(item.navURL)
     {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
     }
     else
+    {
+        self.accessoryType = UITableViewCellAccessoryNone;
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    if(item.isChecked)
+        self.accessoryType = UITableViewCellAccessoryCheckmark;
+
     if(item.properties)
         Properties = [item.properties retain];
     if(item.backgroundColor)

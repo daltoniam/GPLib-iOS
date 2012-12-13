@@ -118,7 +118,12 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSArray*)findObjects:(NSPredicate*)predicate
 {
-    NSEntityDescription *entity = [NSEntityDescription entityForName:self.entityName inManagedObjectContext:[self objectCtx]];
+    return [self findObjects:predicate entity:self.entityName];
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(NSArray*)findObjects:(NSPredicate*)predicate entity:(NSString*)entityN
+{
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityN inManagedObjectContext:[self objectCtx]];
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     [request setEntity:entity];
     request.predicate = predicate;
@@ -139,12 +144,15 @@
         if(save)
         {
             BOOL create = YES;
-            if(self.primaryKey)
+            NSString* priKey = self.primaryKey;
+            if([object respondsToSelector:@selector(primaryKey)])
+                priKey = [object performSelector:@selector(primaryKey)];
+            if(priKey)
             {
-                if([object respondsToSelector:NSSelectorFromString(self.primaryKey)])
+                if([object respondsToSelector:NSSelectorFromString(priKey)])
                 {
-                    NSString* objectKey = [object performSelector:NSSelectorFromString(self.primaryKey)];
-                    NSArray* array = [self findObjects:[NSPredicate predicateWithFormat:@"%K == %@",self.primaryKey,objectKey]];
+                    NSString* objectKey = [object performSelector:NSSelectorFromString(priKey)];
+                    NSArray* array = [self findObjects:[NSPredicate predicateWithFormat:@"%K == %@",priKey,objectKey] entity:entity];
                     if(array.count > 0)
                         create = NO;
                     for(NSManagedObject* managedObject in array)

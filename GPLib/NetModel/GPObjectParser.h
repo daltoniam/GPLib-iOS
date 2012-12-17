@@ -96,7 +96,7 @@
 //add a object mapping and the url resource to identifer it off. tweets.json or whatever
 -(void)addMapping:(GPObjectMapping*)map urlResource:(NSString*)url;
 
-//parse a JSON string and return items created from them.
--(id)parseJSON:(NSString*)jsonString url:(NSString*)url;
+//parse a JSON string (or send an object that has already been parsed) and return items created from them.
+-(id)parseJSON:(id)jsonString url:(NSString*)url;
 
 @end

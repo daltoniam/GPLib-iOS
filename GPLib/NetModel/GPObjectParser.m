@@ -51,13 +51,17 @@ static GPObjectParser* sharedParser;
     [mappingDict setValue:map forKey:url];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(id)parseJSON:(NSString*)jsonString url:(NSString*)url
+-(id)parseJSON:(id)jsonString url:(NSString*)url
 {
     NSString* compareURL = url;
     NSRange range = [compareURL rangeOfString:@"?" options:NSBackwardsSearch];
     if(range.location != NSNotFound)
         compareURL = [compareURL substringToIndex:range.location];
-    id response = [jsonString objectFromJSONString];
+    id response = nil;
+    if([jsonString isKindOfClass:[NSString class]])
+        response = [jsonString objectFromJSONString];
+    else
+        response = jsonString;
     GPObjectMapping* mapping = nil;
     for(NSString* key in mappingDict)
     {

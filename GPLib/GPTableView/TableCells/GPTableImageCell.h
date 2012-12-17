@@ -48,6 +48,7 @@ extern CGFloat TableCellDefaultImageSize;
 }
 
 -(void)setImageView:(UIImage*)image;
+-(void)setImageGIF:(NSData*)gifData;
 -(NSString*)imageURL;
 
 @end

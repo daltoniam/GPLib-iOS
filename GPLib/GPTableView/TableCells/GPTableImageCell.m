@@ -35,6 +35,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "HTMLColors.h"
+#import "GPGif.h"
 
 @implementation GPTableImageCell
 
@@ -135,6 +136,11 @@ CGFloat TableCellDefaultImageSize = 50;
     imageView.image = image;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setImageGIF:(NSData*)gifData
+{
+    [GPGif imageView:imageView withData:gifData];
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSString*)imageURL
 {
     return imageView.URL;
@@ -182,6 +188,8 @@ CGFloat TableCellDefaultImageSize = 50;
         imageView.borderColor = item.imageBorderColor;
         imageView.borderWidth = item.imageBorderWidth;
     }
+    if(item.gifData)
+        [GPGif imageView:imageView withData:item.gifData];
     
     topJustify = item.topJustifyImage;
 }

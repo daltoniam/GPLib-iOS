@@ -964,10 +964,18 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
             GPTableImageItem* item = (GPTableImageItem*)object;
             if([item.imageURL isEqualToString:request.URL.absoluteString])
             {
-                item.imageData = [UIImage imageWithData:[request responseData]];
+                if([[request.responseHeaders objectForKey:@"Content-Type"] isEqualToString:@"image/gif"])
+                    item.gifData = [request responseData];
+                else
+                    item.imageData = [UIImage imageWithData:[request responseData]];
                 UITableViewCell* cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
                 if([cell isKindOfClass:[GPTableImageCell class]])
-                    [(GPTableImageCell*)cell setImageView:item.imageData];
+                {
+                    if(item.gifData)
+                        [(GPTableImageCell*)cell setImageGIF:item.gifData];
+                    else
+                        [(GPTableImageCell*)cell setImageView:item.imageData];
+                }
             }
         }
         i++;

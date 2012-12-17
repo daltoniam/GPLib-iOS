@@ -34,6 +34,7 @@
 #import "GPImageView.h"
 #import "GPDrawExtras.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GPGif.h"
 
 @implementation GPImageView
 
@@ -105,6 +106,11 @@
     {
         [LoadingView stopAnimating];
         LoadingView.hidden = YES;
+    }
+    if([[request.responseHeaders objectForKey:@"Content-Type"] isEqualToString:@"image/gif"])
+    {
+        GPGif* gif = [GPGif decodeGif:[request responseData]];
+        [GPGif setupImageView:self gifObject:gif];
     }
     if([self.delegate respondsToSelector:@selector(imageDidFinish:)])
         [self.delegate imageDidFinish:self];

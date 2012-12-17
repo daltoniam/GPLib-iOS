@@ -219,6 +219,8 @@
 		5CD4F9FE14DC577D00F2CBB3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9FD14DC577C00F2CBB3 /* MobileCoreServices.framework */; };
 		5CD4FA0214DC578D00F2CBB3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4FA0114DC578D00F2CBB3 /* CoreGraphics.framework */; };
 		5CD4FA0414DC579300F2CBB3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4FA0314DC579300F2CBB3 /* QuartzCore.framework */; };
+		5CD8333D167FB21100872232 /* GPGif.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CD8333B167FB21100872232 /* GPGif.h */; };
+		5CD8333E167FB21100872232 /* GPGif.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD8333C167FB21100872232 /* GPGif.m */; };
 		5CE261671520C3E70022ACA2 /* drag-dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE2615F1520C3E70022ACA2 /* drag-dot@2x.png */; };
 		5CE261681520C3E70022ACA2 /* loupe-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261601520C3E70022ACA2 /* loupe-hi@2x.png */; };
 		5CE261691520C3E70022ACA2 /* loupe-lo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261611520C3E70022ACA2 /* loupe-lo@2x.png */; };
@@ -507,6 +509,8 @@
 		5CD4F9FF14DC578500F2CBB3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		5CD4FA0114DC578D00F2CBB3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		5CD4FA0314DC579300F2CBB3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5CD8333B167FB21100872232 /* GPGif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPGif.h; sourceTree = "<group>"; };
+		5CD8333C167FB21100872232 /* GPGif.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPGif.m; sourceTree = "<group>"; };
 		5CE2615F1520C3E70022ACA2 /* drag-dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drag-dot@2x.png"; sourceTree = "<group>"; };
 		5CE261601520C3E70022ACA2 /* loupe-hi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loupe-hi@2x.png"; sourceTree = "<group>"; };
 		5CE261611520C3E70022ACA2 /* loupe-lo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loupe-lo@2x.png"; sourceTree = "<group>"; };
@@ -1017,6 +1021,8 @@
 		5CD4F95514DC54C900F2CBB3 /* ImageViews */ = {
 			isa = PBXGroup;
 			children = (
+				5CD8333B167FB21100872232 /* GPGif.h */,
+				5CD8333C167FB21100872232 /* GPGif.m */,
 				5CD4F95614DC54C900F2CBB3 /* GPImageScrollView.h */,
 				5CD4F95714DC54C900F2CBB3 /* GPImageScrollView.m */,
 				5CD4F95814DC54C900F2CBB3 /* GPImageView.h */,
@@ -1150,6 +1156,7 @@
 				5CB67318166EA9960075DFD0 /* GPTableInfoItem.h in Headers */,
 				5C29A042167640BC00D1F24C /* GPTableGroupButtonItem.h in Headers */,
 				5C29A04A1676445500D1F24C /* GPTableGroupButtonCell.h in Headers */,
+				5CD8333D167FB21100872232 /* GPGif.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1447,6 +1454,7 @@
 				5CB67319166EA9960075DFD0 /* GPTableInfoItem.m in Sources */,
 				5C29A043167640BC00D1F24C /* GPTableGroupButtonItem.m in Sources */,
 				5C29A04B1676445500D1F24C /* GPTableGroupButtonCell.m in Sources */,
+				5CD8333E167FB21100872232 /* GPGif.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

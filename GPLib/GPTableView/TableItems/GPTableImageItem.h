@@ -44,6 +44,7 @@
 @property(nonatomic,assign)BOOL topJustifyImage;
 @property(nonatomic,assign)CGFloat imageBorderWidth;
 @property(nonatomic,retain)UIColor* imageBorderColor;
+@property(nonatomic,retain)NSData* gifData;
 
 + (GPTableImageItem*)itemWithImage:(NSString*)imageurl text:(NSString*)string;
 + (GPTableImageItem*)itemWithImage:(NSString*)imageurl text:(NSString*)string URL:(NSString*)url;

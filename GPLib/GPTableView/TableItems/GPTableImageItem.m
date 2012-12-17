@@ -35,7 +35,7 @@
 
 @implementation GPTableImageItem
 
-@synthesize imageURL,defaultImage,imageData,imageSize,imageRounding,contentMode,topJustifyImage,imageBorderColor,imageBorderWidth;
+@synthesize imageURL,defaultImage,imageData,imageSize,imageRounding,contentMode,topJustifyImage,imageBorderColor,imageBorderWidth,gifData;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 + (GPTableImageItem*)itemWithText:(NSString*)text url:(NSString*)url

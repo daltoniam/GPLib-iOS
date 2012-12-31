@@ -254,6 +254,12 @@
 //set a row as active
 -(void)setSelectedRow:(NSIndexPath*)indexPath;
 
+//set a row as active and scroll to a point if you want
+-(void)setSelectedRow:(NSIndexPath *)indexPath scrollPosition:(UITableViewScrollPosition)pos;
+
+//deselect row
+-(void)deselectRow:(NSIndexPath*)indexPath;
+
 //adding/removing to tableView with animation
 
 //these start are useful if you want to chain multiple animations together

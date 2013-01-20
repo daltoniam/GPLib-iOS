@@ -87,7 +87,7 @@
         frame.size.width -= textSize.width+TableCellSmallMargin;
         HTMLText.frame = frame;
         
-        int left = frame.origin.x + frame.size.width + TableCellSmallMargin;
+        int left = frame.origin.x + frame.size.width; // TableCellSmallMargin
         infoLabel.frame = CGRectMake(left, 1, textSize.width, frame.size.height);
     }
     else if(notificationLabel) //you can only have info or notification, not both

@@ -698,7 +698,7 @@ static int EscapeMapCompare(const void *ucharVoid, const void *mapVoid) {
     s = [s stringByReplacingOccurrencesOfString:@"&times;" withString:@""];
     s = [s stringByReplacingOccurrencesOfString:@"&divide;" withString:@""];*/
     
-    return [s gtm_stringByEscapingForHTML]; 
+    return [s gtm_stringByEscapingForHTML];
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 -(NSString *)stringByStrippingWISWIGElements
@@ -752,7 +752,7 @@ static int EscapeMapCompare(const void *ucharVoid, const void *mapVoid) {
     
     s = [s stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];*/
     
-    return [s gtm_stringByEscapingForHTML];
+    return s;//[s gtm_stringByEscapingForHTML];
 }
 @end
 

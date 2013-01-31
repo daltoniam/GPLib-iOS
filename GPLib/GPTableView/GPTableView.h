@@ -78,6 +78,9 @@
 //when the tableview is scrolled.
 -(void)scrollViewDidScroll:(UIScrollView*)scrollView;
 
+//when the tableview starts scrolling
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
+
 //return True or false if a item can be deleted (swipe to delete).
 -(BOOL)canDeleteObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 

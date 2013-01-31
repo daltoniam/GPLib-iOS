@@ -1049,6 +1049,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [timeScroller scrollViewWillBeginDragging];
+    if([self.delegate respondsToSelector:@selector(scrollViewWillBeginDragging:)])
+        [self.delegate scrollViewWillBeginDragging:scrollView];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)scrollViewDidEndDragging:(UIScrollView*)scrollView willDecelerate:(BOOL)decelerate

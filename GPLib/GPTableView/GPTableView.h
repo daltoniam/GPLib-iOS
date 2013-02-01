@@ -196,6 +196,8 @@
 //the content offset of the tableview
 @property(nonatomic)CGPoint contentOffset;
 
+-(void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated;
+
 //check the contentSize
 @property(nonatomic,assign,readonly)CGSize contentSize;
 

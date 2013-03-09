@@ -428,7 +428,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)removeObjects:(NSArray*)objects animation:(UITableViewRowAnimation)animation
 {
-    if(objects)
+    if(objects && objects.count > 0)
     {
         if(!didBeginUpdate)
             [tableView beginUpdates];

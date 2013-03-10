@@ -67,7 +67,10 @@ static NSString* EmbedHTML = @"<html>\
     if(self.URL)
     {
         if([[self.URL lowercaseString] rangeOfString:@"youtube"].location != NSNotFound)
+        {
             self.URL = [self.URL stringByReplacingOccurrencesOfString:@"/v" withString:@"/embed"];
+            self.URL = [self.URL stringByReplacingOccurrencesOfString:@"/watch?v=" withString:@"/embed/"];
+        }
         NSString* html = [NSString stringWithFormat:EmbedHTML,self.frame.size.width, self.frame.size.width, self.frame.size.height,URL];
         [self loadHTMLString:html baseURL:nil];
         [self resizeVideo];

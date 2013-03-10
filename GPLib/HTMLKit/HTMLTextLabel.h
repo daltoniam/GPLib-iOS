@@ -33,7 +33,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
-#import "GPYouTubeView.h"
 #import "GPHTTPRequest.h"
 
 @interface ImageItem : NSObject
@@ -43,7 +42,7 @@
     CGRect frame;
 }
 +(ImageItem*)imageItem:(UIImage*)image url:(NSString*)url frame:(CGRect)rect;
-+(ImageItem*)videoItem:(GPYouTubeView*)view url:(NSString*)url frame:(CGRect)rect;
++(ImageItem*)videoItem:(UIView*)view url:(NSString*)url frame:(CGRect)rect;
 +(ImageItem*)viewItem:(UIView*)view frame:(CGRect)rect;
 @property(nonatomic, retain) UIImage* imageData;
 @property(nonatomic, copy) NSString* URL;

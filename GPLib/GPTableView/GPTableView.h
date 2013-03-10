@@ -244,6 +244,12 @@
 //returns the index of an object
 -(NSIndexPath*)indexPathOfObject:(id)object;
 
+//returns the index of a cell
+-(NSIndexPath*)indexPathOfCell:(UITableViewCell*)cell;
+
+//returns the object at an index
+-(id)objectAtIndexPath:(NSIndexPath*)indexPath;
+
 //scroll to a indexPath
 -(void)scrollToIndexPath:(NSIndexPath*)path scrollPostition:(UITableViewScrollPosition)pos animated:(BOOL)animated;
 

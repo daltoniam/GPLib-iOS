@@ -63,6 +63,24 @@
     return self;
 }
 /////////////////////////////////////////////////////////////////////////////////////
+-(id)initWithPhotos:(NSArray*)array
+{
+    if(self = [super init])
+    {
+        photoSource = [array retain];
+    }
+    return self;
+}
+/////////////////////////////////////////////////////////////////////////////////////
+-(id)initWithPhoto:(NSString*)photoURL
+{
+    if(self = [super init])
+    {
+        photoSource = [[NSArray arrayWithObject:photoURL] retain];
+    }
+    return self;
+}
+/////////////////////////////////////////////////////////////////////////////////////
 -(void)dimiss
 {
     [self dismissModalViewControllerAnimated:YES];//[[GPNavigator navigator] dismissModal];
@@ -123,7 +141,7 @@
     int firstNeededPageIndex = floorf(CGRectGetMinX(visibleBounds) / CGRectGetWidth(visibleBounds));
     int lastNeededPageIndex  = floorf((CGRectGetMaxX(visibleBounds)-1) / CGRectGetWidth(visibleBounds));
     firstNeededPageIndex = MAX(firstNeededPageIndex, 0);
-    lastNeededPageIndex  = MIN(lastNeededPageIndex, [PhotoSource count] - 1);
+    lastNeededPageIndex  = MIN(lastNeededPageIndex, [photoSource count] - 1);
         [self titleIndex:firstNeededPageIndex];
     // Recycle no-longer-visible pages 
     for (GPImageScrollView *page in visiblePages) 
@@ -186,7 +204,7 @@
 {
     page.index = index;
     page.frame = [self frameForPageAtIndex:index];
-    [page displayImage:[PhotoSource objectAtIndex:index]];
+    [page displayImage:[photoSource objectAtIndex:index]];
     //[self setBar:NO];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tap.numberOfTapsRequired = 1;
@@ -231,7 +249,7 @@
 {
     // We have to use the paging scroll view's bounds to calculate the contentSize, for the same reason outlined above.
     CGRect bounds = ScrollView.bounds;
-    return CGSizeMake((bounds.size.width * [PhotoSource count]) + PADDING*2, bounds.size.height);
+    return CGSizeMake((bounds.size.width * [photoSource count]) + PADDING*2, bounds.size.height);
 }
 /////////////////////////////////////////////////////////////////////////////////////
 //rotation support
@@ -318,7 +336,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 -(void)setCurrentPhotoIndex:(int)index
 {
-    if(index < PhotoSource.count && index > 0)
+    if(index < photoSource.count && index > 0)
     {
         CGFloat pageWidth = ScrollView.bounds.size.width;
         CGPoint point = ScrollView.contentOffset;
@@ -346,8 +364,8 @@
     }
     else
         [NoPhotosLabel removeFromSuperview];
-    [PhotoSource release];
-    PhotoSource = [[NSArray alloc] initWithArray:items];
+    [photoSource release];
+    photoSource = [[NSArray alloc] initWithArray:items];
     ScrollView.contentSize = [self contentSizeForScrollView];
     GPImageScrollView *page = [self dequeueRecycledPage];
     if (page == nil) 
@@ -359,24 +377,24 @@
     [self titleIndex:0];
 }
 /////////////////////////////////////////////////////////////////////////////////////
--(NSArray*)PhotoSource
+-(NSArray*)photoSource
 {
-    return PhotoSource;
+    return photoSource;
 }
 /////////////////////////////////////////////////////////////////////////////////////
 -(void)titleIndex:(int)index
 {
-    if([PhotoSource count] > 0)
+    if([photoSource count] > 0)
     {
         int i = index+1; //because non programmers don't use 0 as an index.
-        self.title = [NSString stringWithFormat:@"%d of %d",i,[PhotoSource count]];
+        self.title = [NSString stringWithFormat:@"%d of %d",i,[photoSource count]];
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////
 -(void)dealloc
 {
     [NoPhotosLabel release];
-    [PhotoSource release];
+    [photoSource release];
     [ScrollView release];
     [recycledPages release];
     [visiblePages release];

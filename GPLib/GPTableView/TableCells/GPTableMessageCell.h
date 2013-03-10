@@ -35,11 +35,13 @@
 #import "HTMLKit.h"
 #import "GPTableMessageItem.h"
 
+@class GPTableMessageCell;
+
 @protocol GPTableMessageCellDelegate <NSObject>
 
 @optional
 
--(void)imageFinished:(NSString*)url height:(int)height width:(int)width;
+-(void)imageFinished:(NSString*)url height:(int)height width:(int)width cell:(GPTableMessageCell*)cell;
 
 @end
 

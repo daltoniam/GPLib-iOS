@@ -36,6 +36,8 @@
 #import "HTMLParser.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HTMLText.h"
+#import "GPImageView.h"
+#import "GPYouTubeView.h"
 
 #define LONG_PRESS_THRESHOLD 0.75
 
@@ -55,7 +57,6 @@
 //////////////////////////////////////////////////////////////////////////////
 -(void)commonClean
 {
-    [imageArray removeAllObjects];
     for(ImageItem* item in videoArray)
         [item.subView removeFromSuperview];
     [videoArray removeAllObjects];
@@ -63,6 +64,10 @@
     for(ImageItem* item in viewArray)
         [item.subView removeFromSuperview];
     [viewArray removeAllObjects];
+    
+    for(ImageItem* item in imageArray)
+        [item.subView removeFromSuperview];
+    [imageArray removeAllObjects];
 }
 //////////////////////////////////////////////////////////////////////////////
 -(id)init
@@ -158,7 +163,7 @@
 {
     isDrawing = YES;
     [super drawRect:rect];
-    CGContextRef context = UIGraphicsGetCurrentContext();
+    //CGContextRef context = UIGraphicsGetCurrentContext();
     for(ImageItem* entry in videoArray)
     {
         [entry.subView removeFromSuperview];
@@ -175,7 +180,11 @@
     
     for (ImageItem* entry in imageArray) 
     {
-        UIImage* image = entry.imageData;
+        [entry.subView removeFromSuperview];
+        [self addSubview:entry.subView];
+        [(GPImageView*)entry.subView fetchImage];
+        [self bringSubviewToFront:entry.subView];
+        /*UIImage* image = entry.imageData;
         if(image)
         {
             CGRect imgBounds = entry.frame;
@@ -184,53 +193,18 @@
 
             CGContextDrawImage(context, imgBounds, image.CGImage);
             //[image drawInRect:imgBounds];
-        }
+        }*/
     }
     isDrawing = NO;
 }
 //////////////////////////////////////////////////////////////////////////////
-//load image from http
--(void)FetchImage:(ImageItem*)item
+//notify that the image is done loading
+-(void)imageDidFinish:(GPImageView*)view
 {
-    [imageArray addObject:item];
-    NSString* url = item.URL;
-    if(!url)
-        return;
-    else if([url hasPrefix:@"http"])
-    {
-        if(!requestArray)
-            requestArray = [[NSMutableArray alloc] init];
-        GPHTTPRequest* SendRequest = [GPHTTPRequest requestWithString:url];
-        [SendRequest setCacheModel:GPHTTPCacheCustomTime];
-        [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
-        [SendRequest setDelegate:self];
-        [SendRequest startAsync];
-        [requestArray addObject:SendRequest];
-    }
-    else
-    {
-        UIImage* image = [UIImage imageNamed:url];
-        if(!image)
-            image = [UIImage imageWithContentsOfFile:url];
-        if(!image)
-        {
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *path = [paths objectAtIndex:0];
-            image = [UIImage imageWithContentsOfFile: [NSString stringWithFormat:@"%@/%@",path,[url encodeURL]] ];
-        }
-        for(ImageItem* item in imageArray )
-            if([item.URL isEqualToString:url])
-                item.imageData = image;
-    }
-}
-//////////////////////////////////////////////////////////////////////////////
-- (void)requestFinished:(GPHTTPRequest *)request
-{
-    [requestArray removeObject:request];
-    UIImage* image = [UIImage imageWithData:[request responseData]];
+    UIImage* image = view.image;
     for(ImageItem* item in imageArray )
     {
-        if([item.URL isEqualToString:request.URL.absoluteString])
+        if([item.URL isEqualToString:view.URL])
         {
             item.imageData = image;
             if(self.autoSizeImages)
@@ -246,10 +220,10 @@
                 NSAttributedString* tempString = [[[NSAttributedString alloc] initWithAttributedString:self.attributedText] autorelease];
                 NSRange validRange = NSMakeRange(0,[tempString length]);
                 [tempString enumerateAttributesInRange:validRange options:0 usingBlock:
-                 ^(NSDictionary *attributes, NSRange range, BOOL *stop) 
+                 ^(NSDictionary *attributes, NSRange range, BOOL *stop)
                  {
                      NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
-                     if([imageurl isEqualToString:request.URL.absoluteString])
+                     if([imageurl isEqualToString:view.URL])
                      {
                          if([self.delegate respondsToSelector:@selector(imageFinished:height:width:)])
                              [self.delegate imageFinished:item.URL height:height width:width];
@@ -281,7 +255,7 @@
 -(BOOL)didAddView:(int)value
 {
     for(ImageItem* item in viewArray)
-        if(item.subView.tag = value)
+        if(item.subView.tag == value)
             return YES;
     return NO;
 }
@@ -406,20 +380,33 @@
                     CGRect runBounds;
                     runBounds.size.width = imgwidth;
                     runBounds.size.height = imgheight;
-                    runBounds.origin.x = origins[lineIndex].x + xOffset;
-                    runBounds.origin.y = origins[lineIndex].y + self.frame.origin.y + top;
-                    runBounds.origin.y -= descent;
+                    //runBounds.origin.x = origins[lineIndex].x + xOffset;
+                    //runBounds.origin.y = origins[lineIndex].y + self.frame.origin.y + top;
+                    //runBounds.origin.y -= descent;
+                    runBounds.origin.x = rect.size.width - origins[lineIndex].x;
+                    runBounds.origin.x -= imgwidth;
+                    runBounds.origin.y = rect.size.height - origins[lineIndex].y;
+                    runBounds.origin.y -= imgheight-((origins[lineIndex].y/2)-5);
+                    //NSLog(@"origins[lineIndex].y: %f",origins[lineIndex].y);
                     CGPathRef pathRef = CTFrameGetPath(textFrame); //10
                     CGRect colRect = CGPathGetBoundingBox(pathRef);
                     
                     CGRect imgBounds = CGRectOffset(runBounds, colRect.origin.x, colRect.origin.y - self.frame.origin.y);
+                    
                     if(self.ignoreXAttachment)
                         imgBounds.origin.x = 0;
                     
+                    GPImageView* view = [[[GPImageView alloc] initWithFrame:imgBounds] autorelease];
+                    view.delegate = (id<GPImageViewDelegate>)self;
                     if(imagedata)
-                        [imageArray addObject:[ImageItem imageItem:imagedata url:imageurl frame:imgBounds]]; //(origins[lineIndex].y+10)
-                    else                                                                                       
-                        [self FetchImage:[ImageItem imageItem:nil url:imageurl frame:imgBounds]]; //(origins[lineIndex].y+10)+imgtop
+                        view.image = imagedata;
+                    else
+                        view.URL = imageurl;
+                    [imageArray addObject:[ImageItem videoItem:view url:imageurl frame:imgBounds]];
+                    //if(imagedata)
+                    //    [imageArray addObject:[ImageItem imageItem:imagedata url:imageurl frame:imgBounds]]; //(origins[lineIndex].y+10)
+                    //else
+                    //    [self FetchImage:[ImageItem imageItem:nil url:imageurl frame:imgBounds]]; //(origins[lineIndex].y+10)+imgtop
                     
                 }
                 if(videourl && ![self didLoadVideo:videourl])
@@ -435,7 +422,7 @@
                     runBounds.origin.x -= vidwidth;
                     runBounds.origin.y = rect.size.height - origins[lineIndex].y;
                     runBounds.origin.y -= descent;
-                    runBounds.origin.y -= vidheight;
+                    runBounds.origin.y -= vidheight-((origins[lineIndex].y/2)+10);
                     CGPathRef pathRef = CTFrameGetPath(textFrame); //10
                     CGRect colRect = CGPathGetBoundingBox(pathRef);
                     
@@ -705,6 +692,7 @@
         [request cancel];
         request.delegate = nil;
     }
+    [self commonClean];
     [requestArray release];
     [attributedText release];
     [imageArray release];
@@ -729,7 +717,7 @@
     return item;
 }
 //////////////////////////////////////////////////////////////////////////////
-+(ImageItem*)videoItem:(GPYouTubeView*)view url:(NSString*)url frame:(CGRect)rect
++(ImageItem*)videoItem:(UIView*)view url:(NSString*)url frame:(CGRect)rect
 {
     ImageItem* item = [[[ImageItem alloc] init] autorelease];
     item.URL = url;
@@ -748,3 +736,79 @@
 //////////////////////////////////////////////////////////////////////////////
 
 @end
+
+//////////////////////////////////////////////////////////////////////////////
+//old stuff I am keeping for reference
+//////////////////////////////////////////////////////////////////////////////
+//load image from http
+/*-(void)FetchImage:(ImageItem*)item
+ {
+ [imageArray addObject:item];
+ NSString* url = item.URL;
+ if(!url)
+ return;
+ else if([url hasPrefix:@"http"])
+ {
+ if(!requestArray)
+ requestArray = [[NSMutableArray alloc] init];
+ GPHTTPRequest* SendRequest = [GPHTTPRequest requestWithString:url];
+ [SendRequest setCacheModel:GPHTTPCacheCustomTime];
+ [SendRequest setCacheTimeout:60*60*1]; // Cache for 1 hour
+ [SendRequest setDelegate:self];
+ [SendRequest startAsync];
+ [requestArray addObject:SendRequest];
+ }
+ else
+ {
+ UIImage* image = [UIImage imageNamed:url];
+ if(!image)
+ image = [UIImage imageWithContentsOfFile:url];
+ if(!image)
+ {
+ NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+ NSString *path = [paths objectAtIndex:0];
+ image = [UIImage imageWithContentsOfFile: [NSString stringWithFormat:@"%@/%@",path,[url encodeURL]] ];
+ }
+ for(ImageItem* item in imageArray )
+ if([item.URL isEqualToString:url])
+ item.imageData = image;
+ }
+ }
+ //////////////////////////////////////////////////////////////////////////////
+ - (void)requestFinished:(GPHTTPRequest *)request
+ {
+ [requestArray removeObject:request];
+ UIImage* image = [UIImage imageWithData:[request responseData]];
+ for(ImageItem* item in imageArray )
+ {
+ if([item.URL isEqualToString:request.URL.absoluteString])
+ {
+ item.imageData = image;
+ if(self.autoSizeImages)
+ {
+ int width = image.size.width;
+ int height = image.size.height;
+ while(width > self.frame.size.width)
+ {
+ height = height - height/4;//height/2;
+ width = width - width/4;//width/2;
+ }
+ //create a temp copy to enumerate through, that way if the attributedText is modified, we are still golden
+ NSAttributedString* tempString = [[[NSAttributedString alloc] initWithAttributedString:self.attributedText] autorelease];
+ NSRange validRange = NSMakeRange(0,[tempString length]);
+ [tempString enumerateAttributesInRange:validRange options:0 usingBlock:
+ ^(NSDictionary *attributes, NSRange range, BOOL *stop)
+ {
+ NSString* imageurl = [attributes objectForKey:IMAGE_LINK];
+ if([imageurl isEqualToString:request.URL.absoluteString])
+ {
+ if([self.delegate respondsToSelector:@selector(imageFinished:height:width:)])
+ [self.delegate imageFinished:item.URL height:height width:width];
+ }
+ }];
+ }
+ }
+ }
+ if(!isDrawing)
+ [self setNeedsDisplay];
+ }*/

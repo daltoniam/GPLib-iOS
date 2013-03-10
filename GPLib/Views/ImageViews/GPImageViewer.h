@@ -37,7 +37,7 @@
 @interface GPImageViewer : UIViewController<UIScrollViewDelegate>
 {
     UIScrollView* ScrollView;;
-    NSArray* PhotoSource; //I will probably change this to a custom datasource object
+    NSArray* photoSource; //I will probably change this to a custom datasource object
     NSMutableSet *recycledPages;
     NSMutableSet *visiblePages;
     UILabel* NoPhotosLabel;
@@ -45,7 +45,11 @@
     int firstVisiblePageIndexBeforeRotation;
     CGFloat percentScrolledIntoFirstVisiblePage;
 }
-@property(nonatomic,retain)NSArray* PhotoSource;
+@property(nonatomic,retain)NSArray* photoSource;
+
+-(id)initWithPhotos:(NSArray*)array;
+-(id)initWithPhoto:(NSString*)photoURL;
+
 - (CGRect)frameForScrollView;
 - (CGSize)contentSizeForScrollView;
 - (CGRect)frameForPageAtIndex:(NSUInteger)index;

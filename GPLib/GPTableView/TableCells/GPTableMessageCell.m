@@ -112,8 +112,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)imageFinished:(NSString *)url height:(int)height width:(int)width
 {
-    if([self.delegate respondsToSelector:@selector(imageFinished:height:width:)])
-        [self.delegate imageFinished:url height:height width:width];
+    if([self.delegate respondsToSelector:@selector(imageFinished:height:width:cell:)])
+        [self.delegate imageFinished:url height:height width:width cell:self];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc 

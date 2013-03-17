@@ -386,7 +386,7 @@
                     runBounds.origin.x = rect.size.width - origins[lineIndex].x;
                     runBounds.origin.x -= imgwidth;
                     runBounds.origin.y = rect.size.height - origins[lineIndex].y;
-                    runBounds.origin.y -= imgheight-((origins[lineIndex].y/2)-5);
+                    runBounds.origin.y -= imgheight-15;//((origins[lineIndex].y/2)-5);
                     //NSLog(@"origins[lineIndex].y: %f",origins[lineIndex].y);
                     CGPathRef pathRef = CTFrameGetPath(textFrame); //10
                     CGRect colRect = CGPathGetBoundingBox(pathRef);

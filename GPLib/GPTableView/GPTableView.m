@@ -112,7 +112,7 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self commonInit:NO];
+        //[self commonInit:NO];
         tableView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     }
     return self;

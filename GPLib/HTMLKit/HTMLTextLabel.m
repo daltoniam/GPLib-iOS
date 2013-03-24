@@ -339,6 +339,9 @@
                 UIImage* imagedata = [attributes objectForKey:HTML_IMAGE_DATA];
                 NSString* videourl = [attributes objectForKey:VIDEO_LINK];
                 NSNumber* viewSpace = [attributes objectForKey:VIEW_SPACE];
+                CTFontRef font = (CTFontRef)[attributes objectForKey:(NSString*)kCTFontAttributeName];
+                CGFloat fontSize = CTFontGetSize(font);
+                int fontOffset = (fontSize*2)+5;
                 
                 if (strikeOut)
                 {
@@ -386,8 +389,9 @@
                     runBounds.origin.x = rect.size.width - origins[lineIndex].x;
                     runBounds.origin.x -= imgwidth;
                     runBounds.origin.y = rect.size.height - origins[lineIndex].y;
-                    runBounds.origin.y -= imgheight-15;//((origins[lineIndex].y/2)-5);
-                    //NSLog(@"origins[lineIndex].y: %f",origins[lineIndex].y);
+                    runBounds.origin.y -= (imgheight-fontOffset);//((origins[lineIndex].y/2)-5); //15
+                    //runBounds.origin.y -= height + (origins[lineIndex].y/2);
+                    //runBounds.origin.y += (height/4);
                     CGPathRef pathRef = CTFrameGetPath(textFrame); //10
                     CGRect colRect = CGPathGetBoundingBox(pathRef);
                     
@@ -422,7 +426,7 @@
                     runBounds.origin.x -= vidwidth;
                     runBounds.origin.y = rect.size.height - origins[lineIndex].y;
                     runBounds.origin.y -= descent;
-                    runBounds.origin.y -= vidheight-((origins[lineIndex].y/2)+10);
+                    runBounds.origin.y -= (vidheight-fontOffset); //((origins[lineIndex].y/2)); //+10
                     CGPathRef pathRef = CTFrameGetPath(textFrame); //10
                     CGRect colRect = CGPathGetBoundingBox(pathRef);
                     

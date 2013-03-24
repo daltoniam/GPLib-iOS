@@ -70,6 +70,26 @@
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)setImage:(UIImage *)image
+{
+    if([self.customView isKindOfClass:[UIButton class]])
+    {
+        UIButton* button = (UIButton*)self.customView;
+        [button setImage:image forState:UIControlStateNormal];
+        [button setImage:image forState:UIControlStateSelected];
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(UIImage*)image
+{
+    if([self.customView isKindOfClass:[UIButton class]])
+    {
+        UIButton* button = (UIButton*)self.customView;
+        return button.imageView.image;
+    }
+    return nil;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //deprecated, will remove
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setTintColor:(UIColor *)tintColor

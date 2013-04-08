@@ -59,11 +59,11 @@ typedef void (^GPModelBlock)(GPModel*,BOOL);
 
 @interface GPModel : NSObject
 {
-    NSLock* lock;
     NSManagedObjectContext* objectCtx;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     GPModelBlock finishedBlock;
+    NSOperationQueue* diskQueue;
 }
 
 //this is the current page you are working with.

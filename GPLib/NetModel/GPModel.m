@@ -46,6 +46,8 @@
     {
         self.page = 1;
         items = [[NSMutableArray alloc] init];
+        diskQueue = [[NSOperationQueue alloc] init];
+        diskQueue.maxConcurrentOperationCount = 1;
     }
     return self;
 }
@@ -57,6 +59,8 @@
         self.page = 1;
         self.URL = url;
         items = [[NSMutableArray alloc] init];
+        diskQueue = [[NSOperationQueue alloc] init];
+        diskQueue.maxConcurrentOperationCount = 1;
     }
     return self;
 }
@@ -105,15 +109,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)fetchFromDisk:(NSArray*)sortDescriptors predicate:(NSPredicate*)predicate
 {
-    if(!lock)
-        lock = [[NSLock alloc] init];
     [items removeAllObjects];
-    NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithCapacity:2];
-    if(sortDescriptors)
-        [dict setValue:sortDescriptors forKey:@"sort"];
-    if(predicate)
-        [dict setValue:predicate forKey:@"search"];
-    [self performSelectorInBackground:@selector(fetchDiskContent:) withObject:dict];
+    [diskQueue addOperationWithBlock:^{
+        [self fetchDiskContent:sortDescriptors predicate:predicate];
+    }];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSArray*)findObjects:(NSPredicate*)predicate
@@ -172,36 +171,32 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObject:(id)object
 {
-    if(!lock)
-        lock = [[NSLock alloc] init];
-    [lock lock];
-    [self processSaveObject:object];
-    [[self objectCtx] save:nil];
-    [lock unlock];
+    [diskQueue addOperationWithBlock:^{
+        [self processSaveObject:object];
+        [[self objectCtx] save:nil];
+    }];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObjects:(NSArray*)array clearDups:(BOOL)clear
 {
-    if(!lock)
-        lock = [[NSLock alloc] init];
-    [lock lock];
-    NSMutableArray* mutArray = nil;
-    if(clear)
-        mutArray = [NSMutableArray array];
-    for(id object in array)
-    {
-        if([self processSaveObject:object] && clear)
-            [mutArray addObject:object];
-    }
-    if(clear)
-    {
-        if([array isKindOfClass:[NSMutableArray class]])
-            [(NSMutableArray*)array removeObjectsInArray:mutArray];
-    }
-    NSError* error = nil;
-    if(![[self objectCtx] save:&error])
-        NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error userInfo]);
-    [lock unlock];
+    [diskQueue addOperationWithBlock:^{
+        NSMutableArray* mutArray = nil;
+        if(clear)
+            mutArray = [NSMutableArray array];
+        for(id object in array)
+        {
+            if([self processSaveObject:object] && clear)
+                [mutArray addObject:object];
+        }
+        if(clear)
+        {
+            if([array isKindOfClass:[NSMutableArray class]])
+                [(NSMutableArray*)array removeObjectsInArray:mutArray];
+        }
+        NSError* error = nil;
+        if(![[self objectCtx] save:&error])
+            NSLog(@"unable to save items to entity: %@ error: %@",self.entityName,[error userInfo]);
+    }];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)saveObjects:(NSArray*)array
@@ -216,9 +211,9 @@
 {
     if(self.entityName)
     {
-        if(!lock)
-            lock = [[NSLock alloc] init];
-        [self performSelectorInBackground:@selector(deleteDiskThread:) withObject:predicate];
+        [diskQueue addOperationWithBlock:^{
+            [self deleteDiskThread:predicate];
+        }];
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,20 +270,16 @@
     [pool drain];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)fetchDiskContent:(NSDictionary*)params
+-(void)fetchDiskContent:(NSArray*)sortDescriptors predicate:(NSPredicate*)predicate
 {
     if(self.entityName)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        [lock lock];
         NSEntityDescription *entity = [NSEntityDescription entityForName:self.entityName inManagedObjectContext:[self objectCtx]];
         
         // Setup the fetch request
         NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
         [request setEntity:entity];
-        
-        NSArray* sortDescriptors = [params objectForKey:@"sort"];
-        NSPredicate* predicate = [params objectForKey:@"search"];
         
         [request setSortDescriptors:sortDescriptors];
         request.predicate = predicate;
@@ -315,7 +306,6 @@
         if(finishedBlock)
             finishedBlock(self,YES);
         [self performSelectorOnMainThread:@selector(finished:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
-        [lock unlock];
         [pool drain];
     }
 }
@@ -336,7 +326,6 @@
     if(self.entityName)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        [lock lock];
         NSEntityDescription *entity = [NSEntityDescription entityForName:self.entityName inManagedObjectContext:[self objectCtx]];
         
         // Setup the fetch request
@@ -348,7 +337,6 @@
         for(NSManagedObject* object in managedItems)
             [[self objectCtx] deleteObject:object];
         [[self objectCtx] save:nil];
-        [lock unlock];
         [pool drain];
     }
 }
@@ -380,7 +368,7 @@
     [persistentStoreCoordinator release];
     [managedObjectModel release];
     [objectCtx release];
-    [lock release];
+    [diskQueue release];
     if (finishedBlock)
     {
 		[finishedBlock release];

@@ -147,6 +147,8 @@ title:(NSString *)title target:(id)target selector:(SEL)selector noBG:(BOOL)noBG
         [customButton setBackgroundImage:backArrowImage forState:UIControlStateNormal];
     else if(!noBG)
         [customButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+    else
+        customButton.showsTouchWhenHighlighted = YES;
 
     
     if(image)
@@ -173,7 +175,7 @@ title:(NSString *)title target:(id)target selector:(SEL)selector noBG:(BOOL)noBG
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)customButtonWithImage:(UIImage*)image target:(id)target selector:(SEL)selector
 {
-    return [self customButtonWithBack:NO image:image edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:nil target:target selector:selector noBG:NO];
+    return [self customButtonWithBack:NO image:image edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:nil target:target selector:selector noBG:YES];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)customButtonWithTitle:(NSString*)title target:(id)target selector:(SEL)selector

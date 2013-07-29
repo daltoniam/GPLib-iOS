@@ -231,47 +231,11 @@
 		5CE2616E1520C3E70022ACA2 /* magnifier-ranged-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE261661520C3E70022ACA2 /* magnifier-ranged-mask@2x.png */; };
 		5CE2636F1522106B0022ACA2 /* GPDrawExtras.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CE2636D1522106B0022ACA2 /* GPDrawExtras.h */; };
 		5CE263701522106B0022ACA2 /* GPDrawExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE2636E1522106B0022ACA2 /* GPDrawExtras.m */; };
-		5CFB9E8715B9D08400E837BE /* libGPHTTPRequestLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */; };
 		5CFFA19514DC754A00501A3E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD4F9F914DC566C00F2CBB3 /* UIKit.framework */; };
 		5CFFA1A114DC79BE00501A3E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CFFA1A014DC79BE00501A3E /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5C5C0A8A15B8DE97005A2F2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5CE2C0751583F95B00463E97;
-			remoteInfo = GPHTTPRequestFramework;
-		};
-		5C5C0A8C15B8DE97005A2F2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5CE2C0861583F95B00463E97;
-			remoteInfo = GPHTTPRequestFrameworkTests;
-		};
-		5C5C0A8E15B8DE97005A2F2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5CE2C0A01583FB0F00463E97;
-			remoteInfo = GPHTTPRequestLibrary;
-		};
-		5C5C0A9015B8DE97005A2F2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5CE2C0AE1583FB0F00463E97;
-			remoteInfo = GPHTTPRequestLibraryTests;
-		};
-		5C5C0A9315B8DEB2005A2F2D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5CE2C09F1583FB0F00463E97;
-			remoteInfo = GPHTTPRequestLibrary;
-		};
 		5CD4F8CA14DC521A00F2CBB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5CD4F8AB14DC521A00F2CBB3 /* Project object */;
@@ -346,7 +310,6 @@
 		5C3D90E21577CA4A0052179A /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Additions.m"; path = "Common/UIViewController+Additions.m"; sourceTree = "<group>"; };
 		5C4D73CB15864F7700BD4C8D /* GPBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPBarButtonItem.h; path = Common/GPBarButtonItem.h; sourceTree = "<group>"; };
 		5C4D73CC15864F7800BD4C8D /* GPBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPBarButtonItem.m; path = Common/GPBarButtonItem.m; sourceTree = "<group>"; };
-		5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPHTTPRequest.xcodeproj; path = GPHTTPRequest/GPHTTPRequest.xcodeproj; sourceTree = "<group>"; };
 		5C5F691D15C72D200077005E /* GPSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSegmentControl.h; sourceTree = "<group>"; };
 		5C5F691E15C72D200077005E /* GPSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSegmentControl.m; sourceTree = "<group>"; };
 		5C63DEC8156A8BDD00C3EEC0 /* GPTabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPTabBarItem.h; sourceTree = "<group>"; };
@@ -539,7 +502,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CFB9E8715B9D08400E837BE /* libGPHTTPRequestLibrary.a in Frameworks */,
 				5C884029152B6957007AEE7D /* libxml2.dylib in Frameworks */,
 				5C6907B914E18A5D00E44620 /* CoreText.framework in Frameworks */,
 				5CFFA1A114DC79BE00501A3E /* SystemConfiguration.framework in Frameworks */,
@@ -640,17 +602,6 @@
 				5C00A973161E1EE10066951F /* GPSideBarView.m */,
 			);
 			path = SideNavigation;
-			sourceTree = "<group>";
-		};
-		5C5C0A8415B8DE97005A2F2D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5C5C0A8B15B8DE97005A2F2D /* GPHTTPRequestFramework.framework */,
-				5C5C0A8D15B8DE97005A2F2D /* GPHTTPRequestFrameworkTests.octest */,
-				5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */,
-				5C5C0A9115B8DE97005A2F2D /* GPHTTPRequestLibraryTests.octest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		5C69073714E02BD900E44620 /* Launcher */ = {
@@ -828,7 +779,6 @@
 		5CD4F8A914DC521A00F2CBB3 = {
 			isa = PBXGroup;
 			children = (
-				5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */,
 				5CD4F8B914DC521A00F2CBB3 /* GPLib */,
 				5CD4F8CD14DC521A00F2CBB3 /* GPLibTests */,
 				5C8813A4151CE7AA006BCDC9 /* GPLibBundle */,
@@ -1191,7 +1141,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5C5C0A9415B8DEB2005A2F2D /* PBXTargetDependency */,
 			);
 			name = GPLib;
 			productName = GPLib;
@@ -1239,12 +1188,6 @@
 			mainGroup = 5CD4F8A914DC521A00F2CBB3;
 			productRefGroup = 5CD4F8B514DC521A00F2CBB3 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 5C5C0A8415B8DE97005A2F2D /* Products */;
-					ProjectRef = 5C5C0A8315B8DE97005A2F2D /* GPHTTPRequest.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				5CD4F8B314DC521A00F2CBB3 /* GPLib */,
@@ -1253,37 +1196,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		5C5C0A8B15B8DE97005A2F2D /* GPHTTPRequestFramework.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GPHTTPRequestFramework.framework;
-			remoteRef = 5C5C0A8A15B8DE97005A2F2D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5C5C0A8D15B8DE97005A2F2D /* GPHTTPRequestFrameworkTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GPHTTPRequestFrameworkTests.octest;
-			remoteRef = 5C5C0A8C15B8DE97005A2F2D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5C5C0A8F15B8DE97005A2F2D /* libGPHTTPRequestLibrary.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGPHTTPRequestLibrary.a;
-			remoteRef = 5C5C0A8E15B8DE97005A2F2D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5C5C0A9115B8DE97005A2F2D /* GPHTTPRequestLibraryTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GPHTTPRequestLibraryTests.octest;
-			remoteRef = 5C5C0A9015B8DE97005A2F2D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5C88139F151CE7AA006BCDC9 /* Resources */ = {
@@ -1469,11 +1381,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5C5C0A9415B8DEB2005A2F2D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GPHTTPRequestLibrary;
-			targetProxy = 5C5C0A9315B8DEB2005A2F2D /* PBXContainerItemProxy */;
-		};
 		5CD4F8CB14DC521A00F2CBB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5CD4F8B314DC521A00F2CBB3 /* GPLib */;
@@ -1608,7 +1515,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2/libxml";
+				USER_HEADER_SEARCH_PATHS = "<Multiple values> GPHTTPRequest/**";
 			};
 			name = Debug;
 		};
@@ -1629,7 +1536,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "<Multiple values> GPHTTPRequest/**";
 			};
 			name = Release;
 		};

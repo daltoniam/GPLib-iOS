@@ -136,6 +136,23 @@ NSLocale* CurrentLocale()
     } else 
         return [self formatDateTime];
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSString*)formatMailTime
+{
+    NSTimeInterval diff = abs([self timeIntervalSinceNow]);
+    if (diff < DAY)
+        return [self formatTime];
+    static NSDateFormatter* formatter = nil;
+    if (!formatter)
+    {
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeStyle:NSDateFormatterNoStyle];
+        [formatter setDateStyle:NSDateFormatterShortStyle];
+        formatter.locale = CurrentLocale();
+        [formatter setDoesRelativeDateFormatting:YES];
+    }
+    return [formatter stringFromDate:self];
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @end

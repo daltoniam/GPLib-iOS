@@ -38,7 +38,7 @@
 @implementation NSMutableAttributedString (HTMLText)
 
 static NSString* DEFAULT_FONT = @"TrebuchetMS";
-void deallocationCallback( void* refCon );
+static void deallocationCallback( void* refCon );
 static CGFloat getAscentCallback( void *refCon );
 static CGFloat getDescentCallback( void *refCon );
 static CGFloat getWidthCallback( void* refCon );

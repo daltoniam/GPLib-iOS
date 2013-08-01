@@ -37,5 +37,6 @@
 - (NSString*)formatRelativeTime;
 - (NSString*)formatDateTime;
 - (NSString*)formatTime;
+- (NSString*)formatMailTime;
 
 @end

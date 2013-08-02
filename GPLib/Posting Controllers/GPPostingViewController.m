@@ -114,19 +114,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)resizeKeyboard:(CGRect)keyboardFrame
 {
-    int height = self.view.frame.size.height - (buttonView.frame.size.height + keyboardFrame.size.height);
+    float top = textView.frame.origin.y*2;
+    int height = self.view.frame.size.height - (buttonView.frame.size.height + keyboardFrame.size.height + top);
     CGRect newFrame = textView.frame;
     newFrame.size.height = height;
     textView.frame = newFrame;
     containerView.frame = newFrame;
     [self addShadow];
     
+    top += height;
     newFrame = buttonView.frame;
-    newFrame.origin.y = height;
+    newFrame.origin.y = top;
     buttonView.frame = newFrame;
     
+    top += buttonView.frame.size.height;
     newFrame = contentView.frame;
-    newFrame.origin.y = height + buttonView.frame.size.height;
+    newFrame.origin.y = top;
     newFrame.size.height = keyboardFrame.size.height;
     contentView.frame = newFrame;
     [self layoutButtons];
@@ -134,7 +137,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)addShadow
 {
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:containerView.bounds];
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, containerView.bounds.size.width, containerView.bounds.size.height+containerView.frame.origin.y)];
     containerView.layer.masksToBounds = NO;
     containerView.layer.shadowColor = [UIColor blackColor].CGColor;
     containerView.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);

@@ -180,7 +180,11 @@ title:(NSString *)title target:(id)target selector:(SEL)selector noBG:(BOOL)noBG
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)customButtonWithTitle:(NSString*)title target:(id)target selector:(SEL)selector
 {
-    return [self customButtonWithBack:NO image:nil edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:title target:target selector:selector noBG:NO];
+    //lazy hack until I port my code base
+    return [[UIBarButtonItem alloc] initWithTitle:title
+                                            style:UIBarButtonItemStyleBordered
+                                           target:target action:selector];
+    //return [self customButtonWithBack:NO image:nil edgeInsets:UIEdgeInsetsMake(0.0f, 5.0f, 0.0f, 5.0f)  title:title target:target selector:selector noBG:NO];
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)customImage:(UIImage*)image target:(id)target selector:(SEL)selector

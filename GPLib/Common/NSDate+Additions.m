@@ -153,6 +153,20 @@ NSLocale* CurrentLocale()
     }
     return [formatter stringFromDate:self];
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSString*)formatTextTime
+{
+    static NSDateFormatter* formatter = nil;
+    if (!formatter)
+    {
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeStyle:NSDateFormatterShortStyle];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        formatter.locale = CurrentLocale();
+        [formatter setDoesRelativeDateFormatting:YES];
+    }
+    return [formatter stringFromDate:self];
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @end

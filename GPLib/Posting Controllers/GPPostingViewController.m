@@ -114,7 +114,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)resizeKeyboard:(CGRect)keyboardFrame
 {
-    float top = textView.frame.origin.y*2;
+    float top = textView.frame.origin.y; //*2;
     int height = self.view.frame.size.height - (buttonView.frame.size.height + keyboardFrame.size.height + top);
     CGRect newFrame = textView.frame;
     newFrame.size.height = height;

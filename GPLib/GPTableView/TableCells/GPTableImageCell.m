@@ -63,10 +63,10 @@ CGFloat TableCellDefaultImageSize = 50;
                             constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)  
                                 lineBreakMode:UILineBreakModeWordWrap];
     if(textSize.height < 44 && imageSize.height < 44)
-        return 44;
+        return 44 + item.rowPad;
     if(textSize.height > imageSize.height)
-        return textSize.height+5;
-    return imageSize.height;
+        return textSize.height+5+item.rowPad;
+    return imageSize.height + item.rowPad;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

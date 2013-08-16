@@ -45,6 +45,7 @@
 @property(nonatomic,assign)CGFloat imageBorderWidth;
 @property(nonatomic,retain)UIColor* imageBorderColor;
 @property(nonatomic,retain)NSData* gifData;
+@property(nonatomic,assign)float rowPad;
 
 + (GPTableImageItem*)itemWithImage:(NSString*)imageurl text:(NSString*)string;
 + (GPTableImageItem*)itemWithImage:(NSString*)imageurl text:(NSString*)string URL:(NSString*)url;

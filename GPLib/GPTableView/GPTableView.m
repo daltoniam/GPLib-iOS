@@ -906,7 +906,8 @@ static const CGFloat HeaderVisibleHeight = 60.0f;
     {
         GPTableMoreItem* item = (GPTableMoreItem*)object;
         item.isLoading = YES;
-        [(GPTableMoreCell *)cell setAnimating:YES];
+        if([cell isKindOfClass:[GPTableMoreCell class]])
+            [(GPTableMoreCell *)cell setAnimating:YES];
         [table deselectRowAtIndexPath:indexPath animated:YES];
         if([self.delegate respondsToSelector:@selector(modelShouldLoad:)])
             [self.delegate modelShouldLoad:NO];
